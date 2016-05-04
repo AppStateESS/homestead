@@ -10,7 +10,7 @@ any previously sent.
 
 ** Please also be aware that if you requested a Private room, we may or
 may not be able to accommodate this request based on space availability.
-If your notice lists a roommate then we were not able to accommodate you 
+If your notice lists a roommate then we were not able to accommodate you
 in a private room.
 
 Assignment: {LOCATION}
@@ -22,12 +22,24 @@ Roommates:
 <!-- END roommate_text -->
 
 <!-- BEGIN movein_time -->
-Check-in Time: {MOVE_IN_TIME} 
+Check-in Time: {MOVE_IN_TIME}
 <!-- END movein_time -->
+
+<!-- BEGIN po_box -->
+Packages shipped via USPS Mail:     {PO_NAME}
+                                    {PO_STREET_ONE}
+                                    {PO_CITY}, {PO_STATE} {PO_ZIPCODE}
+<!-- END po_box -->
+<!-- BEGIN package_desk -->
+Package shipped via Package Desks:  {DESK_NAME}
+                                    {DESK_CO_LABEL}
+                                    {DESK_STREET}
+                                    {DESK_CITY}, {DESK_STATE} {DESK_ZIPCODE}
+<!-- END package_desk -->
 
 Move In is Sunday, May 24th, from noon to 5pm. Check-in at the White Hall Office. Please have your AppCard with you to check-in.
 
-Should you have any questions, please feel free to contact our office at 828-262-6111 or 828-262-2278. You may also visit our website at: 
+Should you have any questions, please feel free to contact our office at 828-262-6111 or 828-262-2278. You may also visit our website at:
 http://housing.appstate.edu/ .
 
 Sincerely,

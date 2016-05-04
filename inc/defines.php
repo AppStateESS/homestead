@@ -236,6 +236,7 @@ define('CANCEL_OFFER_MADE', 'offer_made');
  */
 define('ADDRESS_PRMT_STUDENT',      'PS'); // Permanent student address
 define('ADDRESS_PRMT_RESIDENCE',    'PR'); // permenent student residence
+define('ADDRESS_ASU_BOX',           'AB'); // ASU Box address
 
 /**
  * Room Types (used for summer applications)

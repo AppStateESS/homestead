@@ -150,7 +150,7 @@ CREATE TABLE hms_residence_hall (
     map_image_id                integer DEFAULT 0,
     room_plan_image_id          integer DEFAULT 0,
     assignment_notifications    integer NOT NULL DEFAULT 1,
-    package_desk                integer NOT NULL REFERENCES hms_package_desk(id),
+    package_desk                integer REFERENCES hms_package_desk(id),
     primary key(id)
 );
 

@@ -85,7 +85,16 @@ class EditResidenceHallCommand extends Command {
             $hall->meal_plan_required       = $context->get('meal_plan_required');
             $hall->assignment_notifications = $context->get('assignment_notifications');
 
-            $hall->setPackageDeskId($context->get('package_desk'));
+
+            $packageDeskId = $context->get('package_desk');
+            if ($packageDeskId > 0 )
+            {
+                $hall->setPackageDeskId($packageDeskId);
+            }
+            else
+            {
+                $hall->setPackageDeskId(null);
+            }
 
         } else if ($context->get('tab') == 'images'){
             $hall->exterior_image_id    = $context->get('exterior_image_id');

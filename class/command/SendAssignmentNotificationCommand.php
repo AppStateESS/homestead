@@ -52,121 +52,129 @@ class SendAssignmentNotificationCommand extends Command {
             throw new DatabaseException($result->toString());
         }
 
-        foreach($result as $assignment){
-            //get the students real name from their asu_username
-            $student = StudentFactory::getStudentByUsername($assignment->getUsername(), $term);
+        if($result)
+        {
+            foreach($result as $assignment){
+                //get the students real name from their asu_username
+                $student = StudentFactory::getStudentByUsername($assignment->getUsername(), $term);
 
-            //get the location of their assignment
-            PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-            $bed = new HMS_Bed($assignment->getBedId());
-            $room = $bed->get_parent();
-            $location = $bed->where_am_i() . ' - Bedroom ' . $bed->bedroom_label;
+                //get the location of their assignment
+                PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+                $bed = new HMS_Bed($assignment->getBedId());
+                $room = $bed->get_parent();
+                $location = $bed->where_am_i() . ' - Bedroom ' . $bed->bedroom_label;
 
-            // Lookup the floor and hall to make sure the
-            // assignment notifications flag is true for this hall
-            $floor = $room->get_parent();
-            $hall  = $floor->get_parent();
+                // Lookup the floor and hall to make sure the
+                // assignment notifications flag is true for this hall
+                $floor = $room->get_parent();
+                $hall  = $floor->get_parent();
 
-            if($hall->assignment_notifications == 0){
-                continue;
-            }
-
-            // Get the student type for determining move-in time
-            $type = $student->getType();
-
-            // Check for an accepted and confirmed RLC assignment
-            $rlcAssignment = HMS_RLC_Assignment::getAssignmentByUsername($student->getUsername(), $term);
-
-            // If there is an assignment, make sure the student "confirmed" the rlc invite
-            if(!is_null($rlcAssignment)){
-                if($rlcAssignment->getStateName() != 'confirmed' && $rlcAssignment->getStateName() != 'selfselect-assigned'){
-                    $rlcAssignment = null;
-                }
-            }
-
-            // Make sure this is re-initialized
-            $moveinTimeId = null;
-            $rlcSetMoveinTime = false;
-
-            // Determine the move-in time
-            if(!is_null($rlcAssignment)){
-                // If there is a 'confirmed' RLC assignment, use the RLC's move-in times
-                $rlc = $rlcAssignment->getRlc();
-
-                if($type == TYPE_CONTINUING){
-                    $moveinTimeId = $rlc->getContinuingMoveinTime();
-                }else if($type == TYPE_TRANSFER){
-                    $moveinTimeId = $rlc->getTransferMoveinTime();
-                }else if($type == TYPE_FRESHMEN){
-                    $moveinTimeId = $rlc->getFreshmenMoveinTime();
-                }
-            }
-
-            // If there's a non-null move-in time ID at this point, then we know the RLC must have set it
-            if(!is_null($moveinTimeId)){
-                $rlcSetMoveinTime = true;
-            }
-
-            // If the RLC didn't set a movein time, set it according to the floor
-            // TODO: Find continuing students by checking the student's application term
-            // against the term we're wending assignment notices for
-            if(is_null($moveinTimeId)){
-                if($type == TYPE_CONTINUING){
-                    $moveinTimeId = $assignment->get_rt_movein_time_id();
-                }else if($type == TYPE_TRANSFER){
-                    $moveinTimeId = $assignment->get_t_movein_time_id();
-                }else{
-                    $moveinTimeId = $assignment->get_f_movein_time_id();
-                }
-            }
-
-            // Check for missing move-in times
-            if($moveinTimeId == NULL){
-                //test($assignment, 1); // Will only happen if there's no move-in time set for the floor,student type
-                // Lets only keep a set of the floors
-                if(!in_array($floor, $missingMovein)){
-                    $missingMovein[] = $floor;
-                }
-
-                // Missing move-in time, so skip to the next assignment
-                continue;
-            }
-
-            // TODO: Grab all the move-in times and index them in an array by ID so we don't have to query the DB every single time
-            $movein_time_obj = new HMS_Movein_Time($moveinTimeId);
-            $movein_time = $movein_time_obj->get_formatted_begin_end();
-
-            // Add a bit of text if the move-in time was for an RLC
-            if($rlcSetMoveinTime){
-                $movein_time .= ' (for the ' . $rlc->get_community_name() . ' Residential Learning Community)';
-            }
-
-            //get the list of roommates
-            $roommates = array();
-
-            $beds = $room->get_beds();
-            foreach($beds as $bed){
-                $roommate = $bed->get_assignee();
-                if($roommate == false || is_null($roommate) || $roommate->getUsername() == $student->getUsername()){
+                if($hall->assignment_notifications == 0){
                     continue;
                 }
 
-                $roommates[] = $roommate->getFullName() . ' ('. $roommate->getUsername() . '@appstate.edu) - Bedroom ' . $bed->bedroom_label;
+                // Get the student type for determining move-in time
+                $type = $student->getType();
+
+                // Check for an accepted and confirmed RLC assignment
+                $rlcAssignment = HMS_RLC_Assignment::getAssignmentByUsername($student->getUsername(), $term);
+
+                // If there is an assignment, make sure the student "confirmed" the rlc invite
+                if(!is_null($rlcAssignment)){
+                    if($rlcAssignment->getStateName() != 'confirmed' && $rlcAssignment->getStateName() != 'selfselect-assigned'){
+                        $rlcAssignment = null;
+                    }
+                }
+
+                // Make sure this is re-initialized
+                $moveinTimeId = null;
+                $rlcSetMoveinTime = false;
+
+                // Determine the move-in time
+                if(!is_null($rlcAssignment)){
+                    // If there is a 'confirmed' RLC assignment, use the RLC's move-in times
+                    $rlc = $rlcAssignment->getRlc();
+
+                    if($type == TYPE_CONTINUING){
+                        $moveinTimeId = $rlc->getContinuingMoveinTime();
+                    }else if($type == TYPE_TRANSFER){
+                        $moveinTimeId = $rlc->getTransferMoveinTime();
+                    }else if($type == TYPE_FRESHMEN){
+                        $moveinTimeId = $rlc->getFreshmenMoveinTime();
+                    }
+                }
+
+                // If there's a non-null move-in time ID at this point, then we know the RLC must have set it
+                if(!is_null($moveinTimeId)){
+                    $rlcSetMoveinTime = true;
+                }
+
+                // If the RLC didn't set a movein time, set it according to the floor
+                // TODO: Find continuing students by checking the student's application term
+                // against the term we're wending assignment notices for
+                if(is_null($moveinTimeId)){
+                    if($type == TYPE_CONTINUING){
+                        $moveinTimeId = $assignment->get_rt_movein_time_id();
+                    }else if($type == TYPE_TRANSFER){
+                        $moveinTimeId = $assignment->get_t_movein_time_id();
+                    }else{
+                        $moveinTimeId = $assignment->get_f_movein_time_id();
+                    }
+                }
+
+                // Check for missing move-in times
+                if($moveinTimeId == NULL){
+                    //test($assignment, 1); // Will only happen if there's no move-in time set for the floor,student type
+                    // Lets only keep a set of the floors
+                    if(!in_array($floor, $missingMovein)){
+                        $missingMovein[] = $floor;
+                    }
+
+                    // Missing move-in time, so skip to the next assignment
+                    continue;
+                }
+
+                // TODO: Grab all the move-in times and index them in an array by ID so we don't have to query the DB every single time
+                $movein_time_obj = new HMS_Movein_Time($moveinTimeId);
+                $movein_time = $movein_time_obj->get_formatted_begin_end();
+
+                // Add a bit of text if the move-in time was for an RLC
+                if($rlcSetMoveinTime){
+                    $movein_time .= ' (for the ' . $rlc->get_community_name() . ' Residential Learning Community)';
+                }
+
+                //get the list of roommates
+                $roommates = array();
+
+                $beds = $room->get_beds();
+                foreach($beds as $bed){
+                    $roommate = $bed->get_assignee();
+                    if($roommate == false || is_null($roommate) || $roommate->getUsername() == $student->getUsername()){
+                        continue;
+                    }
+
+                    $roommates[] = $roommate->getFullName() . ' ('. $roommate->getUsername() . '@appstate.edu) - Bedroom ' . $bed->bedroom_label;
+                }
+
+                // Send the email
+                HMS_Email::sendAssignmentNotice($student->getUsername(), $student->getName(), $term, $location, $roommates, $movein_time);
+
+                // Mark the student as having received an email
+                $db->reset();
+                $db->addWhere('asu_username', $assignment->getUsername());
+                $db->addWhere('term', $term);
+                $db->addValue('email_sent', 1);
+                $rslt = $db->update();
+
+                if(PHPWS_Error::logIfError($rslt)){
+                    throw new DatabaseException($result->toString());
+                }
             }
-
-            // Send the email
-            HMS_Email::sendAssignmentNotice($student->getUsername(), $student->getName(), $term, $location, $roommates, $movein_time);
-
-            // Mark the student as having received an email
-            $db->reset();
-            $db->addWhere('asu_username', $assignment->getUsername());
-            $db->addWhere('term', $term);
-            $db->addValue('email_sent', 1);
-            $rslt = $db->update();
-
-            if(PHPWS_Error::logIfError($rslt)){
-                throw new DatabaseException($result->toString());
-            }
+        }
+        else
+        {
+            NQ::simple('hms', hms\NotificationView::ERROR, "No assignment notifications remaining that need to be sent.");
+            $context->goBack();
         }
 
         // Check for floors with missing move-in times.

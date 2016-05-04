@@ -329,6 +329,52 @@ class HMS_Email{
             }
         }
 
+        $student = StudentFactory::getStudentByUsername($to, $term);
+
+        $poBox = $student->getAddress('AB');
+        if($poBox)
+        {
+            $tpl['PO_NAME'] = $student->getName();
+            $tpl['PO_STREET_ONE']   = $poBox->line1;
+            if($poBox->line2)
+            {
+                $tpl['PO_STREET_TWO']   = $poBox->line2;
+            }
+            if($poBox->line3)
+            {
+                $tpl['PO_STREET_THREE'] = $poBox->line3;
+            }
+            $tpl['PO_CITY']         = $poBox->city;
+            $tpl['PO_STATE']        = $poBox->state;
+            $tpl['PO_ZIPCODE']      = $poBox->zip;
+        }
+        else
+        {
+            $tpl['PO_EMPTY_ADDRESS'] = 'Address for your P.O. Box is not currently available.';
+        }
+
+        $assignment = HMS_Assignment::getAssignment($student->getUsername(), $term);
+
+        if($assignment)
+        {
+            $bed = $assignment->get_parent();
+            $room = $bed->get_parent();
+            $floor = $room->get_parent();
+            $hall = $floor->get_parent();
+
+            $packageDesk = PackageDeskFactory::getPackageDeskById($hall->getPackageDeskId());
+
+            if($packageDesk)
+            {
+                $tpl['DESK_NAME'] = $student->getName();
+                $tpl['DESK_CO_LABEL'] = 'c/o: '. $packageDesk->name;
+                $tpl['DESK_STREET'] = $packageDesk->street;
+                $tpl['DESK_CITY'] = $packageDesk->city;
+                $tpl['DESK_STATE'] = $packageDesk->state;
+                $tpl['DESK_ZIPCODE'] = $packageDesk->zip;
+            }
+        }
+
         $sem = Term::getTermSem($term);
 
         switch($sem){
