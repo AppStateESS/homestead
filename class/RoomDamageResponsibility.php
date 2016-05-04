@@ -30,7 +30,22 @@ class RoomDamageResponsibility {
         $term = $damage->getTerm();
         $description = $damage->getShortDescription();
 
-        $soap->addRoomDamageToStudentAccount($this->getBannerId(), $term, $this->getAmount(), $description);
+        $damageType = $damage->getType();
+
+        // Figure out which detail code to use based on the damage type
+        if($damageType == 105) {
+            // Improper checkout
+            $detailCode = 8129;
+        } else if($damageType == 78 || $damageType == 79 || $damageType == 80) {
+            // Lock recomb
+            $detailCode = 8139;
+        } else {
+            // Regular room damage
+            $detailCode = 8138;
+        }
+
+
+        $soap->addRoomDamageToStudentAccount($this->getBannerId(), $term, $this->getAmount(), $description, $detailCode);
     }
 
     public function getId()

@@ -283,10 +283,11 @@ abstract class SOAP
      * @param Integer $term Term to report the damage in
      * @param Integer $amount Damage cost/price, whole dollars only
      * @param String  $damageDescription Short descirption of the damage
+     * @param String  $detailCode Detail code string to record with the charge in student's Banner account
      * @return boolean True if successful, false otherwise
      * @throws InvalidArgumentException, SOAPException
      */
-    public abstract function addRoomDamageToStudentAccount($bannerId, $term, $amount, $damageDescription);
+    public abstract function addRoomDamageToStudentAccount($bannerId, $term, $amount, $damageDescription, $detailCode);
 
 
 

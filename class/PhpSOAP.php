@@ -382,14 +382,15 @@ class PhpSOAP extends SOAP
         return true;
     }
 
-    public function addRoomDamageToStudentAccount($bannerId, $term, $amount, $damageDescription)
+    public function addRoomDamageToStudentAccount($bannerId, $term, $amount, $damageDescription, $detailCode)
     {
         $params = array(
                         'User'      => $this->currentUser,
                         'BannerID'  => $bannerId,
                         'TermCode'  => $term,
                         'Amount'    => $amount,
-                        'DamageDescription' => $damageDescription);
+                        'DamageDescription' => $damageDescription,
+                        'DamageDetailCode' => $detailCode);
 
         try {
             $response = $this->client->AddRoomDamageToStudentAccount($params);
