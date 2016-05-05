@@ -30,7 +30,7 @@ class RoomDamageResponsibility {
         $term = $damage->getTerm();
         $description = $damage->getShortDescription();
 
-        $damageType = $damage->getType();
+        $damageType = $damage->getDamageType();
 
         // Figure out which detail code to use based on the damage type
         if($damageType == 105) {
