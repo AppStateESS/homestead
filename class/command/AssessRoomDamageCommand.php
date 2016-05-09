@@ -34,11 +34,11 @@ class AssessRoomDamageCommand extends Command {
             $resp = RoomDamageResponsibilityFactory::getResponsibilityById($row['id']);
 
             $resp->setAmount($row['assessedCost']);
-            $resp->setState('assessed');
+            //$resp->setState('assessed');
             $resp->setAssessedOn(time());
             $resp->setAssessedBy(UserStatus::getUsername());
 
-            RoomDamageResponsibilityFactory::save($resp);
+            //RoomDamageResponsibilityFactory::save($resp);
 
             // Try to report each damage to Banner and Student Accounts
             try{
