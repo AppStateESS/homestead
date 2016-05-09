@@ -384,6 +384,9 @@ class PhpSOAP extends SOAP
 
     public function addRoomDamageToStudentAccount($bannerId, $term, $amount, $damageDescription, $detailCode)
     {
+        // Description field has a max size of 20 in Banner, so truncate to 20 chars if needed
+        $damageDescription = (strlen($damageDescription) > 20) ? substr($damageDescription, 0, 20) : $damageDescription;
+
         $params = array(
                         'User'      => $this->currentUser,
                         'BannerID'  => $bannerId,
