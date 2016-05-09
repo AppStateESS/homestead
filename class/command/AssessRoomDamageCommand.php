@@ -33,7 +33,7 @@ class AssessRoomDamageCommand extends Command {
             // Load it from the database
             $resp = RoomDamageResponsibilityFactory::getResponsibilityById($row['id']);
 
-            $resp->setAmount(round($row['assessedCost']));
+            $resp->setAmount($row['assessedCost']);
             $resp->setState('assessed');
             $resp->setAssessedOn(time());
             $resp->setAssessedBy(UserStatus::getUsername());
