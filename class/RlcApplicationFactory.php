@@ -20,4 +20,19 @@ class RlcApplicationFactory {
 
         return $stmt->fetch();
     }
+
+    public static function getApplicationById($id, $term)
+    {
+        $db = PdoFactory::getPdoInstance();
+
+        $query = "SELECT * FROM hms_learning_community_applications where id = :id and term = :term";
+
+        $stmt = $db->prepare($query);
+        $stmt->execute(array('id'   => $id,
+                             'term' => $term));
+
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RlcApplicationRestored');
+
+        return $stmt->fetch();
+    }
 }

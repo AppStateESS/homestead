@@ -2,11 +2,11 @@
 
 
 class ExportRlcAppsCommand extends Command {
-    
+
     public function getRequestVars(){
         return array('action'=>'ExportRlcApps');
     }
-    
+
     // TODO: rewrite this
     public function execute(CommandContext $context)
     {
@@ -19,14 +19,17 @@ class ExportRlcAppsCommand extends Command {
 
         $db = new PHPWS_DB('hms_learning_communities');
         $db->addColumn('community_name');
-        $db->addWhere('id',$_REQUEST['rlc_list']);
+        if($context->get('communityId')!= 0)
+        {
+            $db->addWhere('id',$context->get('communityId'));
+        }
         $title = $db->select('one');
 
         $filename = $title . '-applications-' . date('Ymd') . ".csv";
 
         // setup the title and headings
         $buffer = $title . "\n";
-        $buffer .= '"last_name","first_name","middle_name","gender","roommate","email","second_choice","third_choice","major","application_date","denied"' . "\n";
+        $buffer .= '"Last name","First Name","Middle Name","Gender","Roommate","Email","Second Choice","Third Choice","Major","Application Date","Denied"' . "\n";
 
         // get the userlist
         $db = new PHPWS_DB('hms_learning_community_applications');
@@ -34,7 +37,10 @@ class ExportRlcAppsCommand extends Command {
         $db->addColumn('rlc_second_choice_id');
         $db->addColumn('rlc_third_choice_id');
         $db->addColumn('date_submitted');
-        $db->addWhere('rlc_first_choice_id', $_REQUEST['rlc_list']);
+        if($context->get('communityId')!= 0)
+        {
+            $db->addWhere('rlc_first_choice_id', $context->get('communityId'));
+        }
         $db->addWhere('term', Term::getSelectedTerm());
         $db->addOrder('denied asc');
         //$db->addWhere('denied', 0); // Only show non-denied applications
@@ -51,12 +57,12 @@ class ExportRlcAppsCommand extends Command {
             }
 
             $student = StudentFactory::getStudentByUsername($user['username'], Term::getSelectedTerm());
-            
+
             $buffer .= '"' . $student->getLastName() . '",';
             $buffer .= '"' . $student->getFirstName() . '",';
             $buffer .= '"' . $student->getMiddleName() . '",';
             $buffer .= '"' . $student->getPrintableGender() . '",';
-            
+
             if($roomie != NULL) {
                 $buffer .= '"' . $roomie->getFullName() . '",';
             } else {
@@ -106,7 +112,7 @@ class ExportRlcAppsCommand extends Command {
 
         //HERES THE QUERY:
         //select hms_learning_community_applications.user_id, date_submitted, rlc_first_choice.abbreviation as first_choice, rlc_second_choice.abbreviation as second_choice, rlc_third_choice.abbreviation as third_choice FROM (SELECT hms_learning_community_applications.user_id, hms_learning_communities.abbreviation FROM hms_learning_communities,hms_learning_community_applications WHERE hms_learning_communities.id = hms_learning_community_applications.rlc_first_choice_id) as rlc_first_choice, (SELECT hms_learning_community_applications.user_id, hms_learning_communities.abbreviation FROM hms_learning_communities,hms_learning_community_applications WHERE hms_learning_communities.id = hms_learning_community_applications.rlc_second_choice_id) as rlc_second_choice, (SELECT hms_learning_community_applications.user_id, hms_learning_communities.abbreviation FROM hms_learning_communities,hms_learning_community_applications WHERE hms_learning_communities.id = hms_learning_community_applications.rlc_third_choice_id) as rlc_third_choice, hms_learning_community_applications WHERE rlc_first_choice.user_id = hms_learning_community_applications.user_id AND rlc_second_choice.user_id = hms_learning_community_applications.user_id AND rlc_third_choice.user_id = hms_learning_community_applications.user_id;
-         
+
         //Download file
         if(ob_get_contents())
         print('Some data has already been output, can\'t send file');
@@ -122,5 +128,3 @@ class ExportRlcAppsCommand extends Command {
         die();
     }
 }
-
-

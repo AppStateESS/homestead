@@ -219,4 +219,9 @@ class TestSOAP extends SOAP
         return null;
     }
 
+    public function addRoomDamageToStudentAccount($bannerId, $term, $amount, $damageDescription)
+    {
+        return true;
+    }
+
 }
