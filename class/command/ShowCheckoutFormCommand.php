@@ -72,17 +72,27 @@ class ShowCheckoutFormCommand extends Command {
         }
 
         // Find the earliest checkin that matches hall the user selected
-        $hall = new HMS_Residence_Hall($hallId);
-        $checkin = CheckinFactory::getPendingCheckoutForStudentByHall($student, $hall);
+        $selectedHall = new HMS_Residence_Hall($hallId);
+        $checkin = CheckinFactory::getPendingCheckoutForStudentByHall($student, $selectedHall);
 
         if(!isset($checkin)){
             NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, we couldn't find a matching check-in at {$hall->getHallName()} for this student to check-out of.");
             $errorCmd->redirect();
         }
 
+        // Get the bed by persistent id in the current term (pull the bed forward into the current term)
         $bed = BedFactory::getBedByPersistentId($checkin->getBedPersistentId(), $term);
 
+        // Load the hall structure based on the current term
         $room = $bed->get_parent();
+        $floor = $room->get_parent();
+        $checkinHall = $floor->get_parent();
+
+        // Check to make sure the hall ID for this bed in the current term matches the hall id that the user told us to use
+        if($checkinHall->getId() != $hallId){
+            NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, we couldn't find a matching check-in at {$selectedHall->getHallName()} for this student to check-out of. They may have a pending check-out in {$checkinHall->getHallName()}");
+            $errorCmd->redirect();
+        }
 
         // Get the damages for this student's room
         $damages = RoomDamageFactory::getDamagesByRoom($room);
