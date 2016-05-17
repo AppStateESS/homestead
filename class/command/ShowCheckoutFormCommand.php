@@ -98,7 +98,7 @@ class ShowCheckoutFormCommand extends Command {
         $damages = RoomDamageFactory::getDamagesByRoom($room);
 
         PHPWS_Core::initModClass('hms', 'CheckoutFormView.php');
-        $view = new CheckoutFormView($student, $hall, $room, $bed, $damages, $checkin);
+        $view = new CheckoutFormView($student, $selectedHall, $room, $bed, $damages, $checkin);
 
         $context->setContent($view->show());
     }
