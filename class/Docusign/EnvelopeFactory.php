@@ -7,12 +7,14 @@ class EnvelopeFactory {
 
 	public static function createEnvelopeFromTemplate(Client $client, $templateId, $emailSubject, Array $templateRoles, $status, $bannerId) {
 
-		//Creates the data field containing the banner ID value
-		$textTabs[0] = array("tabLabel" => "BannerId", "xPosition" => "435", "yPosition" => "440", "value" => $bannerId, "pageNumber" => "5", "documentId" => "1");
+		// //Creates the data field containing the banner ID value
+		$textTabs[0] = array("tabLabel" => "BannerId", "value" => $bannerId, "pageNumber" => "5", "documentId" => "1");
 
 		$roles = $templateRoles;
 
 		$roles[0]['tabs'] = array("textTabs" => $textTabs);
+
+		// var_dump($templateRoles);exit;
 
 		$data = array (
 			"accountId" => $client->getAccountID(),
