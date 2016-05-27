@@ -8,7 +8,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.php">Homestead</a>
+      <a class="navbar-brand" href="index.php" title="Homestead">HMS</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
