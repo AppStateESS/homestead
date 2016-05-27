@@ -52,8 +52,8 @@
     <p>The Office of Multicultural Student Development will then work with
         University Housing to determine whether or not special housing is
         warranted.  For further information, please visit the
-        <a href="http://www.glbt.appstate.edu/" target="_blank">
-            GLBT Online Resources
+        <a href="http://www.lgbt.appstate.edu/" target="_blank">
+            LGBT Online Resources
         </a>
         website.
     </p>
