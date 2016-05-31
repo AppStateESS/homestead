@@ -17,7 +17,7 @@ Assignment: {LOCATION}
 <!-- BEGIN roommate_text -->
 Roommates:
 <!-- BEGIN roommates -->
-            {ROOMMATE}
+{ROOMMATE}
 <!-- END roommates -->
 <!-- END roommate_text -->
 
@@ -25,7 +25,7 @@ Roommates:
 Check-in Time: {MOVE_IN_TIME}
 <!-- END movein_time -->
 
-Move In is Sunday, May 22nd, from noon to 5pm. Check in at the Cone Hall office. Please have your AppCard with you to check in.
+Move In is Sunday, June 26th, from noon to 5pm. Check in at the Cone Hall office. Please have your AppCard with you to check in.
 
 Should you have any questions, please feel free to contact our office at 828-262-2160. You may also visit our website at:
 http://housing.appstate.edu/ .
