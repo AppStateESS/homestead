@@ -17,7 +17,7 @@ Assignment: {LOCATION}
 <!-- BEGIN roommate_text -->
 Roommates:
 <!-- BEGIN roommates -->
-{ROOMMATE}
+            {ROOMMATE}
 <!-- END roommates -->
 <!-- END roommate_text -->
 
