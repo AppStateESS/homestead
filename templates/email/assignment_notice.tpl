@@ -40,6 +40,6 @@ http://housing.appstate.edu.
 Sincerely,
 
 Alicia Vest
-Associate Director for Administrative Services
+Associate Director for Administrative and Student Services
 University Housing
 Appalachian State University
