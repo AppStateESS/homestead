@@ -28,16 +28,13 @@ please follow the time noted above for your move in. Additional move
 in information can be found by visiting our Move In Webpage at:
 http://housing.appstate.edu/fallmovein .
 
-Want to help us improve the housing application process? Take a quick, 5-question survey:
-https://appstate.az1.qualtrics.com/SE/?SID=SV_6KzWSchqQ56veuh
-
 *Note*: You may receive more than one housing assignment notification,
 this indicates a change has been made in some way to your assignment
 (room change, roommate change, etc.).  The new notification overrides
 all previous notifications.
 
 Should you have any questions, please feel free to contact our office
-at 828-262-6111 or 828-262-2278. You may also visit our website at:
+at 828-262-6111. You may also visit our website at:
 http://housing.appstate.edu.
 
 Sincerely,
