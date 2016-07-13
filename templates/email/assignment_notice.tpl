@@ -34,7 +34,7 @@ this indicates a change has been made in some way to your assignment
 all previous notifications.
 
 Should you have any questions, please feel free to contact our office
-at 828-262-6111. You may also visit our website at:
+at 828-262-2160. You may also visit our website at:
 http://housing.appstate.edu.
 
 Sincerely,
