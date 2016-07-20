@@ -66,6 +66,7 @@ class AssignedStudentData extends Report implements iCsvReport {
 
                 $bannerId = $student->getBannerId();
                 $username = $student->getUsername();
+                $preferred = $student->getPreferredName();
                 $first = $student->getFirstName();
                 $middle = $student->getMiddleName();
                 $last = $student->getLastName();
@@ -110,6 +111,7 @@ class AssignedStudentData extends Report implements iCsvReport {
             } catch (StudentNotFoundException $e) {
                 $bannerId = $row['banner_id'];
                 $username = '';
+                $preferred = '';
                 $first = '';
                 $middle = '';
                 $last = '';
@@ -128,7 +130,7 @@ class AssignedStudentData extends Report implements iCsvReport {
                 $room = '';
             }
 
-            $this->rows[] = array($username, $bannerId, $first, $middle, $last,
+            $this->rows[] = array($username, $bannerId, $preferred, $first, $middle, $last,
                                   $gender, $dob, $type, $cellPhone, $date, $appTerm, $lifestyle,
                                   $assignmentType, $room, $line1, $line2, $line3,
                                   $city, $state, $zip);
@@ -137,7 +139,7 @@ class AssignedStudentData extends Report implements iCsvReport {
 
     public function getCsvColumnsArray()
     {
-        return array('Username', 'Banner id', 'First name', 'Middle name', 'Last Name', 'Gender', 'Birthday',
+        return array('Username', 'Banner id', 'Preferred', 'First name', 'Middle name', 'Last Name', 'Gender', 'Birthday',
             'Student type', 'Cell Phone', 'Date Applied', 'Application Term', 'Lifestyle', 'Assignment Type','Assignment', 'Address 1',
             'Address 2', 'Address 3', 'City', 'State', 'Zip');
     }
