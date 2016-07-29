@@ -23,6 +23,7 @@
     <!-- END cancel2 -->
 </div>
 
+
 <h2>Status: {REQUEST_STATUS}</h2>
 
 <span>Last updated <span data-livestamp="{last_updated_timestamp}"></span> ({last_updated_date})</span>
@@ -77,10 +78,9 @@
 <p>{DENIED_REASON_PRIVATE}</p>
 <!-- END denied_reason -->
 
+
 <script type="text/javascript">
 	$(document).ready(function() {
-		$.get('index.php?module=hms&action=RoomChnageListAvailableBeds',{gender: $("#participant_form_gender").val()}, bedListCallback, 'json');
-
 
 		// Cancel Form
 		$("#cancel-form").hide();
@@ -96,26 +96,4 @@
             $("#deny-form").show();
         });
 	});
-
-	function bedListCallback(data)
-	{
-		$("#participant_form_bed_select").html('');
-
-		// Check for no available beds
-		if(data.length == 0){
-			$("#participant_form_bed_select").html("<p>No available beds found. Please contact the Housing Assignments Office.</p>");
-			return;
-		}
-
-		var html = '<option value="-1">Select destination..</option>';
-
-	    // Loop over each bed and add it to the list
-		for(i = 0; i < data.length; i++){
-			html += '<option value="' + data[i].bedid + '">' + data[i].hall_name + ' ' + data[i].room_number + '</option>';
-		}
-
-		$("#participant_form_bed_select").append(html);
-
-	}
-
 </script>
