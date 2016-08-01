@@ -6,7 +6,7 @@ class DamageRegistration extends ApplicationFeatureRegistration {
     public function __construct()
     {
         $this->name = 'Damage';
-        $this->description = 'Room Damage';
+        $this->description = 'Room Damage Self-Reporting';
         $this->startDateRequired = true;
         $this->endDateRequired = true;
         $this->priority = 7;

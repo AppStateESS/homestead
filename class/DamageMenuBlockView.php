@@ -34,25 +34,21 @@ class DamageMenuBlockView extends hms\View {
 
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
-        $tpl['DEADLINE'] = HMS_Util::get_long_date_time($end);
 
         if (time() > $end){ // too late
             $tpl['ICON'] = FEATURE_LOCKED_ICON;
-            if($end === 0)
-            {
-                $tpl['NO_CHECKIN'] = 'You cannot add room damages unless you have checked in to your assigment.';
-            }
-            else {
+            if($end === 0) {
+                $tpl['NO_CHECKIN'] = ''; // Dummy template var, text is in template
+            } else {
                 $tpl['END_DEADLINE'] = HMS_Util::get_long_date_time($end);
             }
 
-        }
-        else
-        {
+        } else {
             $tpl['ICON'] = FEATURE_OPEN_ICON;
             $addRoomDmgsCmd = CommandFactory::getCommand('ShowStudentAddRoomDamages');
 
-            $tpl['NEW_REQUEST'] = $addRoomDmgsCmd->getLink('add room damages.');
+            $tpl['NEW_REQUEST'] = $addRoomDmgsCmd->getLink('add room damages');
+            $tpl['DEADLINE'] = HMS_Util::get_long_date_time($end);
         }
 
         return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/roomDamageMenuBlock.tpl');
