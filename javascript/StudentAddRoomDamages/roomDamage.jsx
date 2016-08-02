@@ -44,7 +44,7 @@ var RoomDamageBox = React.createClass({
     saveDamages: function()
     {
         var newDamages = this.state.newDamages;
-        console.log(newDamages)
+        //console.log(newDamages)
         for(i = 0; i < newDamages.length; i++)
         {
             var damage = newDamages[i];
@@ -92,7 +92,7 @@ var RoomDamageBox = React.createClass({
     // Function responsible for setting up and executing the ajax call to add room damages.
     addRoomDamages: function(type, side, desc)
     {
-        console.log(desc)
+        //console.log(desc)
         $.ajax({
           url: 'index.php?module=hms&action=AddRoomDamage&roomPersistentId='+roomPID+'&damageType='+type+'&side='+side+'&description='+desc,
           type: 'POST',
@@ -227,27 +227,24 @@ var AddDamageBox = React.createClass({
     render: function()
     {
         var options = Array({category:"Welcome", id: 0, description: "Select the type of damage"});//{id: 0, description: "Select the type of Damage"}
+
         var data = this.props.options;
-        for(i = 0; i < data.length; i++)
-        {
+        for(i = 0; i < data.length; i++) {
           options.push(data[i]);
         }
+
         var selectOptions = options.map(function(node){
-            if(node.category == "Welcome")
-            {
-                return (<option value={node.id}>{node.description}</option>);
-            }
-            else
-            {
+            if(node.category == "Welcome") {
+                return (<option key={node.id} value={node.id}>{node.description}</option>);
+            } else {
               var dmgTypes = node.DamageTypes;
               var options = Array();
-              for(i = 0; i < dmgTypes.length;i++)
-              {
+              for(i = 0; i < dmgTypes.length;i++) {
                 object = dmgTypes[i];
-                options[i+1] = <option value={object.id}>{object.description}</option>;
+                options[i+1] = <option key={object.id} value={object.id}>{object.description}</option>;
               }
 
-              return(<optgroup label={node.category}>
+              return(<optgroup key={node.category} label={node.category}>
                 {options}
               </optgroup>);
             }
@@ -256,13 +253,11 @@ var AddDamageBox = React.createClass({
         var dmgTypeError = false;
         var descError = false;
 
-        if(this.state.dmgTypeInvalid != undefined)
-        {
+        if(this.state.dmgTypeInvalid != undefined) {
             dmgTypeError = this.state.dmgTypeInvalid;
         }
 
-        if(this.state.descInvalid != undefined)
-        {
+        if(this.state.descInvalid != undefined) {
             descError = this.state.descInvalid;
         }
 
@@ -334,7 +329,7 @@ var AlertBox = React.createClass({
         }
         else
         {
-            console.log(this.props.alert)
+            //console.log(this.props.alert)
             if(this.props.alert.status == "success")
             {
                 return (
@@ -364,7 +359,7 @@ var UnsavedDamagesTable = React.createClass({
     },
     render: function()
     {
-        console.log(this.props.newRoomDamages)
+        //console.log(this.props.newRoomDamages)
         if(this.props.newRoomDamages.length != 0)
         {
             var data = this.props.newRoomDamages;
