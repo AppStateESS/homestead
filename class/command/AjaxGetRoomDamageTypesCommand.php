@@ -1,7 +1,5 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'Command.php');
-
 class AjaxGetRoomDamageTypesCommand extends Command {
 
 
@@ -11,56 +9,21 @@ class AjaxGetRoomDamageTypesCommand extends Command {
 
     public function execute(CommandContext $context)
     {
+        // Get the list of damage types from the database
+        $damageTypes = DamageTypeFactory::getDamageTypeAssoc();
 
-      $damageTypes = DamageTypeFactory::getDamageTypeAssoc();
-
-      $types = array();
-
-      $t = 0;
-
-      foreach($damageTypes as $attribs)
-      {
-        $types[$t] = $attribs;
-        $t++;
-      }
-
-      $categories = array();
-
-      foreach($damageTypes as $node)
-      {
-        if(!in_array($node['category'], $categories))
-        {
-          array_push($categories, $node['category']);
+        // Group the damage types by their categories
+        foreach ($damageTypes as $dmgType){
+            $categories[$dmgType['category']][] = $dmgType;
         }
-      }
 
-      $i = 0;
-
-      foreach ($categories as $category)
-      {
-        $result[$i]['category'] = $category;
-        $result[$i]['DamageTypes'] = array();
-        $i++;
-      }
-
-      $resultSize = count($result);
-
-      $i = 0;
-
-      foreach ($types as $node)
-      {
-        $category = $node['category'];
-        for($i; $i < $resultSize; $i++)
-        {
-          if($result[$i]['category'] == $category)
-          {
-            array_push($result[$i]['DamageTypes'], $node);
-          }
+        // Put each category into an format that the front-end expects
+        foreach($categories as $categoryName => $categoryDamages){
+            $result[] = array('category' => $categoryName,
+                              'DamageTypes' => $categoryDamages);
         }
-        $i = 0;
-      }
 
-      echo json_encode($result);
-      exit;
+        echo json_encode($result);
+        exit;
     }
 }
