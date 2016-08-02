@@ -144,12 +144,10 @@ var RoomDamageBox = React.createClass({
 var CurrentDamagesTable = React.createClass({
     render: function()
     {
-        if(this.props.roomDamages != undefined)
-        {
-            var data = this.props.roomDamages;
-            var rows = data.map(function(node){
+        if(this.props.roomDamages != undefined) {
+            var rows = this.props.roomDamages.map(function(node){
                 return (
-                    <tr>
+                    <tr key={node.id}>
                         <td>{node.category}</td>
                         <td>{node.description}</td>
                         <td>{node.side}</td>
@@ -163,18 +161,19 @@ var CurrentDamagesTable = React.createClass({
                     </tr>
                 );
             });
+        } else {
+            var emptyMsg = (<p>No reported damages for your room.</p>)
         }
-        else {
-            var emptyMsg = (<p>No room damages at this time.</p>)
-        }
+
         return (
             <div className="row">
                 <div className="col-md-8">
-                    <div className="panel panel-primary">
+                    <div className="panel panel-default">
                         <div className="panel-heading">
                             <h4>Existing Damages</h4>
                         </div>
                         <div className="panel-body">
+                            <p>Damages that we already know about are listed below. You won't be charged for these when you check-out.</p>
                             <table className="table table-striped table-hover">
                                 <thead>
                                     <tr>
@@ -183,7 +182,7 @@ var CurrentDamagesTable = React.createClass({
                                         <th>Side</th>
                                         <th>Term</th>
                                         <th>Reported On</th>
-                                        <th>Actions</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
