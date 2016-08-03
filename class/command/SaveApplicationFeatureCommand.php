@@ -45,6 +45,7 @@ class SaveApplicationFeatureCommand extends Command {
             throw new PermissionException('You do not have permission to edit deadlines.');
         }
 
+
         PHPWS_Core::initModClass('hms', 'exception/MissingDataException.php');
 
         if(!isset($this->featureId)) {
@@ -61,6 +62,8 @@ class SaveApplicationFeatureCommand extends Command {
             $this->name = $context->get('name');
         }
         $name = $this->name;
+
+
 
         PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
         if(!is_null($featureId)) {
@@ -100,22 +103,17 @@ class SaveApplicationFeatureCommand extends Command {
 
             $registration = $feature->getRegistration();
 
-            if($registration->requiresEditDate())
-            {
+            if($registration->requiresEditDate()) {
                 $feature->setEditDate($editDate + 86399); // Add 23h23m23s so that the end date is actuall 11:59:59pm on the selected day
-            }
-            else
-            {
+            } else {
                 $feature->setEditDate(0);
             }
 
-            if($registration->requiresEndDate())
-            {
+            if($registration->requiresEndDate()) {
                 $feature->setEndDate($endDate + 86399); // Add 23h23m23s so that the end date is actuall 11:59:59pm on the selected day
-            }
-            else
-            {
+            } else {
                 $feature->setEndDate(0);
+
             }
         }
 

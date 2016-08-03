@@ -40,6 +40,8 @@ class RoomView extends hms\View {
 
         // Drop down enhancements for room damage dialog
         javascript('chosen', null, 'mod/hms/');
+        javascript('jquery');
+        javascriptMod('hms', 'RoomDamages', array('ROOM_PERSISTENT_ID' => "".$this->room->getPersistentId()));
 
         /*** Header Info ***/
         $tpl = array();

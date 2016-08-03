@@ -21,24 +21,32 @@ class AddRoomDamageCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        $roomId = $context->get('roomId');
-        $damageType = $context->get('damage_type');
-        $term = $context->get('term');
+        if(UserStatus::isUser())
+        {
+            $term = Term::getSelectedTerm();
+            $username = UserStatus::getUsername();            
+            $student = StudentFactory::getStudentByUsername($username, $term);
+            $checkin = CheckinFactory::getCheckinByBannerId($student->getBannerId(), $term);
+            $end = strtotime('+2 days', $checkin->getCheckinDate());
+            if(time() > $end)
+            {
+                echo json_encode(array('status' => 'The period to add room damages have passed, as it has been more than 48 hours.'));
+                exit;
+            }
+        }
+        $roomId = $context->get('roomPersistentId');
+        $damageType = $context->get('damageType');
+        $term = Term::getSelectedTerm();
         $side = $context->get('side');
-        $note = $context->get('note');
+        $note = $context->get('description');
 
         $room = RoomFactory::getRoomByPersistentId($roomId, $term);
 
         $damage = new RoomDamage($room, $term, $damageType, $side, $note);
 
-        $db = new PHPWS_DB('hms_room_damage');
-        $result = $db->saveObject($damage);
+        RoomDamageFactory::save($damage);
 
-        if(PHPWS_Error::logIfError($result)){
-            throw new DatabaseException($result->toString());
-        }
-
-        echo 'success';
+        echo json_encode(array('status' => 'success'));
         exit;
     }
 }

@@ -2,23 +2,24 @@
 
 PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
 
-class RoomChangeRegistration extends ApplicationFeatureRegistration {
+class DamageRegistration extends ApplicationFeatureRegistration {
     public function __construct()
     {
-        $this->name = 'RoomChange';
-        $this->description = 'Room Change';
+        $this->name = 'Damage';
+        $this->description = 'Room Damage Self-Reporting';
         $this->startDateRequired = true;
         $this->endDateRequired = true;
-        $this->priority = 8;
+        $this->priority = 7;
     }
 
     public function showForStudent(Student $student, $term)
     {
+        // Set up the check for whether it is in the 48 hour period.
         return true;
     }
 }
 
-class RoomChange extends ApplicationFeature {
+class Damage extends ApplicationFeature {
 
     public function getMenuBlockView(Student $student)
     {
@@ -28,8 +29,6 @@ class RoomChange extends ApplicationFeature {
 
         $assignment = HMS_Assignment::getAssignment($student->getUsername(), $this->term);
 
-        $request = RoomChangeRequestFactory::getPendingByStudent($student, $this->term);
-
-        return new RoomChangeMenuBlockView($student, $this->term, $this->getStartDate(), $this->getEndDate(), $assignment, $request);
+        return new DamageMenuBlockView($student, $this->term, $this->getStartDate(), $this->getEndDate(), $assignment);
     }
 }

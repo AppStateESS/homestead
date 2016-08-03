@@ -20,4 +20,27 @@ class RoomFactory {
 
         return $room;
     }
+
+    // Retrieves bed by regular Id
+	public static function getRoomById($roomId, $term)
+    {
+        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+
+    	$db = PdoFactory::getPdoInstance();
+
+        $query = "select * from hms_room where id = :roomId AND term = :term";
+        $stmt = $db->prepare($query);
+
+        $params = array(
+                    'roomId' 	   => $roomId,
+                    'term'         => $term
+		);
+        $stmt->execute($params);
+
+        $results = $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomRestored');
+
+        return $results[0];
+    }
+
 }
