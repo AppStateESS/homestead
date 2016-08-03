@@ -133,8 +133,7 @@ var RoomDamageBox = React.createClass({
                 <h2>Room Damages <small>{this.state.room.location}</small></h2>
                 <CurrentDamagesTable roomDamages={this.state.damages}/>
                 <AddDamageBox options={this.state.options} addDamage={this.addUnsavedDamages} newDamages={this.state.newDamages}
-                    removeRoomDamages={this.removeRoomDamages} alert={this.state.alert}/>
-                <button onClick={this.saveDamages} className="btn btn-lg btn-primary">Save New Damages</button>
+                    removeRoomDamages={this.removeRoomDamages} alert={this.state.alert} saveDamages={this.saveDamages}/>
             </div>
         );
     }
@@ -216,10 +215,18 @@ var AddDamageBox = React.createClass({
         var desc = descInput.value;
         var dmgTypeUnset = (dmgType == 0);
         var descUnset = (desc == "");
-        if(!dmgTypeUnset && !descUnset)
-        {
+
+        // If the form data is valid, then update state
+        if(!dmgTypeUnset && !descUnset){
+            // Reset the form for the next damage
+            this.refs.damageType.getDOMNode().value = '0';
+            this.refs.side.getDOMNode().value = 'Both';
+            this.refs.desc.getDOMNode().value = '';
+
             this.props.addDamage(dmgType, side, desc);
         }
+
+        // Otherwise, update state to indicate an error
         this.setState({dmgTypeInvalid: dmgTypeUnset, descInvalid: descUnset});
 
     },
@@ -277,9 +284,18 @@ var AddDamageBox = React.createClass({
                         <div className="panel-heading">
                             <h4>New Room Damages</h4>
                         </div>
+
                         <div className="panel-body">
+                            <div className="row">
+                                <div className="col-md-10">
+                                    <p>Add any additional damages you've found in your room. The left/right side of the room are from the perspective of facing into the room from the hallway.</p>
+                                </div>
+                            </div>
+
                             <AlertBox alert={this.props.alert}/>
-                            <UnsavedDamagesTable newRoomDamages={this.props.newDamages} removeRow={this.props.removeRoomDamages}/>
+
+                            <UnsavedDamagesTable newRoomDamages={this.props.newDamages} removeRow={this.props.removeRoomDamages} saveDamages={this.props.saveDamages}/>
+                            <hr/>
                             <div className="row">
                                 <div className="col-md-5">
                                     <div className={dmgTypeClasses}>
@@ -289,7 +305,7 @@ var AddDamageBox = React.createClass({
                                         </select>
                                     </div>
                                 </div>
-                                <div className="col-md-2">
+                                <div className="col-md-3">
                                     <div className="form-group">
                                         <label>Side of Room:</label>
                                         <select className="form-control" ref="side">
@@ -299,7 +315,7 @@ var AddDamageBox = React.createClass({
                                         </select>
                                     </div>
                                 </div>
-                                <div className="col-md-5">
+                                <div className="col-md-4">
                                     <div className={descClasses}>
                                         <label>Description</label>
                                         <input type="text" className="form-control" ref="desc"></input>
@@ -307,7 +323,7 @@ var AddDamageBox = React.createClass({
                                 </div>
                             </div>
                             <div className="form-group">
-                                <button onClick={this.add} className="btn btn-md btn-success pull-right">Add Damage</button>
+                                <button onClick={this.add} className="btn btn-md btn-success pull-right"><i className="fa fa-plus"></i> Add Damage</button>
                             </div>
                         </div>
                     </div>
@@ -365,7 +381,7 @@ var UnsavedDamagesTable = React.createClass({
             var removeRow = this.removeRow
             var rows = data.map(function(node){
                 return (
-                    <UnsavedDamageRow node={node} removeRow={removeRow}/>
+                    <UnsavedDamageRow key={node.dmgTypeId + node.category + node.side} node={node} removeRow={removeRow}/>
                 );
             });
             return (
@@ -377,13 +393,18 @@ var UnsavedDamagesTable = React.createClass({
                                 <th>Category</th>
                                 <th>Damage Type</th>
                                 <th>Side</th>
-                                <th>Actions</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             {rows}
                         </tbody>
                     </table>
+                    <div className="row">
+                        <div className="col-md-12">
+                            <button onClick={this.props.saveDamages} className="btn btn-lg btn-primary pull-right">Save New Damages</button>
+                        </div>
+                    </div>
                 </div>
             );
         }
@@ -413,7 +434,7 @@ var UnsavedDamageRow = React.createClass({
                     <a style={commentStyle} className="pull-left" href="javascript:;" title={node.note}>
                         <i className="fa fa-comment"></i>
                     </a>
-                    <button onClick={this.removeRow} className="close pull-left">
+                    <button onClick={this.removeRow} className="close pull-right">
                       <i className="fa fa-trash-o"></i>
                     </button>
                 </td>
