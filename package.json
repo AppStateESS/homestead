@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/csdetschjr/homestead/issues"
   },
-  "homepage": "https://github.com/csdetschjr/homestead#readme"
+  "homepage": "https://github.com/csdetschjr/homestead#readme",
+  "dependencies": {
+    "classnames": "~2.2.5"
+  }
 }

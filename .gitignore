@@ -41,3 +41,4 @@ Thumbs.db
 vendor/
 composer.phar
 bower_components
+node_modules
