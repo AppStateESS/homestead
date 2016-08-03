@@ -8,59 +8,33 @@ class RetrieveRoomDamageCommand extends Command {
 
     public function setRoomPersistentId($id)
     {
-      $this->roomPersistentId = $id;
+        $this->roomPersistentId = $id;
     }
 
     public function getRequestVars(){
         return array('action'=>'RetrieveRoomDamage',
-                      'roomPersistentId' => $this->roomPersistentId);
+        'roomPersistentId' => $this->roomPersistentId);
     }
 
     public function execute(CommandContext $context)
     {
-      $this->setRoomPersistentId($context->get('roomPersistentId'));
+        $this->setRoomPersistentId($context->get('roomPersistentId'));
 
-      $db = PdoFactory::getPdoInstance();
+        $db = PdoFactory::getPdoInstance();
 
-      $query = "select id, term, side, damage_type, reported_on, note from hms_room_damage where room_persistent_id = :persistentId and repaired = 0";
+        $query = "select hms_room_damage.id, term, side, damage_type, to_char(to_timestamp(reported_on), 'MM/DD/YY') as reported_on, note, hms_damage_type.category, hms_damage_type.description FROM hms_room_damage JOIN hms_damage_type ON hms_room_damage.damage_type = hms_damage_type.id WHERE room_persistent_id = :persistentId and repaired = 0";
 
-      $stmt = $db->prepare($query);
+        $stmt = $db->prepare($query);
 
-      $params = array(
-        'persistentId' => $this->roomPersistentId
-      );
-
-      $stmt->execute($params);
-
-      $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-      $damageTypeQuery = "select category, description from hms_damage_type where id = :damageType";
-
-      $i = 0;
-      $converted = array();
-
-      foreach ($results as $row) {
-        $dmgType = $row['damage_type'];
-
-        $stmt = $db->prepare($damageTypeQuery);
-
-        $damageTypeParams = array(
-          'damageType' => $dmgType
+        $params = array(
+            'persistentId' => $this->roomPersistentId
         );
 
-        $stmt->execute($damageTypeParams);
+        $stmt->execute($params);
 
-        $result = $stmt->fetch();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $row['category'] = $result['category'];
-        $row['description'] = $result['description'];
-
-
-        $row['reported_on'] = date('m/d/Y', $row['reported_on']);
-        array_push($converted, $row);
-      }
-
-      echo json_encode($converted);
-      exit;
+        echo json_encode($results);
+        exit;
     }
 }
