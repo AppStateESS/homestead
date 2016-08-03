@@ -1,6 +1,7 @@
 <script type="text/javascript">
     var roomPID = '{ROOM_PID}';
     var roomLocation = '{ROOM_LOCATION}';
+    var term = '{TERM}';
 </script>
 
 <div id="roomDamage"></div>

@@ -28,6 +28,7 @@ class StudentAddRoomDamagesView extends hms\View {
 
         $tpl['ROOM_PID'] = $room->getPersistentId();
         $tpl['ROOM_LOCATION'] = $room->where_am_i();
+        $tpl['TERM'] = $this->term;
 
         return PHPWS_Template::process($tpl, 'hms', 'student/addRoomDamages.tpl');
     }

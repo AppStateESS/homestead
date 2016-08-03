@@ -94,8 +94,13 @@ var RoomDamageBox = React.createClass({
     {
         //console.log(desc)
         $.ajax({
-          url: 'index.php?module=hms&action=AddRoomDamage&roomPersistentId='+roomPID+'&damageType='+type+'&side='+side+'&description='+desc,
+          //url: 'index.php?module=hms&action=AddRoomDamage&roomPersistentId='+roomPID+'&damageType='+type+'&side='+side+'&description='+desc+'&term='+term,
+          url: 'index.php?module=hms&action=AddRoomDamage&roomPersistentId=' + roomPID + '&term=' + term,
           type: 'POST',
+          data: {damageType: type,
+                side: side,
+                description: desc
+            },
           success: function(data) {
               var newAlert = JSON.parse(data);
               this.setState({alert: newAlert});

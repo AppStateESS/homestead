@@ -46,6 +46,7 @@ class DamageMenuBlockView extends hms\View {
         } else {
             $tpl['ICON'] = FEATURE_OPEN_ICON;
             $addRoomDmgsCmd = CommandFactory::getCommand('ShowStudentAddRoomDamages');
+            $addRoomDmgsCmd->setTerm($this->term);
 
             $tpl['NEW_REQUEST'] = $addRoomDmgsCmd->getLink('add room damages');
             $tpl['DEADLINE'] = HMS_Util::get_long_date_time($end);

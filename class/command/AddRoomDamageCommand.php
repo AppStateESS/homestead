@@ -16,31 +16,33 @@ class AddRoomDamageCommand extends Command {
     {
         return array('action'=> 'AddRoomDamage',
                      'roomId'=> $this->room->getPersistentId(),
-                     'term'  => $this->room->getTerm());
+                 );
     }
 
     public function execute(CommandContext $context)
     {
         if(UserStatus::isUser())
         {
-            $term = Term::getSelectedTerm();
-            $username = UserStatus::getUsername();            
+            $term = $context->get('term');
+
+            // Load the room based on the term and room id passed in
+            $roomId = $context->get('roomPersistentId');
+            $room = RoomFactory::getRoomByPersistentId($roomId, $term);
+
+            $username = UserStatus::getUsername();
             $student = StudentFactory::getStudentByUsername($username, $term);
             $checkin = CheckinFactory::getCheckinByBannerId($student->getBannerId(), $term);
             $end = strtotime('+2 days', $checkin->getCheckinDate());
-            if(time() > $end)
-            {
+
+            if(time() > $end) {
                 echo json_encode(array('status' => 'The period to add room damages have passed, as it has been more than 48 hours.'));
                 exit;
             }
         }
-        $roomId = $context->get('roomPersistentId');
+
         $damageType = $context->get('damageType');
-        $term = Term::getSelectedTerm();
         $side = $context->get('side');
         $note = $context->get('description');
-
-        $room = RoomFactory::getRoomByPersistentId($roomId, $term);
 
         $damage = new RoomDamage($room, $term, $damageType, $side, $note);
 

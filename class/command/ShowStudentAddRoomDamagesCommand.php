@@ -7,13 +7,15 @@ PHPWS_Core::initModClass('hms', 'RoomChangeRequestForm.php');
 
 
 class ShowStudentAddRoomDamagesCommand extends Command {
+
     private $term;
 
     public function getRequestVars()
     {
         return array(
                 'action' => 'ShowStudentAddRoomDamages',
-        );
+                'term' => $this->term
+                );
     }
 
     public function setTerm($term)
@@ -23,8 +25,8 @@ class ShowStudentAddRoomDamagesCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        $term = Term::getCurrentTerm();
-
+        $term = $context->get('term');
+        
         // Create the student
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
