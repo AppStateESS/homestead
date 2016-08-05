@@ -29,7 +29,7 @@ class DamageMenuBlockView extends hms\View {
 
         if($checkin != null)
         {
-            $end = strtotime('+2 days', $checkin->getCheckinDate());
+            $end = strtotime('+7 days', $checkin->getCheckinDate());
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
