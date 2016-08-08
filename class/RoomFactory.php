@@ -6,6 +6,14 @@ class RoomFactory {
 
     public static function getRoomByPersistentId($roomId, $term)
     {
+        if(is_null($roomId) || $roomId == ''){
+            throw new InvalidArgumentException('Missing roomId parameter.');
+        }
+
+        if(is_null($term) || $term == ''){
+            throw new InvalidArgumentException('Missing term parameter.');
+        }
+
         $db = new PHPWS_DB('hms_room');
 
         $db->addWhere('term', $term);
