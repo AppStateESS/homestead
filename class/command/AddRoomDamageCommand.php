@@ -2,6 +2,7 @@
 
 PHPWS_Core::initModClass('hms', 'RoomFactory.php');
 PHPWS_Core::initModClass('hms', 'RoomDamage.php');
+PHPWS_Core::initModClass('hms', 'UserStatus.php');
 
 class AddRoomDamageCommand extends Command {
 
@@ -21,23 +22,26 @@ class AddRoomDamageCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(UserStatus::isUser())
+        if(!Current_User::isLogged())
         {
-            $term = $context->get('term');
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You must be logged in first.');
+        }
 
-            // Load the room based on the term and room id passed in
-            $roomId = $context->get('roomPersistentId');
-            $room = RoomFactory::getRoomByPersistentId($roomId, $term);
+        $term = $context->get('term');
 
-            $username = UserStatus::getUsername();
-            $student = StudentFactory::getStudentByUsername($username, $term);
-            $checkin = CheckinFactory::getCheckinByBannerId($student->getBannerId(), $term);
-            $end = strtotime('+7 days', $checkin->getCheckinDate());
+        // Load the room based on the term and room id passed in
+        $roomId = $context->get('roomPersistentId');
+        $room = RoomFactory::getRoomByPersistentId($roomId, $term);
 
-            if(time() > $end) {
-                echo json_encode(array('status' => 'The period to add room damages have passed, as it has been more than 48 hours.'));
-                exit;
-            }
+        $username = UserStatus::getUsername();
+        $student = StudentFactory::getStudentByUsername($username, $term);
+        $checkin = CheckinFactory::getCheckinByBannerId($student->getBannerId(), $term);
+        $end = strtotime('+7 days', $checkin->getCheckinDate());
+
+        if(time() > $end) {
+            echo json_encode(array('status' => 'The period to add room damages have passed, as it has been more than 48 hours.'));
+            exit;
         }
 
         $damageType = $context->get('damageType');
