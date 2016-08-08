@@ -3,4 +3,5 @@
 <script type ="text/jsx" src = "mod/hms/javascript/RoomDamages/RoomDamages.jsx"></script>
 <script type ="text/javascript">
   var roomPersistentId = '{ROOM_PERSISTENT_ID}';
+  var term             = '{TERM}';
 </script>

@@ -46,7 +46,7 @@ var RoomDamagesBox = React.createClass({
   },
   postData: function(type, side, desc) {
     $.ajax({
-      url: 'index.php?module=hms&action=AddRoomDamage&roomPersistentId='+roomPersistentId+'&damageType='+type+'&side='+side+'&description='+desc,
+      url: 'index.php?module=hms&action=AddRoomDamage&roomPersistentId='+roomPersistentId+'&damageType='+type+'&side='+side+'&description=' + desc + '&term=' + this.props.term,
       type: 'POST',
       success: function(data) {
         this.getData();
@@ -248,6 +248,6 @@ var RoomDamagesForm = React.createClass({
 
 
 React.render(
-  <RoomDamagesBox/>,
+  <RoomDamagesBox term={term} />,
   document.getElementById('RoomDamages')
 );
