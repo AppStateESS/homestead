@@ -35,13 +35,18 @@ class AddRoomDamageCommand extends Command {
         $room = RoomFactory::getRoomByPersistentId($roomId, $term);
 
         $username = UserStatus::getUsername();
-        $student = StudentFactory::getStudentByUsername($username, $term);
-        $checkin = CheckinFactory::getCheckinByBannerId($student->getBannerId(), $term);
-        $end = strtotime('+7 days', $checkin->getCheckinDate());
 
-        if(time() > $end) {
-            echo json_encode(array('status' => 'The period to add room damages have passed, as it has been more than 48 hours.'));
-            exit;
+        // NB: This command is used from both the student self-reporting side, and the admin side
+        // If this user is not an admin (i.e. is a student), then we need to check for a check-in and its deadline
+        if(!UserStatus::isAdmin()){
+            $student = StudentFactory::getStudentByUsername($username, $term);
+            $checkin = CheckinFactory::getCheckinByBannerId($student->getBannerId(), $term);
+            $end = strtotime('+7 days', $checkin->getCheckinDate());
+
+            if(time() > $end) {
+                echo json_encode(array('status' => 'The period to add room damages have passed, as it has been more than 48 hours.'));
+                exit;
+            }
         }
 
         $damageType = $context->get('damageType');

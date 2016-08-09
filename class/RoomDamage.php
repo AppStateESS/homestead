@@ -43,7 +43,7 @@ class RoomDamage {
         $this->side                  = $side;
         $this->repaired              = false;
         $this->note                  = $note;
-        $this->reported_by           = Current_User::getUsername();
+        $this->reported_by           = UserStatus::getUsername();
         $this->reported_on           = time();
     }
 
