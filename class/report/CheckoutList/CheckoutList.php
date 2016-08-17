@@ -1,5 +1,7 @@
 <?php
 
+PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+
 /**
  * Checkout List Report
  * Lists all of the currently checked-out students, ordered by hall and room number
@@ -30,7 +32,6 @@ class CheckoutList extends Report implements iCsvReport {
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $term = $this->term;
 
 
@@ -69,11 +70,14 @@ class CheckoutList extends Report implements iCsvReport {
 
             $student = StudentFactory::getStudentByBannerId($bannerId, $this->term);
 
+            $row['bed'] = $row['bedroom_label'] . $row['bed_letter'];
             $row['checkout_date'] = HMS_Util::get_short_date_time($row['checkout_date']);
             $row['username'] = $student->getUsername();
             $row['first_name'] = $student->getFirstName();
             $row['last_name'] = $student->getLastName();
-            $row['bed'] = $row['bedroom_label'] . $row['bed_letter'];
+
+            unset($row['bed_letter']);
+            unset($row['bedroom_label']);
 
             // Copy the cleaned up row to the member var for data
             $this->data[] = $row;
@@ -82,7 +86,7 @@ class CheckoutList extends Report implements iCsvReport {
 
     public function getCsvColumnsArray()
     {
-        return array_keys($this->data[0]);
+        return array('Banner ID', 'Checkout Date', 'checked out by', 'Hall', 'Floor', 'Room', 'Bed', 'username', 'First Name', 'Last Name');
     }
 
     public function getCsvRowsArray(){
