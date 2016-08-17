@@ -1,17 +1,17 @@
 <?php
 
 /**
- * Checkin List Report
- * Lists all of the currently checked-in students, ordered by hall and room number
+ * Checkout List Report
+ * Lists all of the currently checked-out students, ordered by hall and room number
  *
- * @author jbooker
+ * @author Chris Detsch
  * @package HMS
- */
+*/
 
-class CheckinList extends Report implements iCsvReport {
+class CheckoutList extends Report implements iCsvReport {
 
-    const friendlyName = 'Check-in - List of Check-ins';
-    const shortName = 'CheckinList';
+    const friendlyName = 'Check-out - List of Check-outs';
+    const shortName = 'CheckoutList';
 
     private $term;
 
@@ -40,13 +40,16 @@ class CheckinList extends Report implements iCsvReport {
         $db->addJoin('', 'hms_checkin', 'hms_hall_structure', 'bed_id', 'bedid');
 
         $db->addColumn('hms_checkin.banner_id');
-        $db->addColumn('hms_checkin.checkin_date');
-
+        $db->addColumn('hms_checkin.checkout_date');
+        $db->addColumn('hms_checkin.checkout_by');
         $db->addColumn('hms_hall_structure.hall_name');
+        $db->addColumn('hms_hall_structure.floor_number');
         $db->addColumn('hms_hall_structure.room_number');
+        $db->addColumn('hms_hall_structure.bedroom_label');
+        $db->addColumn('hms_hall_structure.bed_letter');
 
         $db->addWhere('hms_checkin.term', $term);
-        $db->addWhere('hms_checkin.checkout_date', null, 'IS NULL');
+        $db->addWhere('hms_checkin.checkout_date', null, 'IS NOT');
 
         // Sort by hall, then room number
         $db->addOrder(array('hms_hall_structure.hall_name ASC', 'hms_hall_structure.room_number ASC'));
@@ -59,11 +62,18 @@ class CheckinList extends Report implements iCsvReport {
 
         // Post-processing, cleanup, making it pretty
         foreach($results as $row){
-
             // Updates counts
             $this->total++;
 
-            $row['checkin_date'] = HMS_Util::get_short_date_time($row['checkin_date']);
+            $bannerId = $row['banner_id'];
+
+            $student = StudentFactory::getStudentByBannerId($bannerId, $this->term);
+
+            $row['checkout_date'] = HMS_Util::get_short_date_time($row['checkout_date']);
+            $row['username'] = $student->getUsername();
+            $row['first_name'] = $student->getFirstName();
+            $row['last_name'] = $student->getLastName();
+            $row['bed'] = $row['bedroom_label'] . $row['bed_letter'];
 
             // Copy the cleaned up row to the member var for data
             $this->data[] = $row;
