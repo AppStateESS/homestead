@@ -15,8 +15,6 @@ function homesteadRunDbMigration($fileName)
  */
 function hms_update(&$content, $currentVersion)
 {
-    $files = array();
-
     switch ($currentVersion) {
         case version_compare($currentVersion, '0.4.92', '<') :
             PHPWS_Core::initModClass('users', 'Permission.php');
