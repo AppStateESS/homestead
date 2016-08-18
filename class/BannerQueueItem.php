@@ -9,6 +9,7 @@ class BannerQueueItem {
 
     public $id;
     public $type;
+    public $banner_id;
     public $asu_username;
     public $term;
     public $building_code;
@@ -39,6 +40,7 @@ class BannerQueueItem {
         $this->meal_plan        = $mealPlan;
         $this->meal_code        = $mealCode;
         $this->percent_refund   = $percentRefund;
+        $this->banner_id        = $student->getBannerId();
 
     }
 
@@ -106,32 +108,28 @@ class BannerQueueItem {
 
         switch($this->type) {
             case BANNER_QUEUE_ASSIGNMENT:
-                $result = $soap->reportRoomAssignment(
-                $this->asu_username,
-                $this->term,
-                $this->building_code,
-                $this->bed_code,
-                    'HOME',
-                $this->meal_code);
+                $result = $soap->createRoomAssignment(
+                                    $this->banner_id,
+                                    $this->term,
+                                    $this->building_code,
+                                    $this->bed_code,
+                                        'HOME',
+                                    $this->meal_code);
                 if($result === TRUE) {
                     HMS_Activity_Log::log_activity(
-                    $this->asu_username,
-                    ACTIVITY_ASSIGNMENT_REPORTED,
-                    Current_User::getUsername(),
-                    $this->term . ' ' .
-                    $this->building_code . ' ' .
-                    $this->bed_code . ' ' .
-                        'HOME' . ' ' .
-                    $this->meal_code);
+                                    $this->asu_username,
+                                    ACTIVITY_ASSIGNMENT_REPORTED,
+                                    Current_User::getUsername(),
+                                    $this->term . ' ' .
+                                    $this->building_code . ' ' .
+                                    $this->bed_code . ' ' .
+                                        'HOME' . ' ' .
+                                    $this->meal_code);
                 }
                 break;
             case BANNER_QUEUE_REMOVAL:
-                // Get the Banner ID from the user name
-                // TODO fix this to use BannerID directly
-                $bannerId = $soap->getBannerId($this->asu_username);
-
                 $result = $soap->removeRoomAssignment(
-                                    $bannerId,
+                                    $this->banner_id,
                                     $this->term,
                                     $this->building_code,
                                     $this->bed_code,
@@ -139,17 +137,18 @@ class BannerQueueItem {
 
                 if($result === TRUE) {
                     HMS_Activity_Log::log_activity(
-                    $this->asu_username,
-                    ACTIVITY_REMOVAL_REPORTED,
-                    Current_User::getUsername(),
-                    $this->term . ' ' .
-                    $this->building_code . ' ' .
-                    $this->bed_code . ' ');
+                                    $this->asu_username,
+                                    ACTIVITY_REMOVAL_REPORTED,
+                                    Current_User::getUsername(),
+                                    $this->term . ' ' .
+                                    $this->building_code . ' ' .
+                                    $this->bed_code . ' ');
                 }
                 break;
         }
 
+
+
         return $result;
     }
 }
-
