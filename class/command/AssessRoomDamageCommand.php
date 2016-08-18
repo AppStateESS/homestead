@@ -45,7 +45,6 @@ class AssessRoomDamageCommand extends Command {
                 $resp->reportToStudentAccount();
             } catch(\Exception $e){
                 header('HTTP/1.1 500 Internal Server Error');
-                var_dump($e);
                 exit;
             }
 
