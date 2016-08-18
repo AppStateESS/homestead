@@ -56,7 +56,7 @@
                                     {HALL_NAME}
                                 </div>
                                 <div class="form-group">
-                                    <label for="{GENDER_TYPE_LABEL}">Gender</label>
+                                    <label for="{GENDER_TYPE_ID}">Gender</label>
                                     {GENDER_TYPE}
                                 </div>
 
@@ -81,14 +81,14 @@
                                         {ASSIGNMENT_NOTIFICATIONS} Assignment Notifications
                                     </label>
                                 </div>
-                                <!--
+                                
                                 <div class="form-group">
-                                    <label for="{PACKAGE_DESK}">
+                                    <label for="{PACKAGE_DESK_ID}">
                                         Package Desk
                                     </label>
                                     {PACKAGE_DESK}
                                 </div>
-                                -->
+                               
                                 <button type="submit" class="btn btn-success pull-right">Save</button>
                             </div>
                         </div>
