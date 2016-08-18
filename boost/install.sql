@@ -614,17 +614,18 @@ CREATE TABLE hms_pending_assignment (
 );
 
 CREATE TABLE hms_banner_queue (
-    id integer NOT NULL,
-    "type" integer NOT NULL,
-    asu_username character varying(32) NOT NULL,
-    building_code character varying(6) NOT NULL,
-    bed_code character varying(15) NOT NULL,
-    meal_plan character varying(5),
-    meal_code smallint DEFAULT 0,
-    term integer NOT NULL,
-    percent_refund integer,
-    queued_on integer NOT NULL,
-    queued_by integer NOT NULL,
+    id              integer NOT NULL,
+    type            integer NOT NULL,
+    banner_id       integer NOT NULL,
+    asu_username    character varying(32) NOT NULL,
+    building_code   character varying(6) NOT NULL,
+    bed_code        character varying(15) NOT NULL,
+    meal_plan       character varying(5),
+    meal_code       smallint DEFAULT 0,
+    term            integer NOT NULL,
+    percent_refund  integer,
+    queued_on       integer NOT NULL,
+    queued_by       integer NOT NULL,
     PRIMARY KEY (id)
 );
 

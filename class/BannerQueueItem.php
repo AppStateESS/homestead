@@ -9,6 +9,7 @@ class BannerQueueItem {
 
     public $id;
     public $type;
+    public $banner_id;
     public $asu_username;
     public $term;
     public $building_code;
@@ -16,7 +17,6 @@ class BannerQueueItem {
     public $meal_plan = 'HOME';
     public $meal_code;
     public $percent_refund;
-    public $banner_id;
 
     public $queued_on;
     public $queued_by;
@@ -109,22 +109,22 @@ class BannerQueueItem {
         switch($this->type) {
             case BANNER_QUEUE_ASSIGNMENT:
                 $result = $soap->createRoomAssignment(
-                $this->banner_id,
-                $this->term,
-                $this->building_code,
-                $this->bed_code,
-                    'HOME',
-                $this->meal_code);
+                                    $this->banner_id,
+                                    $this->term,
+                                    $this->building_code,
+                                    $this->bed_code,
+                                        'HOME',
+                                    $this->meal_code);
                 if($result === TRUE) {
                     HMS_Activity_Log::log_activity(
-                    $this->asu_username,
-                    ACTIVITY_ASSIGNMENT_REPORTED,
-                    Current_User::getUsername(),
-                    $this->term . ' ' .
-                    $this->building_code . ' ' .
-                    $this->bed_code . ' ' .
-                        'HOME' . ' ' .
-                    $this->meal_code);
+                                    $this->asu_username,
+                                    ACTIVITY_ASSIGNMENT_REPORTED,
+                                    Current_User::getUsername(),
+                                    $this->term . ' ' .
+                                    $this->building_code . ' ' .
+                                    $this->bed_code . ' ' .
+                                        'HOME' . ' ' .
+                                    $this->meal_code);
                 }
                 break;
             case BANNER_QUEUE_REMOVAL:
@@ -137,12 +137,12 @@ class BannerQueueItem {
 
                 if($result === TRUE) {
                     HMS_Activity_Log::log_activity(
-                    $this->asu_username,
-                    ACTIVITY_REMOVAL_REPORTED,
-                    Current_User::getUsername(),
-                    $this->term . ' ' .
-                    $this->building_code . ' ' .
-                    $this->bed_code . ' ');
+                                    $this->asu_username,
+                                    ACTIVITY_REMOVAL_REPORTED,
+                                    Current_User::getUsername(),
+                                    $this->term . ' ' .
+                                    $this->building_code . ' ' .
+                                    $this->bed_code . ' ');
                 }
                 break;
         }
