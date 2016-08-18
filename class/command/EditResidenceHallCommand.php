@@ -87,6 +87,13 @@ class EditResidenceHallCommand extends Command {
 
             $hall->setPackageDeskId($context->get('package_desk'));
 
+            $packageDeskId = $context->get('package_desk');
+            if ($packageDeskId > 0 ) {
+                $hall->setPackageDeskId($packageDeskId);
+            } else {
+                $hall->setPackageDeskId(null);
+            }
+
         } else if ($context->get('tab') == 'images'){
             $hall->exterior_image_id    = $context->get('exterior_image_id');
             $hall->other_image_id       = $context->get('other_image_id');
