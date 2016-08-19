@@ -231,7 +231,7 @@ class HMS_Bed extends HMS_Item {
         $floor = $room->get_parent();
         $building = $floor->get_parent();
 
-        $text = $building->hall_name . ' Room ' . $room->room_number;
+        $text = $building->hall_name . ' Room ' . $room->room_number . ' - ' . $this->bedroom_label . $this->bed_letter;
 
         if ($link) {
             $roomCmd = CommandFactory::getCommand('EditRoomView');

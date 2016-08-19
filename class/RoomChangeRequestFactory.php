@@ -32,6 +32,37 @@ class RoomChangeRequestFactory {
     }
 
     /**
+     * Returns the latest room change request for the given bed.
+     * NB: This doesn't check the request status, so you're always going to
+     * get the last room change request for the given bed
+     * @param HMS_Bed $bed The HMS_Bed object that you want the room change request for
+     * @return RoomChangeRequestRestored Room change request object that corresponds to this bed
+     * @throws InvalidArgumentException
+     */
+    public static function getCurrentRequestByBed(HMS_Bed $bed)
+    {
+        if (!isset($bed) || is_null($bed)) {
+            throw new InvalidArgumentException('Missing bed.');
+        }
+
+        $db = PdoFactory::getPdoInstance();
+
+        $query = "SELECT *
+                  FROM hms_room_change_curr_request
+                  WHERE id
+                  IN (SELECT request_id FROM hms_room_change_participant WHERE to_bed = :bedId)
+                  ORDER BY effective_date desc limit 1";
+
+        $stmt = $db->prepare($query);
+        $stmt->execute(array(
+                'bedId' => $bed->getId()
+        ));
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+
+        return $stmt->fetch();
+    }
+
+    /**
      * Returns a RoomChangeReuqest object corresponding to any
      * pending requests a student might have open, or null otherwise.
      *

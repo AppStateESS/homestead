@@ -1,5 +1,9 @@
 <h2><small>{TERM} &raquo; {HALL_NAME} &raquo; {FLOOR_NUMBER} &raquo; {ROOM_NUMBER_LINK}</small></h2>
-<h1>Room {ROOM_NUMBER} - Bed {BED_LABEL}</h1>
+<h1 style="display: inline-block; margin-right: 15px">Room {ROOM_NUMBER} - Bed {BED_LABEL}</h1>
+
+<!-- BEGIN bath -->
+<h3 style="display:inline-block"><span class="label label-danger">{ROOM_CHANGE_RESERVED}</span></h3>
+<!-- END bath -->
 
 {START_FORM}
 <div class="row">
@@ -8,9 +12,16 @@
             <div class="panel-heading">
                 <h3 class="panel-title">Assignment</h3>
             </div>
+            <!-- BEGIN reserve_link -->
+            <div class="panel-body">
+                <p>Currently reserved for a {RESERVE_LINK}</p>
+            </div>
+            <!-- END reserve_link -->
+            <!-- BEGIN assigned_to -->
             <div class="panel-body">
                 <p>Currently assigned to {ASSIGNED_TO}</p>
             </div>
+            <!-- END assigned_to -->
         </div>
 
         <div class="panel panel-default">
