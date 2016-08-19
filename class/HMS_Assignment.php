@@ -132,7 +132,7 @@ class HMS_Assignment extends HMS_Item {
         $floor = $room->get_parent();
         $building = $floor->get_parent();
 
-        $text = $building->hall_name . ' Room ' . $room->room_number . ' - ' . $bed->bedroom_label;
+        $text = $building->hall_name . ' Room ' . $room->room_number . ' - ' . $bed->bedroom_label .$bed->bed_letter;
 
         if ($room->isPrivate()) {
             $text .= ' (private)';
