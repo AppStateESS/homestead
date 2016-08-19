@@ -36,12 +36,11 @@ class BedView extends hms\View
         $tpl['ROOM_NUMBER'] = $this->room->getRoomNumber();
         $tpl['BED_LABEL'] = $this->bed->getBedroomLabel() . ' ' . $this->bed->getLetter();
 
-        if($this->bed->isRoomChangeReserved())
-        {
+        // If the room is reserved for room change, don't show the "assign student here" link
+        if($this->bed->isRoomChangeReserved()) {
           $tpl['ROOM_CHANGE_RESERVED'] = 'Room Change';
           $tpl['RESERVE_LINK'] = $this->getRoomChangeReservedLink();
-        }
-        else {
+        } else {
           $tpl['ASSIGNED_TO'] = $this->bed->get_assigned_to_link();
         }
 
@@ -154,17 +153,13 @@ class BedView extends hms\View
         return $result;
     }
 
-    private function getRoomChangeReservedLink($newWindow = FALSE)
+    private function getRoomChangeReservedLink()
     {
-      $roomChange = RoomChangeRequestFactory::getCurrentRequestByBed($this->bed);
-      $text = 'room change request';
-      $roomChangeCmd = CommandFactory::getCommand('ShowManageRoomChange');
-      $roomChangeCmd->setRequestId($roomChange->getId());
-      if ($newWindow) {
-          return $roomChangeCmd->getLink($text, 'index');
-      } else {
-          return $roomChangeCmd->getLink($text);
-      }
+        $roomChange = RoomChangeRequestFactory::getCurrentRequestByBed($this->bed);
+        $roomChangeCmd = CommandFactory::getCommand('ShowManageRoomChange');
+        $roomChangeCmd->setRequestId($roomChange->getId());
+        
+        return $roomChangeCmd->getLink('room change request');
     }
 
 }
