@@ -49,27 +49,27 @@ class RoomChangeStudentApproveCommand extends Command {
         $student = StudentFactory::getStudentByBannerId($participant->getBannerId(), $request->getTerm());
 
         // Check permissions. Must be the participant or an admin
-        if(UserStatus::getUsername() != $student->getUsername()
-            && !Current_User::allow('hms', 'admin_approve_room_change')) {
+        if(UserStatus::getUsername() != $student->getUsername() && !Current_User::allow('hms', 'admin_approve_room_change')) {
             throw new PermissionException('You do not have permission to appove this room change.');
         }
 
-        if(!UserStatus::isAdmin())
-        {
-          // Check for CAPTCHA if this is the student; admins don't need a CAPTCHA
-          $captchaResult = Captcha::verify(true);
-          if (UserStatus::getUsername() == $student->getUsername() && $captchaResult === false)
-          {
-              // Failed the captcha
-              NQ::simple('hms', hms\NotificationView::ERROR, "You didn't type the magic words correctly. Please try again.");
-              $cmd = CommandFactory::getCommand('ShowRoomChangeRequestApproval');
-              $cmd->redirect();
-          }
+        // Check for CAPTCHA if this is the student; admins don't need a CAPTCHA
+        if(!UserStatus::isAdmin()) {
+            $captchaResult = Captcha::verify(true);
+            if (UserStatus::getUsername() == $student->getUsername() && $captchaResult === false) {
+                // Failed the captcha
+                NQ::simple('hms', hms\NotificationView::ERROR, "You didn't type the magic words correctly. Please try again.");
+                $cmd = CommandFactory::getCommand('ShowRoomChangeRequestApproval');
+                $cmd->redirect();
+            }
 
-          // If there was a captcha, then log the activity
-          if($captchaResult !== false){
+            // If there was a captcha, then log the activity
+            if($captchaResult !== false){
               HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_AGREED, UserStatus::getUsername(FALSE), 'Request id: ' . $requestId . ' Captcha: ' . $captchaResult);
-          }
+            }
+        }else {
+            // Log the activity, but don't include the captca words
+            HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_AGREED, UserStatus::getUsername(FALSE), 'Request id: ' . $requestId);
         }
 
         // Transition to StudentApproved state
