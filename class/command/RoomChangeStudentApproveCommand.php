@@ -54,19 +54,22 @@ class RoomChangeStudentApproveCommand extends Command {
             throw new PermissionException('You do not have permission to appove this room change.');
         }
 
-        // Check for CAPTCHA if this is the student; admins don't need a CAPTCHA
-        $captchaResult = Captcha::verify(true);
-        if (UserStatus::getUsername() == $student->getUsername() && $captchaResult === false) {
-            // Failed the captcha
-            NQ::simple('hms', hms\NotificationView::ERROR, "You didn't type the magic words correctly. Please try again.");
-            $cmd = CommandFactory::getCommand('ShowRoomChangeRequestApproval');
-            $cmd->redirect();
-        }
+        if(!UserStatus::isAdmin())
+        {
+          // Check for CAPTCHA if this is the student; admins don't need a CAPTCHA
+          $captchaResult = Captcha::verify(true);
+          if (UserStatus::getUsername() == $student->getUsername() && $captchaResult === false)
+          {
+              // Failed the captcha
+              NQ::simple('hms', hms\NotificationView::ERROR, "You didn't type the magic words correctly. Please try again.");
+              $cmd = CommandFactory::getCommand('ShowRoomChangeRequestApproval');
+              $cmd->redirect();
+          }
 
-
-        // If there was a captcha, then log the activity
-        if($captchaResult !== false){
-            HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_AGREED, UserStatus::getUsername(FALSE), 'Request id: ' . $requestId . ' Captcha: ' . $captchaResult);
+          // If there was a captcha, then log the activity
+          if($captchaResult !== false){
+              HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_CHANGE_AGREED, UserStatus::getUsername(FALSE), 'Request id: ' . $requestId . ' Captcha: ' . $captchaResult);
+          }
         }
 
         // Transition to StudentApproved state
@@ -87,5 +90,3 @@ class RoomChangeStudentApproveCommand extends Command {
         }
     }
 }
-
-
