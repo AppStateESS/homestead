@@ -23,6 +23,7 @@
     <!-- END cancel2 -->
 </div>
 
+
 <h2>Status: {REQUEST_STATUS}</h2>
 
 <span>Last updated <span data-livestamp="{last_updated_timestamp}"></span> ({last_updated_date})</span>
@@ -77,22 +78,20 @@
 <p>{DENIED_REASON_PRIVATE}</p>
 <!-- END denied_reason -->
 
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		$.get('index.php?module=hms&action=RoomChangeListAvailableBeds',{gender: $("#participant_form_gender").val()}, bedListCallback, 'json');
 
-
 		// Cancel Form
 		$("#cancel-form").hide();
 		$("#cancel-btn").click(function(event){
-			console.log('click');
 			$("#cancel-form").show();
 		});
 
 		// Deny Form
 		$("#deny-form").hide();
         $("#deny-btn").click(function(event){
-            console.log('click');
             $("#deny-form").show();
         });
 	});
