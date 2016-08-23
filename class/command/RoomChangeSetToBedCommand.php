@@ -48,10 +48,10 @@ class RoomChangeSetToBedCommand extends Command {
         $this->setOldBed($context->get('oldBed'));
 
         $bed = new HMS_Bed($this->bedId);
-        if($this->oldBedId != -1)
-        {
+        if($this->oldBedId != -1) {
           $oldBed = new HMS_Bed($this->oldBedId);
         }
+
         // Load the participant
         $participant = RoomChangeParticipantFactory::getParticipantById($this->participantId);
 
@@ -67,8 +67,7 @@ class RoomChangeSetToBedCommand extends Command {
         $bed->save();
 
 
-        if($this->oldBedId != -1)
-        {
+        if($this->oldBedId != -1) {
           $oldBed->clearRoomChangeReserved();
           $oldBed->save();
         }

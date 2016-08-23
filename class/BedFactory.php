@@ -52,7 +52,7 @@ class BedFactory {
     }
 
     // TODO: If we have an id, why do we need to specify the term?
-	public static function getBedByTermWithId($term, $id)
+	public static function getBedByTermWithId($id, $term)
     {
         PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');

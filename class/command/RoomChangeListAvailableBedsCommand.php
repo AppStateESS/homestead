@@ -32,7 +32,7 @@ class RoomChangeListAvailableBedsCommand extends Command {
                 WHERE
                     bed_term = :term and
                     hms_assignment.bed_id IS NULL and
-                    (room_gender = :gender OR room_gender = 2) and
+                    (room_gender = :gender OR room_gender = 3) and
                     offline = 0 and
                     overflow = 0 and
                     parlor = 0 and

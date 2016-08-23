@@ -31,7 +31,7 @@ var RoomChangeBox = React.createClass({
   },
   getData: function(){
     $.ajax({
-      url: 'index.php?module=hms&action=RoomChangeRetrieveDetails&participantId='+partId,
+      url: 'index.php?module=hms&action=RoomChangeGetDetails&participantId='+partId,
       type: 'GET',
       dataType: 'json',
       success: function(data) {
