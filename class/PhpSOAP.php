@@ -409,4 +409,23 @@ class PhpSOAP extends SOAP
 
         return true;
     }
+
+    public function moveRoomAssignment(Array $students, $term)
+    {
+        $params = array(
+            'User'      => $this->currentUser,
+            'TermCode'  => $term,
+            'Students'  => $students
+        );
+
+        try {
+            $response = $this->client->MoveRoomAssignment($params);
+        }catch(SoapFault $e){
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'MoveRoomAssignmentResult', $params);
+        }
+
+        if($response->MoveRoomAssignmentResult != "0"){
+            throw new BannerException('Error while moving room assignments in Banner.', $response->MoveRoomAssignmentResult, 'MoveRoomAssignmentResult', $params);
+        }
+    }
 }
