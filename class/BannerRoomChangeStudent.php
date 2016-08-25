@@ -17,14 +17,30 @@ class BannerRoomChangeStudent {
     public $new_room_code;
     public $new_bldg_code;
 
-    public function __construct($bannerId, $old_blg_code, $old_room_code, $new_bldg_code, $new_room_code)
+    private $student;
+    private $oldBed;
+    private $newBed;
+
+    public function __construct(Student $student, HMS_Bed $oldBed, HMS_Bed $newBed)
     {
-        $this->banner_id = $bannerId;
+        $this->student = $student;
+        $this->oldBed = $oldBed;
+        $this->newBed = $newBed;
 
-        $this->old_blg_code = $old_blg_code;
-        $this->old_room_code = $old_room_code;
+        $this->banner_id = $student->getBannerId();
 
-        $this->new_bldg_code = $new_bldg_code;
-        $this->new_room_code = $new_room_code;
+        $this->old_bldg_code = $oldBed->get_banner_building_code();
+        $this->old_room_code = $oldBed->getBannerId();
+
+        $this->new_bldg_code = $newBed->get_banner_building_code();
+        $this->new_room_code = $newBed->getBannerId();
+    }
+
+    public function getStudent() {
+        return $this->student;
+    }
+
+    public function getNewBed() {
+        return $this->newBed;
     }
 }

@@ -415,14 +415,6 @@ class HMS_Assignment extends HMS_Item {
             throw new AssignmentException('The bed is not empty.');
         }
 
-        // Issue a warning if the bed was reserved for room change
-        //TODO Move this to the room change view
-        /*
-        if ($vacant_bed->room_change_reserved != 0) {
-            NQ::simple('hms', hms\NotificationView::WARNING, 'Room was reserved for room change');
-        }
-        */
-
         // Check that the room's gender and the student's gender match
         $student_gender = $student->getGender();
 
@@ -681,5 +673,93 @@ class HMS_Assignment extends HMS_Item {
 
         // Show a success message
         return true;
+    }
+
+    /**
+     *
+     * @param Array<BannerRoomChangeStudent> $students Array of BannerRoomChangeStudent objects representing the students to be moved and their to/from beds (hall code + room code)
+     */
+    public static function moveAssignments(Array $students, $term)
+    {
+        PHPWS_Core::initModClass('hms', 'exception/AssignmentException.php');
+
+        // Update the assignments in Banner through the Web Service
+        $soap = SOAP::getInstance(UserStatus::getUsername(), SOAP::ADMIN_USER);
+        $soap->moveRoomAssignment($students, $term);
+
+        // Assuming that worked and we're still here, then do the work of updating the local DB
+        foreach($students as $student){
+            // Lookup this student's old (current) assignment
+            $oldAssignment = HMS_Assignment::getAssignmentByBannerId($student->banner_id, $term);
+
+            // Delete the old assigment
+            $result = $oldAssignment->delete();
+
+            // Update the assignment history table to include the removed assignment
+            AssignmentHistory::makeUnassignmentHistory($oldAssignment, UNASSIGN_CHANGE);
+
+            // Make the new Assignment
+
+            // Get the new bed and corresponding room
+            $newBed = $student->getNewBed();
+            $room = $newBed->get_parent();
+
+            // TODO: Most of this is duplicated from createRoomAssignment; Refactor so we don't have to do that.
+            // Check that the room has a vacancy
+            if (!$room->has_vacancy()) {
+                throw new AssignmentException('The room is full.');
+            }
+
+            // Make sure the room is not offline
+            if ($room->offline) {
+                throw new AssignmentException('The room is offline');
+            }
+
+            // Double check that the bed is in the same term as we're being requested to assign for
+            if ($newBed->getTerm() != $term) {
+                throw new AssignmentException('The bed\'s term and the assignment term do not match.');
+            }
+
+            // Double check that the resulting bed is empty
+            if ($newBed->get_number_of_assignees() > 0) {
+                throw new AssignmentException('The bed is not empty.');
+            }
+
+            $studentObj = $student->getStudent();
+
+            $studentGender = $studentObj->getGender();
+
+            if (is_null($studentGender)) {
+                throw new AssignmentException('Student gender is null.');
+            }
+
+            // Genders must match unless the room is COED
+            if ($room->getGender() != $studentGender && $room->getGender() != COED) {
+                throw new AssignmentException('Room gender does not match the student\'s gender.');
+            }
+
+            // Make the assignment in HMS
+            $assignment = new HMS_Assignment();
+
+            $assignment->setBannerId($studentObj->getBannerId());
+            $assignment->asu_username = $studentObj->getUsername();
+            $assignment->bed_id = $newBed->id;
+            $assignment->term = $term;
+            $assignment->letter_printed = 0;
+            $assignment->email_sent = 0;
+            $assignment->meal_option = $oldAssignment->meal_option;
+            $assignment->reason = $oldAssignment->getReason();
+            $assignment->application_term = $studentObj->getApplicationTerm();
+            $assignment->class = $studentObj->getComputedClass($term);
+
+            $result = $assignment->save();
+
+            // Insert assignment into History table
+            AssignmentHistory::makeAssignmentHistory($assignment);
+
+            // Log in the activity log
+            HMS_Activity_Log::log_activity($studentObj->username, ACTIVITY_ROOM_CHANGE_REASSIGNED, UserStatus::getUsername(), "Room Change Approved in $term From {$student->old_bldg_code} {$student->old_room_code} to {$student->new_bldg_code} {$student->new_room_code}");
+        }
+
     }
 }

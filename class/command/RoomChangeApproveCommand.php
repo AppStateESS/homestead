@@ -51,37 +51,36 @@ class RoomChangeApproveCommand extends Command {
         }
 
 
+        $bannerRoomChangeStudents = array();
+
+        // Build BannerRoomChangeStudent object for each student
+        foreach($participants as $participant){
+            $bannerId = $participant->getBannerId();
+
+            // Get the Student object
+            $student = StudentFactory::getStudentByBannerId($bannerId, $term);
+
+            // Get the student's current assignment
+            $assignment = HMS_Assignment::getAssignmentByBannerId($bannerId, $term);
+
+            // Load the bed so that we can lookup banner building and bed codes later
+            $oldBed = $assignment->get_parent();
+
+            // Load the new Bed object via its ID
+            $newBed = new HMS_Bed($participant->getToBed());
+
+            $bannerRoomChangeStudents[] = new BannerRoomChangeStudent($student, $oldBed, $newBed);
+        }
+
+        // Do all the assignment changes in HMS
+        HMS_Assignment::moveAssignments($bannerRoomChangeStudents, $term);
+
         // Transition the request to 'Approved'
         $request->transitionTo(new RoomChangeStateApproved($request, time(), null, UserStatus::getUsername()));
 
-        // Remove each participants existing assignment
+        // Transition each participant to 'In Process'
         foreach ($participants as $participant) {
-            $bannerId = $participant->getBannerId();
-
-            // Lookup the student
-            $student = StudentFactory::getStudentByBannerId($bannerId, $term);
-
-            // Save student object for later
-            $this->students[$bannerId] = $student;
-
-            // Save student's current assignment reason for later re-use
-            $assignment = HMS_Assignment::getAssignmentByBannerId($bannerId, $term);
-            //TODO - Student might not be assigned!!
-
-            $this->assignmentReasons[$bannerId] = $assignment->getReason();
-
-            // Remove existing assignment
-            // TODO: Don't hard code refund percentage
-            HMS_Assignment::unassignStudent($student, $term, 'Room Change Request Approved', UNASSIGN_CHANGE, 100);
-        }
-
-        // Create new assignments for each participant
-        foreach ($participants as $participant) {
-            // Grab the student object which was previously saved
-            $student = $this->students[$participant->getBannerId()];
-
-            // Create each new assignment
-            HMS_Assignment::assignStudent($student, $term, null, $participant->getToBed(), BANNER_MEAL_STD, 'Room Change Approved', FALSE, $this->assignmentReasons[$bannerId]);
+            $participant->transitionTo(new ParticipantStateInProcess($participant, time(), null, UserStatus::getUsername()));
 
             // Release bed reservation
             $bed = new HMS_Bed($participant->getToBed());
@@ -89,17 +88,11 @@ class RoomChangeApproveCommand extends Command {
             $bed->save();
         }
 
-        // Transition each participant to 'In Process'
-        foreach ($participants as $participant) {
-            $participant->transitionTo(new ParticipantStateInProcess($participant, time(), null, UserStatus::getUsername()));
-            // TODO: Send notifications
-        }
-
         // Notify everyone that they can do the move
         HMS_Email::sendRoomChangeInProcessNotice($request);
 
         // Notify roommates that their circumstances are going to change
-        foreach($request->getParticipants() as $p) {
+        foreach($participants as $p) {
             $student = $this->students[$p->getBannerId()];
 
             // New Roommate
@@ -128,5 +121,3 @@ class RoomChangeApproveCommand extends Command {
         $cmd->redirect();
     }
 }
-
-
