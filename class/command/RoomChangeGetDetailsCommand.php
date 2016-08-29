@@ -23,7 +23,7 @@ class RoomChangeGetDetailsCommand extends Command {
     public function getRequestVars()
     {
         return array('action'           => 'RoomChangeGetDetails',
-        'participantId'    => $this->participantId);
+                     'participantId'    => $this->participantId);
     }
 
     public function execute(CommandContext $context)
@@ -32,32 +32,24 @@ class RoomChangeGetDetailsCommand extends Command {
 
         $participantId = $context->get('participantId');
 
-        $db = PdoFactory::getPdoInstance();
+        $participant = RoomChangeParticipantFactory::getParticipantById($participantId);
 
-        $query = "select from_bed, to_bed from hms_room_change_participant where id = :participantId";
-        $stmt = $db->prepare($query);
+        $from = BedFactory::getBedById($participant->getFromBed())->where_am_i();
 
-        $params = array('participantId' => $participantId);
-        $stmt->execute($params);
-
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        $results = $results[0];
-
-        $from = $results['from_bed'];
-        $from = BedFactory::getBedByTermWithId($from, $term)->where_am_i();
-
-        if($results['to_bed'] != NULL) {
-            $to = $results['to_bed'];
-            $to = BedFactory::getBedByTermWithId($to, $term)->where_am_i();
+        $toBedId = $participant->getToBed();
+        if($toBedId != NULL) {
+            $to = BedFactory::getBedById($toBedId)->where_am_i();
         } else {
-            $to = "TBD";
+            $to = null;
         }
 
-        $results['from'] = $from;
-        $results['to'] = $to;
+        $data = array();
 
-        echo json_encode($results);
+        $data['participant'] = $participant;
+        $data['fromBed'] = $from;
+        $data['toBed'] = $to;
+
+        echo json_encode($data);
         exit;
     }
 }

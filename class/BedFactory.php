@@ -30,41 +30,17 @@ class BedFactory {
     }
 
 	// Retrieves bed by regular Id
-	public static function getBedById($bedId, $term)
+	public static function getBedById($bedId)
     {
         PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
     	$db = PdoFactory::getPdoInstance();
 
-        $query = "select * from hms_bed where id = :bedId AND term = :term";
+        $query = "select * from hms_bed where id = :bedId";
         $stmt = $db->prepare($query);
 
-        $params = array(
-                    'bedId' 	   => $bedId,
-                    'term'         => $term
-		);
-        $stmt->execute($params);
-
-        $results = $stmt->fetchAll(PDO::FETCH_CLASS, 'BedRestored');
-
-        return $results[0];
-    }
-
-    // TODO: If we have an id, why do we need to specify the term?
-	public static function getBedByTermWithId($id, $term)
-    {
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-
-    	$db = PdoFactory::getPdoInstance();
-
-        $query = "select * from hms_bed where id = :id AND term = :term";
-        $stmt = $db->prepare($query);
-
-        $params = array(
-                    'id'   => $id,
-                    'term' => $term);
+        $params = array('bedId' => $bedId);
         $stmt->execute($params);
 
         $results = $stmt->fetchAll(PDO::FETCH_CLASS, 'BedRestored');
