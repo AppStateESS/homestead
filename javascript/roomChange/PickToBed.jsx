@@ -61,8 +61,7 @@ var RoomChangeDestination = React.createClass({
     render: function() {
         return (
             <div className="form-group">
-                <InfoBox data={this.state.rcData}/>
-                <RoomChangeDropdown onAdd={this.chooseBed} data={this.state.beds}/>
+                <InfoBox fromBed={this.state.rcData.fromBed} toBed={this.state.rcData.toBed} availableBeds={this.state.beds}/>
             </div>
         );
     }
@@ -74,7 +73,7 @@ var RoomChangeDropdown = React.createClass({
         this.props.onAdd(bedToAdd);
     },
     render: function() {
-        var options = Array({bedid:0, hall_name: "Select a New Room"});
+        var options = Array({bedid: 0, hall_name: "Select a New Room"});
         var data = this.props.data;
         for(i = 0; i < data.length; i++) {
             options.push(data[i]);
@@ -101,21 +100,28 @@ var RoomChangeDropdown = React.createClass({
 });
 
 var InfoBox = React.createClass({
+    getInitialState: function(){
+        return {showDropdown: false};
+    },
     render: function() {
-        var data = this.props.data;
-        if(data.toBed == "TBD") {
-            toFrom = <div>
-                <p><strong>From</strong> {data.from}</p>
-                <p>A destination has not yet been chosen.</p>
-            </div>;
+        if(this.props.toBed == null) {
+            toLocation = "To Be Selected";
         } else {
-            toFrom = <p><strong>From</strong> {data.fromBed} <strong>To</strong> {data.toBed}</p>;
+            toLocation = this.props.toBed;
+        }
+
+        if(this.state.showDropdown){
+            var destination = <RoomChangeDropdown onAdd={this.props.chooseBed} data={this.props.availableBeds}/>;
+        } else {
+            var destination = toLocation +" " + <button className="btn btn-default btn-xs"><i className="fa fa-bed"></i> Change Destination</button>;
         }
 
         return (
             <div className="row">
                 <div className="col-md-12">
-                    {toFrom}
+                    <p>
+                        <strong>From</strong> {this.props.toBed} <strong>To</strong> {destination}
+                    </p>
                 </div>
             </div>
         );
