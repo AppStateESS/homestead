@@ -119,7 +119,26 @@ class CheckinFactory {
     {
         $db = PdoFactory::getPdoInstance();
 
-        $query = "SELECT * FROM hms_checkin
+        // NB: Must be specific about the columns we want (can't select *) because
+        // the hms_checkin.banner_id and hms_bed.banner_id columns conflict.
+        $query = "SELECT
+                        hms_checkin.id,
+                        hms_checkin.banner_id,
+                        hms_checkin.term,
+                        hms_checkin.bed_persistent_id,
+                        hms_checkin.bed_id,
+                        hms_checkin.room_id,
+                        hms_checkin.checkin_date,
+                        hms_checkin.checkin_by,
+                        hms_checkin.key_code,
+                        hms_checkin.checkout_date,
+                        hms_checkin.checkout_by,
+                        hms_checkin.express_checkout,
+                        hms_checkin.improper_checkout,
+                        hms_checkin.improper_checkout_note,
+                        hms_checkin.checkout_key_code,
+                        hms_checkin.key_not_returned
+                    FROM hms_checkin
                     JOIN hms_bed ON hms_checkin.bed_id = hms_bed.id
                     JOIN hms_room ON hms_bed.room_id = hms_room.id
                     JOIN hms_floor ON hms_room.floor_id = hms_floor.id
