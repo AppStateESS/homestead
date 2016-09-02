@@ -125,7 +125,7 @@ class CheckinFactory {
                     JOIN hms_floor ON hms_room.floor_id = hms_floor.id
                     JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id
                     WHERE hms_checkin.term = :term
-                    AND checkout_date = NULL
+                    AND checkout_date IS NULL
                     ORDER BY hms_residence_hall.hall_name ASC, hms_room.room_number ASC";
 
         $stmt = $db->prepare($query);
