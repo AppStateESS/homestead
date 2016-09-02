@@ -41,10 +41,10 @@ class AddRoomDamageCommand extends Command {
         if(!UserStatus::isAdmin()){
             $student = StudentFactory::getStudentByUsername($username, $term);
             $checkin = CheckinFactory::getCheckinByBannerId($student->getBannerId(), $term);
-            $end = strtotime('+7 days', $checkin->getCheckinDate());
+            $end = strtotime(RoomDamage::SELF_REPORT_DEADLINE, $checkin->getCheckinDate());
 
             if(time() > $end) {
-                echo json_encode(array('status' => 'The period to add room damages have passed, as it has been more than 48 hours.'));
+                echo json_encode(array('status' => 'The period to add room damages have passed, as it has been more than 7 days.'));
                 exit;
             }
         }

@@ -10,6 +10,10 @@ PHPWS_Core::initModClass('hms', 'DamageTypeFactory.php');
  */
 class RoomDamage {
 
+    // The amount of time allowed for students to self-report damages from the time they check-in
+    // Must be a valid parameter to the strtotime function
+    const SELF_REPORT_DEADLINE = '+7 days';
+
     public $id;
     public $room_persistent_id; // The room the damage occured in
     public $term;               // The term the damage occured in

@@ -27,9 +27,8 @@ class DamageMenuBlockView extends hms\View {
         $tpl = array();
         $end = 0;
 
-        if($checkin != null)
-        {
-            $end = strtotime('+7 days', $checkin->getCheckinDate());
+        if($checkin != null) {
+            $end = strtotime(RoomDamage::SELF_REPORT_DEADLINE, $checkin->getCheckinDate());
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
