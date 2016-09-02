@@ -1,6 +1,7 @@
 <?php
 
 PHPWS_Core::initModClass('hms', 'Checkin.php');
+PHPWS_Core::initModClass('hms', 'PdoFactory.php');
 
 class CheckinFactory {
 
@@ -116,25 +117,23 @@ class CheckinFactory {
      */
     public static function getCheckinsOrderedByRoom($term)
     {
-    	$db = new PHPWS_DB('hms_checkin');
-    	$db->addWhere('term', $term);
+        $db = PdoFactory::getPdoInstance();
 
-    	$db->addWhere('checkout_date', 'NULL');
+        $query = "SELECT * FROM hms_checkin
+                    JOIN hms_bed ON hms_checkin.bed_id = hms_bed.id
+                    JOIN hms_room ON hms_bed.room_id = hms_room.id
+                    JOIN hms_floor ON hms_room.floor_id = hms_floor.id
+                    JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id
+                    WHERE hms_checkin.term = :term
+                    AND checkout_date = NULL
+                    ORDER BY hms_residence_hall.hall_name ASC, hms_room.room_number ASC";
 
-    	$db->addJoin('', 'hms_checkin', 'hms_bed', 'bed_id', 'id');
-    	$db->addJoin('', 'hms_bed', 'hms_room', 'room_id', 'id');
-    	$db->addJoin('', 'hms_room', 'hms_floor', 'floor_id', 'id');
-    	$db->addJoin('', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
+        $stmt = $db->prepare($query);
+        $stmt->execute(array('term' => $term));
 
-    	$db->addOrder(array('hms_residence_hall.hall_name ASC', 'hms_room.room_number ASC'));
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RestoredCheckin');
 
-    	$results = $db->getObjects('RestoredCheckin');
-
-    	if(PHPWS_Error::logIfError($results)){
-    		throw new DatabaseException($results->toString());
-    	}
-
-    	return $results;
+        return $stmt->fetchAll();
     }
 
     /**
@@ -236,4 +235,3 @@ class CheckinFactory {
         return array_shift($result);
     }
 }
-
