@@ -174,34 +174,34 @@ class InfoCardPdfView {
 
         // Horizontal Line
         $this->pdf->setDrawColor(0, 0, 0);
-        $this->pdf->line(10, 105, 270, 105);
+        $this->pdf->line(10, 95, 270, 95);
 
         // Verticle Line
-        $this->pdf->line(145, 105, 145, 200);
+        $this->pdf->line(145, 95, 145, 200);
 
         /*******************
          * Check-in Column *
          */
         $this->pdf->setFont('Times', null, 16);
-        $this->pdf->setXY(10, 108);
+        $this->pdf->setXY(10, 96);
         $this->pdf->cell(50, 5, 'Check-in');
         $this->pdf->setFont('Times', null, 14);
 
         // Check-in Date/time
-        $this->pdf->setXY(40, 108);
+        $this->pdf->setXY(40, 96);
         $this->pdf->cell(50, 5, date('j M, Y @ g:ia', $infoCard->getCheckin()->getCheckinDate()));
 
         // Check-in By
-        $this->pdf->setXY(95, 108);
+        $this->pdf->setXY(95, 96);
         $this->pdf->cell(50, 5, 'By: ' . $infoCard->getCheckin()->getCheckinBy());
 
         /************
          * Key Code *
          */
-        $this->pdf->setXY(10, 118);
+        $this->pdf->setXY(10, 101);
         $this->pdf->cell(50, 5, 'Key Code:');
 
-        $this->pdf->setXY(33, 118);
+        $this->pdf->setXY(33, 101);
         $this->pdf->cell(50, 5, $infoCard->getCheckin()->getKeyCode());
 
 
@@ -209,7 +209,7 @@ class InfoCardPdfView {
          * Check-in Damages *
          */
 
-        $this->pdf->setXY(10, 130);
+        $this->pdf->setXY(10, 105);
         $this->pdf->cell(50, 5, 'Existing Room Damages:');
 
         $damageList = $infoCard->getCheckinDamages();
@@ -219,13 +219,13 @@ class InfoCardPdfView {
             $this->pdf->setFont('Times', null, 9);
 
             $xOffset = 10;
-            $yOffset = 140; // Distance down the page, we'll increment this as we go
+            $yOffset = 110; // Distance down the page, we'll increment this as we go
 
             foreach ($damageList as $dmg) {
                 $this->pdf->setXY($xOffset, $yOffset);
 
                 $this->pdf->cell(50, 5, '(' . $dmg->getSide() . ') ' . $this->damageTypes[$dmg->getDamageType()]['category'] . ' ' . $this->damageTypes[$dmg->getDamageType()]['description']);
-                $yOffset += 6;
+                $yOffset += 5;
             }
         }
 
@@ -234,7 +234,7 @@ class InfoCardPdfView {
          */
         // Check-out
         $this->pdf->setFont('Times', null, 16);
-        $this->pdf->setXY(150, 108);
+        $this->pdf->setXY(150, 96);
         $this->pdf->cell(50, 5, 'Check-out');
         $this->pdf->setFont('Times', null, 14);
 
@@ -243,19 +243,19 @@ class InfoCardPdfView {
         $checkoutTimestamp = $infoCard->getCheckin()->getCheckoutDate();
         if (!is_null($checkoutTimestamp)) {
             // Check-out Date/time
-            $this->pdf->setXY(180, 108);
+            $this->pdf->setXY(180, 96);
             $this->pdf->cell(50, 5, date('j M, Y @ g:ia', $checkoutTimestamp));
         }
 
         // Check-out By
-        $this->pdf->setXY(235, 108);
+        $this->pdf->setXY(235, 96);
         $this->pdf->cell(50, 5, 'By: ' . $infoCard->getCheckin()->getCheckoutBy());
 
         // Key code at check-out
-        $this->pdf->setXY(150, 118);
+        $this->pdf->setXY(150, 101);
         $this->pdf->cell(50, 5, 'Key Code:');
 
-        $this->pdf->setXY(173, 118);
+        $this->pdf->setXY(173, 101);
         $this->pdf->cell(50, 5, $this->pdf->cell(50, 5, $infoCard->getCheckin()->getCheckoutKeyCode()));
 
 
@@ -263,7 +263,7 @@ class InfoCardPdfView {
          * Check-out Damages *
          */
 
-        $this->pdf->setXY(150, 130);
+        $this->pdf->setXY(150, 105);
         $this->pdf->cell(50, 5, 'Damages at Check-out:');
 
         $checkoutDamages = $infoCard->getCheckoutDamages();
@@ -273,13 +273,13 @@ class InfoCardPdfView {
             $this->pdf->setFont('Times', null, 9);
 
             $xOffset = 150;
-            $yOffset = 140; // Distance down the page, we'll increment this as we go
+            $yOffset = 110; // Distance down the page, we'll increment this as we go
 
             foreach ($checkoutDamages as $dmg) {
                 $this->pdf->setXY($xOffset, $yOffset);
 
                 $this->pdf->cell(50, 5, '(' . $dmg->getSide() . ') ' . $this->damageTypes[$dmg->getDamageType()]['category'] . ' ' . $this->damageTypes[$dmg->getDamageType()]['description']);
-                $yOffset += 6;
+                $yOffset += 5;
             }
         }
     }

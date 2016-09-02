@@ -65,8 +65,10 @@ class InfoCard {
             $this->checkinDamages = array();
         }
 
-        // Get the damages at check-out time
-        $this->checkoutDamages = RoomDamageFactory::getDamagesByRoom($this->room);
+        // If the student has checked out, get the damages at check-out time
+        if(!is_null($this->checkin->getCheckoutDate())){
+            $this->checkoutDamages = RoomDamageFactory::getDamagesBefore($this->room, $this->checkin->getCheckoutDate());
+        }
         if(sizeof($this->checkoutDamages) <= 0){
             $this->checkoutDamages = array();
         }
