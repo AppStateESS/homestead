@@ -2,6 +2,7 @@
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+PHPWS_Core::initModClass('hms', 'RoomDamage.php');
 PHPWS_Core::initModClass('hms', 'RoomDamageFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
@@ -59,7 +60,7 @@ class InfoCard {
         $this->hall = $this->floor->get_parent();
 
         // Get the damages at check-in time
-        $this->checkinDamages = RoomDamageFactory::getDamagesBefore($this->room, ($this->checkin->getCheckinDate() + Checkin::CHECKIN_TIMEOUT));
+        $this->checkinDamages = RoomDamageFactory::getDamagesBefore($this->room, ($this->checkin->getCheckinDate() + RoomDamage::SELF_REPORT_DEADLINE));
         if (sizeof($this->checkinDamages) <= 0) {
             $this->checkinDamages = array();
         }
@@ -111,4 +112,3 @@ class InfoCard {
         return $this->checkoutDamages;
     }
 }
-
