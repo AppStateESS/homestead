@@ -410,6 +410,9 @@ class PhpSOAP extends SOAP
         return true;
     }
 
+    /**
+     * Calls web service function to move room assignments. This is important to keep billing correct because moveAssignment does prorating of charges.
+     */
     public function moveRoomAssignment(Array $students, $term)
     {
         $params = array(
