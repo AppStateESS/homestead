@@ -235,9 +235,9 @@ class PhpSOAP extends SOAP
         }
 
         // Check for a Banner error code
-        if($response->CreateHousingAppResult != "0"){
+        if($response->basic_response->error_num != "0"){
             SOAP::logSoap('createHousingApp', 'failed', $params);
-            throw new BannerException('Error while reporting application to Banner.', $response->CreateHousingAppResult, 'reportApplicationReceived', $params);
+            throw new BannerException('Error while reporting application to Banner.', $response->basic_response->error_num, 'reportApplicationReceived', $params);
         }
 
         SOAP::logSoap('createHousingApp', 'success', $params);
@@ -262,9 +262,9 @@ class PhpSOAP extends SOAP
             throw new SOAPException($e->getMessage(), $e->getCode(), 'createRoomAssignment', $params);
         }
 
-        if($response->CreateRoomAssignmentResult != "0"){
+        if($response->basic_response->error_num != "0"){
             SOAP::logSoap('createRoomAssignment', 'failed', $params);
-            throw new BannerException('Error while reporting assignment to Banner.', $response->CreateRoomAssignmentResult, 'createRoomAssignment', $params);
+            throw new BannerException('Error while reporting assignment to Banner.', $response->basic_response->error_num, 'createRoomAssignment', $params);
         }
 
         SOAP::logSoap('createRoomAssignment', 'success', $params);
@@ -288,9 +288,9 @@ class PhpSOAP extends SOAP
             throw new SOAPException($e->getMessage(), $e->getCode(), 'removeRoomAssignment', $params);
         }
 
-        if($response->RemoveRoomAssignmentResult != "0"){
+        if($response->basic_response->error_num != "0"){
             SOAP::logSoap('removeRoomAssignment', 'failed', $params);
-            throw new BannerException('Error while reporting removal to Banner.', $response->RemoveRoomAssignmentResult, 'removeRoomAssignment', $params);
+            throw new BannerException('Error while reporting removal to Banner.', $response->basic_response->error_num, 'removeRoomAssignment', $params);
         }
 
         SOAP::logSoap('removeRoomAssignment', 'success', $params);
@@ -351,8 +351,8 @@ class PhpSOAP extends SOAP
             throw new SOAPException($e->getMessage(), $e->getCode(), 'setHousingWaiver', $params);
         }
 
-        if($response->SetHousingWaiverResult != "0"){
-            throw new BannerException('Error while setting waiver flag in Banner.', $response->SetHousingWaiverResult, 'setHousingWaiver', $params);
+        if($response->basic_response->error_num != "0"){
+            throw new BannerException('Error while setting waiver flag in Banner.', $response->basic_response->error_num, 'setHousingWaiver', $params);
         }
 
         SOAP::logSoap('setHousingWaiver', 'success', $params);
@@ -373,8 +373,8 @@ class PhpSOAP extends SOAP
             throw new SOAPException($e->getMessage(), $e->getCode(), 'clearHousingWaiver', $params);
         }
 
-        if($response->ClearHousingWaiverResult != "0"){
-            throw new BannerException('Error while clearing waiver flag in Banner.', $response->ClearHousingWaiverResult, 'clearHousingWaiver', $params);
+        if($response->basic_response->error_num != "0"){
+            throw new BannerException('Error while clearing waiver flag in Banner.', $response->basic_response->error_num, 'clearHousingWaiver', $params);
         }
 
         SOAP::logSoap('clearHousingWaiver', 'success', $params);
@@ -401,8 +401,8 @@ class PhpSOAP extends SOAP
             throw new SOAPException($e->getMessage(), $e->getCode(), 'AddRoomDamageToStudentAccount', $params);
         }
 
-        if($response->AddRoomDamageToStudentAccountResult != "0"){
-            throw new BannerException('Error while reporting room damage to Banner.', $response->AddRoomDamageToStudentAccountResult, 'addRoomDamageToStudentAccount', $params);
+        if($response->basic_response->error_num != "0"){
+            throw new BannerException('Error while reporting room damage to Banner.', $response->basic_response->error_num, 'addRoomDamageToStudentAccount', $params);
         }
 
         SOAP::logSoap('AddRoomDamageToStudentAccount', 'success', $params);
@@ -424,8 +424,8 @@ class PhpSOAP extends SOAP
             throw new SOAPException($e->getMessage(), $e->getCode(), 'MoveRoomAssignmentResult', $params);
         }
 
-        if($response->MoveRoomAssignmentResult != "0"){
-            throw new BannerException('Error while moving room assignments in Banner.', $response->MoveRoomAssignmentResult, 'MoveRoomAssignmentResult', $params);
+        if($response->basic_response->error_num != "0"){
+            throw new BannerException('Error while moving room assignments in Banner.', $response->basic_response->error_num, 'MoveRoomAssignmentResult', $params);
         }
     }
 }
