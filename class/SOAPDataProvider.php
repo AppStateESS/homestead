@@ -73,7 +73,12 @@ class SOAPDataProvider extends StudentDataProvider {
 
         $student->setConfidential($soapData->confid);
 
-        $student->setApplicationTerm($soapData->application_term);
+        if(isset($soapData->application_term)){
+            $student->setApplicationTerm($soapData->application_term);
+        }else{
+            $student->setApplicationTerm(null);
+        }
+        
         $student->setType($soapData->student_type);
         $student->setClass($soapData->projected_class);
         $student->setCreditHours($soapData->credhrs_completed);
@@ -147,5 +152,3 @@ class SOAPDataProvider extends StudentDataProvider {
     {
     }
 }
-
-
