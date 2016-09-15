@@ -167,20 +167,15 @@
                 </div>
             </div>
         </div>
+        <h3>Emergency Medical Information</h3>
         <div class="form-group">
-            <label for="{EMERGENCY_MEDICAL_CONDITION_ID}">Medical Conditions</label>
-            <p>Are there any medical conditions you have which our staff should be aware of?</p>
+            <p>Are there any <em>emergency</em> medical conditions which our staff should be aware of?</p>
             <span class="help-block">
-                These should be <em>life-threatening</em> conditions you'd want us to share with first responders. For example, <em>severe</em> allergies to food or medicines.
-            </span>
-            <span class="help-block">
-                (This information will be kept confidential and
-                will only be shared with the staff in your residence hall. However, this
-                information may be disclosed to emergency medical personnel in case of an
-                emergency.)
+                In the event of a <em>medical emergency</em> within the residence halls we may disclose this information to <em>emergency personnel</em>. For example, severe <em>life-threatening</em> allergies to medications or foods. This information will be kept confidential and only shared on a need-to-know basis.
             </span>
             <div class="row">
                 <div class="col-md-4">
+                    <label for="{EMERGENCY_MEDICAL_CONDITION_ID}">Emergency Medical Conditions</label>
                     {EMERGENCY_MEDICAL_CONDITION}
                 </div>
             </div>
@@ -232,42 +227,15 @@
             </div>
         </div>
 
-        <h3>Special Needs Housing</h3>
+        <h3>Housing Accommodations</h3>
 
-        <!-- BEGIN special_needs_text -->
-        {SPECIAL_NEEDS_TEXT}
         <p>
-            University Housing is committed to meeting the needs of all students to
-            the best of its ability.
+            University Housing is committed to meeting the individual needs of all students to the best of our ability. Housing requests due to disabilities and gender related needs are taken seriously, thoroughly considered, and kept confidential.
         </p>
         <p>
-            Special needs housing requests will be reviewed individually with a
-            commitment to providing housing that best meets the needs of each student.
-            University Housing takes these concerns very seriously and confidentiality
-            will be maintained. Housing for special needs may be limited due to space
-            availability.
+            Students who need housing accommodations due to the impact of a disability (physical, medical, etc.) should contact the <a href="https://ods.appstate.edu/" target="_parent">Office of Disability Services</a>.
+            Students who need housing accommodations due to gender related needs should contact the <a href="http://multicultural.appstate.edu/" target="_parent">Office of Multicultural Student Development</a>.
         </p>
-        <p>Do you have any special needs?</p>
-        <!-- END special_needs_text -->
-
-        <!-- BEGIN special_need -->
-        <div class="row">
-            <div class="col-md-5 col-md-offset-1">
-                <div class="checkbox">
-                    <label>
-                        {SPECIAL_NEED}{SPECIAL_NEED_LABEL}
-                    </label>
-                </div>
-            </div>
-        </div>
-        <!-- END special_need -->
-
-
-        <!-- BEGIN special_needs_result -->
-        <p>
-            {SPECIAL_NEEDS_RESULT}
-        </p>
-        <!-- END special_needs_result -->
 
         <!-- BEGIN rlc_interest_1 -->
         <h3>Residential Learning Communities</h3>
