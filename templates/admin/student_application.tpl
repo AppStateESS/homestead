@@ -95,7 +95,10 @@ Please review the information you entered. If you need to go back and make chang
         <td>{EMERGENCY_CONTACT_EMAIL}</td>
     </tr>
     <tr>
-        <td colspan="2"><p>Are there any medical conditions you have which our staff should be aware of? (This information will be kept confidential and will only be shared with the staff in your residence hall. However, this information <strong>may</strong> be disclosed to medical/emergency personnel in case of an emergency.)</p>
+        <td colspan="2"><p>Are there any <em>emergency</em> medical conditions which our staff should be aware of?</p>
+        <span class="help-block">
+            In the event of a <em>medical emergency</em> within the residence halls we may disclose this information to <em>emergency personnel</em>. For example, severe <em>life-threatening</em> allergies to medications or foods. This information will be kept confidential and only shared on a need-to-know basis.
+        </span>
             {EMERGENCY_MEDICAL_CONDITION}
         </td>
     </tr>
@@ -124,28 +127,17 @@ Please review the information you entered. If you need to go back and make chang
     </tr>
 </table>
 
-<h3>Special Needs Housing</h3>
-<table class="table table-striped">
-    <!-- BEGIN special_needs_text -->
-    {SPECIAL_NEEDS_TEXT}
-    <tr>
-        <td colspan="2">
-            <p>University Housing is committed to meeting the needs of all students to the best of its ability.</p>
+<h3>Housing Accommodations</h3>
 
-            <p>Special needs housing requests will be reviewed individually with a commitment to providing housing that best meets the needs of the student.  University Housing takes these concerns very seriously and confidentiality will be maintained. Housing for special needs may be limited due to space availability.</p>
-        </td>
-    </tr>
-    <!-- END special_needs_text -->
-    <tr>
-        <td><p>Do you have any special needs?</p>
-            <!-- BEGIN special_need -->
-            {SPECIAL_NEED}{SPECIAL_NEED_LABEL} <br />
-            <!-- END special_need -->
-            <!-- BEGIN special_needs_result -->
-            {SPECIAL_NEEDS_RESULT}
-            <!-- END special_needs_result -->
-        </td>
-    </tr>
+<p>
+    University Housing is committed to meeting the individual needs of all students to the best of our ability. Housing requests due to disabilities and gender related needs are taken seriously, thoroughly considered, and kept confidential.
+</p>
+<p>
+    Students who need housing accommodations due to the impact of a disability (physical, medical, etc.) should contact the <a href="https://ods.appstate.edu/" target="_parent">Office of Disability Services</a>.
+    Students who need housing accommodations due to gender related needs should contact the <a href="http://multicultural.appstate.edu/" target="_parent">Office of Multicultural Student Development</a>.
+</p>
+
+<table class="table table-striped">
     <!-- BEGIN rlc_interest_1 -->
     <tr>
         <th colspan="2">Residential Learning Communities</th>
