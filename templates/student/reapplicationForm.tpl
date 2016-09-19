@@ -200,8 +200,8 @@
             University Housing is committed to meeting the individual needs of all students to the best of our ability. Housing requests due to disabilities and gender related needs are taken seriously, thoroughly considered, and kept confidential.
         </p>
         <p>
-            Students who need housing accommodations due to the impact of a disability (physical, medical, etc.) should contact the <a href="https://ods.appstate.edu/" target="_parent">Office of Disability Services</a>.
-            Students who need housing accommodations due to gender related needs should contact the <a href="http://multicultural.appstate.edu/" target="_parent">Office of Multicultural Student Development</a>.
+            Students who need housing accommodations due to the impact of a disability (physical, medical, etc.) should contact the <a href="https://ods.appstate.edu/" target="_blank">Office of Disability Services</a>.
+            Students who need housing accommodations due to gender related needs should contact the <a href="http://multicultural.appstate.edu/" target="_blank">Office of Multicultural Student Development</a>.
         </p>
     </div>
 </div>
