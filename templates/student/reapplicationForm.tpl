@@ -194,28 +194,15 @@
 
 <div class="row">
     <div class="col-md-10">
-        <h3>Special needs</h3>
-        <p>University Housing is committed to meeting the needs of all students to
-            the best of its ability.
-        </p>
-        <p>Special needs housing requests will be reviewed individually with a
-            commitment to providing housing that best meets the needs of the student.
-            University Housing takes these concerns very seriously and confidentiality
-            will be maintained. Housing for special needs may be limited due to space
-            availability.
-        </p>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-8">
-        <label>Do you have any special needs?</label>
+        <h3>Housing Accommodations</h3>
 
-        <div class="checkbox">
-            <label>
-                {SPECIAL_NEED}
-                {SPECIAL_NEED_LABEL} (Includes physical, psychological, medical, and gender needs.)
-            </label>
-        </div>
+        <p>
+            University Housing is committed to meeting the individual needs of all students to the best of our ability. Housing requests due to disabilities and gender related needs are taken seriously, thoroughly considered, and kept confidential.
+        </p>
+        <p>
+            Students who need housing accommodations due to the impact of a disability (physical, medical, etc.) should contact the <a href="https://ods.appstate.edu/" target="_parent">Office of Disability Services</a>.
+            Students who need housing accommodations due to gender related needs should contact the <a href="http://multicultural.appstate.edu/" target="_parent">Office of Multicultural Student Development</a>.
+        </p>
     </div>
 </div>
 

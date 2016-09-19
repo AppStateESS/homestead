@@ -97,15 +97,15 @@ class HousingApplicationView extends hms\View {
             $tpl['CELLPHONE']   .= '-'.substr($application->cell_phone, 3, 3);
             $tpl['CELLPHONE']   .= '-'.substr($application->cell_phone, 6, 4);
         }
-        
+
         /* Emergency Contact */
         $tpl['EMERGENCY_CONTACT_NAME'] 			= $application->getEmergencyContactName();
         $tpl['EMERGENCY_CONTACT_RELATIONSHIP']	= $application->getEmergencyContactRelationship();
         $tpl['EMERGENCY_CONTACT_PHONE'] 		= $application->getEmergencyContactPhone();
         $tpl['EMERGENCY_CONTACT_EMAIL'] 		= $application->getEmergencyContactEmail();
-        
+
         $tpl['EMERGENCY_MEDICAL_CONDITION'] = $application->getEmergencyMedicalCondition();
-        
+
         /* Missing Person */
         if(Current_User::allow('hms', 'view_missing_person_info')) {
             $tpl['MISSING_PERSON_NAME'] 		= $application->getMissingPersonName();
@@ -113,26 +113,6 @@ class HousingApplicationView extends hms\View {
             $tpl['MISSING_PERSON_PHONE'] 		= $application->getMissingPersonPhone();
             $tpl['MISSING_PERSON_EMAIL'] 		= $application->getMissingPersonEmail();
         }
-
-        /* Special Needs */
-        $special_needs = "";
-        if($application->physical_disability == 1){
-            $special_needs = 'Physical disability<br />';
-        }
-        if($application->psych_disability){
-            $special_needs .= 'Psychological disability<br />';
-        }
-        if($application->medical_need){
-            $special_needs .= 'Medical need<br />';
-        }
-        if($application->gender_need){
-            $special_needs .= 'Gender need<br />';
-        }
-
-        if($special_needs == ''){
-            $special_needs = 'None';
-        }
-        $tpl['SPECIAL_NEEDS_RESULT'] = $special_needs;
 
         if($application instanceof FallApplication){
             PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
@@ -153,4 +133,3 @@ class HousingApplicationView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'admin/student_application.tpl');
     }
 }
-

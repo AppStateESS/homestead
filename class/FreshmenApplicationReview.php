@@ -37,7 +37,7 @@ class FreshmenApplicationReview extends hms\View {
         }
 
         $tpl['SMOKING_PREFERENCE']  = $this->app->getSmokingPreference() == 1?'No' : 'Yes';
-        
+
         $tpl['MEAL_OPTION']         = HMS_Util::formatMealOption($this->app->getMealPlan());
 
         /* Cell Phone */
@@ -57,26 +57,6 @@ class FreshmenApplicationReview extends hms\View {
         $tpl['MISSING_PERSON_PHONE'] 		= $this->app->getMissingPersonPhone();
         $tpl['MISSING_PERSON_EMAIL'] 		= $this->app->getMissingPersonEmail();
 
-
-        /* Special Needs */
-        $special_needs = "";
-        if(isset($this->app->physical_disability)){
-            $special_needs = 'Physical disability<br />';
-        }
-        if(isset($this->app->psych_disability)){
-            $special_needs .= 'Psychological disability<br />';
-        }
-        if(isset($this->app->medical_need)){
-            $special_needs .= 'Medical need<br />';
-        }
-        if(isset($this->app->gender_need)){
-            $special_needs .= 'Gender need<br />';
-        }
-
-        if($special_needs == ''){
-            $special_needs = 'None';
-        }
-        $tpl['SPECIAL_NEEDS_RESULT'] = $special_needs;
 
         /* RLC Interest */
         if(Term::getTermSem($this->term) == TERM_FALL){

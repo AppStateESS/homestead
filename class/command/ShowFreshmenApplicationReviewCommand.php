@@ -37,12 +37,6 @@ class ShowFreshmenApplicationReviewCommand extends Command {
     {
         $term = $context->get('term');
 
-        // If we're coming from the special needs page, save any special needs flags the student selected
-        if(array_key_exists('special_needs', $context->getParams()))
-        {
-            $this->saveSpecialNeeds($context);
-        }
-
         // If they haven't agreed, redirect to the agreement
         // TODO: actually check via docusign API
         $event = $context->get('event');
@@ -91,25 +85,4 @@ class ShowFreshmenApplicationReviewCommand extends Command {
         $view = new FreshmenApplicationReview($student, $term, $application);
         $context->setContent($view->show());
     }
-
-    public function saveSpecialNeeds(CommandContext $context)
-    {
-      if(array_key_exists('physical_disability', $context->get('special_needs')))
-      {
-        $_SESSION['application_data']['special_needs']['physical_disability'] = 'physical_disability';
-      }
-      if(array_key_exists('psych_disability', $context->get('special_needs')))
-      {
-        $_SESSION['application_data']['special_needs']['psych_disability'] = 'psych_disability';
-      }
-      if(array_key_exists('medical_need', $context->get('special_needs')))
-      {
-        $_SESSION['application_data']['special_needs']['medical_need'] = 'medical_need';
-      }
-      if(array_key_exists('gender_need', $context->get('special_needs')))
-      {
-        $_SESSION['application_data']['special_needs']['gender_need'] = 'gender_need';
-      }
-    }
-
 }

@@ -70,22 +70,9 @@ class ReApplicationFormSubmitCommand extends Command {
             $errorCmd->redirect();
         }
 
-        $specialNeed = $context->get('special_need');
-        if(isset($specialNeed)){
-            $onSubmitCmd = CommandFactory::getCommand('ReApplicationFormSave');
-            $onSubmitCmd->loadContext($context);
-            $onSubmitCmd->setTerm($term);
-
-            $specialNeedCmd = CommandFactory::getCommand('ShowSpecialNeedsForm');
-            $specialNeedCmd->setTerm($term);
-            $specialNeedCmd->setVars($context->getParams());
-            $specialNeedCmd->setOnSubmitCmd($onSubmitCmd);
-            $specialNeedCmd->redirect();
-        }else{
-            $reviewCmd = CommandFactory::getCommand('ReApplicationFormSave');
-            $reviewCmd->setTerm($term);
-            $reviewCmd->loadContext($context);
-            $reviewCmd->redirect();
-        }
+        $reviewCmd = CommandFactory::getCommand('ReApplicationFormSave');
+        $reviewCmd->setTerm($term);
+        $reviewCmd->loadContext($context);
+        $reviewCmd->redirect();
     }
 }

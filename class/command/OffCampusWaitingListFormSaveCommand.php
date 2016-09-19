@@ -57,28 +57,22 @@ class OffCampusWaitingListFormSaveCommand extends Command {
 
         $mealPlan = $context->get('meal_plan');
 
-        $specialNeeds = $context->get('special_needs');
-        $physicalDisability = isset($specialNeeds['physical_disability'])?1: 0;
-        $psychDisability    = isset($specialNeeds['psych_disability'])?1: 0;
-        $genderNeed         = isset($specialNeeds['gender_need'])?1: 0;
-        $medicalNeed        = isset($specialNeeds['medical_need'])?1: 0;
-
         $international = $student->isInternational();
-        
+
         $application = new WaitingListApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), $cellPhone, $mealPlan, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $international);
 
         $application->setEmergencyContactName($context->get('emergency_contact_name'));
         $application->setEmergencyContactRelationship($context->get('emergency_contact_relationship'));
         $application->setEmergencyContactPhone($context->get('emergency_contact_phone'));
         $application->setEmergencyContactEmail($context->get('emergency_contact_email'));
-        
+
         $application->setEmergencyMedicalCondition($context->get('emergency_medical_condition'));
-        
+
         $application->setMissingPersonName($context->get('missing_person_name'));
         $application->setMissingPersonRelationship($context->get('missing_person_relationship'));
         $application->setMissingPersonPhone($context->get('missing_person_phone'));
         $application->setMissingPersonEmail($context->get('missing_person_email'));
-        
+
         try{
             $application->save();
         }catch(Exception $e){
@@ -99,4 +93,3 @@ class OffCampusWaitingListFormSaveCommand extends Command {
         $cmd->redirect();
     }
 }
-

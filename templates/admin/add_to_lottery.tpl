@@ -12,7 +12,7 @@
     <div>
         {ASU_USERNAME_LABEL}
     </div>
-    <div class="input-group">	
+    <div class="input-group">
         {ASU_USERNAME}
 	<span class="input-group-addon">
             @appstate.edu
@@ -20,37 +20,6 @@
     </div>
     </div>
 </div>
-<div class="form-group row">
-    <div class="col-md-4">
-        {PHYSICAL_DISABILITY_LABEL}
-    </div>
-    <div class="col-md-4">
-        {PHYSICAL_DISABILITY}
-    </div>
-</div>
-<div class="form-group row">
-    <div class="col-md-4">
-        {PSYCH_DISABILITY_LABEL}
-    </div>
-    <div class="col-md-4">
-        {PSYCH_DISABILITY}
-    </div>
-</div>
-<div class="form-group row">
-    <div class="col-md-4">
-        {MEDICAL_NEED_LABEL}
-    </div>
-    <div class="col-md-4">
-        {MEDICAL_NEED}
-    </div>
-</div>
-<div class="form-group row">
-    <div class="col-md-4">
-        {GENDER_NEED_LABEL}
-    </div>
-    <div class="col-md-4">
-        {GENDER_NEED}
-    </div>
-</div>
+
 <button class="btn btn-success"><i class="fa fa-plus"></i> Add to lottery</button>
 {END_FORM}

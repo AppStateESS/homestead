@@ -85,12 +85,6 @@ class HousingApplicationFormSubmitCommand extends Command {
             }
         }
 
-        $specialNeed = $context->get('special_need');
-
-        if (!isset($specialNeed)) {
-            unset($_REQUEST['special_needs']);
-        }
-
         // Session the current application data
         $_SESSION['application_data'] = $_REQUEST;
 
@@ -98,16 +92,6 @@ class HousingApplicationFormSubmitCommand extends Command {
         $reviewCmd = CommandFactory::getCommand('ShowFreshmenApplicationReview');
         $reviewCmd->setTerm($term);
 
-        if (isset($specialNeed)) {
-            $specialNeedCmd = CommandFactory::getCommand('ShowSpecialNeedsForm');
-            $specialNeedCmd->setTerm($term);
-            $specialNeedCmd->setVars($_REQUEST);
-            $specialNeedCmd->setOnSubmitCmd($reviewCmd);
-            $specialNeedCmd->redirect();
-        } else {
-            $reviewCmd->redirect();
-        }
+        $reviewCmd->redirect();
     }
 }
-
-

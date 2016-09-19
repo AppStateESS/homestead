@@ -36,11 +36,6 @@ class LotteryAdminCreateAppCommand extends Command {
             $viewCmd->redirect();
         }
 
-        $physicalDisability = $context->get('physical_disability');
-        $psychDisability    = $context->get('psych_disability');
-        $genderNeed         = $context->get('gender_need');
-        $medicalNeed        = $context->get('medical_need');
-
         $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), null, BANNER_MEAL_STD, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, 0, NULL, 0, NULL, 0, 0, 0, 0);
 
         try{
@@ -54,4 +49,3 @@ class LotteryAdminCreateAppCommand extends Command {
         $viewCmd->redirect();
     }
 }
-

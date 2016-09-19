@@ -94,13 +94,6 @@ class ReApplicationOffCampusFormView extends hms\View {
         $form->setLabel('meal_plan', 'Meal plan: ');
         $form->setMatch('meal_plan', BANNER_MEAL_STD);
 
-        $form->addCheck('special_need', array('special_need'));
-        $form->setLabel('special_need', array('Yes, I require special needs housing.'));
-
-        if(isset($_REQUEST['special_need'])){
-            $form->setMatch('special_need', $_REQUEST['special_need']);
-        }
-
         $form->addCheck('deposit_check', array('deposit_check'));
         $form->setLabel('deposit_check', 'I understand & acknowledge that if I cancel my License Contract after I am assigned a space in a residence hall my student account will be charged $250.  If I cancel my License Contract after July 1, I will be liable for the entire amount of the on-campus housing fees for the Fall semester.');
 

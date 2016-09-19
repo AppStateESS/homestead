@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 PHPWS_Core::initModClass('hms', 'FallApplication.php');
 PHPWS_Core::initModClass('hms', 'SpringApplication.php');
@@ -103,14 +103,6 @@ abstract class ContextApplicationFactory {
         /* Medical Conditions */
         $this->app->setEmergencyMedicalCondition($this->context->get('emergency_medical_condition'));
 
-        /* Special Needs */
-        $specialNeeds = $this->context->get('special_needs');
-        	
-        isset($specialNeeds['physical_disability'])?$this->app->setPhysicalDisability(true):null;
-        isset($specialNeeds['psych_disability'])?$this->app->setPsychDisability(true):null;
-        isset($specialNeeds['gender_need'])?$this->app->setGenderNeed(true):null;
-        isset($specialNeeds['medical_need'])?$this->app->setMedicalNeed(true):null;
-
         if($student->isInternational()){
             $this->app->setInternational(true);
         }else{
@@ -179,4 +171,3 @@ class LotteryContextApplicationFactory extends ContextApplicationFactory {
         $this->app->setApplicationType('lottery');
     }
 }
-
