@@ -38,12 +38,6 @@ class HousingApplication {
     public $missing_person_phone;
     public $missing_person_email;
 
-    /* Special needs flags */
-    public $physical_disability;
-    public $psych_disability;
-    public $medical_need;
-    public $gender_need;
-
     public $international; // Whether or not this student is an international student. 0 => false, 1=> true (0 by default)
 
     public $created_on; // unix timestamp when the application as first saved
@@ -84,13 +78,9 @@ class HousingApplication {
      * @param string $application_term
      * @param string $cell_phone
      * @param string $meal_plan
-     * @param string $physical_disability
-     * @param string $psych_disability
-     * @param string $gender_need
-     * @param string $medical_need
      * @param string $international
      */
-    public function __construct($term = null, $banner_id = null, $username = null, $gender = null, $student_type = null, $application_term = null, $cell_phone = null, $meal_plan = null, $physical_disability = null, $psych_disability = null, $gender_need = null, $medical_need = null, $international = null)
+    public function __construct($term = null, $banner_id = null, $username = null, $gender = null, $student_type = null, $application_term = null, $cell_phone = null, $meal_plan = null, $international = null)
     {
 
         $this->setTerm($term);
@@ -101,11 +91,6 @@ class HousingApplication {
         $this->setApplicationTerm($application_term);
         $this->setCellPhone($cell_phone);
         $this->setMealPlan($meal_plan);
-
-        $this->setPhysicalDisability($physical_disability);
-        $this->setPsychDisability($psych_disability);
-        $this->setMedicalNeed($medical_need);
-        $this->setGenderNeed($gender_need);
 
         $this->setInternational($international);
 
@@ -853,46 +838,6 @@ class HousingApplication {
     public function setMealPlan($plan)
     {
         $this->meal_plan = $plan;
-    }
-
-    public function getPhysicalDisability()
-    {
-        return $this->physical_disability;
-    }
-
-    public function setPhysicalDisability($physical)
-    {
-        $this->physical_disability = $physical;
-    }
-
-    public function getPsychDisability()
-    {
-        return $this->psych_disability;
-    }
-
-    public function setPsychDisability($psych)
-    {
-        $this->psych_disability = $psych;
-    }
-
-    public function getMedicalNeed()
-    {
-        return $this->medical_need;
-    }
-
-    public function setMedicalNeed($medical)
-    {
-        $this->medical_need = $medical;
-    }
-
-    public function getGenderNeed()
-    {
-        return $this->gender_need;
-    }
-
-    public function setGenderNeed($gender)
-    {
-        $this->gender_need = $gender;
     }
 
     public function getInternational()

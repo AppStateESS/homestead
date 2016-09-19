@@ -51,9 +51,19 @@ Email: {MISSING_PERSON_EMAIL}
 	this again later (after you choose your room).</p>
 {MEAL_PLAN_LABEL} {MEAL_PLAN}
 <br />
-<h2>Special needs</h2>
-{SPECIAL_NEED}&nbsp;{SPECIAL_NEED_LABEL}
+
+<h3>Housing Accommodations</h3>
+
+<p>
+    University Housing is committed to meeting the individual needs of all students to the best of our ability. Housing requests due to disabilities and gender related needs are taken seriously, thoroughly considered, and kept confidential.
+</p>
+<p>
+    Students who need housing accommodations due to the impact of a disability (physical, medical, etc.) should contact the <a href="https://ods.appstate.edu/" target="_blank">Office of Disability Services</a>.
+    Students who need housing accommodations due to gender related needs should contact the <a href="http://multicultural.appstate.edu/" target="_blank">Office of Multicultural Student Development</a>.
+</p>
+
 <br />
+
 <h2>Terms &amp; Conditions</h2>
 {DEPOSIT_CHECK}{DEPOSIT_CHECK_LABEL}
 <br />

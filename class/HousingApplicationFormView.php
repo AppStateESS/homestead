@@ -194,27 +194,6 @@ class HousingApplicationFormView extends hms\View
             $form->setValue('missing_person_email', $this->existingApplication->getMissingPersonEmail());
         }
 
-        /**
-         * Special needs
-         */
-        $tpl['SPECIAL_NEEDS_TEXT'] = ''; // setting this template variable to anything causes the special needs text to be displayed
-        $form->addCheck('special_need', array('special_need'));
-        $form->setLabel('special_need', array('Yes, I require special needs housing.'));
-
-
-        if(isset($this->existingApplication)) {
-            if((!is_null($this->existingApplication->physical_disability) && $this->existingApplication->physical_disability != "0") ||
-                    (!is_null($this->existingApplication->psych_disability) && $this->existingApplication->psych_disability != "0") ||
-                    (!is_null($this->existingApplication->medical_need) && $this->existingApplication->medical_need != "0") ||
-                    (!is_null($this->existingApplication->gender_need) && $this->existingApplication->gender_need != "0")) {
-                $form->setMatch('special_need', 'special_need');
-            }
-        }
-
-        if (isset($_REQUEST['special_needs'])) {
-            $form->addHidden('special_needs', $_REQUEST['special_needs']);
-        }
-
         /*******
          * RLC *
          *******/

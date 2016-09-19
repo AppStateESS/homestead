@@ -45,10 +45,6 @@ class LotteryApplication extends HousingApplication {
      * @param string $application_term
      * @param string $cell_phone
      * @param string $meal_plan
-     * @param string $physical_disability
-     * @param string $psych_disability
-     * @param string $gender_need
-     * @param string $medical_need
      * @param string $international
      * @param string $specialInterest
      * @param number $magicWinner
@@ -58,7 +54,7 @@ class LotteryApplication extends HousingApplication {
      * @param string $rlcInterest
      * @param string $earlyRelease
      */
-    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $physical_disability = NULL, $psych_disability = NULL, $gender_need = NULL, $medical_need = NULL, $international = NULL, $specialInterest = NULL, $magicWinner = 0, $sororityPref = NULL, $wgPref = NULL, $honorsPref = NULL, $rlcInterest = NULL, $earlyRelease = NULL)
+    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $international = NULL, $specialInterest = NULL, $magicWinner = 0, $sororityPref = NULL, $wgPref = NULL, $honorsPref = NULL, $rlcInterest = NULL, $earlyRelease = NULL)
     {
         /**
          * If the id is non-zero, then we need to load the other member variables
@@ -72,7 +68,7 @@ class LotteryApplication extends HousingApplication {
 
         $this->application_type = 'lottery';
 
-        parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $physical_disability, $psych_disability, $gender_need, $medical_need, $international);
+        parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $international);
 
         $this->special_interest = $specialInterest;
         $this->magic_winner = $magicWinner;
@@ -213,10 +209,6 @@ class LotteryApplication extends HousingApplication {
         $template = array();
 
         $template['ASU_USERNAME']        = $student->getProfileLink();
-        $template['PHYSICAL_DISABILITY'] = $this->physical_disability == 1 ? 'Yes' : 'No';
-        $template['PSYCH_DISABILITY']    = $this->psych_disability    == 1 ? 'Yes' : 'No';
-        $template['MEDICAL_NEED']        = $this->medical_need        == 1 ? 'Yes' : 'No';
-        $template['GENDER_NEED']         = $this->gender_need         == 1 ? 'Yes' : 'No';
 
         $form = new PHPWS_Form('clear_disabilities');
         $form->addHidden('da_clear', $this->asu_username);
@@ -438,11 +430,6 @@ class LotteryApplication extends HousingApplication {
             $pager->addWhere('hms_lottery_application.tf_pref', 1);
         }else if(substr($group, 0, 8) == 'sorority'){ // starts with 'sorority'
             $pager->addWhere('hms_lottery_application.sorority_pref', $group);
-        }else if($group == 'special_needs'){
-            $pager->addWhere('hms_new_application.physical_disability', 1, '=', 'OR', 'blah');
-            $pager->addWhere('hms_new_application.psych_disability', 1, '=', 'OR', 'blah');
-            $pager->addWhere('hms_new_application.medical_need', 1, '=', 'OR', 'blah');
-            $pager->addWhere('hms_new_application.gender_need', 1, '=', 'OR', 'blah');
         }else{
             // bad group
             throw new InvalidArgumentException('Invalid special interest group specified.');

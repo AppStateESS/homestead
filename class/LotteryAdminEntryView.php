@@ -19,18 +19,6 @@ class LotteryAdminEntryView extends hms\View {
         $form->setClass('asu_username', 'form-control');
         $form->setExtra('asu_username', 'autofocus');
 
-        $form->addCheck('physical_disability');
-        $form->setLabel('physical_disability', 'Physical Disability');
-
-        $form->addCheck('psych_disability');
-        $form->setLabel('psych_disability', 'Psychological Disability');
-
-        $form->addCheck('medical_need');
-        $form->setLabel('medical_need', 'Medical Need');
-
-        $form->addCheck('gender_need');
-        $form->setLabel('gender_need', 'Gender Need');
-
 //        $form->addSelect('special_interest', HMS_Lottery::get_special_interest_groups());
 //        $form->setLabel('special_interest', 'Special Interest Group');
 

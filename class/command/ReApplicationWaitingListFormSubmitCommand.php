@@ -44,25 +44,9 @@ class ReApplicationWaitingListFormSubmitCommand extends Command {
             }
         }
 
-
-        $specialNeed = $context->get('special_need');
-
-        if(isset($specialNeed)){
-            $onSubmitCmd = CommandFactory::getCommand('OffCampusWaitingListFormSave');
-            $onSubmitCmd->loadContext($context);
-            $onSubmitCmd->setTerm($term);
-
-            $specialNeedCmd = CommandFactory::getCommand('ShowSpecialNeedsForm');
-            $specialNeedCmd->setTerm($term);
-            $specialNeedCmd->setVars($context->getParams());
-            $specialNeedCmd->setOnSubmitCmd($onSubmitCmd);
-            $specialNeedCmd->redirect();
-        }else{
-            //TODO
-            $reviewCmd = CommandFactory::getCommand('OffCampusWaitingListFormSave');
-            $reviewCmd->setTerm($term);
-            $reviewCmd->loadContext($context);
-            $reviewCmd->redirect();
-        }
+        $reviewCmd = CommandFactory::getCommand('OffCampusWaitingListFormSave');
+        $reviewCmd->setTerm($term);
+        $reviewCmd->loadContext($context);
+        $reviewCmd->redirect();
     }
 }

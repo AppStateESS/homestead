@@ -12,8 +12,7 @@ class FallApplication extends HousingApplication{
     public $rlc_interest;
 
     public function __construct($id = 0, $term = null, $banner_id = null, $username = null, $gender = null, $student_type = null, $application_term = null,
-            $cell_phone = null, $meal_plan = null, $physical_disability = null, $psych_disability = null, $gender_need = null, $medical_need = null,
-            $international = null, $lifestyle_option = null, $preferred_bedtime = null, $room_condition = null, $smoking_preference = null, $rlc_interest = null){
+            $cell_phone = null, $meal_plan = null, $international = null, $lifestyle_option = null, $preferred_bedtime = null, $room_condition = null, $smoking_preference = null, $rlc_interest = null){
 
         /**
          * If the id is non-zero, then we need to load the other member variables
@@ -27,8 +26,7 @@ class FallApplication extends HousingApplication{
 
         $this->application_type = 'fall';
 
-        parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $physical_disability,
-            $psych_disability, $gender_need, $medical_need, $international);
+        parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $international);
 
         $this->setLifestyleOption($lifestyle_option);
         $this->setPreferredBedtime($preferred_bedtime);

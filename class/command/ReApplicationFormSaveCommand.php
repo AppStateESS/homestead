@@ -64,12 +64,6 @@ class ReApplicationFormSaveCommand extends Command {
 
         $mealPlan = $context->get('meal_plan');
 
-        $specialNeeds = $context->get('special_needs');
-        $physicalDisability = isset($specialNeeds['physical_disability'])?1: 0;
-        $psychDisability    = isset($specialNeeds['psych_disability'])?1: 0;
-        $genderNeed         = isset($specialNeeds['gender_need'])?1: 0;
-        $medicalNeed        = isset($specialNeeds['medical_need'])?1: 0;
-
         /**
          * Special interest housing groups
          */

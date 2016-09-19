@@ -115,16 +115,6 @@ class ReApplicationFormView extends hms\View {
         $form->setLabel('rlc_interest', "I'm interested in applying for (or continuing in) a Residential Learning Community.");
 
         /*
-         * Special needs
-         */
-        $form->addCheck('special_need', array('special_need'));
-        $form->setLabel('special_need', array('Yes, I require special needs housing.'));
-
-        if(isset($_REQUEST['special_need'])){
-            $form->setMatch('special_need', $_REQUEST['special_need']);
-        }
-
-        /*
          * Early Release
          */
         $nextTerm = Term::toString(Term::getNextTerm($this->term));

@@ -3,8 +3,8 @@
   /**
    * DenySpecialInterest
    *
-   * Unset a student's preference for a special interest group 
-   * on their application.  
+   * Unset a student's preference for a special interest group
+   * on their application.
    * A special needs preference includes pysch, physical, medical,
    * and gender.  If a student is denied special needs unset all of
    * these at once. Everything else is one-for-one right now.
@@ -18,7 +18,7 @@ class DenySpecialInterestCommand extends Command
 {
     private $id;
     private $group;
-    
+
     public function getRequestVars()
     {
         return array('action' => 'DenySpecialInterest',
@@ -62,12 +62,6 @@ class DenySpecialInterestCommand extends Command
         case 'sorority':
             $app->setSororityPref(0);
             break;
-        case 'special_needs':
-            $app->setPhysicalDisability(0);
-            $app->setPsychDisability(0);
-            $app->setMedicalNeed(0);
-            $app->setGenderNeed(0);
-            break;
         }
 
         // Save, notify, and buh-bye
@@ -88,5 +82,3 @@ class DenySpecialInterestCommand extends Command
         $this->group = $group;
     }
 }
-
-
