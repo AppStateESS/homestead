@@ -63,10 +63,6 @@ class UnassignedFreshmen extends Report implements iCsvReport {
         $db->addColumn('hms_new_application.student_type');
         $db->addColumn('hms_new_application.cell_phone');
         $db->addColumn('hms_new_application.meal_plan');
-        $db->addColumn('hms_new_application.physical_disability');
-        $db->addColumn('hms_new_application.psych_disability');
-        $db->addColumn('hms_new_application.medical_need');
-        $db->addColumn('hms_new_application.gender_need');
         $db->addColumn('hms_new_application.international');
         $db->addColumn('hms_new_application.created_on');
 
