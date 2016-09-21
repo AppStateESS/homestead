@@ -86,13 +86,13 @@ var RoomChangeDropdown = React.createClass({
             }
         });
         return (
-            <div className="form-group">
-                <select className="form-control" ref="bedChoices">
-                    {selectOptions}
-                </select>
-                <p></p>
-                <div className="button-group">
-                    <a onClick={this.add} className="btn btn-md btn-success">Set</a>
+            <div className="row">
+                <div className="col-md-6">
+                    <div className="form-group">
+                        <select className="form-control" ref="bedChoices">
+                            {selectOptions}
+                        </select>
+                    </div>
                 </div>
             </div>
         );
@@ -103,6 +103,9 @@ var InfoBox = React.createClass({
     getInitialState: function(){
         return {showDropdown: false};
     },
+    handleClickChangeButton: function() {
+        this.setState({showDropdown: true});
+    },
     render: function() {
         if(this.props.toBed == null) {
             toLocation = "To Be Selected";
@@ -111,18 +114,22 @@ var InfoBox = React.createClass({
         }
 
         if(this.state.showDropdown){
-            var destination = <RoomChangeDropdown onAdd={this.props.chooseBed} data={this.props.availableBeds}/>;
+            var dropdown = <RoomChangeDropdown onAdd={this.props.chooseBed} data={this.props.availableBeds}/>;
+            var changeButton = '';
+            var destination = '';
         } else {
-            var destination = toLocation +" " + <button className="btn btn-default btn-xs"><i className="fa fa-bed"></i> Change Destination</button>;
+            var destination = toLocation;
+            var changeButton = <button className="btn btn-default btn-xs" onClick={this.handleClickChangeButton}><i className="fa fa-bed"></i> Change Destination</button>;
         }
 
         return (
             <div className="row">
                 <div className="col-md-12">
                     <p>
-                        <strong>From</strong> {this.props.toBed} <strong>To</strong> {destination}
+                        <strong>From</strong> {this.props.toBed} <strong>To</strong> {destination} {changeButton}
                     </p>
                 </div>
+                {dropdown}
             </div>
         );
     }
