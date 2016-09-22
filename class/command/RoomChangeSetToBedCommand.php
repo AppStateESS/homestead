@@ -43,6 +43,12 @@ class RoomChangeSetToBedCommand extends Command {
 
     public function execute(CommandContext $context)
     {
+        // Must have room change approval permissions
+        if(!Current_User::allow('hms', 'admin_approve_room_change')){
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You do not have permission to approve/modify room changes.');
+        }
+
         $this->setParticipantId($context->get('participantId'));
         $this->setBedId($context->get('bedId'));
         $this->setOldBed($context->get('oldBed'));

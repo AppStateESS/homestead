@@ -2,9 +2,9 @@ var RoomChangeDestination = React.createClass({
     getInitialState: function() {
         return {beds: [], rcData: []};
     },
-    chooseBed: function(nameToAdd)
+    chooseBed: function(selectedBed)
     {
-        this.postData(nameToAdd);
+        this.postData(selectedBed);
     },
     removeClick: function(bed)
     {
@@ -35,7 +35,7 @@ var RoomChangeDestination = React.createClass({
             type: 'GET',
             dataType: 'json',
             success: function(data) {
-                console.log(data);
+                //console.log(data);
                 this.setState({rcData: data});
             }.bind(this),
             error: function(xhr, status, err) {
@@ -61,16 +61,15 @@ var RoomChangeDestination = React.createClass({
     render: function() {
         return (
             <div className="form-group">
-                <InfoBox fromBed={this.state.rcData.fromBed} toBed={this.state.rcData.toBed} availableBeds={this.state.beds}/>
+                <InfoBox fromBed={this.state.rcData.fromBed} toBed={this.state.rcData.toBed} availableBeds={this.state.beds} handleChooseBed={this.chooseBed}/>
             </div>
         );
     }
 });
 
 var RoomChangeDropdown = React.createClass({
-    add: function() {
-        var bedToAdd = this.refs.bedChoices.getDOMNode().value;
-        this.props.onAdd(bedToAdd);
+    handleOnSelect: function() {
+        this.props.handleOnSelect(this.refs.bedChoices.getDOMNode().value);
     },
     render: function() {
         var options = Array({bedid: 0, hall_name: "Select a New Room"});
@@ -89,7 +88,7 @@ var RoomChangeDropdown = React.createClass({
             <div className="row">
                 <div className="col-md-6">
                     <div className="form-group">
-                        <select className="form-control" ref="bedChoices">
+                        <select className="form-control" ref="bedChoices" onChange={this.handleOnSelect}>
                             {selectOptions}
                         </select>
                     </div>
@@ -106,30 +105,42 @@ var InfoBox = React.createClass({
     handleClickChangeButton: function() {
         this.setState({showDropdown: true});
     },
-    render: function() {
-        if(this.props.toBed == null) {
-            toLocation = "To Be Selected";
-        } else {
-            toLocation = this.props.toBed;
+    handleBedSelected: function(selectedBed) {
+        this.props.handleChooseBed(selectedBed);
+        this.setState({showDropdown: false});
+    },
+    handleCancelClick: function(){
+        this.setState({showDropdown: false});
+    },
+    componentWillReceiveProps: function(nextProps){
+        if(nextProps.toBed == null){
+            this.setState({showDropdown: true});
+        }else{
+            this.setState({showDropdown: false});
         }
-
+    },
+    render: function() {
         if(this.state.showDropdown){
-            var dropdown = <RoomChangeDropdown onAdd={this.props.chooseBed} data={this.props.availableBeds}/>;
+            var dropdown = <RoomChangeDropdown handleOnSelect={this.handleBedSelected} data={this.props.availableBeds}/>;
+            var cancelButton = <button className="btn btn-default btn-sm" onClick={this.handleCancelClick}>Cancel</button>;
             var changeButton = '';
             var destination = '';
         } else {
-            var destination = toLocation;
+            var destination = this.props.toBed;
             var changeButton = <button className="btn btn-default btn-xs" onClick={this.handleClickChangeButton}><i className="fa fa-bed"></i> Change Destination</button>;
+            var cancelButton = '';
+            var dropdown = '';
         }
 
         return (
             <div className="row">
                 <div className="col-md-12">
                     <p>
-                        <strong>From</strong> {this.props.toBed} <strong>To</strong> {destination} {changeButton}
+                        <strong>From</strong> {this.props.fromBed} <strong>To</strong> {destination} {changeButton}
                     </p>
                 </div>
                 {dropdown}
+                <p>{cancelButton}</p>
             </div>
         );
     }
