@@ -14,15 +14,12 @@ class InternationalReservedBeds extends Report
     const shortName = 'InternationalReservededBeds';
 
     private $term;
-
     private $data;
-
     private $total;
 
     public function __construct($id = 0)
     {
         parent::__construct($id);
-
         $data = array();
     }
 
@@ -46,29 +43,26 @@ class InternationalReservedBeds extends Report
         $halls = array();
         $rows = array();
 
-        foreach ($result as $node)
-        {
+        foreach ($result as $node) {
             $this->total++;
-            if(!in_array($node['hall_name'], $halls))
-            {
+            if(!in_array($node['hall_name'], $halls)) {
                 $halls[] = $node['hall_name'];
             }
         }
 
-        foreach ($halls as $hall)
-        {
+        foreach ($halls as $hall) {
             $row = array();
             $row['HALL_NAME'] = $hall;
             $hallTotal = 0;
-            foreach ($result as $bedNode)
-            {
-                if($bedNode['hall_name'] == $row['HALL_NAME'])
-                {
+
+            foreach ($result as $bedNode) {
+                if($bedNode['hall_name'] == $row['HALL_NAME']) {
                     $bed = $bedNode['bedroom_label'] . $bedNode['bed_letter'];
                     $row['beds'][] = array('ROOM_NUMBER' => $bedNode['room_number'], 'BED' => $bed);
                     $hallTotal++;
                 }
             }
+
             $row['HALL_TOTAL'] = $hallTotal;
             $rows[] = $row;
         }
