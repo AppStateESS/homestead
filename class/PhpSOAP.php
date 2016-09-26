@@ -103,18 +103,18 @@ class PhpSOAP extends SOAP
             throw new SOAPException($e->getMessage(), $e->getCode(), 'getUsername', $params);
         }
 
-        if(!isset($response->GetBannerIDResult)){
+        if(!isset($response->basic_response->value)){
             return null;
         }
 
-        if(!is_numeric($response->GetBannerIDResult)){
+        if(!is_numeric($response->basic_response->value)){
             //throw new BannerException($response->GetBannerIDResult, null, 'getBannerId', $params);
             return null;
         }
 
         SOAP::logSoap('getBannerId', 'success', $params);
 
-        return $response->GetBannerIDResult;
+        return $response->basic_response->value;
     }
 
     // TODO Update this or get rid of it
