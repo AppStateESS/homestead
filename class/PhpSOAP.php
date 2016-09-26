@@ -77,14 +77,14 @@ class PhpSOAP extends SOAP
             throw new SOAPException($e->getMessage(), $e->getCode(), 'getUsername', $params);
         }
 
-        if(!isset($response->GetUserNameResult)){
+        if(!isset($response->basic_response->value)){
             //throw new StudentNotFoundException("No matching student found with Banner ID: $bannerId.");
             return false;
         }
 
         SOAP::logSoap('getUsername', 'success', $params);
 
-        return $response->GetUserNameResult;
+        return $response->basic_response->value;
     }
 
     public function getBannerId($username)
