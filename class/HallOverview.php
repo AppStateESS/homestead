@@ -106,7 +106,7 @@ class HallOverview extends hms\View{
                     if(isset($bed->_curr_assignment)){
                         $username = $bed->_curr_assignment->asu_username;
                         try {
-                            $student = StudentFactory::getStudentByUsername($username, $this->hall->term);
+                            $student = StudentFactory::getStudentByBannerId($bed->_curr_assignment->getBannerId(), $this->hall->term);
                         }catch(StudentNotFoundException $e){
                             $student = null;
                             NQ::simple('hms', hms\NotificationView::WARNING, "Could not find data for: $username");
