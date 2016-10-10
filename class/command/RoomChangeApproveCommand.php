@@ -93,7 +93,8 @@ class RoomChangeApproveCommand extends Command {
 
         // Notify roommates that their circumstances are going to change
         foreach($participants as $p) {
-            $student = $this->students[$p->getBannerId()];
+            // Get the Student object
+            $student = StudentFactory::getStudentByBannerId($p->getBannerId(), $term);
 
             // New Roommate
             $newbed = new HMS_Bed($p->getToBed());

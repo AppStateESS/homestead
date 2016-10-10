@@ -318,7 +318,7 @@ abstract class SOAP
      */
     protected static function logSoap($function, $result, Array $params)
     {
-        $args = implode(', ', $params);
+        $args = print_r($params, true);
         $msg = "$function($args) result: $result";
         PHPWS_Core::log($msg, 'soap.log', 'SOAP');
     }
