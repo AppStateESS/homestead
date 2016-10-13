@@ -397,6 +397,8 @@ define('ACTIVITY_REAPP_WAITINGLIST_APPLY',      76);
 // Reinstate Application
 define('ACTIVITY_REINSTATE_APPLICATION',        77);
 
+define('ACTIVITY_ROOM_CHANGE_REASSIGNED',       78); // Assignment moved due to room change
+
 /**
  * Errors
  */

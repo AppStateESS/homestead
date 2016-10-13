@@ -290,6 +290,20 @@ abstract class SOAP
     public abstract function addRoomDamageToStudentAccount($bannerId, $term, $amount, $damageDescription, $detailCode);
 
 
+    /**
+     * Moves each student in the array from their current bed to a new bed in
+     * an atomic operation. This allows the billing to be pro-rated depending
+     * on the date of the move and the difference in room rates.
+     *
+     * @see BannerRoomChangeStudent
+     * @param Array<BannerRoomChangeStudent> Array of BannerRoomChangeStudent objects representing each student to move
+     * @param Integer $term The term for these assignments
+     * @return boolean True if successful, false otherwise
+     * @throws InvalidArgumentException, SOAPException
+     */
+    public abstract function moveRoomAssignment(Array $students, $term);
+
+
 
     /*********************
      * Utility Functions *
@@ -304,7 +318,7 @@ abstract class SOAP
      */
     protected static function logSoap($function, $result, Array $params)
     {
-        $args = implode(', ', $params);
+        $args = print_r($params, true);
         $msg = "$function($args) result: $result";
         PHPWS_Core::log($msg, 'soap.log', 'SOAP');
     }

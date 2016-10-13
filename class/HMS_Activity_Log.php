@@ -224,7 +224,8 @@ class HMS_Activity_Log{
         ACTIVITY_CHECK_IN                       => 'Checked-in',
         ACTIVITY_CHECK_OUT                      => 'Checked-out',
         ACTIVITY_REAPP_WAITINGLIST_APPLY        => 'Applied for Re-application Waiting List',
-        ACTIVITY_REINSTATE_APPLICATION          => 'Reinstated Application');
+        ACTIVITY_REINSTATE_APPLICATION          => 'Reinstated Application',
+        ACTIVITY_ROOM_CHANGE_REASSIGNED         => 'Reassigned due to Room Change');
     }
 
     /**
