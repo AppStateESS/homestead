@@ -224,4 +224,7 @@ class TestSOAP extends SOAP
         return true;
     }
 
+    public function moveRoomAssignment(Array $students, $term){
+        return true;
+    }
 }

@@ -13,6 +13,7 @@ PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
 
 class HMS_Assignment extends HMS_Item {
+
     public $asu_username = null;
     public $banner_id;
     public $bed_id = 0;
@@ -678,6 +679,7 @@ class HMS_Assignment extends HMS_Item {
     /**
      *
      * @param Array<BannerRoomChangeStudent> $students Array of BannerRoomChangeStudent objects representing the students to be moved and their to/from beds (hall code + room code)
+     * @param string Term
      */
     public static function moveAssignments(Array $students, $term)
     {
@@ -687,28 +689,15 @@ class HMS_Assignment extends HMS_Item {
         $soap = SOAP::getInstance(UserStatus::getUsername(), SOAP::ADMIN_USER);
         $soap->moveRoomAssignment($students, $term);
 
-        // Assuming that worked and we're still here, then do the work of updating the local DB
+        $numberOfStudents = sizeof($students);
+
+        // Do sanity checks for each student, before we go removing anything
         foreach($students as $student){
-            // Lookup this student's old (current) assignment
-            $oldAssignment = HMS_Assignment::getAssignmentByBannerId($student->banner_id, $term);
-
-            // Delete the old assigment
-            $result = $oldAssignment->delete();
-
-            // Update the assignment history table to include the removed assignment
-            AssignmentHistory::makeUnassignmentHistory($oldAssignment, UNASSIGN_CHANGE);
-
-            // Make the new Assignment
-
-            // Get the new bed and corresponding room
+            // Get the new bed and corresponding room for sanity checks
             $newBed = $student->getNewBed();
             $room = $newBed->get_parent();
 
             // TODO: Most of this is duplicated from createRoomAssignment; Refactor so we don't have to do that.
-            // Check that the room has a vacancy
-            if (!$room->has_vacancy()) {
-                throw new AssignmentException('The room is full.');
-            }
 
             // Make sure the room is not offline
             if ($room->offline) {
@@ -720,21 +709,73 @@ class HMS_Assignment extends HMS_Item {
                 throw new AssignmentException('The bed\'s term and the assignment term do not match.');
             }
 
-            // Double check that the resulting bed is empty
-            if ($newBed->get_number_of_assignees() > 0) {
-                throw new AssignmentException('The bed is not empty.');
+            // Sanity checks vary depending on whether this is one student moving (a switch), or multiple students (a swap)
+            if($numberOfStudents == 1){
+                // There's only one student, so this is a "switch" - destination bed must be empty/available
+                // Check that the room has a vacancy
+                if (!$room->has_vacancy()) {
+                    throw new AssignmentException('The room is full.');
+                }
+
+                // Double check that the bed is empty
+                if ($newBed->get_number_of_assignees() > 0) {
+                    throw new AssignmentException('The bed is not empty.');
+                }
+            }else{
+                // There are > 1 students, so this is a swap. Destination bed can be occupied,
+                // so long as its occupant is also in the set of students moving
+                $newBedOccupant = $newBed->get_assignee();
+                if($newBedOccupant !== null){
+                    // Destination bed is occupied, so make sure its current occupant is moving too
+                    $destinationOccupantInSet = false;
+                    foreach($students as $s){
+                        if($newBedOccupant->getBannerId() === $s->banner_id){
+                            $destinationOccupantInSet = true;
+                            break;
+                        }
+                    }
+
+                    if(!$destinationOccupantInSet){
+                        throw new AssignmentException('Destination bed for ' . $student->banenr_id . ' is not empty, but existing student ' .  $newBedOccupant->getBanenrId() . 'is not moving.');
+                    }
+                }
             }
 
+            // Get the student's Banner Info
             $studentObj = $student->getStudent();
 
+            // Double check that the student's gender field is set
             $studentGender = $studentObj->getGender();
 
             if (is_null($studentGender)) {
                 throw new AssignmentException('Student gender is null.');
             }
+        }
+
+
+        // Remove each student from their beds
+        foreach($students as $student){
+            // Lookup this student's old (current) assignment
+            $oldAssignment = HMS_Assignment::getAssignmentByBannerId($student->banner_id, $term);
+
+            // Delete the old assigment
+            $result = $oldAssignment->delete();
+            var_dump($result);
+
+            // Update the assignment history table to include the removed assignment
+            AssignmentHistory::makeUnassignmentHistory($oldAssignment, UNASSIGN_CHANGE);
+        }
+
+
+        // Make each of the new assignments
+        foreach($students as $student){
+
+            $newBed = $student->getNewBed();
+            $room = $newBed->get_parent();
+            $studentObj = $student->getStudent();
 
             // Genders must match unless the room is COED
-            if ($room->getGender() != $studentGender && $room->getGender() != COED) {
+            if ($room->getGender() != COED && $room->getGender() != $studentObj->getGender()) {
                 throw new AssignmentException('Room gender does not match the student\'s gender.');
             }
 
