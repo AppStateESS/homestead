@@ -752,6 +752,8 @@ class HMS_Assignment extends HMS_Item {
             }
         }
 
+        $db = new \PHPWS_DB();
+        $db->query('BEGIN'); //TODO: convert to PDO::beginTransaction()
 
         // Remove each student from their beds
         foreach($students as $student){
@@ -760,7 +762,6 @@ class HMS_Assignment extends HMS_Item {
 
             // Delete the old assigment
             $result = $oldAssignment->delete();
-            var_dump($result);
 
             // Update the assignment history table to include the removed assignment
             AssignmentHistory::makeUnassignmentHistory($oldAssignment, UNASSIGN_CHANGE);
@@ -801,6 +802,8 @@ class HMS_Assignment extends HMS_Item {
             // Log in the activity log
             HMS_Activity_Log::log_activity($studentObj->username, ACTIVITY_ROOM_CHANGE_REASSIGNED, UserStatus::getUsername(), "Room Change Approved in $term From {$student->old_bldg_code} {$student->old_room_code} to {$student->new_bldg_code} {$student->new_room_code}");
         }
+
+        $db->query('COMMIT');
 
     }
 }
