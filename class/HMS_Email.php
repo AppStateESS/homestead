@@ -348,7 +348,7 @@ class HMS_Email{
                  HMS_Email::send_template_message($to . TO_DOMAIN, 'Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
                  }
                  */
-                HMS_Email::send_template_message($to . TO_DOMAIN, 'Proof of campus housing for voter registration and voting', 'email/assignment_notice.tpl', $tpl);
+                HMS_Email::send_template_message($to . TO_DOMAIN, 'Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
                 break;
         }
     }
