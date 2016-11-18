@@ -11,7 +11,7 @@ class Envelope {
 
     public function __construct($envelopeId, $uri, $statusDateTime, $status)
     {
-    	$this->envelopeId = $envelopeId;
+        $this->envelopeId = $envelopeId;
         $this->uri = $uri;
         $this->statusDateTime = $statusDateTime;
         $this->status = $status;
@@ -19,17 +19,20 @@ class Envelope {
 
     public function getUri()
     {
-    	return $this->uri;
+        return $this->uri;
     }
 
     public function getEnvelopeId()
     {
-    	return $this->envelopeId;
+        return $this->envelopeId;
     }
 
-	public function getEnvelopeViewURI(Client $client)
-	{
-		$http = new \Guzzle\Http\Client();
+    /**
+     * Returns the URL to view this envelope's documents.
+     */
+    public function getEnvelopeViewURI(Client $client)
+    {
+        $http = new \Guzzle\Http\Client();
         try {
             $request = $http->createRequest('POST', $client->getBaseUrl() . '/views/console/');
             $request->setHeader('Content-Type', 'application/json');
@@ -46,6 +49,6 @@ class Envelope {
         }
         $result = $response->json();
         return $result['url'];
-	}
+    }
 
 }
