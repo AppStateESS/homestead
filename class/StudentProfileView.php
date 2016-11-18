@@ -226,7 +226,7 @@ class StudentProfileView extends hms\View {
         /****************
          * Applications *
         *************/
-        $appList = new ProfileHousingAppList($this->applications);
+        $appList = new ProfileHousingAppList($this->student, $this->applications);
         $tpl['APPLICATIONS'] = $appList->show();
 
         /*********

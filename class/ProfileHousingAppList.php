@@ -7,11 +7,16 @@
  */
 class ProfileHousingAppList extends hms\View
 {
+    private $student;
     private $housingApps;
+    private $docusignClient;
 
-    public function __construct(Array $housingApps)
+    public function __construct(Student $student, Array $housingApps)
     {
+        $this->student = $student;
         $this->housingApps = $housingApps;
+
+        $this->docusignClient = DocusignClientFactory::getClient();
     }
 
     public function show()
@@ -76,13 +81,10 @@ class ProfileHousingAppList extends hms\View
                     $row['cancel'] = $cancel;
                 }
 
-                $student    = StudentFactory::getStudentByBannerId($app->getBannerId(), $app->getTerm());
-                $contract   = ContractFactory::getContractByStudentTerm($student, $app->getTerm());
-                $client     = DocusignClientFactory::getClient();
-                $envelopeId = $contract->getEnvelopeId();
-                $envelope   = \Docusign\EnvelopeFactory::getEnvelopeById($client, $envelopeId);
+                $contract = ContractFactory::getContractByStudentTerm($this->student, $app->getTerm());
+                $envelope = \Docusign\EnvelopeFactory::getEnvelopeById($this->docusignClient, $contract->getEnvelopeId());
 
-                $row['contract'] = $envelope->getEnvelopeViewURI($client);
+                $row['contract'] = $envelope->getEnvelopeViewURI($this->docusignClient);
             }
 
 
