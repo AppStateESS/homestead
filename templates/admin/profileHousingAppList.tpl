@@ -23,7 +23,7 @@
             <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"
                 id="dropdownMenu" aria-haspopup="true" aria-expanded="false">
                 Actions
-                <span class="caret">
+                <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
                 <li>
