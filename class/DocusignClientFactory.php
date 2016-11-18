@@ -12,7 +12,7 @@ class DocusignClientFactory {
      * Returns a Client object for making API calls to Docusign
      *
      * @throws DatabaseException
-     * @return Array Associative array of damage types
+     * @return \Docusign\Client object
      */
     public static function getClient()
     {
