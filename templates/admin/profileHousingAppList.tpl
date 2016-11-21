@@ -9,7 +9,7 @@
       <th>Meal plan</th>
       <th>Cleanliness</th>
       <th>Bedtime</th>
-      <th>Actions</th>
+      <th></th>
     </tr>
     <!-- BEGIN APPLICATIONS -->
     <tr class="{row_style}">
@@ -22,7 +22,7 @@
       <td><div class="dropdown">
             <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"
                 id="dropdownMenu" aria-haspopup="true" aria-expanded="false">
-                Actions
+                <i class="fa fa-cog"></i>
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
@@ -31,7 +31,7 @@
                 </li>
                 <!-- BEGIN cancel-link -->
                 <li>
-                    <a href="{cancel}"><i class="fa fa-times"></i> Cancel Application</a>
+                    <a href="{cancel}" class="cancelAppLink"><i class="fa fa-times"></i> Cancel Application</a>
                 </li>
                 <!-- END cancel-link -->
                 <!-- BEGIN reinstate-link -->
