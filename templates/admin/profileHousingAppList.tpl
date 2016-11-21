@@ -9,7 +9,7 @@
       <th>Meal plan</th>
       <th>Cleanliness</th>
       <th>Bedtime</th>
-      <th>Actions</th>
+      <th></th>
     </tr>
     <!-- BEGIN APPLICATIONS -->
     <tr class="{row_style}">
@@ -19,16 +19,37 @@
       <td>{meal_plan}</td>
       <td>{clean}</td>
       <td>{bedtime}</td>
-      <td><a href="{view}" class="btn btn-primary btn-xs"><i class="fa fa-search"></i> View</a>
-          <!-- BEGIN cancel-link -->
-            <a href="{cancel}" class="btn btn-danger btn-xs cancelAppLink"><i class="fa fa-times"></i> Cancel</a>
-          <!-- END cancel-link -->
-          <!-- BEGIN reinstate-link -->
-            <a href="{reinstate}" class="btn btn-warning btn-xs"><i class="fa fa-undo"></i> Re-instate</a>
-          <!-- END reinstate-link -->
-          <!-- BEGIN cancelled -->
-            <span class="text-muted">{cancelledReason}</span>
-          <!-- END cancelled -->
+      <td><div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"
+                id="dropdownMenu" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-cog"></i>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                <li>
+                    <a href="{view}"><i class="fa fa-search"></i> View Application</a>
+                </li>
+                <!-- BEGIN cancel-link -->
+                <li>
+                    <a href="{cancel}" class="cancelAppLink"><i class="fa fa-times"></i> Cancel Application</a>
+                </li>
+                <!-- END cancel-link -->
+                <!-- BEGIN reinstate-link -->
+                <li>
+                    <a href="{reinstate}"><i class="fa fa-undo"></i> Re-instate</a>
+                </li>
+                <!-- END reinstate-link -->
+                <!-- BEGIN view_contract-link -->
+                <li role="separator" class="divider"></li>
+                <li>
+                    <a href="{contract}"><i class="fa fa-file-text"></i> View Contract</a>
+                </li>
+                <!-- END view_contract-link -->
+            </ul>
+          </div>
+            <!-- BEGIN cancelled -->
+                <span class="text-muted">{cancelledReason}</span>
+            <!-- END cancelled -->
       </td>
     </tr>
     <!-- END APPLICATIONS -->
