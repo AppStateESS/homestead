@@ -50,5 +50,4 @@ class Envelope {
         $result = $response->json();
         return $result['url'];
     }
-
 }
