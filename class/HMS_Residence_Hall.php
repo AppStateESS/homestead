@@ -46,7 +46,7 @@ class HMS_Residence_Hall extends HMS_Item {
     /**
      * Constructor
      */
-    public function HMS_Residence_Hall($id = 0)
+    public function __construct($id = 0)
     {
         $this->construct($id, 'hms_residence_hall');
     }

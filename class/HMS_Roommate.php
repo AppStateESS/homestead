@@ -32,7 +32,7 @@ class HMS_Roommate
     /**
      * Constructor
      */
-    public function HMS_Roommate($id = 0)
+    public function __construct($id = 0)
     {
         if (!$id) {
             return;

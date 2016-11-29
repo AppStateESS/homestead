@@ -31,7 +31,7 @@ class HMS_Assignment extends HMS_Item {
      * Instance Methods *
      * *****************
      */
-    public function HMS_Assignment($id = 0)
+    public function __construct($id = 0)
     {
         $this->construct($id, 'hms_assignment');
 

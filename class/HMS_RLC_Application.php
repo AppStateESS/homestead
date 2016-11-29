@@ -59,7 +59,7 @@ class HMS_RLC_Application extends HMS_Item
      * to create/load a application for. Otherwise, the student currently
      * logged in (session) is used.
      */
-    public function HMS_RLC_Application($id = 0)
+    public function __construct($id = 0)
     {
         $this->construct($id);
     }

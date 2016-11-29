@@ -22,7 +22,7 @@ class HMS_Activity_Log{
      * Constructor
      *
      */
-    public function HMS_Activity_Log($id = 0, $user_id = null, $timestamp = null,
+    public function __construct($id = 0, $user_id = null, $timestamp = null,
     $activity = null, $actor = null, $notes = null)
     {
         $this->activity_text = HMS_Activity_Log::getActivityMapping();

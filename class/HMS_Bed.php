@@ -29,7 +29,7 @@ class HMS_Bed extends HMS_Item {
      */
     var $_room;
 
-    public function HMS_Bed($id = 0)
+    public function __construct($id = 0)
     {
         $this->construct($id, 'hms_bed');
         // test($this);

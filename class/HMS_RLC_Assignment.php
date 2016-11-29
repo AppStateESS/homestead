@@ -28,7 +28,7 @@ class HMS_RLC_Assignment {
      * Constructor
      *
      */
-    public function HMS_RLC_Assignment($id = NULL)
+    public function __construct($id = NULL)
     {
         if(isset($id)){
             $this->id = $id;
