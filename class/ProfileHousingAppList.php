@@ -82,9 +82,13 @@ class ProfileHousingAppList extends hms\View
                 }
 
                 $contract = ContractFactory::getContractByStudentTerm($this->student, $app->getTerm());
-                $envelope = \Docusign\EnvelopeFactory::getEnvelopeById($this->docusignClient, $contract->getEnvelopeId());
+                if($contract !== false){
+                    $envelope = \Docusign\EnvelopeFactory::getEnvelopeById($this->docusignClient, $contract->getEnvelopeId());
+                    $row['contract'] = $envelope->getEnvelopeViewURI($this->docusignClient);
+                } else {
+                    $row['contract'] = 'No Contract';
+                }
 
-                $row['contract'] = $envelope->getEnvelopeViewURI($this->docusignClient);
             }
 
 
