@@ -104,7 +104,7 @@ class ReApplicationFormSaveCommand extends Command {
          * Emergency Contact Info *
          */
 
-        $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $studentType, $student->getApplicationTerm(), $cellPhone, $mealPlan, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $international, NULL, $magicWinner, $sororityPref, $wgPref, $honorsPref, $rlcInterest, $earlyRelease);
+        $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $studentType, $student->getApplicationTerm(), $cellPhone, $mealPlan, $international, NULL, $magicWinner, $sororityPref, $wgPref, $honorsPref, $rlcInterest, $earlyRelease);
 
         $application->setEmergencyContactName($context->get('emergency_contact_name'));
         $application->setEmergencyContactRelationship($context->get('emergency_contact_relationship'));
