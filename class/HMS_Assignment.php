@@ -269,7 +269,11 @@ class HMS_Assignment extends HMS_Item {
             throw new DatabaseException($result->toString());
         }
 
-        return !is_null($result);
+        if($result === false || is_null($result)){
+            return false;
+        }
+
+        return true;
     }
 
     public static function getAssignment($asu_username, $term)
