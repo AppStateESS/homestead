@@ -25,14 +25,14 @@ class ShowReApplicationCommand extends Command {
 
         $term = $context->get('term');
 
-        # Double check that the student is eligible
+        // Double check that the student is eligible
         if(!HMS_Lottery::determineEligibility(UserStatus::getUsername())){
             NQ::simple('hms', hms\NotificationView::ERROR, 'You are not eligible to re-apply for on-campus housing for this semester.');
             $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
             $menuCmd->redirect();
         }
 
-        # Check if the student has already applied. If so, redirect to the student menu
+        // Check if the student has already applied. If so, redirect to the student menu
         $result = HousingApplication::checkForApplication(UserStatus::getUsername(), $term);
 
         if($result !== FALSE){
@@ -41,7 +41,8 @@ class ShowReApplicationCommand extends Command {
             $menuCmd->redirect();
         }
 
-        # Make sure the student agreed to the terms, if not, send them back to the terms & agreement command
+        // Make sure the student agreed to the terms, if not, send them back to the terms & agreement command
+        /*
         $event = $context->get('event');
 
         $_SESSION['application_data'] = array();
@@ -56,6 +57,7 @@ class ShowReApplicationCommand extends Command {
             $agreementCmd->setAgreedCommand($onAgree);
             $agreementCmd->redirect();
         }
+        */
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
