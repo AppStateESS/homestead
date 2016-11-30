@@ -28,7 +28,7 @@ class LocalCacheDataProvider extends StudentDataProvider {
         }
 
         // If the result was empty, use the fallback
-        if(is_null($result)){
+        if($result === false || is_null($result)){
             $provider = $this->getFallbackProvider();
             $result   = $provider->getStudentByUsername($username, $term);
 
