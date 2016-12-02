@@ -133,8 +133,12 @@ class BeginDocusignCommand extends Command
                 $envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $templateId, 'University Housing Contract', $templateRoles, 'sent', $student->getBannerId());
             }
 
+            var_dump($envelope);
+            var_dump($envelope->getStatus());
+            var_dump(strtotime($envelope->getStatusDateTime()));
+
             // Create a new contract to save the envelope ID
-            $contract = new Contract($student, $term, $envelope->getEnvelopeId());
+            $contract = new Contract($student, $term, $envelope->getEnvelopeId(), $envelope->getStatus(), strtotime($envelope->getStatusDateTime()));
             ContractFactory::save($contract);
         } else {
             // Use the existing envelope id
@@ -155,7 +159,7 @@ class BeginDocusignCommand extends Command
         $returnUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . $returnCmd->getURI();
 
         $url = $recipientView->getRecipientViewUrl($returnUrl);
-        
+
         PHPWS_Core::reroute($url);
         //$context->setContent('beginning signing process');
     }

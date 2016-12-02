@@ -40,22 +40,26 @@ class ContractFactory {
       $id = $contract->getId();
 
       if (isset($id)) {
-        $query = "UPDATE hms_contract SET (banner_id, term, envelope_id) = (:bannerId, :term, :envelopeId) WHERE id = :id";
+        $query = "UPDATE hms_contract SET (banner_id, term, envelope_id, envelope_status, envelope_status_time) = (:bannerId, :term, :envelopeId, :envelopeStatus, :envelopeStatusTime) WHERE id = :id";
 
         $params = array(
                   'bannerId' => $contract->getBannerId(),
                   'term' => $contract->getTerm(),
-                  'envelopeId' => $contract->getEnvelopeId()
+                  'envelopeId' => $contract->getEnvelopeId(),
+                  'envelopeStatus' => $contract->getEnvelopeStatus(),
+                  'envelopeStatusTime' => $contract->getEnvelopeStatusTime()
       	);
 
       }else{
         // Insert
-        $query = "INSERT INTO hms_contract (id, banner_id, term, envelope_id) VALUES (nextval('hms_contract_seq'), :bannerId, :term, :envelopeId)";
+        $query = "INSERT INTO hms_contract (id, banner_id, term, envelope_id, envelope_status, envelope_status_time) VALUES (nextval('hms_contract_seq'), :bannerId, :term, :envelopeId, :envelopeStatus, :envelopeStatusTime)";
 
         $params = array(
                   'bannerId' => $contract->getBannerId(),
                   'term' => $contract->getTerm(),
-                  'envelopeId' => $contract->getEnvelopeId()
+                  'envelopeId' => $contract->getEnvelopeId(),
+                  'envelopeStatus' => $contract->getEnvelopeStatus(),
+                  'envelopeStatusTime' => $contract->getEnvelopeStatusTime()
         );
       }
 

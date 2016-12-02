@@ -27,6 +27,16 @@ class Envelope {
         return $this->envelopeId;
     }
 
+    public function getStatusDateTime()
+    {
+        return $this->statusDateTime;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
     /**
      * Returns the URL to view this envelope's documents.
      */
