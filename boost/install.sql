@@ -12,6 +12,8 @@ create table hms_contract (
 	banner_id 	integer not null,
 	term 		integer not null REFERENCES hms_term(term),
 	envelope_id character varying not null,
+    envelope_status character varying not null default 'sent',
+    envelope_status_time set not null,
 	PRIMARY KEY(id)
 );
 
@@ -154,6 +156,8 @@ CREATE TABLE hms_residence_hall (
     primary key(id)
 );
 
+create sequence hms_residence_hall_seq;
+
 -- Referenced by hms_floor, needs to be created first
 CREATE TABLE hms_learning_communities (
     id integer DEFAULT 0 NOT NULL,
@@ -189,6 +193,8 @@ CREATE TABLE hms_floor (
     primary key(id)
 );
 
+create sequence hms_floor_seq;
+
 CREATE TABLE hms_room (
     id                      integer NOT NULL,
     persistent_id           character varying NOT NULL,
@@ -216,6 +222,8 @@ CREATE TABLE hms_room (
     primary key(id)
 );
 
+create sequence hms_room_seq;
+
 CREATE TABLE hms_bed (
     id              integer NOT NULL,
     term            integer NOT NULL REFERENCES hms_term(term),
@@ -235,6 +243,8 @@ CREATE TABLE hms_bed (
     ra                      smallint NOT NULL DEFAULT 0,
     PRIMARY KEY(id)
 );
+
+create sequence hms_bed_seq;
 
 create table hms_checkin (
     id                  integer NOT NULL,
