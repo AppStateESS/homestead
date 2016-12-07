@@ -45,7 +45,6 @@ class ShowTermsAgreementCommand extends Command {
 
         // Recreate the agreedToCommand
         $agreedCmd = CommandFactory::getCommand($context->get('onAgreeAction'));
-        $agreedCmd->setTerm($term);
         
         $roommateRequestId = $context->get('roommateRequestId');
         if(isset($roommateRequestId) && $roommateRequestId != null) {
@@ -55,9 +54,9 @@ class ShowTermsAgreementCommand extends Command {
         //$submitCmd = CommandFactory::getCommand('AgreeToTerms');
         //$submitCmd->setTerm($term);
         //$submitCmd->setAgreedCmd($agreedCmd);
-        
+
         $sem = Term::getTermSem($term);
-        
+
         switch ($sem){
             case TERM_FALL:
                 $appType = 'fall';
@@ -72,13 +71,13 @@ class ShowTermsAgreementCommand extends Command {
         }
 
         $application = HousingApplicationFactory::getApplicationFromSession($_SESSION['application_data'], $term, $student, $appType);
-        
+
         $docusignCmd = CommandFactory::getCommand('BeginDocusign');
         $docusignCmd->setTerm($term);
         $docusignCmd->setReturnCmd($agreedCmd);
         $docusignCmd->setParentName($application->getEmergencyContactName());
         $docusignCmd->setParentEmail($application->getEmergencyContactEmail());
-        
+
 
         PHPWS_Core::initModClass('hms', 'TermsAgreementView.php');
         $agreementView = new TermsAgreementView($term, $docusignCmd, $student);
@@ -86,5 +85,3 @@ class ShowTermsAgreementCommand extends Command {
         $context->setContent($agreementView->show());
     }
 }
-
-
