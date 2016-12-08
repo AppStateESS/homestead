@@ -553,6 +553,35 @@ class LotteryProcess {
      * @throws DatabaseException
      * @return int Number of outstanding roommate invites.
      */
+    public static function totalOutstandingInvites($term)
+    {
+        $now = time();
+        $ttl = INVITE_TTL_HRS * 3600;
+
+        $query = "SELECT count(*) FROM hms_new_application
+        JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
+        LEFT OUTER JOIN hms_assignment ON (hms_new_application.banner_id = hms_assignment.banner_id AND hms_new_application.term = hms_assignment.term)
+        WHERE hms_assignment.banner_id IS NULL
+        AND hms_new_application.term = $term
+        AND hms_lottery_application.invited_on IS NOT NULL
+        AND (hms_lottery_application.invited_on + $ttl) > $now";
+
+        $remainingApplications = PHPWS_DB::getOne($query);
+
+        if (PHPWS_Error::logIfError($remainingApplications)) {
+            throw new DatabaseException($remainingApplications->toString());
+        }
+
+        return $remainingApplications;
+    }
+
+    /**
+     * Returns the number of outstanding roommate invites.
+     *
+     * @param int $term
+     * @throws DatabaseException
+     * @return int Number of outstanding roommate invites.
+     */
     public static function countOutstandingRoommateInvites($term)
     {
         $query = "select count(*) FROM hms_lottery_reservation
