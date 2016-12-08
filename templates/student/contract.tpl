@@ -2,7 +2,7 @@
 	<div class="col-md-10 col-md-offset-1">
 		<h1>Residence Hall Contract <small>{TERM}</small></h1>
 
-		<p>Click the button below to begin the signing process through Docusign. Once you've signed, you'll be automatically returned here to complete your application.<p>
+		<p>Click the button below to begin the signing process through Docusign. Once you've signed, you'll be automatically returned here to complete your application.</p>
 
 		<!-- BEGIN under18 -->
 		<div class="alert alert-info">
@@ -17,7 +17,9 @@
 		</div>
 		<!-- END under18 -->
 
-		<button class="btn btn-success btn-lg pull-right" id="signButton"><i class="fa fa-edit"></i> Sign Contract via Docusign</button>
+        <div class="text-center">
+            <button class="btn btn-success btn-lg" id="signButton"><i class="fa fa-edit"></i> Sign Contract via Docusign</button>
+        </div>
 	</div>
 </div>
 
