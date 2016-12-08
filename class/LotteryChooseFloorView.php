@@ -32,7 +32,9 @@ class LotteryChooseFloorView extends hms\View {
 
         if(isset($hall->room_plan_image_id) && $hall->room_plan_image_id != 0){
             $file = Cabinet::getFile($hall->room_plan_image_id);
-            $tpl['ROOM_PLAN_IMAGE'] = $file->parentLinked();
+            if($file->id !== 0){
+                $tpl['ROOM_PLAN_IMAGE'] = $file->parentLinked();
+            }
         }
 
         if(isset($hall->map_image_id)){
@@ -41,7 +43,9 @@ class LotteryChooseFloorView extends hms\View {
 
         if(isset($hall->other_image_id) && $hall->other_image_id != 0 && $hall->other_image_id != '0'){
             $file = Cabinet::getFile($hall->other_image_id);
-            $tpl['OTHER_IMAGE'] = $file->parentLinked();
+            if($file->id !== 0){
+                $tpl['OTHER_IMAGE'] = $file->parentLinked();
+            }
         }
 
         if($this->rlcAssignment != null && ($this->rlcAssignment->getStateName() == 'confirmed' || $this->rlcAssignment->getStateName() == 'selfselect-invite')) {
