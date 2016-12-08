@@ -126,11 +126,10 @@ class AdminAddRlcMembersCommand extends Command {
                 continue;
             }
 
-            if($student->getType() == TYPE_CONTINUING)
-            {
-                // If not a freshmen then check Student's Eligibility
+            // If not a freshmen then check Student's Eligibility
+            if($student->getType() == TYPE_CONTINUING) {
                 $eligibility = HMS_Lottery::determineEligibility($student->getUsername());
-                if($eligibility == false){
+                if($eligibility === false){
                     NQ::simple('hms', hms\NotificationView::ERROR, "{$student->getName()} ({$student->getBannerID()}) is not currently eligible for housing");
                     continue;
                 }
