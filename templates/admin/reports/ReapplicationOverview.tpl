@@ -107,15 +107,14 @@
 </div>
 
 <div class="col-md-9">
+  <h3>Outstanding Invites</h3>
   <table class="table table-striped table-hover">
-    <tr>
-      <h3>Outstanding Invites</h3>
-    </tr>
     <tr>
       <th></th>
       <th>Sophomores</th>
       <th>Juniors</th>
       <th>Seniors</th>
+      <th>Roommate Invites</th>
       <th>Total</th>
     </tr>
     <tr>
@@ -123,7 +122,8 @@
       <td>{PENDING_SOPH_INVITES}</td>
       <td>{PENDING_JR_INVITES}</td>
       <td>{PENDING_SR_INVITES}</td>
-      <th>{ROOMMATE_INVITES}</th>
+      <td>{PENDING_ROOMMATE_INVITES}</td>
+      <td>{TOTAL_PENDING_INVITES}</td>
     </tr>
   </table>
 </div>
