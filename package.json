@@ -1,11 +1,21 @@
 {
-  "name": "hms",
+  "name": "Homestead",
   "version": "1.0.0",
-  "description": "Housing Management System",
-  "main": "index.js",
+  "description": "A web-application for managing on-campus student housing.",
+  "main": "index.php",
   "directories": {
     "doc": "docs"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AppStateESS/homestead.git"
+  },
+  "author": "",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/AppStateESS/homestead/issues"
+  },
+  "homepage": "https://github.com/AppStateESS/homestead/",
   "dependencies": {
     "classnames": "^2.2.3"
   },
@@ -13,14 +23,4 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/csdetschjr/homestead.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/csdetschjr/homestead/issues"
-  },
-  "homepage": "https://github.com/csdetschjr/homestead#readme"
 }
