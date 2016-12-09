@@ -25,6 +25,6 @@ class ShowViewByRlc extends hms\View{
 
         javascript('jquery');
 
-        return \PHPWS_Template::process($tpl, 'hms', 'admin/rlcPager.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/rlcMembersList.tpl');
     }
 }
