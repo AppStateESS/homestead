@@ -10,21 +10,17 @@ var RlcPagerBox = React.createClass({
     },
     startSort: function(column)
     {
-        if(this.state.sortedBy == column)
-        {
-            if(this.state.sortOrder == "ASC")
-            {
+        if(this.state.sortedBy == column){
+            if(this.state.sortOrder == "ASC"){
                 this.setState({sortOrder: "DESC"});
-            }
-            else
-            {
+            }else{
                 this.setState({sortOrder: "ASC"});
             }
-        }
-        else
-        {
+
+        }else{
             this.setState({sortedBy: column, sortOrder: "ASC"});
         }
+
         this.sortMembers();
     },
 
@@ -148,9 +144,9 @@ var RlcPagerBox = React.createClass({
     },
     render: function()
     {
-        var backUrl = "/phpwebsite/index.php?module=hms&action=ShowSearchByRlc"
-        var addMembersUrl = "/phpwebsite/index.php?module=hms&action=ShowAdminAddRlcMember&communityId=" + rlcId;
-        var exportUrl = "/phpwebsite/index.php?module=hms&action=CreateCsvByRlc&id="+rlcId
+        var backUrl = "index.php?module=hms&action=ShowSearchByRlc"
+        var addMembersUrl = "index.php?module=hms&action=ShowAdminAddRlcMember&communityId=" + rlcId;
+        var exportUrl = "index.php?module=hms&action=CreateCsvByRlc&id="+rlcId
         return(
             <div>
                 <AlertBox alert={this.state.alert}/>
@@ -174,21 +170,16 @@ var RlcPagerBox = React.createClass({
 var AlertBox = React.createClass({
     render: function()
     {
-        if(this.props.alert == undefined || this.props.alert.message == "")
-        {
+        if(this.props.alert == undefined || this.props.alert.message == "") {
             return (<div></div>)
-        }
-        else
-        {
+        } else {
             var alert;
             var success = false;
             var error = false;
-            if(this.props.alert.type == "success")
-            {
+
+            if(this.props.alert.type == "success") {
                 var success = true;
-            }
-            else
-            {
+            } else {
                 var error = true;
             }
 
@@ -197,13 +188,16 @@ var AlertBox = React.createClass({
                 'alert-success': success,
                 'alert-danger': error
             });
+
             var faClass = classNames({
                 'fa': true,
                 'fa-2x': true,
                 'fa-check': success,
                 'fa-times': error
             });
+
             var alertSymbol = (<i className={faClass}></i>);
+
             return (
                 <div className={alertClass} role="alert">
                     {alertSymbol} {this.props.alert.message}
@@ -240,11 +234,9 @@ var ListBox = React.createClass({
     },
     render: function()
     {
-        if(this.props.rlcMembers.length == 0)
-        {
+        if(this.props.rlcMembers.length == 0) {
             return (<div></div>)
-        }
-        else {
+        } else {
             var data = this.props.rlcMembers;
             var removeFunc = this.props.remove;
             var removeDenyFunc = this.props.removeDeny;
@@ -323,16 +315,11 @@ var ListRowBox = React.createClass({
         var danger = false;
         var muted = false;
 
-        if(this.props.node.status == 'confirmed' || this.props.node.status == "self-selected")
-        {
+        if(this.props.node.status == 'confirmed' || this.props.node.status == "self-selected") {
             success = true;
-        }
-        else if(this.props.node.status == 'declined')
-        {
+        } else if(this.props.node.status == 'declined') {
             danger = true;
-        }
-        else if(this.props.node.status == 'not invited' || this.props.node.status == 'pending' || this.props.node.status == 'self-select available')
-        {
+        } else if(this.props.node.status == 'not invited' || this.props.node.status == 'pending' || this.props.node.status == 'self-select available') {
             muted = true;
         }
 
