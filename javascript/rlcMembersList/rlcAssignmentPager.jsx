@@ -1,4 +1,4 @@
-var RlcPagerBox = React.createClass({
+var RlcMembersList = React.createClass({
     getInitialState: function()
     {
         return ({rlcMembers: [], alert: {message: "", alert: ""}, sortedBy: "", sortOrder: ""});
@@ -12,7 +12,7 @@ var RlcPagerBox = React.createClass({
     {
         if(this.state.sortedBy == column){
             if(this.state.sortOrder == "ASC"){
-                this.setState({sortOrder: "DESC"});
+                this.setState({sortOrder: "DESC"}); // TODO: These seem backwards. IF sortOrder is ASC, why are we setting state to DESC?
             }else{
                 this.setState({sortOrder: "ASC"});
             }
@@ -235,7 +235,7 @@ var ListBox = React.createClass({
     render: function()
     {
         if(this.props.rlcMembers.length == 0) {
-            return (<div></div>)
+            return (<div><p className="text-muted">There are no members currently in this community.</p></div>)
         } else {
             var data = this.props.rlcMembers;
             var removeFunc = this.props.remove;
@@ -371,6 +371,6 @@ var ListRowBox = React.createClass({
 
 //Inserts all the react components within the giving element.
 React.render(
-  <RlcPagerBox/>,
-  document.getElementById('rlcPager')
+  <RlcMembersList/>,
+  document.getElementById('rlcMembers')
 );
