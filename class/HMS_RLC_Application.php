@@ -58,9 +58,9 @@ class HMS_RLC_Application extends HMS_Item
      * to create/load a application for. Otherwise, the student currently
      * logged in (session) is used.
      */
-    public function HMS_RLC_Application($id = 0)
+    public function __construct($id = 0)
     {
-        $this->construct($id);
+        parent::__construct($id);
     }
 
     public function getDb()
@@ -194,111 +194,6 @@ class HMS_RLC_Application extends HMS_Item
         $unDenyCmd->setApplicationId($this->id);
 
         $tags['ACTION']         = $unDenyCmd->getLink('Un-Deny');
-
-        return $tags;
-    }
-
-    /**
-     * Pager tags for the RlcRosterPager (ShowViewByRlcCommand)
-     */
-    public function viewByRLCPagerTags()
-    {
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
-        $tags = array();
-
-        // Get the Student object
-        try{
-            $student = StudentFactory::getStudentByUsername($this->username, Term::getSelectedTerm());
-        }catch(StudentNotFoundException $e){
-            // Catch the StudentNotFound exception in the odd case that someone doesn't exist.
-            // Show a warning message and skip the rest of the method
-            NQ::simple('hms', hms\NotificationView::WARNING, "No student found with username: {$this->username}.");
-            $tags['USERNAME'] = $this->username;
-            $tags['NAME'] = 'UNKNOWN - INVALID';
-            return $tags;
-        }
-
-        // Display demographic info
-        $tags['NAME']           = $student->getProfileLink();
-        $tags['BANNER_ID']      = $student->getBannerId();
-        $tags['GENDER']         = $student->getPrintableGenderAbbreviation();
-        $tags['STUDENT_TYPE']   = $student->getPrintableType();
-        $tags['USERNAME']       = $this->username;
-
-        /*** Assignment Status/State ***/
-        // Lookup the assignmnet (used later as well)
-        $assign = HMS_RLC_Assignment::getAssignmentByUsername($this->username, $this->term);
-        $state = $assign->getStateName();
-        if($state == 'confirmed'){
-            $tags['STATE'] = '<span class="text-success">confirmed</span>';
-        }else if($state == 'declined'){
-            $tags['STATE'] = '<span class="text-danger">declined</span>';
-        }else if($state == 'new'){
-            $tags['STATE'] = '<em class="text-muted">not invited</em>';
-        }else if($state == 'invited'){
-            $tags['STATE'] = '<em class="text-muted">pending</em>';
-        }else if($state == 'selfselect-invite'){
-            $tags['STATE'] = '<em class="text-muted">self-select available</em>';
-        }else if($state == 'selfselect-assigned'){
-            $tags['STATE'] = '<span class="text-success">self-selected</span>';
-        }else{
-            $tags['STATE'] = '';
-        }
-
-
-        // Check for/display room assignment
-        $roomAssign = HMS_Assignment::getAssignmentByBannerId($student->getBannerId(), Term::getSelectedTerm());
-
-        if(isset($roomAssign)){
-            $tags['ROOM_ASSIGN'] = $roomAssign->where_am_i();
-        }else{
-            $tags['ROOM_ASSIGN'] = 'n/a';
-        }
-
-        /*** Roommates ***/
-        // Show all possible roommates for this application
-        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-
-        $allRoommates = HMS_Roommate::get_all_roommates($this->username, $this->term);
-        $tags['ROOMMATES'] = 'N/A'; // Default text
-
-        if(sizeof($allRoommates) > 1) {
-            // Don't show all the roommates
-            $tags['ROOMMATES'] = "Multiple Requests";
-        }
-        elseif(sizeof($allRoommates) == 1) {
-            // Get other roommate
-            $otherGuy = StudentFactory::getStudentByUsername($allRoommates[0]->get_other_guy($this->username), $this->term);
-            $tags['ROOMMATES'] = $otherGuy->getProfileLink();
-            // If roommate is pending then show little status message
-            if(!$allRoommates[0]->confirmed) {
-                $tags['ROOMMATES'] .= " (Pending)";
-            }
-        }
-
-        /*** Other Actions ***/
-        $viewCmd = CommandFactory::getCommand('ShowRlcApplicationReView');
-        $viewCmd->setAppId($this->getId());
-
-        $actions = array();
-
-        $actions[] = $viewCmd->getLink('App');
-
-        $rmCmd = CommandFactory::getCommand('RemoveRlcAssignment');
-        $rmCmd->setAssignmentId($assign->id);
-
-        $actions[] = $rmCmd->getLink('Remove');
-
-        // Remove and Deny macro command
-        $rmDenyCmd = CommandFactory::getCommand('RemoveDenyRlcAssignment');
-        $rmDenyCmd->setAppId($this->getId());
-        $rmDenyCmd->setAssignmentId($assign->id);
-
-        $actions[] = $rmDenyCmd->getLink('Remove & Deny');
-
-        $tags['ACTION'] = implode(' | ', $actions);
 
         return $tags;
     }
