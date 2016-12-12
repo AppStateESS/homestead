@@ -14,7 +14,7 @@ class RemoveRlcAssignmentCommand extends Command{
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'approve_rlc_applications')){
+        if(!Current_User::allow('hms', 'remove_rlc_members')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to approve/deny RLC applications.');
         }
