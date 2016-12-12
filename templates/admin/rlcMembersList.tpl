@@ -1,5 +1,3 @@
-{ORIGINAL}
-
 <script type="text/javascript">
     var rlcId = '{RLC_ID}';
     var rlcName = '{RLC_TITLE}';
