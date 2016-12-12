@@ -33,7 +33,7 @@ class HMS_Assignment extends HMS_Item {
      */
     public function __construct($id = 0)
     {
-        $this->construct($id, 'hms_assignment');
+        parent::__construct($id, 'hms_assignment');
 
         return $this;
     }

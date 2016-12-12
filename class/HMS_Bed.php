@@ -31,7 +31,7 @@ class HMS_Bed extends HMS_Item {
 
     public function __construct($id = 0)
     {
-        $this->construct($id, 'hms_bed');
+        parent::__construct($id, 'hms_bed');
         // test($this);
     }
 

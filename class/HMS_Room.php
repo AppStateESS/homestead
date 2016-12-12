@@ -65,7 +65,7 @@ class HMS_Room extends HMS_Item
      */
     public function __construct($id = 0)
     {
-        $this->construct($id, 'hms_room');
+        parent::__construct($id, 'hms_room');
     }
 
     public function getDb()

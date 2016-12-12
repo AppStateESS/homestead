@@ -32,7 +32,7 @@ class HMS_Learning_Community extends HMS_Item
 
     public function __construct($id = 0)
     {
-        $this->construct($id);
+        parent::__construct($id);
     }
 
     public function getDb()
@@ -367,4 +367,3 @@ class HMS_Learning_Community extends HMS_Item
 class RestoredRlc extends HMS_Learning_Community {
     public function __construct(){}
 }
-

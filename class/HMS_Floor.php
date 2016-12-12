@@ -39,7 +39,7 @@ class HMS_Floor extends HMS_Item
      */
     public function __construct($id = 0)
     {
-        $this->construct($id, 'hms_floor');
+        parent::__construct($id, 'hms_floor');
     }
 
     public function getDb()
