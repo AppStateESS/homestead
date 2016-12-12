@@ -17,7 +17,7 @@ class HMS_Movein_Time
     /********************
      * Instance Methods *
      *******************/
-    public function HMS_Movein_Time($id = NULL){
+    public function __construct($id = NULL){
 
         if(!isset($id) || is_null($id)){
             return;
