@@ -78,8 +78,7 @@ class AjaxGetRLCMembersCommand {
             if(sizeof($allRoommates) > 1) {
                 // Don't show all the roommates
                 $roommates = "Multiple Requests";
-            }
-            elseif(sizeof($allRoommates) == 1) {
+            } elseif(sizeof($allRoommates) == 1) {
                 // Get other roommate
                 $otherGuy = StudentFactory::getStudentByUsername($allRoommates[0]->get_other_guy($username), $term);
                 $roommates = $otherGuy->getProfileLink();
