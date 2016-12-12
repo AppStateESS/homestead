@@ -146,7 +146,8 @@ var RlcMembersList = React.createClass({
     {
         var backUrl = "index.php?module=hms&action=ShowSearchByRlc"
         var addMembersUrl = "index.php?module=hms&action=ShowAdminAddRlcMember&communityId=" + rlcId;
-        var exportUrl = "index.php?module=hms&action=CreateCsvByRlc&id="+rlcId
+        var exportUrl = "index.php?module=hms&action=CreateCsvByRlc&id=" + rlcId
+
         return(
             <div>
                 <div className="row">
@@ -165,7 +166,7 @@ var RlcMembersList = React.createClass({
 
                 <div className="row">
                     <div className="col-md-12">
-                        <h2>{rlcName} Assignments <small>{term}</small></h2>
+                        <h2>{rlcName} Members <small>{term}</small></h2>
                         <a className="btn btn-default pull-right" href={exportUrl}>
                             <i className="fa fa-file-excel-o"></i> Export to Spreadsheet
                         </a>
@@ -344,42 +345,43 @@ var ListRowBox = React.createClass({
             'text-muted': muted
         });
 
-        return (<tr>
-            <td><a href={profileLink}>{this.props.node.name}</a></td>
-            <td>{this.props.node.bannerId}</td>
-            <td>{this.props.node.gender}</td>
-            <td>{this.props.node.studentType}</td>
-            <td>{this.props.node.username}</td>
-            <td>
-                <div className="btn-group">
-                    <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <em className={studentTypeFont}>{this.props.node.status}</em>  <span className="caret"></span>
-                    </button>
-                    <ul className="dropdown-menu">
-                        <li><a onClick={this.setConfirm} href="javascript:;">Confirmed</a></li>
-                        <li><a onClick={this.setDecline} href="javascript:;">Declined</a></li>
-                        <li><a onClick={this.setNotInvited} href="javascript:;">Not invited</a></li>
-                        <li><a onClick={this.setPending} href="javascript:;">Pending</a></li>
-                        <li><a onClick={this.setSelfSelectAvail} href="javascript:;">Self-Select Available</a></li>
-                        <li><a onClick={this.setSelfSelected} href="javascript:;">Self-Selected</a></li>
-                    </ul>
-                </div>
-            </td>
-            <td>{this.props.node.assignment}</td>
-            <td>{this.props.node.roommates}</td>
-            <td>
-                <div className="btn-group">
-                    <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i className="fa fa-gear"></i> <span className="caret"></span>
-                    </button>
-                    <ul className="dropdown-menu">
-                        <li><a href={applicationLink}>View RLC Application</a></li>
-                        <li><a onClick={this.remove} href="javascript:;">Remove RLC Assignment</a></li>
-                        <li><a onClick={this.removeDeny} href="javascript:;">Remove and Deny </a></li>
-                    </ul>
-                </div>
-            </td>
-        </tr>);
+        return (
+            <tr>
+                <td><a href={profileLink}>{this.props.node.name}</a></td>
+                <td>{this.props.node.bannerId}</td>
+                <td>{this.props.node.gender}</td>
+                <td>{this.props.node.studentType}</td>
+                <td>{this.props.node.username}</td>
+                <td>
+                    <div className="btn-group">
+                        <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <em className={studentTypeFont}>{this.props.node.status}</em>  <span className="caret"></span>
+                        </button>
+                        <ul className="dropdown-menu">
+                            <li><a onClick={this.setConfirm} href="javascript:;">Confirmed</a></li>
+                            <li><a onClick={this.setDecline} href="javascript:;">Declined</a></li>
+                            <li><a onClick={this.setNotInvited} href="javascript:;">Not invited</a></li>
+                            <li><a onClick={this.setPending} href="javascript:;">Pending</a></li>
+                            <li><a onClick={this.setSelfSelectAvail} href="javascript:;">Self-Select Available</a></li>
+                            <li><a onClick={this.setSelfSelected} href="javascript:;">Self-Selected</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td>{this.props.node.assignment}</td>
+                <td>{this.props.node.roommates}</td>
+                <td>
+                    <div className="btn-group">
+                        <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i className="fa fa-gear"></i> <span className="caret"></span>
+                        </button>
+                        <ul className="dropdown-menu">
+                            <li><a href={applicationLink}>View RLC Application</a></li>
+                            <li><a onClick={this.remove} href="javascript:;">Remove Membership</a></li>
+                            <li><a onClick={this.removeDeny} href="javascript:;">Remove &amp; Deny Application</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>);
     }
 })
 

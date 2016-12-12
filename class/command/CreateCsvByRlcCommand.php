@@ -14,7 +14,7 @@ class CreateCsvByRlcCommand extends Command {
     {
         $input = $_REQUEST['id'];
         $term = Term::getSelectedTerm();
-        $memberList = RlcMembershipFactory::getRlcMembersById($input, $term);
+        $memberList = RlcMembershipFactory::getRlcMembersByCommunityId($input, $term);
 
         $output = fopen('php://output', 'w');
 

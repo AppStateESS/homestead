@@ -24,7 +24,7 @@ class RlcMembershipFactory {
         return $stmt->fetch();
     }
 
-    public static function getRlcMembersById($id, $term)
+    public static function getRlcMembersByCommunityId($rlcId, $term)
     {
         $db = PdoFactory::getPdoInstance();
 
@@ -35,7 +35,7 @@ class RlcMembershipFactory {
                     WHERE term = :term and hms_learning_community_assignment.rlc_id = :id';
 
         $params = array(
-                'id' => $id,
+                'id' => $rlcId,
                 'term' => $term
         );
 
