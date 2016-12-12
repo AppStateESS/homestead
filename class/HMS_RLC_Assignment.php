@@ -436,6 +436,11 @@ class HMS_RLC_Assignment {
     public function getStateName(){
         return $this->state;
     }
+
+    public function setState($newState)
+    {
+        $this->state = $newState;
+    }
 }
 
 class RlcMembershipRestored extends HMS_RLC_Assignment {

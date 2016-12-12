@@ -5,21 +5,23 @@ PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
 class SearchByRlcView extends hms\View {
 
     public function show(){
-        PHPWS_Core::initCoreClass('Form.php');
-        $form = new PHPWS_Form;
-        $form->addDropBox('rlc', HMS_Learning_Community::getRlcList());
-        $form->setClass('rlc', 'form-control');
-        $form->addHidden('module', 'hms');
-        $form->addHidden('action', 'ShowSearchByRlc');
-        $form->addSubmit('submit', _('Search'));
-        $form->setClass('submit', 'btn btn-primary pull-right');
 
-        $tags = $form->getTemplate();
-        $tags['TITLE'] = "RLC Search";
+        $tpl = array();
+        $tpl['LEARNING_COMMUNITIES'] = array();
+        $tpl['TITLE'] = "Learning Communities";
 
-        Layout::addPageTitle("RLC Search");
+        $term = Term::getSelectedTerm();
+        $rlcs = RlcFactory::getRlcList($term);
 
-        $final = PHPWS_Template::processTemplate($tags, 'hms', 'admin/search_by_rlc.tpl');
+        $keys = array_keys($rlcs);
+
+        foreach($keys as $rlcId) {
+            $cmd = CommandFactory::getCommand('ShowSearchByRlc');
+            $node = array('URL' => $cmd->getURI().'&rlc='.$rlcId, 'RLC_NAME' => $rlcs[$rlcId]);
+            $tpl['LEARNING_COMMUNITIES'][] = $node;
+        }
+
+        $final = PHPWS_Template::processTemplate($tpl, 'hms', 'admin/search_by_rlc.tpl');
         return $final;
     }
 }
