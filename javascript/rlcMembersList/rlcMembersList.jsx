@@ -1,7 +1,7 @@
 var RlcMembersList = React.createClass({
     getInitialState: function()
     {
-        return ({rlcMembers: [], alert: {message: "", alert: ""}, sortedBy: "", sortOrder: ""});
+        return ({rlcMembers: [], alert: {message: "", alert: ""}, sortedBy: "", sortOrder: "", loadingMembers: true});
     },
     componentWillMount: function()
     {
@@ -134,7 +134,7 @@ var RlcMembersList = React.createClass({
             data: inputData,
             success: function(data) {
                 var members = JSON.parse(data);
-                this.setState({rlcMembers: members});
+                this.setState({rlcMembers: members, loadingMembers: false});
             }.bind(this),
             error: function(xhr, status, err) {
                 alert("Failed to load the community members.")
@@ -176,7 +176,7 @@ var RlcMembersList = React.createClass({
                     </div>
                 </div>
 
-                <ListBox rlcMembers={this.state.rlcMembers} remove={this.remove} removeDeny={this.removeDeny}
+                <ListBox rlcMembers={this.state.rlcMembers} loadingMembers={this.state.loadingMembers} remove={this.remove} removeDeny={this.removeDeny}
                     startSort={this.startSort} setStatus={this.setStatus}/>
             </div>
         );
@@ -250,7 +250,9 @@ var ListBox = React.createClass({
     },
     render: function()
     {
-        if(this.props.rlcMembers.length == 0) {
+        if(this.props.loadingMembers){
+            return (<div><p className="text-muted"><i className="fa fa-spinner fa-spin"></i> Loading Community Members...</p></div>)
+        }else if (this.props.rlcMembers.length == 0) {
             return (<div><p className="text-muted">There are no members currently in this community.</p></div>)
         } else {
             var data = this.props.rlcMembers;
