@@ -367,8 +367,14 @@ class HMS_Assignment extends HMS_Item {
 
         $username = strtolower($username);
 
+        // Make sure the student has a valid student type.
         if ($student->getType() == TYPE_WITHDRAWN) {
             throw new AssignmentException('Invalid student type. Student is withdrawn.');
+        }
+
+        // Make sure the student has a valid application term
+        if($student->getApplicationTerm() === null || $student->getApplicationTerm() === ''){
+            throw new AssignmentException('The student\'s application term is missing or invalid.');
         }
 
         if (HMS_Assignment::checkForAssignment($username, $term)) {
