@@ -133,10 +133,6 @@ class BeginDocusignCommand extends Command
                 $envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $templateId, 'University Housing Contract', $templateRoles, 'sent', $student->getBannerId());
             }
 
-            var_dump($envelope);
-            var_dump($envelope->getStatus());
-            var_dump(strtotime($envelope->getStatusDateTime()));
-
             // Create a new contract to save the envelope ID
             $contract = new Contract($student, $term, $envelope->getEnvelopeId(), $envelope->getStatus(), strtotime($envelope->getStatusDateTime()));
             ContractFactory::save($contract);
