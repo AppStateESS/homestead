@@ -78,7 +78,7 @@ class AjaxGetRLCMembersCommand {
             $rowValues['assignment'] = $assignDisplay;
 
             $allRoommates = HMS_Roommate::get_all_roommates($username, $term);
-            $roommates = 'N/A'; // Default text
+            $roommates = array();
 
             if(sizeof($allRoommates) > 1) {
                 // Don't show all the roommates
@@ -86,12 +86,23 @@ class AjaxGetRLCMembersCommand {
             } elseif(sizeof($allRoommates) == 1) {
                 // Get other roommate
                 $otherGuy = StudentFactory::getStudentByUsername($allRoommates[0]->get_other_guy($username), $term);
-                $roommates = $otherGuy->getProfileLink();
+
+                $profileCmd = CommandFactory::getCommand('ShowStudentProfile');
+                $profileCmd->setUsername($otherGuy->getUsername());
+
+                $roommateName = $otherGuy->getName();
+
                 // If roommate is pending then show little status message
                 if(!$allRoommates[0]->confirmed) {
-                    $roommates .= " (Pending)";
+                    $roommateName .= " (Pending)";
                 }
+
+                $roommate = new stdClass();
+                $roommate->name = $roommateName;
+                $roommate->profileUri = $profileCmd->getUri();
+                $roommates[] = $roommate;
             }
+
             $rowValues['roommates'] = $roommates;
 
             $returnData[] = $rowValues;

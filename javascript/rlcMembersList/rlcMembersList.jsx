@@ -347,6 +347,13 @@ var ListRowBox = React.createClass({
             'text-muted': muted
         });
 
+        var roommate = '';
+        if(Array.isArray(this.props.node.roommates)){
+            roommate = <a href={this.props.node.roommates[0].profileUri}>{this.props.node.roommates[0].name}</a>
+        }else{
+            roommate = this.props.node.roommates;
+        }
+
         return (
             <tr>
                 <td><a href={profileLink}>{this.props.node.name}</a></td>
@@ -370,7 +377,7 @@ var ListRowBox = React.createClass({
                     </div>
                 </td>
                 <td>{this.props.node.assignment}</td>
-                <td>{this.props.node.roommates}</td>
+                <td>{roommate}</td>
                 <td>
                     <div className="btn-group">
                         <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
