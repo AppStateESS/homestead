@@ -347,11 +347,10 @@ var ListRowBox = React.createClass({
             'text-muted': muted
         });
 
-        var roommate = '';
-        if(Array.isArray(this.props.node.roommates)){
+        // Just use the first roommate
+        roommate = ''
+        if(Array.isArray(this.props.node.roommates) && this.props.node.roommates.length > 0){
             roommate = <a href={this.props.node.roommates[0].profileUri}>{this.props.node.roommates[0].name}</a>
-        }else{
-            roommate = this.props.node.roommates;
         }
 
         return (
