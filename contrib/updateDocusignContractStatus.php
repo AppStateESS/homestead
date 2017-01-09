@@ -19,7 +19,15 @@ require_once($phpwsPath . 'mod/hms/contrib/dbConnect.php');
 
 require_once $phpwsPath . 'config/core/config.php';
 //require_once 'src/Bootstrap.php';
+
+// For older versions of PHPWS, comment this out
 require_once $phpwsPath . 'src/Autoloader.php';
+
+// For older versions of PHPWS, uncomment these
+// require_once $phpwsPath . 'core/conf/defines.php';
+// require_once $phpwsPath . 'Global/Functions.php';
+// require_once $phpwsPath . 'Global/Implementations.php';
+// require_once $phpwsPath . 'config/core/source.php';
 
 require_once $phpwsPath . 'mod/hms/vendor/autoload.php';
 require_once $phpwsPath . 'mod/hms/class/DocusignClientFactory.php';
