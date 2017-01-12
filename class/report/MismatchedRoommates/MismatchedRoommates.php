@@ -92,7 +92,11 @@ class MismatchedRoommates extends Report
 
     public function getCsvColumnsArray()
     {
-        return array_keys($this->data[0]);
+        if(sizeof($this->data) === 0){
+            return array();
+        } else {
+            return array_keys($this->data[0]);
+        }
     }
 
     public function getCsvRowsArray(){
@@ -119,4 +123,3 @@ class MismatchedRoommates extends Report
     }
 
 }
-
