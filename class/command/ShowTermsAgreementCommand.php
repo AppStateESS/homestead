@@ -47,9 +47,15 @@ class ShowTermsAgreementCommand extends Command {
         $agreedCmd = CommandFactory::getCommand($context->get('onAgreeAction'));
         $agreedCmd->setTerm($term);
 
+
         $roommateRequestId = $context->get('roommateRequestId');
         if(isset($roommateRequestId) && $roommateRequestId != null) {
         	$agreedCmd->setRoommateRequestId($roommateRequestId);
+        }
+
+        $mealPlan = $context->get('meal_plan');
+        if(isset($mealPlan) && $mealPlan !== null){
+            $agreedCmd->setMealPlan($mealPlan);
         }
 
         //$submitCmd = CommandFactory::getCommand('AgreeToTerms');

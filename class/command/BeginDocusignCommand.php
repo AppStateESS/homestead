@@ -152,6 +152,11 @@ class BeginDocusignCommand extends Command
             $returnCmd->setRoommateRequestId($roommateRequestId);
         }
 
+        $mealPlan = $context->get('meal_plan');
+        if(isset($mealPlan) && $mealPlan !== null){
+            $returnCmd->setMealPlan($mealPlan);
+        }
+
         $returnUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . $returnCmd->getURI();
 
         $url = $recipientView->getRecipientViewUrl($returnUrl);

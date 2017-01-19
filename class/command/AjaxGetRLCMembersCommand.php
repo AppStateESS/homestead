@@ -21,9 +21,9 @@ class AjaxGetRLCMembersCommand {
             throw new PermissionException('You do not have permission to view RLC members.');
         }
 
-        $input = $_REQUEST['id'];
+        $rlcId = $_REQUEST['id'];
         $term = Term::getSelectedTerm();
-        $memberList = RlcMembershipFactory::getRlcMembersByCommunityId($input, $term);
+        $memberList = RlcMembershipFactory::getRlcMembersByCommunityId($rlcId, $term);
 
         $returnData = array();
 

@@ -382,12 +382,25 @@ class HMS_Lottery {
 
     public static function get_lottery_roommate_invite_by_id($id)
     {
-        $db = new PHPWS_DB('hms_lottery_reservation');
+        if($id === null || $id === ''){
+            throw new \InvalidArgumentException('Missing roommate invite id parameter');
+        }
 
-        $db->addWhere('expires_on', time(), '>'); // make sure the request hasn't expired
-        $db->addWhere('id', $id);
+        $db = PdoFactory::getPdoInstance();
 
-        $result = $db->select('row');
+        $query = "SELECT hms_lottery_reservation.*
+                    FROM hms_lottery_reservation
+                    WHERE
+                        hms_lottery_reservation.expires_on > :expiresOn
+                        AND hms_lottery_reservation.id = :id";
+
+        $stmt = $db->prepare($query);
+        $stmt->execute(array(
+                'id' => $id,
+                'expiresOn' => time()
+        ));
+
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if (!$result || PHPWS_Error::logIfError($result)) {
             return false;

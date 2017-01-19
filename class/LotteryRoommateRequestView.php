@@ -63,7 +63,7 @@ class LotteryRoommateRequestView extends hms\View {
         if($this->housingApplication != null) {
             // Housing application complete, go straight to confirming roommate
             $submitCmd = CommandFactory::getCommand('LotteryShowConfirmRoommateRequest');
-            $submitCmd->setRequestId($this->request['id']);
+            $submitCmd->setRoommateRequestId($this->request['id']);
         } else {
         	// No housing application, goto self-select start page for contract and emg contact
             $submitCmd = CommandFactory::getCommand('RlcSelfAssignStart');
@@ -101,8 +101,10 @@ class LotteryRoommateRequestView extends hms\View {
         }
 
         $form->addSubmit('accept', 'Accept Roommate');
+        $form->addCssClass('accept', 'btn btn-success btn-md');
 
         $form->addButton('reject', 'Deny Roommate');
+        $form->addCssClass('reject', 'btn btn-default btn-md pull-right');
 
         javascript('modules/hms/buttonAction', array('ID'=>'phpws_form_reject', 'URI'=>$denyCmd->getURI()));
 

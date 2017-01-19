@@ -32,6 +32,11 @@ class Envelope {
         return $this->statusDateTime;
     }
 
+    public function getStatusDateTimeUnixTimestamp()
+    {
+        return strtotime($this->statusDateTime);
+    }
+
     public function getStatus()
     {
         return $this->status;
