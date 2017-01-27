@@ -9,7 +9,7 @@ require_once('cliCommon.php');
 
 $args = array('phpwsPath' => '',
                 'phpwsUser' => '',
-                'bannerId' => '',
+                'bannerIdListFile' => '',
                 'term' => '');
 
 $switches = array();
@@ -18,16 +18,19 @@ check_args($argc, $argv, $args, $switches);
 $phpwsPath  = $args['phpwsPath'];
 $phpwsUser  = $args['phpwsUser'];
 $term       = $args['term'];
-$bannerId   = $args['bannerId'];
+$bannerIdFile   = $args['bannerIdListFile'];
 
 require_once($phpwsPath . 'mod/hms/contrib/dbConnect.php');
 
 require_once $phpwsPath . 'config/core/config.php';
+define('DEFAULT_LANGUAGE', 'en_US');
+define('CURRENT_LANGUAGE', 'en_US');
 //require_once 'src/Bootstrap.php';
 
 // For older versions of PHPWS, comment this out
 require_once $phpwsPath . 'src/Autoloader.php';
 require_once $phpwsPath . 'src/Translation.php';
+require_once $phpwsPath . 'src/Log.php';
 
 // For older versions of PHPWS, uncomment these
 // require_once $phpwsPath . 'core/conf/defines.php';
@@ -74,8 +77,8 @@ $docusignClient = DocusignClientFactory::getClient();
 $http = new \Guzzle\Http\Client();
 
 
-// Get the student object
-$student = StudentFactory::getStudentByBannerId($bannerId, $term);
+// Get lines in input file
+$bannerIds = file($bannerIdFile);
 
 // Get a term object
 $termObj = new Term($term);
@@ -84,53 +87,64 @@ $termObj = new Term($term);
 $templateId = $termObj->getDocusignTemplate();
 $under18TemplateId = $termObj->getDocusignUnder18Template();
 
-$under18 = $student->isUnder18();
+foreach ($bannerIds as $bannerId){
+    // Get the student object
+    $student = StudentFactory::getStudentByBannerId($bannerId, $term);
 
-$templateRoles = array(
-    array(
-        "roleName" => 'Student',
-        "email" => $student->getEmailAddress(),
-        "name" => $student->getLegalName(),
-        "clientUserId" => $student->getBannerId()
-    )
-);
+    sendContractToStudent($student, $term, $docusignClient, $http, $templateId, $under18TemplateId);
 
-// If student is under 18, then add parent role to list of signers
-if ($under18) {
-    // TODO: Get parent name/email from housing application
-    /*
-    $parentName = $context->get('parentName');
-    $parentEmail = $context->get('parentEmail');
-
-    $templateRoles[] = array(
-        "roleName" => 'Parent',
-        "email" => $parentEmail,
-        "name" => $parentName
-            //"clientUserId" => $student->getBannerId()
-    );
-    */
-    echo "Under 18 contracts not supported yet.";
+    echo "Sent contract for $bannerId\n";
 }
 
-// Check for an existing contract
-$contract = ContractFactory::getContractByStudentTerm($student, $term);
+function sendContractToStudent($student, $term, $docusignClient, $http, $templateId, $under18TemplateId)
+{
+    $under18 = $student->isUnder18();
 
-if ($contract === false) {
-    // Create a new envelope and save it
+    $templateRoles = array(
+        array(
+            "roleName" => 'Student',
+            "email" => $student->getEmailAddress(),
+            "name" => $student->getLegalName()
+            //"clientUserId" => $student->getBannerId()
+        )
+    );
+
+    // If student is under 18, then add parent role to list of signers
     if ($under18) {
-        // If student is under 18, use the template with parent signatures
-        $envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $under18TemplateId, 'University Housing Contract', $templateRoles, 'sent', $student->getBannerId());
-    } else {
-        // Student is over 18, so use the 1-signature template (without a parent signature)
-        $envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $templateId, 'University Housing Contract', $templateRoles, 'sent', $student->getBannerId());
+        // TODO: Get parent name/email from housing application
+        /*
+        $parentName = $context->get('parentName');
+        $parentEmail = $context->get('parentEmail');
+
+        $templateRoles[] = array(
+            "roleName" => 'Parent',
+            "email" => $parentEmail,
+            "name" => $parentName
+                //"clientUserId" => $student->getBannerId()
+        );
+        */
+        echo "Under 18 contracts not supported yet.\n";
+        return;
     }
 
-    // Create a new contract to save the envelope ID
-    $contract = new Contract($student, $term, $envelope->getEnvelopeId(), $envelope->getStatus(), strtotime($envelope->getStatusDateTime()));
-    ContractFactory::save($contract);
-} else {
-    // Use the existing envelope id
-    $envelope = Docusign\EnvelopeFactory::getEnvelopeById($docusignClient, $contract->getEnvelopeId());
-}
+    // Check for an existing contract
+    $contract = ContractFactory::getContractByStudentTerm($student, $term);
 
-echo "\n";
+    if ($contract === false) {
+        // Create a new envelope and save it
+        if ($under18) {
+            // If student is under 18, use the template with parent signatures
+            $envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $under18TemplateId, 'University Housing Contract', $templateRoles, 'sent', $student->getBannerId());
+        } else {
+            // Student is over 18, so use the 1-signature template (without a parent signature)
+            $envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $templateId, 'University Housing Contract', $templateRoles, 'sent', $student->getBannerId());
+        }
+
+        // Create a new contract to save the envelope ID
+        $contract = new Contract($student, $term, $envelope->getEnvelopeId(), $envelope->getStatus(), strtotime($envelope->getStatusDateTime()));
+        ContractFactory::save($contract);
+    } else {
+        // Use the existing envelope id
+        $envelope = Docusign\EnvelopeFactory::getEnvelopeById($docusignClient, $contract->getEnvelopeId());
+    }
+}
