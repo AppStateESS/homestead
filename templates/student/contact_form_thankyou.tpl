@@ -5,6 +5,6 @@
 <hr>
 <h2>In the mean time...</h2>
 
-<p class="lead">Try checking out our <a href="https://housing.appstate.edu/assignments">frequently asked questions</a> page.</p>
+<p class="lead">Try checking out our <a href="https://housing.appstate.edu/faq">frequently asked questions</a> page.</p>
 
-<p>Our website contains lots of details about on-campus housing assignments. Answers to many common questions can be found on the <a href="https://housing.appstate.edu/assignments">frequently asked questions page</a>.</p>
+<p>Our website contains lots of details about on-campus housing assignments. Answers to many common questions can be found on the <a href="https://housing.appstate.edu/faq">frequently asked questions page</a>.</p>
