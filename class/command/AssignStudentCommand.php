@@ -82,6 +82,8 @@ class AssignStudentCommand extends Command {
 
     public function execute(CommandContext $context)
     {
+
+
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to assign students.');
@@ -98,10 +100,12 @@ class AssignStudentCommand extends Command {
         // NB: Username must be all lowercase
         $username = strtolower(trim($context->get('username')));
         $term = Term::getSelectedTerm();
+        $bed = $context->get('bed');
 
         // Setup command to redirect to in case of error
         $errorCmd = CommandFactory::getCommand('ShowAssignStudent');
         $errorCmd->setUsername($username);
+        $errorCmd->setBedId($bed);
 
         /***
          * Input Sanity Checking
@@ -215,7 +219,7 @@ class AssignStudentCommand extends Command {
         }
 
         // Actually try to make the assignment, decide whether to use the room id or the bed id
-        $bed = $context->get('bed');
+
         try {
             if(isset($bed) && $bed != 0){
                 HMS_Assignment::assignStudent($student, $term, NULL, $bed, $context->get('meal_plan'), $context->get('note'), false, $context->get('assignment_type'));
