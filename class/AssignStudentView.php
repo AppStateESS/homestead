@@ -165,6 +165,8 @@ class AssignStudentView extends hms\View {
                 ASSIGN_INTL                  => 'International',
                 ASSIGN_RA                    => 'RA',
                 ASSIGN_RA_ROOMMATE           => 'RA Roommate',
+                ASSIGN_ATHLETIC_FRESHMEN     => 'Athletics Freshmen',
+                ASSIGN_ATHLETIC_RETURNING    => 'Athletics Returning',
                 ASSIGN_MEDICAL_FRESHMEN      => 'Medical Freshmen',
                 ASSIGN_MEDICAL_CONTINUING    => 'Medical Continuing',
                 //ASSIGN_MEDICAL               => 'Medical',

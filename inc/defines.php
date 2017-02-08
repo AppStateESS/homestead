@@ -131,6 +131,10 @@ define('ASSIGN_INTL',       'international');
 define('ASSIGN_RA',          'ra');
 define('ASSIGN_RA_ROOMMATE', 'ra_roommate');
 
+// Athletics
+define('ASSIGN_ATHLETIC_FRESHMEN', 'athletic_freshmen');
+define('ASSIGN_ATHLETIC_RETURNING', 'athletic_returning');
+
 // Medical
 define('ASSIGN_MEDICAL_FRESHMEN','medical_freshmen');
 define('ASSIGN_MEDICAL_CONTINUING', 'medical_continuing');
@@ -187,6 +191,10 @@ define('international', 'International');
 
 define('ra', 'RA');
 define('ra_roommate', 'RA Roommate');
+
+// Athletics
+define('athletic_freshmen', 'Athletics Freshmen');
+define('athletic_returning', 'Athletics Returning');
 
 // Medical
 define('medical_freshmen', 'Medical Freshmen');
