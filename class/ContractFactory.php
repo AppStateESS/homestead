@@ -40,9 +40,12 @@ class ContractFactory {
       $id = $contract->getId();
 
       if (isset($id)) {
-        $query = "UPDATE hms_contract SET (banner_id, term, envelope_id, envelope_status, envelope_status_time) = (:bannerId, :term, :envelopeId, :envelopeStatus, :envelopeStatusTime) WHERE id = :id";
+        $query = "UPDATE hms_contract
+                    SET (banner_id, term, envelope_id, envelope_status, envelope_status_time) =
+                    (:bannerId, :term, :envelopeId, :envelopeStatus, :envelopeStatusTime) WHERE id = :id";
 
         $params = array(
+                  'id' => $contract->getId(),
                   'bannerId' => $contract->getBannerId(),
                   'term' => $contract->getTerm(),
                   'envelopeId' => $contract->getEnvelopeId(),
