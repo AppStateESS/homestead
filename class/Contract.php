@@ -86,11 +86,28 @@ class Contract {
         return $this->envelope_status;
     }
 
+    /**
+     * TODO: Check for a valid status string.
+     */
+    public function setEnvelopeStatus($status)
+    {
+        $this->envelope_status = $status;
+    }
+
     public function getEnvelopeStatusTime()
     {
         return $this->envelope_status_time;
     }
 
+    /**
+     * Sets the envelope status time field.
+     *
+     * @param int $time Unix timestamp when envelope status was last updated.
+     */
+    public function setEnvelopeStatusTime($time)
+    {
+        $this->envelope_status_time = $time;
+    }
 }
 
 class ContractRestored extends Contract {
