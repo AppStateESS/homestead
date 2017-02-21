@@ -28,15 +28,15 @@ define('CURRENT_LANGUAGE', 'en_US');
 //require_once 'src/Bootstrap.php';
 
 // For older versions of PHPWS, comment this out
-require_once $phpwsPath . 'src/Autoloader.php';
-require_once $phpwsPath . 'src/Translation.php';
-require_once $phpwsPath . 'src/Log.php';
+//require_once $phpwsPath . 'src/Autoloader.php';
+//require_once $phpwsPath . 'src/Translation.php';
+//require_once $phpwsPath . 'src/Log.php';
 
 // For older versions of PHPWS, uncomment these
-// require_once $phpwsPath . 'core/conf/defines.php';
-// require_once $phpwsPath . 'Global/Functions.php';
-// require_once $phpwsPath . 'Global/Implementations.php';
-// require_once $phpwsPath . 'config/core/source.php';
+require_once $phpwsPath . 'core/conf/defines.php';
+require_once $phpwsPath . 'Global/Functions.php';
+require_once $phpwsPath . 'Global/Implementations.php';
+require_once $phpwsPath . 'config/core/source.php';
 
 require_once $phpwsPath . 'mod/hms/vendor/autoload.php';
 require_once $phpwsPath . 'mod/hms/class/DocusignClientFactory.php';
@@ -96,12 +96,6 @@ foreach ($bannerIds as $bannerId){
     echo "Checking for contract for $bannerId: ";
 
     $result = voidDocusignContract($student, $term, $docusignClient, $http);
-
-    if($result === true){
-        echo "Voided\n";
-    } else{
-        echo "No contract found.\n";
-    }
 }
 
 function voidDocusignContract($student, $term, $docusignClient, $http)
@@ -111,6 +105,16 @@ function voidDocusignContract($student, $term, $docusignClient, $http)
 
     if ($contract !== false) {
         // Contract exists, so void it
+
+        $contract->updateEnvelope();
+
+        $status = $contract->getEnvelopeStatus();
+
+        // If the status is not 'sent' of 'delivered' then we cannot void it
+        if($status !== 'sent' && $status !== 'delivered'){
+            echo "Cannot cancel because status is: $status\n";
+            return;
+        }
 
         // Get the corresponding envelope id
         $envelope = Docusign\EnvelopeFactory::getEnvelopeById($docusignClient, $contract->getEnvelopeId());
@@ -124,8 +128,8 @@ function voidDocusignContract($student, $term, $docusignClient, $http)
 
         //ContractFactory::save($contract);
 
-        return true;
+        echo "Voided\n";
     } else {
-        return false; // Indicate that no envelope was found by returning false
+        echo "No envelope found\n";
     }
 }
