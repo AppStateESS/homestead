@@ -54,17 +54,6 @@ class ShowOffCampusWaitListApplicationCommand extends Command {
 
         $_SESSION['application_data'] = array();
 
-        // If they haven't agreed, redirect to the agreement
-        if(is_null($event) || !isset($event) || ($event != 'signing_complete' && $event != 'viewing_complete')){
-            $onAgree = CommandFactory::getCommand('ShowOffCampusWaitListApplication');
-            $onAgree->setTerm($term);
-
-            $agreementCmd = CommandFactory::getCommand('ShowTermsAgreement');
-            $agreementCmd->setTerm($term);
-            $agreementCmd->setAgreedCommand($onAgree);
-            $agreementCmd->redirect();
-        }
-
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         PHPWS_Core::initModClass('hms', 'ReApplicationOffCampusFormView.php');
@@ -73,4 +62,3 @@ class ShowOffCampusWaitListApplicationCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

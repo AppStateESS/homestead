@@ -35,31 +35,31 @@ class OffCampusWaitingListFormSaveCommand extends Command {
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         // Data sanity checking
-        $doNotCall  = $context->get('do_not_call');
-        $areaCode   = $context->get('area_code');
-        $exchange   = $context->get('exchange');
-        $number     = $context->get('number');
+        $doNotCall   = $context->get('do_not_call');
+        $phoneNumber = $context->get('number');
 
         if(is_null($doNotCall)){
             // do not call checkbox was not selected, so check the number
-            if(is_null($areaCode) || is_null($exchange) || is_null($number)){
+            if($phoneNumber === ''){
                 NQ::simple('hms', hms\NotificationView::ERROR, 'Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
                 $errorCmd->redirect();
             }
+
+            $phoneNumber = trim($phoneNumber);
+
+        } else {
+            $phoneNumber = null;
         }
 
+        $mealPlan = $context->get('meal_option');
 
-        if(!is_null($doNotCall)){
-            $cellPhone = null;
-        }else{
-            $cellPhone = $areaCode . $exchange . $number;
-        }
-
-        $mealPlan = $context->get('meal_plan');
+        $waitlistReason = $context->get('waitlist_reason');
+        $oncampusReason = $context->get('oncampus_reason');
+        $oncampusOtherReason = $context->get('oncampus_other_reason');
 
         $international = $student->isInternational();
 
-        $application = new WaitingListApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), $cellPhone, $mealPlan, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, $international);
+        $application = new WaitingListApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), $phoneNumber, $mealPlan, $international, $waitlistReason, $oncampusReason, $oncampusOtherReason);
 
         $application->setEmergencyContactName($context->get('emergency_contact_name'));
         $application->setEmergencyContactRelationship($context->get('emergency_contact_relationship'));
