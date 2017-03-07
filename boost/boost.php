@@ -1,6 +1,6 @@
 <?php
     $proper_name  = 'Housing Management System';
-    $version      = '0.5.9';
+    $version      = '0.5.10';
     $import_sql   = TRUE;
     $image_dir    = TRUE;
     $file_dir     = FALSE;

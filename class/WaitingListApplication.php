@@ -4,7 +4,11 @@ PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
 class WaitingListApplication extends HousingApplication {
 
-    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $international = NULL)
+    public $waitlist_reason;
+    public $oncampus_reason;
+    public $oncampus_other_reason;
+
+    public function __construct($id = 0, $term = NULL, $banner_id = NULL, $username = NULL, $gender = NULL, $student_type = NULL, $application_term = NULL, $cell_phone = NULL, $meal_plan = NULL, $international = NULL, $waitlistReason = NULL, $oncampusReason = NULL, $oncampusOtherReason = NULL)
     {
         /**
          * If the id is non-zero, then we need to load the other member variables
@@ -20,6 +24,10 @@ class WaitingListApplication extends HousingApplication {
         $this->application_type = 'offcampus_waiting_list';
 
         parent::__construct($term, $banner_id, $username, $gender, $student_type, $application_term, $cell_phone, $meal_plan, $international);
+
+        $this->waitlist_reason = $waitlistReason;
+        $this->oncampus_reason = $oncampusReason;
+        $this->oncampus_other_reason = $oncampusOtherReason;
     }
 
     /**

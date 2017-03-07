@@ -492,6 +492,9 @@ CREATE TABLE hms_lottery_application (
 
 create table hms_waitlist_application (
     id integer NOT NULL references hms_new_application (id),
+    waitlist_reason character varying,
+    oncampus_reason character varying,
+    oncampus_other_reason character varying
     PRIMARY KEY(id)
 );
 

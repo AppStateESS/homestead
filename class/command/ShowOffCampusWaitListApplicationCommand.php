@@ -43,26 +43,10 @@ class ShowOffCampusWaitListApplicationCommand extends Command {
         // Check if the student has already applied. If so, redirect to the student menu
         $app = HousingApplication::getApplicationByUser(UserStatus::getUsername(), $term);
 
-        if (isset($result) && $result->getApplicationType == 'offcampus_waiting_list') {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'You have already enrolled on the on-campus housing Open Waiting List for this term.');
+        if (isset($app) && $app->getApplicationType() == 'offcampus_waiting_list') {
+            NQ::simple('hms', hms\NotificationView::ERROR, 'You have already enrolled in the Open Waiting List for this term.');
             $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
             $menuCmd->redirect();
-        }
-
-        // Make sure the student agreed to the terms, if not, send them back to the terms & agreement command
-        $event = $context->get('event');
-
-        $_SESSION['application_data'] = array();
-
-        // If they haven't agreed, redirect to the agreement
-        if(is_null($event) || !isset($event) || ($event != 'signing_complete' && $event != 'viewing_complete')){
-            $onAgree = CommandFactory::getCommand('ShowOffCampusWaitListApplication');
-            $onAgree->setTerm($term);
-
-            $agreementCmd = CommandFactory::getCommand('ShowTermsAgreement');
-            $agreementCmd->setTerm($term);
-            $agreementCmd->setAgreedCommand($onAgree);
-            $agreementCmd->redirect();
         }
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
@@ -73,4 +57,3 @@ class ShowOffCampusWaitListApplicationCommand extends Command {
         $context->setContent($view->show());
     }
 }
-
