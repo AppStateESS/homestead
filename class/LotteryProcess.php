@@ -174,6 +174,7 @@ class LotteryProcess {
                     // Send an invite to the proper class & gender
                     $winningRow = $this->chooseWinner($c, $g);
 
+                    // TODO: Check that $winningRow isn't null. chooseWinner can return null if there are no more students to choose from of the requested class/gender
                     $student = StudentFactory::getStudentByBannerId($winningRow['banner_id'], $this->term);
 
                     $this->sendInvite($student);
@@ -283,6 +284,7 @@ class LotteryProcess {
         return $result;
     }
 
+    // TODO: Check what happens when there are no more students to choose from. Can this return an empty array?
     private function chooseWinner($class, $gender)
     {
         $query = "SELECT * FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
