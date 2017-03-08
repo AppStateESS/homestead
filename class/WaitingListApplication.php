@@ -172,6 +172,10 @@ class WaitingListApplication extends HousingApplication {
             $tags['PHONE']      .= '-'.substr($this->cell_phone, 6, 4);
         }
 
+        $tags['WAITINGLIST_REASON'] = $this->waitlist_reason;
+        $tags['ONCAMPUS_REASON'] = $this->oncampus_reason;
+        $tags['ONCAMPUS_OTHER_REASON'] = $this->oncampus_other_reason;
+
         return $tags;
     }
 
@@ -189,6 +193,11 @@ class WaitingListApplication extends HousingApplication {
 
         $pager->db->addJoin('LEFT', 'hms_new_application', 'hms_waitlist_application', 'id', 'id');
         $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_assignment', 'username', 'asu_username AND hms_new_application.term = hms_assignment.term');
+
+        $pager->joinResult('id', 'hms_waitlist_application', 'id', 'waitlist_reason', 'waitlist_reason');
+        $pager->joinResult('id', 'hms_waitlist_application', 'id', 'oncampus_reason', 'oncampus_reason');
+        $pager->joinResult('id', 'hms_waitlist_application', 'id', 'oncampus_other_reason', 'oncampus_other_reason');
+
         $pager->db->addWhere('hms_assignment.asu_username', 'NULL');
         $pager->db->addWhere('hms_new_application.term', $term);
         $pager->db->addWhere('hms_new_application.application_type', 'offcampus_waiting_list');
