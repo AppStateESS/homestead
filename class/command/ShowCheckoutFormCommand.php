@@ -76,7 +76,7 @@ class ShowCheckoutFormCommand extends Command {
         $checkin = CheckinFactory::getPendingCheckoutForStudentByHall($student, $selectedHall);
 
         if(!isset($checkin)){
-            NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, we couldn't find a matching check-in at {$hall->getHallName()} for this student to check-out of.");
+            NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, we couldn't find a matching check-in at {$selectedHall->getHallName()} for this student to check-out of.");
             $errorCmd->redirect();
         }
 
