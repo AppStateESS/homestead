@@ -182,7 +182,7 @@ Please review the information you entered. If you need to go back and make chang
     </tr>
     <!-- END rlc_review -->
 </table>
-            <button class="btn btn-lg btn-primary">Continue <i class="fa fa-arrow-right"></i></button>
+
 <!-- BEGIN redo_form -->
 or {REDO_BUTTON}
 <!-- END redo_form -->
