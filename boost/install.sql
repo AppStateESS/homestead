@@ -17,6 +17,8 @@ create table hms_contract (
 	PRIMARY KEY(id)
 );
 
+alter table hms_contract add constraint contract_uniq_banner_term UNIQUE (banner_id, term);
+
 create sequence hms_contract_seq;
 
 CREATE TABLE hms_student_cache (
