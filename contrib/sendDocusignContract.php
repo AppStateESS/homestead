@@ -6,6 +6,7 @@
  * their Banner IDs) in the input file.
  *
  * TODO: Update this to use the ContractFactory class's central methods.
+ * TODO: Add logging entries
  */
 
 ini_set('display_errors', 1);
