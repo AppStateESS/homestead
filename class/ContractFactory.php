@@ -13,6 +13,13 @@ class ContractFactory {
         // TODO
     }
 
+    /**
+     * Get a Contract object for the given Student and term
+     *
+     * @param Student $student Student object to fetch a contract for
+     * @param int $term Term code to look for a contract for
+     * @return Mixed<Contract|bool> The requested Contract object, or boolean false if none found
+     */
     public static function getContractByStudentTerm(Student $student, $term)
     {
         PHPWS_Core::initModClass('hms', 'Contract.php');

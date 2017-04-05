@@ -407,6 +407,12 @@ define('ACTIVITY_REINSTATE_APPLICATION',        77);
 
 define('ACTIVITY_ROOM_CHANGE_REASSIGNED',       78); // Assignment moved due to room change
 
+// Contract logging
+define('ACTIVITY_CONTRACT_CREATED',             79); // Envelope created
+define('ACTIVITY_CONTRACT_SENT_EMAIL',          80); // Envelope sent via email
+define('ACTIVITY_CONTRACT_STUDENT_SIGN_EMBEDDED',81);
+define('ACTIVITY_CONTRACT_REMOVED_VOIDED',      82);
+
 /**
  * Errors
  */
