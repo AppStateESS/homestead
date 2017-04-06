@@ -37,6 +37,8 @@ class ShowFreshmenApplicationReviewCommand extends Command {
     {
         $term = $context->get('term');
 
+        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
+
         // If they haven't agreed, redirect to the agreement
         // TODO: actually check via docusign API
         $event = $context->get('event');
@@ -49,9 +51,9 @@ class ShowFreshmenApplicationReviewCommand extends Command {
             $agreementCmd->setTerm($term);
             $agreementCmd->setAgreedCommand($returnCmd);
             $agreementCmd->redirect();
+        } else if($event === 'signing_complete'){
+            HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CONTRACT_STUDENT_SIGN_EMBEDDED, UserStatus::getUsername(), "Student signed contract for $term through the embedded signing process");
         }
-
-        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         $errorCmd = CommandFactory::getCommand('ShowHousingApplicationForm');
         $errorCmd->setTerm($term);
