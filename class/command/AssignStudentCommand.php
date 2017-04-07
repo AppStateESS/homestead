@@ -94,6 +94,8 @@ class AssignStudentCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         PHPWS_Core::initModClass('hms', 'BannerQueue.php');
+        PHPWS_Core::initModClass('hms', 'ContractFactory.php');
+        PHPWS_Core::initModClass('hms', 'Contract.php');
 
         // NB: Username must be all lowercase
         $username = strtolower(trim($context->get('username')));
@@ -227,6 +229,46 @@ class AssignStudentCommand extends Command {
             $errorCmd->redirect();
         }
 
+
+
+        /*******************************************
+         * Check for a valid and complete contract *
+         *******************************************/
+        $contract = ContractFactory::getContractByStudentTerm($student, $term);
+
+        if($contract === false){
+            // No contract exists. Create a new one and send it via email to the student
+            $this->sendContract($student, $term);
+
+            HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CONTRACT_SENT_EMAIL, UserStatus::getUsername(), "Sent new contract via email for $term");
+            NQ::simple('hms', hms\NotificationView::WARNING, 'No contract found for this semester. A new contract signing request was sent to the student via email.');
+
+        } else {
+            // Contract exists. Refresh its status and send a new one if necessary
+            $contract->updateEnvelope();
+            $envStatus = $contract->getEnvelopeStatus(); // Refresh status
+
+            if ($envStatus === Contract::STATUS_COMPLETED){
+                // Contract is complete already. We're good to go.
+                NQ::simple('hms', hms\NotificationView::SUCCESS, 'This student has a valid contract for this semester.');
+
+            } else if($envStatus === Contract::STATUS_VOIDED || $envStatus === Contract::STATUS_DECLINED){
+                // Contract is voided. Ignore the current contract and send them another.
+                // Delete the current contract
+                ContractFactory::deleteContract($contract);
+                HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CONTRACT_REMOVED_VOIDED, UserStatus::getUsername(), "Removed student's existing voided contract for $term, so a new contract can be sent.");
+
+                // Send a new contract
+                // TODO: Add logging
+                $this->sendContract($student, $term);
+                NQ::simple('hms', hms\NotificationView::WARNING, 'A voided contract was found for this semester. A new contract signing request was sent to the student via email.');
+                HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CONTRACT_SENT_EMAIL, UserStatus::getUsername(), "Sent new contract via email for $term");
+            } else {
+                // Contract exists, but is in some other pending status (sent, delivered). We don't need to do anything, hopefully student will complete the existing contract.
+                NQ::simple('hms', hms\NotificationView::INFO, 'This student has a pending contract for this semester. A new contract was not needed.');
+            }
+        }
+
         // Show a success message
         if($context->get('moveConfirmed') == 'true'){
             NQ::simple('hms', hms\NotificationView::SUCCESS, 'Successfully moved ' . $username . ' to ' . $hall->hall_name . ' room ' . $room->room_number);
@@ -236,5 +278,19 @@ class AssignStudentCommand extends Command {
 
         $successCmd = CommandFactory::getCommand('ShowAssignStudent');
         $successCmd->redirect();
+    }
+
+    private function sendContract(Student $student, $term)
+    {
+        // Decide which envelope template to use based on student's age
+        if($student->isUnder18()){
+            // TODO: Look up the student's application (if any) and try to pull parent/guardian info from the application before failing to send
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Could not send contract. Student is under 18, but we don\'t know who the parent/guardian is.');
+            ContractFactory::sendContractUnder18($student, $term, $parentName, $parentEmail);
+            return;
+        } else {
+            // Over 18, use the regular template
+            ContractFactory::sendContractOver18($student, $term);
+        }
     }
 }

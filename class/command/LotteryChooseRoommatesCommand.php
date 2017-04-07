@@ -164,9 +164,8 @@ class LotteryChooseRoommatesCommand extends Command {
             $agreementCmd->setTerm($term);
             $agreementCmd->setAgreedCommand($onAgree);
             $agreementCmd->redirect();
-        }
-        else {
-
+        } else if($event === 'signing_complete'){
+            HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CONTRACT_STUDENT_SIGN_EMBEDDED, UserStatus::getUsername(), "Student signed contract for $term through the embedded signing process");
         }
 
 

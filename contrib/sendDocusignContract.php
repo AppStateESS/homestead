@@ -1,6 +1,14 @@
 #!/usr/bin/php
 <?php
 
+/**
+ * Sends docusign contracts to the list of students given (by
+ * their Banner IDs) in the input file.
+ *
+ * TODO: Update this to use the ContractFactory class's central methods.
+ * TODO: Add logging entries
+ */
+
 ini_set('display_errors', 1);
 ini_set('ERROR_REPORTING', E_WARNING);
 error_reporting(E_ALL);

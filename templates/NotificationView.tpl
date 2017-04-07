@@ -19,4 +19,10 @@
     <i class="fa fa-info fa-2x"></i> {UNKNOWN}
 </div>
 <!-- END UNKNOWN -->
+<!-- BEGIN INFO -->
+<div class="alert alert-info" role="alert">
+    <i class="fa fa-info fa-2x"></i> {INFO}
+</div>
+<!-- END INFO -->
+
 <!-- END NOTIFICATIONS -->

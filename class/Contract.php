@@ -6,8 +6,15 @@ class Contract {
     protected $term;
 
     protected $envelope_id;
-    protected $envelope_status;
+    protected $envelope_status; // String - see below for constants defining the possible values
     protected $envelope_status_time;
+
+    // Class constants for DocuSign envelope statuses in $this->envelope_status
+    const STATUS_SENT       = 'sent'; // Aka "created"
+    const STATUS_VOIDED     = 'voided';
+    const STATUS_DELIVERED  = 'delivered'; // Sent via email
+    const STATUS_COMPLETED  = 'completed'; // This is the "signed" and done/success status
+    const STATUS_DECLINED   = 'declined';
 
     // TODO: make first parameter an instance of $student
     public function __construct($student, $term, $envelopeId, $envelopeStatus, $envelopeStatusTime)

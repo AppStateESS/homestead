@@ -34,9 +34,20 @@ class RlcSelfSelectInviteSaveCommand extends Command {
 
     public function execute(CommandContext $context)
     {
+        $term = $context->get('term');
+
+        // Load the student
+        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
+
         // Check to see if the user is coming back from DocuSign contract
         $event = $context->get('event');
-        if(isset($event) && $event != null && ($event == 'signing_complete' || $event == 'viewing_complete')) {
+        if(isset($event) && $event != null && ($event === 'signing_complete' || $event === 'viewing_complete')) {
+
+            // Log that the student just signed, but ignore the 'viewing complete' event.
+            if($event === 'signing_complete'){
+                HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CONTRACT_STUDENT_SIGN_EMBEDDED, UserStatus::getUsername(), "Student signed contract for $term through the embedded signing process");
+            }
+
             $roommateRequestId = $context->get('roommateRequestId');
         	if(isset($roommateRequestId) && $roommateRequestId != null) {
                 $roommateCmd = CommandFactory::getCommand('LotteryShowRoommateRequest');
@@ -48,13 +59,8 @@ class RlcSelfSelectInviteSaveCommand extends Command {
             }
         }
 
-        $term = $context->get('term');
-
         $errorCmd = CommandFactory::getCommand('RlcSelfAssignStart');
         $errorCmd->setTerm($term);
-
-        // Load the student
-        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         // Load the RLC Assignment
         $rlcAssignment = HMS_RLC_Assignment::getAssignmentByUsername($student->getUsername(), $term);

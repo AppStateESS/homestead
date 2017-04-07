@@ -9,6 +9,7 @@ class NotificationView
     const ERROR     = 9;
     const WARNING   = 8;
     const SUCCESS   = 7;
+    const INFO      = 6;
 
     private $notifications = array();
 
@@ -47,6 +48,8 @@ class NotificationView
                 return 'WARNING';
             case NotificationView::SUCCESS:
                 return 'SUCCESS';
+            case NotificationView::INFO:
+                return 'INFO';
             default:
                 return 'UNKNOWN';
         }
