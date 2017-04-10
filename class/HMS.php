@@ -56,6 +56,22 @@ abstract class HMS {
                 $nv->popNotifications();
                 Layout::add($nv->show());
             } catch(Exception $e) {
+
+                $user = Current_User::getUserObj();
+                $e->username = $user->getUsername();
+                
+                if(isset($_SERVER['HTTP_REFERER'])){
+                    $e->referrer = $_SERVER['HTTP_REFERER'];
+                }else{
+                    $e->referrer = 'None';
+                }
+
+                $e->remoteAddr = $_SERVER['REMOTE_ADDR'];
+
+                if (extension_loaded('newrelic')) { // Ensure PHP agent is available
+                    newrelic_notice_error($e->getMessage(), $e);
+                }
+
                 try {
                     $message = $this->formatException($e);
                     NQ::Simple('hms', hms\NotificationView::ERROR, 'An internal error has occurred, and the authorities have been notified.  We apologize for the inconvenience.');
