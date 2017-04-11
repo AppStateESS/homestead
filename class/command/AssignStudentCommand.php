@@ -129,10 +129,19 @@ class AssignStudentCommand extends Command {
             $errorCmd->redirect();
         }
 
-        // Check to make sure the student has an application on file
-        $applicationStatus = HousingApplication::checkForApplication($username, $term);
+        // Lookup the student in Banner
+        try{
+            $student = StudentFactory::getStudentByUsername($username, $term);
+        }catch(StudentNotFoundException $e){
+            NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid user name, no such student found.');
+            $errorCmd->redirect();
+        }
 
-        if($applicationStatus == FALSE){
+        // Check to make sure the student has an application on file
+        //$applicationStatus = HousingApplication::checkForApplication($username, $term);
+        $housingApplication = HousingApplicationFactory::getAppByStudent($student, $term);
+
+        if($housingApplication === null){
             NQ::simple('hms', hms\NotificationView::WARNING, 'Warning: No housing application found for this student in this term.');
         }
 
@@ -156,12 +165,6 @@ class AssignStudentCommand extends Command {
             }
         }
 
-        try{
-            $student = StudentFactory::getStudentByUsername($username, $term);
-        }catch(StudentNotFoundException $e){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid user name, no such student found.');
-            $errorCmd->redirect();
-        }
 
         // Check age, issue a warning for over 25
         if(strtotime($student->getDOB()) < strtotime("-25 years")){
@@ -238,10 +241,12 @@ class AssignStudentCommand extends Command {
 
         if($contract === false){
             // No contract exists. Create a new one and send it via email to the student
-            $this->sendContract($student, $term);
-
-            HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CONTRACT_SENT_EMAIL, UserStatus::getUsername(), "Sent new contract via email for $term");
-            NQ::simple('hms', hms\NotificationView::WARNING, 'No contract found for this semester. A new contract signing request was sent to the student via email.');
+            if($this->sendContract($student, $housingApplication, $term)){
+                HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CONTRACT_SENT_EMAIL, UserStatus::getUsername(), "Sent new contract via email for $term");
+                NQ::simple('hms', hms\NotificationView::WARNING, 'No contract found for this semester. A new contract signing request was sent to the student via email.');
+            }else{
+                NQ::simple('hms', hms\NotificationView::ERROR, 'Could not send contract. Student is under 18, but we don\'t know who the parent/guardian is.');
+            }
 
         } else {
             // Contract exists. Refresh its status and send a new one if necessary
@@ -259,8 +264,7 @@ class AssignStudentCommand extends Command {
                 HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CONTRACT_REMOVED_VOIDED, UserStatus::getUsername(), "Removed student's existing voided contract for $term, so a new contract can be sent.");
 
                 // Send a new contract
-                // TODO: Add logging
-                $this->sendContract($student, $term);
+                $this->sendContract($student, $housingApplication, $term);
                 NQ::simple('hms', hms\NotificationView::WARNING, 'A voided contract was found for this semester. A new contract signing request was sent to the student via email.');
                 HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CONTRACT_SENT_EMAIL, UserStatus::getUsername(), "Sent new contract via email for $term");
             } else {
@@ -280,17 +284,31 @@ class AssignStudentCommand extends Command {
         $successCmd->redirect();
     }
 
-    private function sendContract(Student $student, $term)
+    /**
+     * Sends a contract based on student, HousingApplication, and term. Returns false if the contact could not be sent.
+     */
+    private function sendContract(Student $student, HousingApplication $housingApplication = null, $term)
     {
         // Decide which envelope template to use based on student's age
         if($student->isUnder18()){
-            // TODO: Look up the student's application (if any) and try to pull parent/guardian info from the application before failing to send
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Could not send contract. Student is under 18, but we don\'t know who the parent/guardian is.');
+            // Look up the student's application (if any) and try to pull parent/guardian info from the application before failing to send
+            if($housingApplication === null){
+                return false; // We don't know who the parent/guardian is
+            }
+
+            $parentName = $housingApplication->getEmergencyContactName();
+            $parentEmail = $housingApplication->getEmergencyContactEmail();
+
+            if($parentName === '' || $parentEmail === '' || $parentName === null || $parentEmail === null){
+                return false; // We don't know who the parent/guardian is
+            }
+
             ContractFactory::sendContractUnder18($student, $term, $parentName, $parentEmail);
-            return;
         } else {
             // Over 18, use the regular template
             ContractFactory::sendContractOver18($student, $term);
         }
+
+        return true;
     }
 }

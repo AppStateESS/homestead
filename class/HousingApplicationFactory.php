@@ -81,6 +81,7 @@ class HousingApplicationFactory {
      * @param string $applicationType
      * @throws DatabaseException
      * @throws InvalidArgumentException
+     * @return Mixed<HousingApplication|null> A HousingApplication subclass object, or null of no applicaiton exists
      */
     public static function getAppByStudent(Student $student, $term, $applicationType = NULL)
     {
@@ -105,7 +106,7 @@ class HousingApplicationFactory {
             throw new DatabaseException($result->toString());
         }
 
-        if ($result == null) {
+        if ($result === false || $result === null) {
             return null;
         }
 
