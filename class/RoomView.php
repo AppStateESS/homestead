@@ -216,6 +216,7 @@ class RoomView extends hms\View {
         $tpl['ROOM_DAMAGE_LIST'] = $this->roomDamagePager();
 
 
+
         if(Current_User::allow('hms', 'add_room_dmg')){
             $dmgCmd = CommandFactory::getCommand('ShowAddRoomDamage');
             $dmgCmd->setRoom($this->room);

@@ -1,3 +1,10 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Setup date pickers
+        $('[data-toggle="tooltip"]').tooltip(container:body);
+    });
+</script>
+
 <table class="table table-striped table-hover">
     <tr>
         <th>Category</th>
@@ -12,7 +19,7 @@
     </tr>
     <!-- END empty_table -->
     <!-- BEGIN listrows -->
-    <tr>
+    <tr data-toggle="tooltip" title="{NOTES}" data-placement="right">
         <td>{CATEGORY}</td>
         <td>{DESCRIPTION}</td>
         <td>{SIDE}</td>
