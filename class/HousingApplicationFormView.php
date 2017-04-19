@@ -107,6 +107,8 @@ class HousingApplicationFormView extends hms\View
             } else {
                 $form->setMatch('room_type', '0');
             }
+
+            $tpl['SUMMER_DEPOSIT_MSG'] = ''; // Dummy variable for summer deposit notice
         }
 
         /*********************

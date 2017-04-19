@@ -18,6 +18,13 @@
         </p>
         <!-- END review_msg -->
 
+        <!-- BEGIN summer_deposit -->
+        {SUMMER_DEPOSIT_MSG}
+        <div class="alert alert-info">
+            <p><i class="fa fa-usd fa-2x"></i> <strong>Cancellation Fees are in Effect!</strong> We are now assigning students as applications are received.  You will be assessed a $75 cancellation fee if you cancel your space after completion of this application. <strong>Please do not complete this application if you are unsure of your summer housing needs</strong>.  We will continue to accept applications through the opening of summer school.</p>
+        </div>
+        <!-- END summer_deposit -->
+
         <h3>Demographic Information</h3>
 
         <form class="form-horizontal">
