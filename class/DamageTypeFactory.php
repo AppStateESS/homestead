@@ -18,23 +18,21 @@ class DamageTypeFactory {
     {
         PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getPdoInstance();
-        
-        $query = "SELECT * FROM hms_damage_type ORDER BY category ASC, description ASC";
-        
+
+        $query = "SELECT * FROM hms_damage_type WHERE active = 1 ORDER BY category ASC, description ASC";
+
         $stmt = $db->prepare($query);
-        
+
         $stmt->execute();
-        
+
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
         $resultById = array();
-        
+
         foreach($result as $row){
         	$resultById[$row['id']] = $row;
         }
-        
+
         return $resultById;
     }
 }
-
-

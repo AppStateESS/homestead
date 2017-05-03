@@ -275,6 +275,7 @@ create table hms_damage_type(
     category    character varying NOT NULL,
     description character varying NOT NULL,
     cost        integer,
+    active      smallint not null default 1,
     PRIMARY KEY(id)
 );
 
