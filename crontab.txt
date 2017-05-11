@@ -1,4 +1,4 @@
 # Example crontab entries. Paths may need to be updated to fit local env
 
-# Update DocusignContracts at 5am every morning
-0 5 * * * phpwebsite/mod/hms/class/cli.php phpwebsite/config/core/config.php hms 'UpdateDocusignContractStatus' > /var/www/phpwebsite/log/cron.log
+# Update DocuSign contracts' status at 5am every morning
+0 5 * * * SERVER_NAME=hms.ess.appstate.edu; export SERVER_NAME; /var/www/phpwebsite/mod/hms/cli.php /var/www/phpwebsite/config/core/config.php hms 'UpdateDocusignContractStatus'  >> /var/www/phpwebsite/logs/cron.log

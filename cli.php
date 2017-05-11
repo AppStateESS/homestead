@@ -28,7 +28,7 @@ $_SERVER['HTTP_HOST'] = 'localhost';
 
 // Include PHPWS bootstrapping code
 require_once PHPWS_SOURCE_DIR . 'config/core/source.php';
-require_once PHPWS_SOURCE_DIR . 'src/Bootstrap.php';
+//require_once PHPWS_SOURCE_DIR . 'src/Bootstrap.php';
 
 // For older versions of PHPWS, comment this out
 //require_once PHPWS_SOURCE_DIR . 'src/Autoloader.php';
@@ -38,7 +38,7 @@ require_once PHPWS_SOURCE_DIR . 'src/Bootstrap.php';
 require_once PHPWS_SOURCE_DIR . 'Global/Functions.php';
 //require_once PHPWS_SOURCE_DIR . 'Global/Implementations.php';
 //require_once PHPWS_SOURCE_DIR . 'config/core/source.php';
-require_once PHPWS_SOURCE_DIR . 'src/Autoloader.php';
+//require_once PHPWS_SOURCE_DIR . 'src/Autoloader.php';
 
 // Set the 'module' request variable to help the autoloader find classes
 $_REQUEST['module'] = $args['module'];

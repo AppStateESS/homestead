@@ -18,8 +18,8 @@ class UpdateDocusignContractStatus {
         $user = new \PHPWS_User($userId);
 
         // Uncomment for production on branches
-        //$user->auth_script = 'shibbolethnocreate.php';
-        //$user->auth_name = 'shibbolethnocreate';
+        $user->auth_script = 'shibboleth.php';
+        $user->auth_name = 'shibboleth';
 
         //$user->login();
         $user->setLogged(true);
