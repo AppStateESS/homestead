@@ -291,7 +291,7 @@ class Term
      * Returns a simple array of term (in numeric form) of all terms after the 'current' term.
      * @return Array Returns an array of all the terms after the current term.
      */
-    public function getFutureTerms()
+    public static function getFutureTerms()
     {
         $objs = self::getTerms();
         $currTerm = self::getCurrentTerm();
