@@ -15,7 +15,6 @@ class BannerQueueItem {
     public $building_code;
     public $bed_code;
     public $meal_plan = 'HOME';
-    public $meal_code;
     public $percent_refund;
 
     public $queued_on;
@@ -38,7 +37,6 @@ class BannerQueueItem {
         $this->building_code    = $hall->getBannerBuildingCode();
         $this->bed_code         = $bed->getBannerId();
         $this->meal_plan        = $mealPlan;
-        $this->meal_code        = $mealCode;
         $this->percent_refund   = $percentRefund;
         $this->banner_id        = $student->getBannerId();
 
@@ -113,8 +111,7 @@ class BannerQueueItem {
                                     $this->term,
                                     $this->building_code,
                                     $this->bed_code,
-                                        'HOME',
-                                    $this->meal_code);
+                                        'HOME');
                 if($result === TRUE) {
                     HMS_Activity_Log::log_activity(
                                     $this->asu_username,
@@ -123,8 +120,7 @@ class BannerQueueItem {
                                     $this->term . ' ' .
                                     $this->building_code . ' ' .
                                     $this->bed_code . ' ' .
-                                        'HOME' . ' ' .
-                                    $this->meal_code);
+                                        'HOME');
                 }
                 break;
             case BANNER_QUEUE_REMOVAL:
@@ -146,8 +142,6 @@ class BannerQueueItem {
                 }
                 break;
         }
-
-
 
         return $result;
     }
