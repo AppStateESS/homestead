@@ -188,11 +188,10 @@ abstract class SOAP
      * @param String $building Banner building code
      * @param Integer $bannerBedId Banner bed Id.
      * @param String $plan Banner plan code ('HOUSE' or 'HOME', defaults to 'HOME').
-     * @param Integer $meal Banner meal code (numeric code for meal plan level)
      * @return boolean True if successful.
      * @throws InvalidArgumentException, SOAPException, BannerException
      */
-    public abstract function createRoomAssignment($bannerId, $term, $building, $bannerBedId, $plan = 'HOME', $meal);
+    public abstract function createRoomAssignment($bannerId, $term, $building, $bannerBedId, $plan = 'HOME');
 
     /**
      * Sends a room assignment to banner. Will cause students to be billed, etc.
@@ -208,10 +207,10 @@ abstract class SOAP
      * @return boolean True if successful.
      * @throws InvalidArgumentException, SOAPException, BannerException
      */
-    public function reportRoomAssignment($username, $term, $building_code, $room_code, $plan_code, $meal_code)
+    public function reportRoomAssignment($username, $term, $building_code, $room_code, $plan_code)
     {
         $bannerId = $this->getBannerId($username);
-        return $this->createRoomAssignment($bannerId, $term, $building_code, $room_code, $plan_code, $meal_code);
+        return $this->createRoomAssignment($bannerId, $term, $building_code, $room_code, $plan_code);
     }
 
     /**
@@ -227,6 +226,19 @@ abstract class SOAP
      * @throws InvalidArgumentException, SOAPException, BannerException
      */
     public abstract function removeRoomAssignment($bannerId, $term, $building, $bannerBedId, $percentRefund);
+
+
+    /**
+     * Create a meal plan for the given student.
+     * Will throw an exception if a meal plan already exists.
+     *
+     * @param String $bannerId
+     * @param Integer $term
+     * @param Integer $mealCode Banner meal code (numeric code for meal plan level)
+     * @return boolean True if successful.
+     * @throws InvalidArgumentException, SOAPException, BannerException
+     */
+    public abstract function createMealPlan($bannerId, $term, $mealCode);
 
     /**
      * Sets the flag in Banner that says this student is exempt from

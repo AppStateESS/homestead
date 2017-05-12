@@ -245,7 +245,7 @@ class PhpSOAP extends SOAP
         return true;
     }
 
-    public function createRoomAssignment($bannerId, $term, $building, $bannerBedId, $plan = 'HOME', $meal)
+    public function createRoomAssignment($bannerId, $term, $building, $bannerBedId, $plan = 'HOME')
     {
         $params = array(
                         'User'      => $this->currentUser,
@@ -254,7 +254,6 @@ class PhpSOAP extends SOAP
                         'BldgCode'  => $building,
                         'RoomCode'  => $bannerBedId,
                         'PlanCode'  => $plan,
-                        'MealCode'  => $meal,
                         'UserType'  => $this->userType);
         try{
             $response = $this->client->CreateRoomAssignment($params);
@@ -294,7 +293,30 @@ class PhpSOAP extends SOAP
         }
 
         SOAP::logSoap('removeRoomAssignment', 'success', $params);
-        return TRUE;
+        
+        return true;
+    }
+
+    public function createMealPlan($bannerId, $term, $mealCode)
+    {
+        $params = array(
+                        'User'      => $this->currentUser,
+                        'BannerID'  => $bannerId,
+                        'TermCode'  => $term,
+                        'MealCode'  => $mealCode);
+
+        try{
+            $response = $this->client->CreateMealPlan($params);
+        }catch(SoapFault $e){
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'CreateMealPlan', $params);
+        }
+
+        if($response->basic_response->error_num !== "0"){
+            SOAP::logSoap('createMealPlan', 'failed', $params);
+            throw new BannerException('Error creating meal plan.', $response->basic_response->error_num, 'CreateMealPlan', $params);
+        }
+
+        return true;
     }
 
     public function getHousMealRegister($bannerId, $term, $opt)
