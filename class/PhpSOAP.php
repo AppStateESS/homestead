@@ -245,7 +245,7 @@ class PhpSOAP extends SOAP
         return true;
     }
 
-    public function createRoomAssignment($bannerId, $term, $building, $bannerBedId, $plan = 'HOME')
+    public function createRoomAssignment($bannerId, $term, $building, $bannerBedId)
     {
         $params = array(
                         'User'      => $this->currentUser,
@@ -253,7 +253,7 @@ class PhpSOAP extends SOAP
                         'TermCode'  => $term,
                         'BldgCode'  => $building,
                         'RoomCode'  => $bannerBedId,
-                        'PlanCode'  => $plan,
+                        'PlanCode'  => 'HOME',
                         'UserType'  => $this->userType);
         try{
             $response = $this->client->CreateRoomAssignment($params);
@@ -293,7 +293,7 @@ class PhpSOAP extends SOAP
         }
 
         SOAP::logSoap('removeRoomAssignment', 'success', $params);
-        
+
         return true;
     }
 

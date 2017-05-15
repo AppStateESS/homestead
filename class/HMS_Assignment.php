@@ -17,7 +17,6 @@ class HMS_Assignment extends HMS_Item {
     public $asu_username = null;
     public $banner_id;
     public $bed_id = 0;
-    public $meal_option = 0;
     public $letter_printed = 0;
     public $email_sent = 0;
     public $reason = null;
@@ -457,6 +456,7 @@ class HMS_Assignment extends HMS_Item {
             throw new AssignmentException('Null hall object.');
         }
 
+        // TODO Do something with meal plan code or remove
         if ($meal_plan == BANNER_MEAL_NONE) {
             $meal_plan = NULL;
         }
@@ -508,7 +508,7 @@ class HMS_Assignment extends HMS_Item {
         }
 
         // Send this off to the queue for assignment in banner
-        $banner_success = BannerQueue::queueAssignment($student, $term, $hall, $vacant_bed, 'HOME', $meal_plan);
+        $banner_success = BannerQueue::queueAssignment($student, $term, $hall, $vacant_bed);
         if ($banner_success !== TRUE) {
             throw new AssignmentException('Error while adding the assignment to the Banner queue.');
         }

@@ -13,9 +13,9 @@ class BannerQueue {
     /**
      * Queues a Create Assignment
      */
-    public static function queueAssignment(Student $student, $term, HMS_Residence_Hall $hall, HMS_Bed $bed, $mealPlan, $mealCode)
+    public static function queueAssignment(Student $student, $term, HMS_Residence_Hall $hall, HMS_Bed $bed)
     {
-        $entry = new BannerQueueItem(0, BANNER_QUEUE_ASSIGNMENT, $student, $term, $hall, $bed, $mealPlan, $mealCode);
+        $entry = new BannerQueueItem(0, BANNER_QUEUE_ASSIGNMENT, $student, $term, $hall, $bed);
 
         if(BannerQueue::processImmediately($term)) {
             return $entry->process();
@@ -39,7 +39,7 @@ class BannerQueue {
      */
     public static function queueRemoveAssignment(Student $student, $term, HMS_Residence_Hall $hall, HMS_Bed $bed, $refund)
     {
-        $entry = new BannerQueueItem(0, BANNER_QUEUE_REMOVAL, $student, $term, $hall, $bed, null, null, $refund);
+        $entry = new BannerQueueItem(0, BANNER_QUEUE_REMOVAL, $student, $term, $hall, $bed, $refund);
 
         if(BannerQueue::processImmediately($term)) {
             return $entry->process();

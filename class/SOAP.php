@@ -191,7 +191,7 @@ abstract class SOAP
      * @return boolean True if successful.
      * @throws InvalidArgumentException, SOAPException, BannerException
      */
-    public abstract function createRoomAssignment($bannerId, $term, $building, $bannerBedId, $plan = 'HOME');
+    public abstract function createRoomAssignment($bannerId, $term, $building, $bannerBedId);
 
     /**
      * Sends a room assignment to banner. Will cause students to be billed, etc.

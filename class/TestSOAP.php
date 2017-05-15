@@ -168,7 +168,7 @@ class TestSOAP extends SOAP{
     /**
      * Sends a room assignment to banner. Will cause students to be billed, etc.
      */
-    public function createRoomAssignment($bannerId, $term, $building, $bannerBedId, $plan)
+    public function createRoomAssignment($bannerId, $term, $building, $bannerBedId)
     {
         //		return false; //error
         return true;
