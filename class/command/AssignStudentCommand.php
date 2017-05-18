@@ -273,6 +273,14 @@ class AssignStudentCommand extends Command {
             }
         }
 
+
+        /*************
+         * Meal Plan *
+         *************/
+        // Check for a meal plan and create one based on the application, if needed
+        $this->setupMealPlan($student, $term, $housingApplication);
+
+
         // Show a success message
         if($context->get('moveConfirmed') == 'true'){
             NQ::simple('hms', hms\NotificationView::SUCCESS, 'Successfully moved ' . $username . ' to ' . $hall->hall_name . ' room ' . $room->room_number);
@@ -310,5 +318,27 @@ class AssignStudentCommand extends Command {
         }
 
         return true;
+    }
+
+    private function setupMealPlan(Student $student, $term, HousingApplication $housingApplication = null)
+    {
+        // If the student doesn't have a housing Application, then they're getting the standard plan
+        if($housingApplication === null){
+            $planCode = MealPlan::BANNER_MEAL_STD;
+        } else {
+            $planCode = $housingApplication->getMealPlan();
+        }
+
+        // If the student selected the 'none' plan, then we're done here
+        if($planCode === MealPlan::BANNER_MEAL_NONE){
+            return;
+        }
+
+        // Make a new MealPlan object
+        $mealPlan = new MealPlan($student->getBannerId(), $term, $planCode);
+
+        // Process the meal plan, if needed
+        $soap = SOAP::getInstance(UserStatus::getUsername(), SOAP::ADMIN_USER);
+        MealPlanProcessor::queueMealPlan($mealPlan, $soap);
     }
 }
