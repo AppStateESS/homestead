@@ -442,6 +442,7 @@ class HMS_Lottery {
         $requestor = StudentFactory::getStudentByUsername($invite['requestor'], $term);
 
         // Actually make the assignment
+        // TODO: Handle meal plan changes
         HMS_Assignment::assignStudent($student, $term, null, $invite['bed_id'], $meal_plan, 'Confirmed roommate invite', true, ASSIGN_LOTTERY);
 
         // return successfully

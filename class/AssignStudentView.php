@@ -125,27 +125,6 @@ class AssignStudentView extends hms\View {
             $tpl['LINK_STYLE'] = '';
         }
 
-        $form->addDropBox('meal_plan', array(
-                BANNER_MEAL_LOW   => 'Low',
-                BANNER_MEAL_STD   => 'Standard',
-                BANNER_MEAL_HIGH  => 'High',
-                BANNER_MEAL_SUPER => 'Super',
-                BANNER_MEAL_NONE  => 'None',
-                // 4 Week Meal Plan Removed according to ticket #709
-                // BANNER_MEAL_4WEEK => 'Summer (4 weeks)',
-                BANNER_MEAL_5WEEK => 'Summer (5 weeks)'));
-        $form->setLabel('meal_plan', 'Meal plan: ');
-        $form->addCssClass('meal_plan', 'form-control');
-
-        // If the username was passed in, and that student has a meal plan
-        // pre-select the student's chosen meal plan
-        if (isset($this->application)) {
-            $form->setMatch('meal_plan', $this->application->getMealPlan());
-        } else {
-            // Otherwise, select 'standard' meal plan
-            $form->setMatch('meal_plan', BANNER_MEAL_STD);
-        }
-
         // "Assignment Type", see defines.php for declarations
         $form->addDropBox('assignment_type', array(
                 -1                           => 'Choose assignment type...',

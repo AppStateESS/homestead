@@ -82,13 +82,9 @@ class HMS_Bed extends HMS_Item {
                         NQ::simple('hms', hms\NotificationView::ERROR, 'Could not copy assignment for ' . $this->_curr_assignment->asu_username);
                         return;
                     }
-                    // meal option defaults to standard
-                    $meal_option = BANNER_MEAL_STD;
-                    if (!is_null($app)) {
-                        $meal_option = $app->getMealPlan();
-                    }
+
                     $note = "Assignment copied from " . Term::getPrintableCurrentTerm() . " to " . Term::toString($to_term);
-                    HMS_Assignment::assignStudent($student, $to_term, null, $new_bed->id, $meal_option, $note, false, $this->_curr_assignment->getReason());
+                    HMS_Assignment::assignStudent($student, $to_term, null, $new_bed->id, $note, false, $this->_curr_assignment->getReason());
                 } catch (Exception $e) {
                     throw $e;
                 }

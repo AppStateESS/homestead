@@ -11,7 +11,6 @@ class AssignStudentCommand extends Command {
     private $username;
     private $room;
     private $bed;
-    private $mealPlan;
     private $moveConfirmed;
     private $assignmentType;
     private $notes;
@@ -27,10 +26,6 @@ class AssignStudentCommand extends Command {
 
     public function setBed($bed){
         $this->bed = $bed;
-    }
-
-    public function setMealPlan($plan){
-        $this->mealPlan = $plan;
     }
 
     public function setMoveConfirmed($move){
@@ -59,10 +54,6 @@ class AssignStudentCommand extends Command {
 
         if(isset($this->bed)){
             $vars['bed'] = $this->bed;
-        }
-
-        if(isset($this->mealPlan)){
-            $vars['meal_plan'] = $this->mealPlan;
         }
 
         if(isset($this->moveConfirmed)){
@@ -158,7 +149,6 @@ class AssignStudentCommand extends Command {
                 $moveConfirmCmd->setUsername($username);
                 $moveConfirmCmd->setRoom($context->get('room'));
                 $moveConfirmCmd->setBed($context->get('bed'));
-                $moveConfirmCmd->setMealPlan($context->get('meal_plan'));
                 $moveConfirmCmd->setAssignmentType($assignmentType);
                 $moveConfirmCmd->setNotes($context->get('note'));
                 $moveConfirmCmd->redirect();
@@ -223,9 +213,9 @@ class AssignStudentCommand extends Command {
         $bed = $context->get('bed');
         try {
             if(isset($bed) && $bed != 0){
-                HMS_Assignment::assignStudent($student, $term, NULL, $bed, $context->get('meal_plan'), $context->get('note'), false, $context->get('assignment_type'));
+                HMS_Assignment::assignStudent($student, $term, NULL, $bed, $context->get('note'), false, $context->get('assignment_type'));
             }else{
-                HMS_Assignment::assignStudent($student, $term, $context->get('room'), NULL, $context->get('meal_plan'), $context->get('note'), false, $context->get('assignment_type'));
+                HMS_Assignment::assignStudent($student, $term, $context->get('room'), NULL, $context->get('note'), false, $context->get('assignment_type'));
             }
         } catch(AssignmentException $e) {
             NQ::simple('hms', hms\NotificationView::ERROR, 'Assignment error: ' . $e->getMessage());
@@ -322,6 +312,14 @@ class AssignStudentCommand extends Command {
 
     private function setupMealPlan(Student $student, $term, HousingApplication $housingApplication = null)
     {
+        // Check for a meal plan, if one exists, don't do anything
+        $mealPlan = MealPlanFactory::getMealByBannerIdTerm($student->getBannerId(), $term);
+
+        if($mealPlan !== null){
+            // Meal plan exists, so we're done here
+            return;
+        }
+
         // If the student doesn't have a housing Application, then they're getting the standard plan
         if($housingApplication === null){
             $planCode = MealPlan::BANNER_MEAL_STD;

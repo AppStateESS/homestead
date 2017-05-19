@@ -40,14 +40,17 @@ abstract class AssignmentStrategy {
 
         // Actually assign the given pairing to the given room
         try{
-            $application = HousingApplication::getApplicationByUser($pair->getStudent1()->getUsername(), $this->term);
+            //$application = HousingApplication::getApplicationByUser($pair->getStudent1()->getUsername(), $this->term);
 
+            /********************
+            // TODO: Handle meal plan
             if(is_null($application)){
                 $student1MealPlan = BANNER_MEAL_STD;
             }else{
                 $student1MealPlan = $application->getMealPlan();
             }
-            HMS_Assignment::assignStudent($pair->getStudent1(), $this->term, $room->id, NULL, $student1MealPlan, 'Auto-assigned', false, ASSIGN_FR_AUTO);
+            */
+            HMS_Assignment::assignStudent($pair->getStudent1(), $this->term, $room->id, NULL, 'Auto-assigned', false, ASSIGN_FR_AUTO);
         }catch(Exception $e){
             echo "Could not assign '{$pair->getStudent1()->getUsername()}': {get_class($e)}: {$e->getMessage()}<br />\n";
         }
@@ -55,14 +58,17 @@ abstract class AssignmentStrategy {
         $pair->setBed1($room->__toString());
 
         try{
-            $application = HousingApplication::getApplicationByUser($pair->getStudent2()->getUsername(), $this->term);
+            //$application = HousingApplication::getApplicationByUser($pair->getStudent2()->getUsername(), $this->term);
 
+            /********************
+            // TODO: Handle meal plan
             if(is_null($application)){
                 $student2MealPlan = BANNER_MEAL_STD;
             }else{
                 $student2MealPlan = $application->getMealPlan();
             }
-            HMS_Assignment::assignStudent($pair->getStudent2(), $this->term, $room->id, NULL, $student2MealPlan, 'Auto-assigned', false, ASSIGN_FR_AUTO);
+            */
+            HMS_Assignment::assignStudent($pair->getStudent2(), $this->term, $room->id, NULL, 'Auto-assigned', false, ASSIGN_FR_AUTO);
         }catch(Exception $e){
             echo "Could not assign '{$pair->getStudent2()->getUsername()}': " . get_class($e) . ": {$e->getMessage()}<br />\n";
         }

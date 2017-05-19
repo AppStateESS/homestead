@@ -326,7 +326,6 @@ class HMS_Assignment extends HMS_Item {
      * @param Integer $term
      * @param Integer $room_id
      * @param Integer $bed_id
-     * @param Integer $meal_plan
      * @param String $notes
      * @param boolean $lottery
      * @param string $reason
@@ -335,7 +334,7 @@ class HMS_Assignment extends HMS_Item {
      * @throws DatabaseException
      * @throws Exception
      */
-    public static function assignStudent(Student $student, $term, $room_id = NULL, $bed_id = NULL, $meal_plan, $notes = "", $lottery = FALSE, $reason)
+    public static function assignStudent(Student $student, $term, $room_id = NULL, $bed_id = NULL, $notes = "", $lottery = FALSE, $reason)
     {
 
         /**
@@ -522,7 +521,6 @@ class HMS_Assignment extends HMS_Item {
         $assignment->term = $term;
         $assignment->letter_printed = 0;
         $assignment->email_sent = 0;
-        $assignment->meal_option = $meal_plan;
         $assignment->reason = $reason;
         $assignment->application_term = $student->getApplicationTerm();
         $assignment->class = $student->getComputedClass($term);
@@ -799,7 +797,6 @@ class HMS_Assignment extends HMS_Item {
             $assignment->term = $term;
             $assignment->letter_printed = 0;
             $assignment->email_sent = 0;
-            $assignment->meal_option = $oldAssignment->meal_option;
             $assignment->reason = $oldAssignment->getReason();
             $assignment->application_term = $studentObj->getApplicationTerm();
             $assignment->class = $studentObj->getComputedClass($term);
