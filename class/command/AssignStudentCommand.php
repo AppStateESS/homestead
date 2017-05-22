@@ -327,6 +327,12 @@ class AssignStudentCommand extends Command {
             $planCode = $housingApplication->getMealPlan();
         }
 
+        // If the term is summer 1 or summer 2, then we always use the summer plan
+        $semester = Term::getTermSem($term);
+        if($semester == TERM_SUMMER1 || $semester == TERM_SUMMER2){
+            $planCode = MealPlan::BANNER_MEAL_SUMMER;
+        }
+
         // If the student selected the 'none' plan, then we're done here
         if($planCode === MealPlan::BANNER_MEAL_NONE){
             return;

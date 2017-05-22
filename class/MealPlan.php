@@ -23,7 +23,7 @@ class MealPlan {
     const BANNER_MEAL_SUPER = '8';
     const BANNER_MEAL_NONE  = '-1'; // NB: This is internal only. Doesn't actully exist in Banner.
 
-    const BANNER_MEAL_5WEEK = 'S5';
+    const BANNER_MEAL_SUMMER = 'S5';
 
 
     // Status strings for $status field
