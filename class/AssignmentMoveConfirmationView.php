@@ -7,18 +7,16 @@ class AssignmentMoveConfirmationView extends hms\View
     private $residenceHall;
     private $room;
     private $bed;
-    private $mealPlan;
     private $assignmentType;
     private $notes;
 
-    public function __construct(Student $student, HMS_Assignment $assignment, $residenceHall, $room, $bed, $mealPlan, $assignmentType, $notes)
+    public function __construct(Student $student, HMS_Assignment $assignment, $residenceHall, $room, $bed, $assignmentType, $notes)
     {
         $this->student = $student;
         $this->assignment = $assignment;
         $this->residenceHall = $residenceHall;
         $this->room = $room;
         $this->bed = $bed;
-        $this->mealPlan = $mealPlan;
         $this->assignmentType = $assignmentType;
         $this->notes = $notes;
     }
@@ -36,7 +34,6 @@ class AssignmentMoveConfirmationView extends hms\View
         $submitCmd->setUsername($this->student->getUsername());
         $submitCmd->setRoom($this->room);
         $submitCmd->setBed($this->bed);
-        $submitCmd->setMealPlan($this->mealPlan);
         $submitCmd->setMoveConfirmed("true");
         $submitCmd->setAssignmentType($this->assignmentType);
         $submitCmd->setNotes($this->notes);
