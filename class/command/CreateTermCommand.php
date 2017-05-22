@@ -36,6 +36,7 @@ class CreateTermCommand extends Command {
             $term = new Term(NULL);
             $term->setTerm($year . $sem);
             $term->setBannerQueue(1);
+            $term->setMealPlanQueue(1);
 
             try{
                 $term->save();
@@ -122,5 +123,3 @@ class CreateTermCommand extends Command {
         $successCmd->redirect();
     }
 }
-
-
