@@ -44,6 +44,33 @@
 			<!-- END BANNER_QUEUE_PROCESS -->
 		</fieldset>
     </div>
+    <div class="col-md-5 col-md-offset-1">
+        <fieldset>
+            <legend>Meal Plan Queue</legend>
+            <p>The Meal Plan Queue for this term is
+                <!-- BEGIN meal_plan_enabled -->{MEAL_PLAN_QUEUE_ENABLED}
+                <strong class="text-success">enabled</strong>.
+                <!-- END meal_plan_enabled -->
+                <!-- BEGIN meal_plan_disabled -->{MEAL_PLAN_QUEUE_DISABLED}
+                <strong class="text-danger">disabled</strong>.
+                <!-- END meal_plan_disabled -->
+            </p>
+
+            <!-- BEGIN meal_plan_disabled -->
+            <p>
+                <a href="{MEAL_PLAN_ENABLE_URI}" class="btn btn-default">Enable Meal Plan Queue</a>
+            </p>
+            <!-- END meal_plan_disabled -->
+
+            <!-- BEGIN meal_plan_process -->
+            <p>
+                There are {MEAL_PLAN_QUEUE_SIZE} meal plans to be sent to Banner.
+                <a href="{PROCESS_MEAL_URI}" class="btn btn-danger">Process &amp; Disable Meal Plan Queue</a>
+            </p>
+            <!-- END meal_plan_process -->
+
+        </fieldset>
+    </div>
 </div>
 <div class="row">
 	<div class="col-md-5">

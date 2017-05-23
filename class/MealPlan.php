@@ -8,12 +8,12 @@
  */
 class MealPlan {
 
-    private $id;
-    private $bannerId;
-    private $term;
-    private $planCode;
-    private $status;
-    private $statusTimestamp;
+    public $id;
+    public $banner_id;
+    public $term;
+    public $meal_plan_code;
+    public $status;
+    public $status_timestamp;
 
 
     // Banner Meal Plan Codes (???)
@@ -57,12 +57,12 @@ class MealPlan {
             throw new \InvalidArgumentException('Missing plan code.');
         }
 
-        $this->bannerId = $bannerId;
+        $this->banner_id = $bannerId;
         $this->term = $term;
-        $this->planCode = $planCode;
+        $this->meal_plan_code = $planCode;
 
         $this->status = MealPlan::STATUS_NEW;
-        $this->statusTimestamp = time();
+        $this->status_timestamp = time();
     }
 
     public function getId(){
@@ -74,7 +74,7 @@ class MealPlan {
     }
 
     public function getBannerId(){
-        return $this->bannerId;
+        return $this->banner_id;
     }
 
     public function getTerm(){
@@ -82,7 +82,7 @@ class MealPlan {
     }
 
     public function getPlanCode(){
-        return $this->planCode;
+        return $this->meal_plan_code;
     }
 
     public function getStatus(){
@@ -94,10 +94,10 @@ class MealPlan {
     }
 
     public function getStatusTimestamp(){
-        return $this->statusTimestamp;
+        return $this->status_timestamp;
     }
 
     public function setStatusTimestamp($timestamp){
-        $this->statusTimestamp = $timestamp;
+        $this->status_timestamp = $timestamp;
     }
 }

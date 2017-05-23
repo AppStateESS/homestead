@@ -109,6 +109,26 @@ class MealPlanFactory {
         return $stmt->fetchAll();
     }
 
+    public static function getQueueSize($term)
+    {
+        if(!isset($term) || is_null($term)){
+            throw new \InvalidArgumentException('Missing term.');
+        }
+
+        $db = PdoFactory::getPdoInstance();
+
+        $query = "SELECT count(*) FROM hms_meal_plan WHERE term = :term AND status = :status";
+
+        $stmt = $db->prepare($query);
+
+        $stmt->execute(array('term' => $term,
+                            'status' => MealPlan::STATUS_NEW));
+
+        $result = $stmt->fetch();
+        
+        return $result[0];
+    }
+
     /**
      * Saves (creates or updates) a MealPlan object to the database.
      *

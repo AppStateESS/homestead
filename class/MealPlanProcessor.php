@@ -36,7 +36,7 @@ class MealPlanProcessor {
         // Use the SOAP Client to send the meal plan
         // If this fails, it'll throw an exception. We don't catch it here, so it
         // can be handeled by the calling method/interface.
-        $soap->createMealPlan($mealPlan->getBannerId(), $mealPlan->getTerm(), $mealPlan->getPlanCode());
+        $soapClient->createMealPlan($mealPlan->getBannerId(), $mealPlan->getTerm(), $mealPlan->getPlanCode());
 
         // Update the meal plan's status and timestamp
         $mealPlan->setStatus(MealPlan::STATUS_SENT);

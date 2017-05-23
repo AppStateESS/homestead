@@ -67,6 +67,25 @@ class TermEditView extends hms\View {
             $tpl['BANNER_QUEUE_LINK'] = $cmd->getLink('Enable');
         }
 
+        if($term->getMealPlanQueue()){
+            $tpl['MEAL_PLAN_QUEUE_ENABLED'] = '';
+
+            $count = MealPlanFactory::getQueueSize($term->getTerm());
+
+            $tpl['MEAL_PLAN_QUEUE_SIZE'] = $count;
+
+            // Show process & disable button
+            $processMealCmd = CommandFactory::getCommand('ProcessMealPlanQueue');
+            $tpl['PROCESS_MEAL_URI'] = $processMealCmd->getUri();
+        } else {
+            // Queue is disabled
+            $tpl['MEAL_PLAN_QUEUE_DISABLED'] = '';
+
+            // Show enable button
+            $enableCmd = CommandFactory::getCommand('EnableMealPlanQueue');
+            $tpl['MEAL_PLAN_ENABLE_URI'] = $enableCmd->getUri();
+        }
+
         // Terms and Conditions
         PHPWS_Core::initModClass('hms', 'TermsConditionsAdminView.php');
         $tcav = new TermsConditionsAdminView($this->term);
