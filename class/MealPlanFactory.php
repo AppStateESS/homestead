@@ -13,34 +13,43 @@ PHPWS_Core::initModClass('hms', 'MealPlanRestored.php');
 class MealPlanFactory {
 
 
-    /**
-     * Creates a new MealPlan object based on a given HousingApplication.
-     *
-     * @param HousingApplication $application Housing Application to base this meal plan on (student id, term, and selected meal plan)
-     * @return MealPlan
-     */
-    // public static function newMealPlanViaApplication(HousingApplication $application)
-    // {
-    //     $planCode = $housingApplication->getMealPlan();
-    //
-    //     // If the student selected the 'none' plan, then we're done here
-    //     if($planCode === MealPlan::BANNER_MEAL_NONE){
-    //         return null;
-    //     }
-    //
-    //     return new MealPlan($application->getBannerId(), $application->getTerm(), $planCode);
-    // }
 
-    // public static function newMealPlanViaStudentTerm(Student $student, $term)
-    // {
-    //     // Check for a housing application for this student in this term
-    //
-    //     // If no housing application, student gets the standard meal plan
-    //
-    //     // If selected 'none' plan on application, then we're done
-    //
-    //
-    // }
+
+    /**
+     * Creates a meal plan given a Student, term, and (optionally) a Housing Application.
+     * If no HousingApplication is given, the student gets the Standard level meal plan.
+     * Summer terms always use the Summer meal plan. If the student selected "none" meal option,
+     * the we return null.
+     *
+     * NB: Does not check to see if a student has an existing plan. This method always makes a new MealPlan object.
+     *
+     * @param Student $student
+     * @param int $term
+     * @param HousingApplication|null $application
+     * @return MealPlan|null
+     */
+    public static function createPlan(Student $student, $term, HousingApplication $application = null)
+    {
+        if($application === null){
+            $planCode = MealPlan::BANNER_MEAL_STD;
+        } else {
+            $planCode = $application->getMealPlan();
+        }
+
+        // If the term is summer 1 or summer 2, then we always use the summer plan
+        $semester = Term::getTermSem($term);
+        if($semester == TERM_SUMMER1 || $semester == TERM_SUMMER2){
+            $planCode = MealPlan::BANNER_MEAL_SUMMER;
+        }
+
+        // If the student selected the 'none' plan, then we're done here
+        if($planCode === MealPlan::BANNER_MEAL_NONE){
+            return null;
+        }
+
+        // Make a new MealPlan object and return it
+        return new MealPlan($student->getBannerId(), $term, $planCode);
+    }
 
     /**
      * Returns a MealPlanRestored object from the database given a banner id and term.
@@ -125,7 +134,7 @@ class MealPlanFactory {
                             'status' => MealPlan::STATUS_NEW));
 
         $result = $stmt->fetch();
-        
+
         return $result[0];
     }
 

@@ -320,26 +320,8 @@ class AssignStudentCommand extends Command {
             return;
         }
 
-        // If the student doesn't have a housing Application, then they're getting the standard plan
-        if($housingApplication === null){
-            $planCode = MealPlan::BANNER_MEAL_STD;
-        } else {
-            $planCode = $housingApplication->getMealPlan();
-        }
-
-        // If the term is summer 1 or summer 2, then we always use the summer plan
-        $semester = Term::getTermSem($term);
-        if($semester == TERM_SUMMER1 || $semester == TERM_SUMMER2){
-            $planCode = MealPlan::BANNER_MEAL_SUMMER;
-        }
-
-        // If the student selected the 'none' plan, then we're done here
-        if($planCode === MealPlan::BANNER_MEAL_NONE){
-            return;
-        }
-
         // Make a new MealPlan object
-        $mealPlan = new MealPlan($student->getBannerId(), $term, $planCode);
+        $mealPlan = MealPlanFactory::createPlan($student, $term, $housingApplication);
 
         // Process the meal plan, if needed
         $soap = SOAP::getInstance(UserStatus::getUsername(), SOAP::ADMIN_USER);

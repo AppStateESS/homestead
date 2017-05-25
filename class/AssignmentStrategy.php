@@ -5,10 +5,13 @@ PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 abstract class AssignmentStrategy {
 
     protected $term;
+    private $soap;
 
     public function __construct($term)
     {
         $this->term  = $term;
+
+        $this->soapClient = SOAP::getInstance(UserStatus::getUsername(), SOAP::ADMIN_USER);
     }
 
     public abstract function doAssignment($pair);
@@ -40,16 +43,6 @@ abstract class AssignmentStrategy {
 
         // Actually assign the given pairing to the given room
         try{
-            //$application = HousingApplication::getApplicationByUser($pair->getStudent1()->getUsername(), $this->term);
-
-            /********************
-            // TODO: Handle meal plan
-            if(is_null($application)){
-                $student1MealPlan = BANNER_MEAL_STD;
-            }else{
-                $student1MealPlan = $application->getMealPlan();
-            }
-            */
             HMS_Assignment::assignStudent($pair->getStudent1(), $this->term, $room->id, NULL, 'Auto-assigned', false, ASSIGN_FR_AUTO);
         }catch(Exception $e){
             echo "Could not assign '{$pair->getStudent1()->getUsername()}': {get_class($e)}: {$e->getMessage()}<br />\n";
@@ -57,23 +50,42 @@ abstract class AssignmentStrategy {
 
         $pair->setBed1($room->__toString());
 
-        try{
-            //$application = HousingApplication::getApplicationByUser($pair->getStudent2()->getUsername(), $this->term);
+        // Check for a meal plan, create and queue a new meal plan if needed
+        $existingMealPlan1 = MealPlanFactory::getMealByBannerIdTerm($pair->getStudent1()->getBannerID(), $this->term);
 
-            /********************
-            // TODO: Handle meal plan
-            if(is_null($application)){
-                $student2MealPlan = BANNER_MEAL_STD;
-            }else{
-                $student2MealPlan = $application->getMealPlan();
-            }
-            */
+        if($existingMealPlan1 !== null){
+            // Setup the meal plan for student 1
+            $application = HousingApplicationFactory::getApplicationByStudent($pair->getStudent1(), $this->term);
+
+            $plan1 = MealPlanFactory::createPlan($pair->getStudent1(), $this->term, $application);
+            MealPlanProcessor::queueMealPlan($plan1, $this->soapClient);
+        }
+
+
+        try{
+
+        } catch(\Exception $e){
+            echo "Exception while creating meal plan for {$pair->getStudent1()->getBannerId()}\n";
+        }
+
+        try{
             HMS_Assignment::assignStudent($pair->getStudent2(), $this->term, $room->id, NULL, 'Auto-assigned', false, ASSIGN_FR_AUTO);
         }catch(Exception $e){
             echo "Could not assign '{$pair->getStudent2()->getUsername()}': " . get_class($e) . ": {$e->getMessage()}<br />\n";
         }
 
         $pair->setBed2($room->__toString());
+
+        // Check for a meal plan, create and queue a new meal plan if needed
+        $existingMealPlan2 = MealPlanFactory::getMealByBannerIdTerm($pair->getStudent2()->getBannerID(), $this->term);
+
+        if($existingMealPlan2 !== null){
+            // Setup the meal plan for student 1
+            $application = HousingApplicationFactory::getApplicationByStudent($pair->getStudent2(), $this->term);
+
+            $plan2 = MealPlanFactory::createPlan($pair->getStudent2(), $this->term, $application);
+            MealPlanProcessor::queueMealPlan($plan2, $this->soapClient);
+        }
     }
 
     // TODO: this, better?
