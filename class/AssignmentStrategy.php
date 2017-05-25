@@ -5,13 +5,10 @@ PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 abstract class AssignmentStrategy {
 
     protected $term;
-    private $soap;
 
     public function __construct($term)
     {
         $this->term  = $term;
-
-        $this->soapClient = SOAP::getInstance(UserStatus::getUsername(), SOAP::ADMIN_USER);
     }
 
     public abstract function doAssignment($pair);
@@ -58,7 +55,7 @@ abstract class AssignmentStrategy {
             $application = HousingApplicationFactory::getApplicationByStudent($pair->getStudent1(), $this->term);
 
             $plan1 = MealPlanFactory::createPlan($pair->getStudent1(), $this->term, $application);
-            MealPlanProcessor::queueMealPlan($plan1, $this->soapClient);
+            MealPlanFactory::saveMealPlan($plan1);
         }
 
 
@@ -84,7 +81,7 @@ abstract class AssignmentStrategy {
             $application = HousingApplicationFactory::getApplicationByStudent($pair->getStudent2(), $this->term);
 
             $plan2 = MealPlanFactory::createPlan($pair->getStudent2(), $this->term, $application);
-            MealPlanProcessor::queueMealPlan($plan2, $this->soapClient);
+            MealPlanFactory::saveMealPlan($plan2);
         }
     }
 
