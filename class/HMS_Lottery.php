@@ -409,7 +409,7 @@ class HMS_Lottery {
         return $result;
     }
 
-    public static function confirm_roommate_request($username, $requestId, $meal_plan)
+    public static function confirm_roommate_request($username, $requestId)
     {
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
@@ -442,8 +442,7 @@ class HMS_Lottery {
         $requestor = StudentFactory::getStudentByUsername($invite['requestor'], $term);
 
         // Actually make the assignment
-        // TODO: Handle meal plan changes
-        HMS_Assignment::assignStudent($student, $term, null, $invite['bed_id'], $meal_plan, 'Confirmed roommate invite', true, ASSIGN_LOTTERY);
+        HMS_Assignment::assignStudent($student, $term, null, $invite['bed_id'], 'Confirmed roommate invite', true, ASSIGN_LOTTERY);
 
         // return successfully
         HMS_Email::send_roommate_confirmation($student, $requestor);
