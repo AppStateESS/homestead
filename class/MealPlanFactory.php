@@ -173,4 +173,24 @@ class MealPlanFactory {
             $mealPlan->setId($db->lastInsertId('hms_meal_plan_seq'));
         }
     }
+
+    public static function removeMealPlan(MealPlan $mealPlan)
+    {
+        $db = PdoFactory::getPdoInstance();
+
+        $planId = $mealPlan->getId();
+
+        if($planId === null || !isset($planId)){
+            throw new \InvalidArgumentException('Attempting to delete a MealPlan without a valid id.');
+        }
+
+        $query = "DELETE FROM hms_meal_plan WHERE id = :id and banner_id = :bannerId AND term = :term";
+
+        $params = array('id'        => $planId,
+                        'bannerId'  => $mealPlan->getBannerId(),
+                        'term'      => $mealPlan->getTerm()
+                    );
+        $stmt = $db->prepare($query);
+        $stmt->execute($params);
+    }
 }
