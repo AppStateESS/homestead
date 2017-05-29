@@ -103,17 +103,17 @@ class LotteryChooseRoommatesView extends hms\View {
         $floor  = $room->get_parent();
         $hall   = $floor->get_parent();
         if($hall->meal_plan_required == 0){
-            $form->addDropBox('meal_plan', array(BANNER_MEAL_NONE   =>_('None'),
-            BANNER_MEAL_LOW    =>_('Low'),
-            BANNER_MEAL_STD    =>_('Standard'),
-            BANNER_MEAL_HIGH   =>_('High'),
-            BANNER_MEAL_SUPER  =>_('Super')));
+            $form->addDropBox('meal_plan', array(MealPlan::BANNER_MEAL_NONE   =>_('None'),
+            MealPlan::BANNER_MEAL_LOW    =>_('Low'),
+            MealPlan::BANNER_MEAL_STD    =>_('Standard'),
+            MealPlan::BANNER_MEAL_HIGH   =>_('High'),
+            MealPlan::BANNER_MEAL_SUPER  =>_('Super')));
             $form->addCssClass('meal_plan', 'form-control');
         }else{
-            $form->addDropBox('meal_plan', array(BANNER_MEAL_LOW    =>_('Low'),
-            BANNER_MEAL_STD    =>_('Standard'),
-            BANNER_MEAL_HIGH   =>_('High'),
-            BANNER_MEAL_SUPER  =>_('Super')));
+            $form->addDropBox('meal_plan', array(MealPlan::BANNER_MEAL_LOW    =>_('Low'),
+            MealPlan::BANNER_MEAL_STD    =>_('Standard'),
+            MealPlan::BANNER_MEAL_HIGH   =>_('High'),
+            MealPlan::BANNER_MEAL_SUPER  =>_('Super')));
             $form->addCssClass('meal_plan', 'form-control');
         }
 

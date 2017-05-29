@@ -1,5 +1,7 @@
 <?php
 
+PHPWS_Core::initModClass('hms', 'MealPlan.php');
+
 class GetMealPlanDropboxCommand extends Command {
 
     public function getRequestVars(){
@@ -7,12 +9,12 @@ class GetMealPlanDropboxCommand extends Command {
     }
 
     public function execute(CommandContext $context){
-        $options = array(BANNER_MEAL_LOW   => 'Low',
-                BANNER_MEAL_STD   => 'Standard',
-                BANNER_MEAL_HIGH  => 'High',
-                BANNER_MEAL_SUPER => 'Super',
-                BANNER_MEAL_5WEEK => 'Summer (5 Weeks)',
-                BANNER_MEAL_NONE  => 'None'
+        $options = array(MealPlan::BANNER_MEAL_LOW   => 'Low',
+                         MealPlan::BANNER_MEAL_STD   => 'Standard',
+                         MealPlan::BANNER_MEAL_HIGH  => 'High',
+                         MealPlan::BANNER_MEAL_SUPER => 'Super',
+                         MealPlan::BANNER_MEAL_SUMMER => 'Summer (5 Weeks)',
+                         MealPlan::BANNER_MEAL_NONE  => 'None'
         );
         $form = new PHPWS_Form('select_meal');
         $form->addSelect('mealplan', $options);
@@ -22,9 +24,9 @@ class GetMealPlanDropboxCommand extends Command {
         $term = Term::getSelectedTerm();
         if ( (strlen($term) >= 2) &&
                 ( (substr($term, -2) == TERM_SUMMER1) || (substr($term, -2) == TERM_SUMMER2) ) ) {
-            $form->setMatch('mealplan', BANNER_MEAL_5WEEK);
+            $form->setMatch('mealplan', MealPlan::BANNER_MEAL_SUMMER);
         } else {
-            $form->setMatch('mealplan', BANNER_MEAL_STD);
+            $form->setMatch('mealplan', MealPlan::BANNER_MEAL_STD);
         }
         $form->setClass('mealplan', 'form-control');
 
@@ -33,4 +35,3 @@ class GetMealPlanDropboxCommand extends Command {
         exit;
     }
 }
-

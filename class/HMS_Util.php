@@ -252,28 +252,27 @@ class HMS_Util{
 
     public static function formatMealOption($meal)
     {
+        PHPWS_Core::initModClass('hms', 'MealPlan.php');
+
         if(is_null($meal)){
             return 'Unknown';
         }
 
         switch($meal){
-            case BANNER_MEAL_NONE:
+            case MealPlan::BANNER_MEAL_NONE:
                 return 'None';
-            case BANNER_MEAL_LOW:
+            case MealPlan::BANNER_MEAL_LOW:
                 return 'Low';
-            case BANNER_MEAL_STD:
+            case MealPlan::BANNER_MEAL_STD:
                 return 'Standard';
-            case BANNER_MEAL_HIGH:
+            case MealPlan::BANNER_MEAL_HIGH:
                 return 'High';
-            case BANNER_MEAL_SUPER:
+            case MealPlan::BANNER_MEAL_SUPER:
                 return 'Super';
-                // 4 Week Meal Plan Removed according to ticket #709
-                //case BANNER_MEAL_4WEEK:
-                //    return 'Summer (4 weeks)';
-                case BANNER_MEAL_5WEEK:
-                    return 'Summer (5 weeks)';
-                default:
-                    return 'Unknown';
+            case MealPlan::BANNER_MEAL_SUMMER:
+                return 'Summer (5 weeks)';
+            default:
+                return 'Unknown';
         }
     }
 

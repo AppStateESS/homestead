@@ -48,10 +48,10 @@ class ReApplicationOffCampusFormView extends hms\View {
         $form->addCssClass('oncampus_other_reason', 'form-control');
         $form->setLabel('oncampus_other_reason', 'If you chose "Other" above, please explain your need. Include reasons why on-campus housing better meets this need than off-campus options:');
 
-        $mealOptions = array(BANNER_MEAL_LOW => _('Low'), BANNER_MEAL_STD => _('Standard'), BANNER_MEAL_HIGH => _('High'), BANNER_MEAL_SUPER => _('Super'));
+        $mealOptions = array(MealPlan::BANNER_MEAL_LOW => _('Low'), MealPlan::BANNER_MEAL_STD => _('Standard'), MealPlan::BANNER_MEAL_HIGH => _('High'), MealPlan::BANNER_MEAL_SUPER => _('Super'));
         $form->addDropBox('meal_option', $mealOptions);
         $form->setClass('meal_option', 'form-control');
-        $form->setMatch('meal_option', BANNER_MEAL_STD);
+        $form->setMatch('meal_option', MealPlan::BANNER_MEAL_STD);
         $form->addCssClass('meal_option', 'form-control');
 
         $form->addText('number');
@@ -113,13 +113,13 @@ class ReApplicationOffCampusFormView extends hms\View {
         }
         */
 
-        $mealPlans = array(BANNER_MEAL_LOW=>_('Low'),
-                BANNER_MEAL_STD=>_('Standard'),
-                BANNER_MEAL_HIGH=>_('High'),
-                BANNER_MEAL_SUPER=>_('Super'));
+        $mealPlans = array(MealPlan::BANNER_MEAL_LOW=>_('Low'),
+                MealPlan::BANNER_MEAL_STD=>_('Standard'),
+                MealPlan::BANNER_MEAL_HIGH=>_('High'),
+                MealPlan::BANNER_MEAL_SUPER=>_('Super'));
         $form->addDropBox('meal_plan', $mealPlans);
         $form->setLabel('meal_plan', 'Meal plan: ');
-        $form->setMatch('meal_plan', BANNER_MEAL_STD);
+        $form->setMatch('meal_plan', MealPlan::BANNER_MEAL_STD);
 
         $form->addCheck('deposit_check', array('deposit_check'));
         $form->setLabel('deposit_check', 'I understand & acknowledge that if I cancel my License Contract after I am assigned a space in a residence hall my student account will be charged $250.  If I cancel my License Contract after July 1, I will be liable for the entire amount of the on-campus housing fees for the Fall semester.');

@@ -22,6 +22,7 @@ class HousingApplicationConfirmCommand extends Command {
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
+        PHPWS_Core::initModClass('hms', 'MealPlan.php');
 
         PHPWS_Core::initModClass('hms', 'exception/InvalidTermException.php');
 
@@ -88,7 +89,7 @@ class HousingApplicationConfirmCommand extends Command {
         // Hard code a summer meal option for all summer applications.
         // Application for other terms use whatever the student selected
         if($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2){
-            $application->setMealPlan(BANNER_MEAL_5WEEK);
+            $application->setMealPlan(MealPlan::BANNER_MEAL_SUMMER);
         }
 
         $result = $application->save();

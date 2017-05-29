@@ -1,6 +1,7 @@
 <?php
 
 PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
+PHPWS_Core::initModClass('hms', 'MealPlan.php');
 
 class HousingApplicationFormView extends hms\View
 {
@@ -127,24 +128,24 @@ class HousingApplicationFormView extends hms\View
         ***************/
         if ($sem == TERM_FALL || $sem == TERM_SPRING) {
             if ($this->student->getType() == TYPE_FRESHMEN) {
-                $mealOptions = array(BANNER_MEAL_STD => 'Standard', BANNER_MEAL_HIGH => 'High', BANNER_MEAL_SUPER => 'Super');
+                $mealOptions = array(MealPlan::BANNER_MEAL_STD => 'Standard', MealPlan::BANNER_MEAL_HIGH => 'High', MealPlan::BANNER_MEAL_SUPER => 'Super');
             } else {
-                $mealOptions = array(BANNER_MEAL_LOW => _('Low'), BANNER_MEAL_STD => _('Standard'), BANNER_MEAL_HIGH => _('High'), BANNER_MEAL_SUPER => _('Super'));
+                $mealOptions = array(MealPlan::BANNER_MEAL_LOW => _('Low'), MealPlan::BANNER_MEAL_STD => _('Standard'), MealPlan::BANNER_MEAL_HIGH => _('High'), MealPlan::BANNER_MEAL_SUPER => _('Super'));
             }
         } else if ($sem == TERM_SUMMER1 || $sem == TERM_SUMMER2) {
-            $mealOptions = array(BANNER_MEAL_5WEEK => 'Summer 5-Week Plan');
+            $mealOptions = array(MealPlan::BANNER_MEAL_SUMMER => 'Summer 5-Week Plan');
         }
 
         $form->addDropBox('meal_option', $mealOptions);
         $form->setClass('meal_option', 'form-control');
-        $form->setMatch('meal_option', BANNER_MEAL_STD);
+        $form->setMatch('meal_option', MealPlan::BANNER_MEAL_STD);
 
         $form->addCssClass('meal_option', 'form-control');
 
         if (!is_null($this->existingApplication)) {
             $form->setMatch('meal_option', $this->existingApplication->getMealPlan());
         } else {
-            $form->setMatch('meal_option', BANNER_MEAL_STD);
+            $form->setMatch('meal_option', MealPlan::BANNER_MEAL_STD);
         }
 
         /*********************

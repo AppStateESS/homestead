@@ -17,12 +17,12 @@ class JSONGetOptionsCommand
         $options = array();
 
         $options['meal_plan'] = array(
-        array('id' => BANNER_MEAL_LOW, 'value' => 'Low'),
-        array('id' => BANNER_MEAL_STD, 'value' => 'Standard'),
-        array('id' => BANNER_MEAL_HIGH, 'value' => 'High'),
-        array('id' => BANNER_MEAL_SUPER, 'value' => 'Super'),
-        array('id' => BANNER_MEAL_NONE, 'value' => 'None'),
-        array('id' => BANNER_MEAL_5WEEK, 'value' => 'Summer (5 weeks)'));
+        array('id' => MealPlan::BANNER_MEAL_LOW, 'value' => 'Low'),
+        array('id' => MealPlan::BANNER_MEAL_STD, 'value' => 'Standard'),
+        array('id' => MealPlan::BANNER_MEAL_HIGH, 'value' => 'High'),
+        array('id' => MealPlan::BANNER_MEAL_SUPER, 'value' => 'Super'),
+        array('id' => MealPlan::BANNER_MEAL_NONE, 'value' => 'None'),
+        array('id' => MealPlan::BANNER_MEAL_SUMMER, 'value' => 'Summer (5 weeks)'));
 
         $options['assignment_type'] = array(
         array('id' => ASSIGN_ADMIN, 'value' => 'Administrative'),
@@ -50,7 +50,7 @@ class JSONGetOptionsCommand
         array('id' => ASSIGN_RHA, 'value' => 'RHA/NRHH'),
         array('id' => ASSIGN_SCHOLARS, 'value' => 'Diversity &amp; Plemmons Scholars'));
 
-        $options['default_plan'] = BANNER_MEAL_STD;
+        $options['default_plan'] = MealPlan::BANNER_MEAL_STD;
         $options['default_assignment'] = ASSIGN_ADMIN;
 
         $context->setContent(json_encode($options));
