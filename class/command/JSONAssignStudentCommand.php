@@ -22,7 +22,6 @@ class JSONAssignStudentCommand
         $username = $context->get('username');
         $banner_id = (int) $context->get('banner_id');
         $reason = $context->get('reason');
-        $meal_plan = $context->get('meal_plan');
         $bed_id = $context->get('bed_id');
         $term = Term::getSelectedTerm();
 
@@ -36,13 +35,22 @@ class JSONAssignStudentCommand
                 return;
             }
             try {
-                HMS_Assignment::assignStudent($student, $term, null, $bed_id, $meal_plan, null, null, $reason);
+                HMS_Assignment::assignStudent($student, $term, null, $bed_id, null, null, $reason);
+
+                // Setup a meal plan
+                $application = HousingApplicationFactory::getAppByStudent($student, $term);
+
+                $mealPlan = MealPlanFactory::getMealByBannerIdTerm($student->getBannerId(), $term);
+                if($mealPlan === null){
+                    $plan = MealPlanFactory::createPlan($student, $term, $application);
+                    MealPlanFactory::saveMealPlan($plan);
+                }
             } catch (AssignmentException $e) {
                 $context->setContent(json_encode(array('status'=>'failure', 'message'=>$e->getMessage())));
                 return;
             }
             $message = $student->first_name . ' ' . $student->last_name;
-            
+
             $context->setContent(json_encode(array('status' => 'success', 'message'=>$message, 'student'=>$student)));
         } catch (\StudentNotFoundException $e) {
             $context->setContent(json_encode(array('status' => 'failure', 'message' => $e->getMessage())));

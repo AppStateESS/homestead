@@ -16,14 +16,6 @@ class JSONGetOptionsCommand
     {
         $options = array();
 
-        $options['meal_plan'] = array(
-        array('id' => MealPlan::BANNER_MEAL_LOW, 'value' => 'Low'),
-        array('id' => MealPlan::BANNER_MEAL_STD, 'value' => 'Standard'),
-        array('id' => MealPlan::BANNER_MEAL_HIGH, 'value' => 'High'),
-        array('id' => MealPlan::BANNER_MEAL_SUPER, 'value' => 'Super'),
-        array('id' => MealPlan::BANNER_MEAL_NONE, 'value' => 'None'),
-        array('id' => MealPlan::BANNER_MEAL_SUMMER, 'value' => 'Summer (5 weeks)'));
-
         $options['assignment_type'] = array(
         array('id' => ASSIGN_ADMIN, 'value' => 'Administrative'),
         array('id' => ASSIGN_APPEALS, 'value' => 'Appeals'),

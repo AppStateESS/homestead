@@ -17,24 +17,24 @@ class JSONGetRoomsCommand
         $newrows = array();
         $pdo = PdoFactory::getPdoInstance();
         $floor_id = (int) $context->get('floorId');
-        $query = <<<EOF
-select	room.id as room_id,
-	room.room_number,
-	room.gender_type,
-	bed.id as bed_id,
-	bed.bedroom_label,
-	bed.bed_letter,
-	assign.banner_id,
-	assign.meal_option,
-        assign.asu_username
-from  	hms_room as room
-	full join
-		hms_bed as bed on room.id=bed.room_id
-	full join
-		hms_assignment as assign on bed.id=assign.bed_id
-where	room.floor_id = :floor_id
-order by room_number asc, bedroom_label, bed_letter;
-EOF;
+        $query = "SELECT
+                    room.id as room_id,
+                    room.room_number,
+                    room.gender_type,
+                    bed.id as bed_id,
+                    bed.bedroom_label,
+                    bed.bed_letter,
+                    assign.banner_id,
+                    assign.asu_username
+                FROM
+                    hms_room as room
+                FULL JOIN
+                    hms_bed as bed on room.id=bed.room_id
+                FULL JOIN
+                    hms_assignment as assign on bed.id=assign.bed_id
+                WHERE
+                    room.floor_id = :floor_id
+                ORDER BY room_number asc, bedroom_label, bed_letter";
 
         $prep = $pdo->prepare($query);
         $prep->execute(array(':floor_id' => $floor_id));

@@ -3,17 +3,9 @@ var AssignByFloor = React.createClass({
     getInitialState: function () {
         return {
             hallList: [],
-            mealPlanOptions: [],
             assignmentOptions: [],
-            currentMealPlan: 0,
             currentAssignmentType: 0
         };
-    },
-
-    updateMealPlan: function(value) {
-        this.setState({
-            currentMealPlan: value
-        });
     },
 
     updateAssignmentType: function(value) {
@@ -38,9 +30,7 @@ var AssignByFloor = React.createClass({
             }, function(data){
                 this.setState({
                     hallList: hallList,
-                    mealPlanOptions: data.meal_plan,
                     assignmentOptions: data.assignment_type,
-                    currentMealPlan: data.default_plan,
                     currentAssignmentType: data.default_assignment
                 });
 
@@ -51,8 +41,8 @@ var AssignByFloor = React.createClass({
     render: function () {
         return (
             <div>
-                <Options {...this.state} updateMealPlan={this.updateMealPlan} updateAssignmentType={this.updateAssignmentType} />
-                <Halls hallList={this.state.hallList} mealPlan={this.state.currentMealPlan} assignmentType={this.state.currentAssignmentType} />
+                <Options {...this.state} updateAssignmentType={this.updateAssignmentType} />
+                <Halls hallList={this.state.hallList}  assignmentType={this.state.currentAssignmentType} />
             </div>
         );
     }
@@ -61,22 +51,13 @@ var AssignByFloor = React.createClass({
 var Options = React.createClass({
     getInitialState: function () {
         return {
-            currentMealPlan: 0,
             currentAssignmentType: 0
         };
     },
 
     componentWillReceiveProps: function(nextProps) {
         this.setState({
-            currentMealPlan: nextProps.currentMealPlan,
             currentAssignmentType: nextProps.currentAssignmentType
-        });
-    },
-
-    updateMealPlan: function(event) {
-        this.props.updateMealPlan(event.target.value);
-        this.setState({
-            currentMealPlan: event.target.value
         });
     },
 
@@ -95,10 +76,6 @@ var Options = React.createClass({
                     <h3 className="panel-title">Assignment settings</h3>
                 </div>
                 <div className="row panel-body">
-                    <div className="col-sm-6 form-group">
-                        <label htmlFor="mealPlan">Meal&nbsp;Plan:</label>
-                        <DropSelect options={this.props.mealPlanOptions} selectId='mealPlan' default={this.state.currentMealPlan} ref="mealPlan" onChange={this.updateMealPlan} />
-                    </div>
                     <div className="col-sm-6 form-group">
                         <label htmlFor="assignmentType">Assignment&nbsp;type:</label>
                         <DropSelect options={this.props.assignmentOptions}  selectId='assignmentType' default={this.state.currentAssignmentType} ref="assignmentType" onChange={this.updateAssignmentType} />
@@ -172,7 +149,7 @@ var Halls = React.createClass({
         return (
             <div>
                 <DropDown floorList={this.state.floorList} icon={this.state.icon} listing={this.props.hallList} onClick={this.updateHall} selected={this.state.selected} title={this.state.hallName}/>
-                <Floors key={this.state.timestamp} floorDisabled={this.state.floorDisabled} floorList={this.state.floors} mealPlan={this.props.mealPlan} assignmentType={this.props.assignmentType} />
+                <Floors key={this.state.timestamp} floorDisabled={this.state.floorDisabled} floorList={this.state.floors} assignmentType={this.props.assignmentType} />
             </div>
         );
     }
@@ -231,7 +208,7 @@ var Floors = React.createClass({
             <div>
                 <DropDown disabled={this.props.floorDisabled} icon={this.state.icon} listing={this.props.floorList} onClick={this.updateFloor} selected={this.state.selected} title={this.state.floorName}/>
                 <div className="room-list">
-                    <Rooms roomList={this.state.rooms} display={this.state.displayStatus} mealPlan={this.props.mealPlan} assignmentType={this.props.assignmentType}/>
+                    <Rooms roomList={this.state.rooms} display={this.state.displayStatus} assignmentType={this.props.assignmentType}/>
                 </div>
             </div>
         );
@@ -254,7 +231,7 @@ var Rooms = React.createClass({
                 <div>
                     {this.props.roomList.map(function (room, i) {
                         return (
-                            <Room key={i} room={room} mealPlan={this.props.mealPlan} assignmentType={this.props.assignmentType} tab={i} />
+                            <Room key={i} room={room} assignmentType={this.props.assignmentType} tab={i} />
                         );
                     }, this)}
                 </div>
@@ -280,7 +257,7 @@ var Room = React.createClass({
                 {this.props.room.beds.map(function (bed, i) {
                     bed.tab = i + (this.props.tab * bedCount) + 1;
                     return (
-                        <Bed bed={bed} key={i} mealPlan={this.props.mealPlan} assignmentType={this.props.assignmentType}/>
+                        <Bed bed={bed} key={i} assignmentType={this.props.assignmentType}/>
                     );
                 }, this)}
             </div>
@@ -313,7 +290,6 @@ var Bed = React.createClass({
         var tempBed = this.state.bed;
         tempBed.asu_username = student.username;
         tempBed.banner_id = student.banner_id;
-        tempBed.meal_option = this.props.mealPlan;
         tempBed.student = student.first_name + ' ' + student.last_name;
         this.setState({
             bed : tempBed
@@ -327,7 +303,6 @@ var Bed = React.createClass({
             action: 'JSONAssignStudent',
             banner_id: banner_id,
             reason: this.props.assignmentType,
-            meal_plan: this.props.mealPlan,
             bed_id: this.props.bed.bed_id
         }, function (data) {
             if (data.status == 'success') {
@@ -349,7 +324,6 @@ var Bed = React.createClass({
             action: 'JSONAssignStudent',
             username: username,
             reason: this.props.assignmentType,
-            meal_plan: this.props.mealPlan,
             bed_id: this.props.bed.bed_id
         }, function (data) {
             if (data.status == 'success') {

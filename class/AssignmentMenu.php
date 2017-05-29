@@ -21,11 +21,9 @@ class AssignmentMenu extends CommandMenu {
                 $hallOverviewCmd->setOnSelectCmd(CommandFactory::getCommand('HallOverview'));
                 $this->addCommand('Hall Overview', $hallOverviewCmd);
             }
-            
+
             if(Current_User::allow('hms', 'assign_by_floor')){
                 $floorAssignCmd = CommandFactory::getCommand('AssignByFloor');
-                $floorAssignCmd->setOnSelectCmd(CommandFactory::getCommand('ShowFloorAssignmentView'));
-                $floorAssignCmd->setTitle('Assign Students to Floor');
                 $this->addCommand('Assign students by floor', $floorAssignCmd);
             }
 
