@@ -44,7 +44,7 @@ class CreateTermView extends hms\View {
         $form->setLabel('term_drop','Semester: ');
         $form->addCssClass('term_drop', 'form-control');
 
-        $vars = array('struct' => 'Hall structure', 'assign' => 'Assignments', 'role' => 'Roles');
+        $vars = array('struct' => 'Hall structure', 'assign' => 'Assignments (and Meal Plans)', 'role' => 'Roles');
         $form->addCheckAssoc('copy_pick', $vars);
         $form->addCssClass('', 'form-control');
         $tpl['COPY_PICK_LABEL'] = 'What to copy:';
