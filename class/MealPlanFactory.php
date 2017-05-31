@@ -88,6 +88,9 @@ class MealPlanFactory {
             return null;
         }
 
+        // 'meal_plan_code' is a char(2) field, so it always comes out as two characters. Trim it.
+        $result->meal_plan_code = trim($result->meal_plan_code);
+
         return $result;
     }
 

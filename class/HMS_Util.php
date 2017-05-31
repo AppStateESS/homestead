@@ -257,7 +257,7 @@ class HMS_Util{
         if(is_null($meal)){
             return 'Unknown';
         }
-
+        
         switch($meal){
             case MealPlan::BANNER_MEAL_NONE:
                 return 'None';

@@ -81,18 +81,29 @@
         </div>
         <!-- END review -->
 
-        <!-- BEGIN meal_plan -->
         <h3>Preferences</h3>
+
         <div class="form-group">
             <label for="{MEAL_OPTION_ID}">Meal Plan:</label>
             <div class="row">
 
+                <!-- BEGIN meal_plan -->
                 <div class="col-md-3">
                     {MEAL_OPTION}
                 </div>
+                <!-- END meal_plan -->
+
+                <!-- BEGIN meal_plan_exists -->
+                <div class="col-md-6">
+                    <p>{EXISTING_MEAL_PLAN}</p>
+                    <p class="help-block">You meal plan has been choice has been sent to Food Services. Contact <a href="https://foodservices.appstate.edu/" target="_blank">Food Services</a> if you'd like to change it.</p>
+                </div>
+                <!-- END meal_plan_exists -->
+
             </div>
         </div>
-        <!-- END meal_plan -->
+
+
         <!-- BEGIN preferences -->
         <div class="form-group">
             <label for="{LIFESTYLE_OPTION_ID}">Lifestyle Option:</label>
