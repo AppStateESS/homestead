@@ -392,6 +392,9 @@ define('ACTIVITY_CONTRACT_SENT_EMAIL',          80); // Envelope sent via email
 define('ACTIVITY_CONTRACT_STUDENT_SIGN_EMBEDDED',81);
 define('ACTIVITY_CONTRACT_REMOVED_VOIDED',      82);
 
+
+define('ACTIVITY_MEAL_PLAN_SENT',               83); // Meal plan reported to Banner
+
 /**
  * Errors
  */

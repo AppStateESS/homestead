@@ -1,5 +1,8 @@
 <?php
 
+PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+
 class ProcessMealPlanQueueCommand extends Command {
 
     public function getRequestVars()
@@ -56,6 +59,11 @@ class ProcessMealPlanQueueCommand extends Command {
                 $plan->setStatusTimestamp(time());
                 MealPlanFactory::saveMealPlan($plan);
             }
+
+            $student = StudentFactory::getStudentByBannerId($plan->getBannerId(), $term->term);
+
+            // Log that the meal plan was sent to Banner
+            HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_MEAL_PLAN_SENT, UserStatus::getUsername(), 'Meal Plan sent to Banner: ' . HMS_Util::formatMealOption($plan->getPlanCode()));
         }
 
         $term->setMealPlanQueue(0);
