@@ -4,6 +4,7 @@ PHPWS_Core::initModClass('hms', 'SOAP.php');
 PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
 PHPWS_Core::initModClass('hms', 'exception/BannerException.php');
 PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
+PHPWS_Core::initModClass('hms', 'exception/MealPlanExistsException.php');
 
 /**
  * PhpSOAP Class - Singleton implementation of SOAP class.
@@ -311,7 +312,12 @@ class PhpSOAP extends SOAP
             throw new SOAPException($e->getMessage(), $e->getCode(), 'CreateMealPlan', $params);
         }
 
-        if($response->basic_response->error_num !== "0"){
+        if($response->basic_response->error_num === 1403){
+            SOAP::logSoap('createMealPlan', 'Already exists', $params, $response->basic_response->error_num);
+            throw new MealPlanExistsException('Meal plan already exists.', $response->basic_response->error_num);
+        }
+
+        if($response->basic_response->error_num !== 0){
             SOAP::logSoap('createMealPlan', 'failed', $params);
             throw new BannerException('Error creating meal plan.', $response->basic_response->error_num, 'CreateMealPlan', $params);
         }

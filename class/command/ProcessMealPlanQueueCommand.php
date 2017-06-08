@@ -49,8 +49,13 @@ class ProcessMealPlanQueueCommand extends Command {
         // Process the queue of meal plans, one item at a time
         // Catch exceptions and continue the loop if anything fails
         foreach($mealPlans as $plan){
-            // TODO catch exceptions
-            MealPlanProcessor::processMealPlan($plan, $soapClient);
+            try {
+                MealPlanProcessor::processMealPlan($plan, $soapClient);
+            }catch(MealPlanExistsException $e){
+                $plan->setStatus(MealPlan::STATUS_SENT);
+                $plan->setStatusTimestamp(time());
+                MealPlanFactory::saveMealPlan($plan);
+            }
         }
 
         $term->setMealPlanQueue(0);
