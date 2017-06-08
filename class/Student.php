@@ -75,8 +75,13 @@ class Student
         } else {
             $firstName = $this->getFirstName();
         }
+        if (isset($this->middle_name) && $this->middle_name != $this->preferred_name) {
+            $middleName = $this->getMiddleName();
+        } else {
+            $middleName = null;
+        }
 
-        return $this->getLastName() . ', ' . $firstName . ' ' . $this->getMiddleName();
+        return $this->getLastName() . ', ' . $firstName . ' ' . $middleName;
     }
 
     public function getPrintableGender()
