@@ -2,7 +2,7 @@ CREATE TABLE hms_meal_plan (
     id                  integer NOT NULL,
     banner_id           integer NOT NULL,
     term                integer NOT NULL REFERENCES hms_term(term),
-    meal_plan_code      character(2) NOT NULL,
+    meal_plan_code      character varying NOT NULL,
     status              character varying NOT NULL,
     status_timestamp    integer NOT NULL,
     primary key(id)
