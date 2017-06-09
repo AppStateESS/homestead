@@ -5,6 +5,7 @@
         "swiftmailer/swiftmailer": "5.0.1",
         "michelf/php-markdown": "1.3",
         "ioki/wkhtmltopdf-amd64-centos6": "0.12.2.1",
-        "setasign/fpdi-fpdf": "1.5.4"
+        "setasign/fpdi-fpdf": "1.5.4",
+        "ralouphie/getallheaders": "^2.0"
     }
 }
