@@ -26,7 +26,7 @@ class EmergencyContactFormView extends hms\View {
         $submitCmd->initForm($form);
 
         javascript('jquery');
-        javascript('modules/hms/EmailValidation');
+        javascriptMod('hms', 'EmailValidation');
 
         $tpl = array();
 

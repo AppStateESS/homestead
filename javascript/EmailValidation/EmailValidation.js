@@ -69,14 +69,12 @@ function missing_validation_error(error_message) {
 
 // suggest a valid email
 function get_suggestion_str(is_valid, alternate) {
-  if (is_valid) {
-    if (alternate) {
-      result += '<p class="text-warning"> (Though did you mean <em>' + alternate + '</em>?)</p>';
-    }
-    return result
-  } else if (alternate) {
+
+  if (alternate) {
     return '<p class="text-warning">Did you mean <em>' +  alternate + '</em>?</p>';
-  } else {
+  } else if (!is_valid){
     return '<p class="text-danger">Address is invalid.</p>';
+  } else {
+    return '';
   }
 }
