@@ -328,7 +328,7 @@ abstract class SOAP
      * @param String $result A string indicating the result of the function call. Could be anything (usually "success").
      * @return void
      */
-     protected static function logSoap($function, $result, Array $params, $responseCode = null)
+     protected static function logSoap($function, $result, Array $params, $responseCode = null, $errorMessage = null)
      {
          $args = '';
 
@@ -341,7 +341,7 @@ abstract class SOAP
          }
 
          $args = implode(', ', $args);
-         $msg = "$function($args) result: $result ($responseCode)";
+         $msg = "$function($args) result: $result ($responseCode: $errorMessage)";
          PHPWS_Core::log($msg, 'soap.log', 'SOAP');
-     } 
+     }
 }

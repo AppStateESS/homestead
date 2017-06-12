@@ -49,6 +49,8 @@ class ProcessMealPlanQueueCommand extends Command {
         // Get a SOAP instance for reuse while sending each meal plan
         $soapClient = SOAP::getInstance(UserStatus::getUsername(), SOAP::ADMIN_USER);
 
+        $failures = array();
+
         // Process the queue of meal plans, one item at a time
         // Catch exceptions and continue the loop if anything fails
         foreach($mealPlans as $plan){
@@ -58,6 +60,8 @@ class ProcessMealPlanQueueCommand extends Command {
                 $plan->setStatus(MealPlan::STATUS_SENT);
                 $plan->setStatusTimestamp(time());
                 MealPlanFactory::saveMealPlan($plan);
+            }catch(BannerException $e){
+                $failures[] = ($plan->getBannerId() . ' ' . $e->getCode() . ': ' . $e->getMessage());
             }
 
             $student = StudentFactory::getStudentByBannerId($plan->getBannerId(), $term->term);
@@ -66,8 +70,15 @@ class ProcessMealPlanQueueCommand extends Command {
             HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_MEAL_PLAN_SENT, UserStatus::getUsername(), 'Meal Plan sent to Banner: ' . HMS_Util::formatMealOption($plan->getPlanCode()));
         }
 
-        $term->setMealPlanQueue(0);
-        $term->save();
+        if(empty($failures)){
+            $term->setMealPlanQueue(0);
+            $term->save();
+
+            NQ::Simple('hms', hms\NotificationView::SUCCESS, 'Meal Plans were sent to Banner and the Meal Plan Queue has been disabled.');
+        } else {
+            NQ::Simple('hms', hms\NotificationView::ERROR, 'There were some errors while processing the meal plans. The queue could not be disabled.');
+            NQ::Simple('hms', hms\NotificationView::ERROR, '<br />' . implode('<br />', $failures));
+        }
 
         NQ::Simple('hms', hms\NotificationView::SUCCESS, 'Meal Plans were sent to Banner and the Meal Plan Queue has been disabled.');
         $cmd->redirect();
