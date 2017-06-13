@@ -318,7 +318,7 @@ class PhpSOAP extends SOAP
         }
 
         if($response->basic_response->error_num !== 0){
-            SOAP::logSoap('createMealPlan', 'failed', $params);
+            SOAP::logSoap('createMealPlan', 'failed', $params, $response->basic_response->error_num, $response->basic_response->error_message);
             throw new BannerException('Error creating meal plan: ' . $response->basic_response->error_message, $response->basic_response->error_num, 'CreateMealPlan', $params);
         }
 
