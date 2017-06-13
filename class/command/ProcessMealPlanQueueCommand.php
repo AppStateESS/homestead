@@ -61,7 +61,7 @@ class ProcessMealPlanQueueCommand extends Command {
                 $plan->setStatusTimestamp(time());
                 MealPlanFactory::saveMealPlan($plan);
             }catch(BannerException $e){
-                $failures[] = ($plan->getBannerId() . ' ' . $e->getCode() . ': ' . $e->getMessage());
+                $failures[] = ($plan->getBannerId() . ' Banner Error: ' . $e->getCode());
             }
 
             $student = StudentFactory::getStudentByBannerId($plan->getBannerId(), $term->term);
@@ -80,7 +80,6 @@ class ProcessMealPlanQueueCommand extends Command {
             NQ::Simple('hms', hms\NotificationView::ERROR, '<br />' . implode('<br />', $failures));
         }
 
-        NQ::Simple('hms', hms\NotificationView::SUCCESS, 'Meal Plans were sent to Banner and the Meal Plan Queue has been disabled.');
         $cmd->redirect();
         return;
     }

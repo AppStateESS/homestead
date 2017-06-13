@@ -341,7 +341,12 @@ abstract class SOAP
          }
 
          $args = implode(', ', $args);
-         $msg = "$function($args) result: $result ($responseCode: $errorMessage)";
+         $msg = "$function($args) result: $result ";
+
+         if($responseCode !== null){
+             $msg .= "($responseCode: $errorMessage)";
+         }
+
          PHPWS_Core::log($msg, 'soap.log', 'SOAP');
      }
 }
