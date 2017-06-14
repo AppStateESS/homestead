@@ -55,7 +55,7 @@ abstract class StudentDataProvider {
     /**
      * Clears all of the various types of caching.
      */
-    public function clearAllCache()
+    public static function clearAllCache()
     {
         $instance = self::getInstance();
 
