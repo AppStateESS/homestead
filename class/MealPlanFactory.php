@@ -3,6 +3,8 @@
 PHPWS_Core::initModClass('hms', 'PdoFactory.php');
 PHPWS_Core::initModClass('hms', 'MealPlan.php');
 PHPWS_Core::initModClass('hms', 'MealPlanRestored.php');
+PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
 /**
  * Factory for loading and saving MealPlan objects
@@ -28,7 +30,7 @@ class MealPlanFactory {
      * @param HousingApplication|null $application
      * @return MealPlan|null
      */
-    public static function createPlan(Student $student, $term, HousingApplication $application = null)
+    public static function createPlan(Student $student, $term, HousingApplication $application = null, HMS_Residence_Hall $hall = null)
     {
         if($application === null){
             $planCode = MealPlan::BANNER_MEAL_STD;
@@ -42,8 +44,20 @@ class MealPlanFactory {
             $planCode = MealPlan::BANNER_MEAL_SUMMER;
         }
 
-        // If the student selected the 'none' plan, then we're done here
+        // If the student selected the 'none' plan, make sure that's allowed by the residence hall
         if($planCode === MealPlan::BANNER_MEAL_NONE){
+            // If we have a ResidenceHall parameter, check its meal plan setting
+            if($hall !== null){
+                if($hall->mealPlanRequired() === 1){
+                    // Meal plan is required, so use standard plan
+                    $planCode = MealPlan::BANNER_MEAL_STD;
+                } else {
+                    // Meal plan is optional and 'none' was requested, so we're done here
+                    return null;
+                }
+            }
+
+            // We didn't have a hall param, so we can't check required status.
             return null;
         }
 

@@ -87,6 +87,7 @@ class AssignStudentCommand extends Command {
         PHPWS_Core::initModClass('hms', 'BannerQueue.php');
         PHPWS_Core::initModClass('hms', 'ContractFactory.php');
         PHPWS_Core::initModClass('hms', 'Contract.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
         // NB: Username must be all lowercase
         $username = strtolower(trim($context->get('username')));
@@ -268,7 +269,7 @@ class AssignStudentCommand extends Command {
          * Meal Plan *
          *************/
         // Check for a meal plan and create one based on the application, if needed
-        $this->setupMealPlan($student, $term, $housingApplication);
+        $this->setupMealPlan($student, $term, $housingApplication, $hall);
 
 
         // Show a success message
@@ -310,7 +311,7 @@ class AssignStudentCommand extends Command {
         return true;
     }
 
-    private function setupMealPlan(Student $student, $term, HousingApplication $housingApplication = null)
+    private function setupMealPlan(Student $student, $term, HousingApplication $housingApplication = null, HMS_Residence_Hall $hall)
     {
         // Check for a meal plan, if one exists, don't do anything
         $mealPlan = MealPlanFactory::getMealByBannerIdTerm($student->getBannerId(), $term);

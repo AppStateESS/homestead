@@ -455,20 +455,6 @@ class HMS_Assignment extends HMS_Item {
             throw new AssignmentException('Null hall object.');
         }
 
-        // TODO Do something with meal plan code or remove
-        // if ($meal_plan == BANNER_MEAL_NONE) {
-        //     $meal_plan = NULL;
-        // }
-
-        // Determine which meal plan to use
-        // If this is a freshmen student and they've somehow selected none or low, give them standard
-        // if ($student->getType() == TYPE_FRESHMEN && ($meal_plan == BANNER_MEAL_NONE || $meal_plan == BANNER_MEAL_LOW)) {
-        //     $meal_plan = BANNER_MEAL_STD;
-        //     // If a student is living in a dorm which requires a meal plan and they've selected none, give them low
-        // } else if ($hall->meal_plan_required == 1 && $meal_plan == BANNER_MEAL_NONE) {
-        //     $meal_plan = BANNER_MEAL_LOW;
-        // }
-
         /**
          * ***************************
          * Temporary Assignment HACK *

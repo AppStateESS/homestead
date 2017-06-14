@@ -693,6 +693,14 @@ class HMS_Residence_Hall extends HMS_Item {
     }
 
     /**
+     * Returns whether a meal plan is required for this residence hall.
+     * @return int Integer value 1 if a meal plan is required, 0 if a meal plan is optional
+     */
+    public function mealPlanRequired(){
+        return $this->meal_plan_required;
+    }
+
+    /**
      * ****************
      * Static Methods *
      * ***************
