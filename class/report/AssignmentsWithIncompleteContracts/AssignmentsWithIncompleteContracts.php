@@ -43,7 +43,7 @@ class AssignmentsWithIncompleteContracts extends Report implements iCsvReport{
                     hms_contract.envelope_status
                 FROM hms_assignment
                     LEFT OUTER JOIN hms_contract
-                        ON (hms_assignment.banner_id = hms_contract.banner_id AND hms_assignment.term = hms_contract.term)
+                        ON (hms_assignment.banner_id = hms_contract.banner_id AND (hms_assignment.term = hms_contract.term OR hms_contract.term IS NULL))
 
                     LEFT OUTER JOIN hms_bed ON hms_assignment.bed_id = hms_bed.id
                     LEFT OUTER JOIN hms_room ON hms_bed.room_id = hms_room.id
@@ -52,7 +52,7 @@ class AssignmentsWithIncompleteContracts extends Report implements iCsvReport{
 
                 WHERE
                     hms_assignment.term = :term and
-                    hms_contract.envelope_status != 'completed'";
+                    (hms_contract.envelope_status != 'completed' OR hms_contract.envelope_status IS NULL)";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute(array('term'=>$this->term));

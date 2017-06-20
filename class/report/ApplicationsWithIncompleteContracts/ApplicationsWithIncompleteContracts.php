@@ -54,7 +54,7 @@ class ApplicationsWithIncompleteContracts extends Report implements iCsvReport{
 
                     WHERE
                         hms_new_application.term = :term and
-                        hms_contract.envelope_status != 'completed'";
+                        (hms_contract.envelope_status != 'completed' OR hms_contract.envelope_status IS NULL)";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute(array('term'=>$this->term));
