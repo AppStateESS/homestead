@@ -1,4 +1,4 @@
-<h2>Applications With Incomplete Contracts <small>{TERM}</small></h2>
+<h2>Assignments With Incomplete Contracts <small>{TERM}</small></h2>
 
 <div class="col-md-12">
 <p>Executed on: {EXEC_DATE} by {EXEC_USER}</p>
