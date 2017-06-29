@@ -8,14 +8,16 @@ class SOAP
 {
     private $client; // SOAP client object
 
-    private $currentUser = 'jb67803';
+    private $currentUser;
     private $userType = 'A';
 
     //private $currentUser = 'bickersss';
     //private $userType = 'S';
 
-    public function __construct()
+    public function __construct($username)
     {
+        $this->currentUser = $username;
+
         ini_set('soap.wsdl_cache_enabled', 0);
         $this->client = new SoapClient('http://bansrvtest.its.appstate.edu:8081/shs0001.asmx?WSDL', array('trace'=>true));
     }
@@ -226,7 +228,7 @@ class SOAP
         return true;
     }
 
-    public function createRoomAssignment($bannerId, $term, $building, $bannerBedId, $plan = 'HOME', $meal)
+    public function createRoomAssignment($bannerId, $term, $building, $bannerBedId, $plan = 'HOME')
     {
         $params = array(
                         'User'      => $this->currentUser,
@@ -235,7 +237,6 @@ class SOAP
                         'BldgCode'  => $building,
                         'RoomCode'  => $bannerBedId,
                         'PlanCode'  => $plan,
-                        'MealCode'  => $meal,
                         'UserType'  => $this->userType);
         try{
             $response = $this->client->CreateRoomAssignment($params);

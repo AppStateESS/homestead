@@ -333,12 +333,13 @@ class HMS_Autoassigner
         $bid  = $bed->banner_id;
         $user = $app->username;
 
+        // TODO: Handle meal plan
         $meal_plan = array();
         $meal_plan['plan'] = 'HOME';
         $meal_plan['meal'] = $app->meal_plan;
 
         $error = BannerQueue::queueAssignment($user, $term,
-            $bbc, $bid, $meal_plan['plan'], $meal_plan['meal']);
+            $bbc, $bid);
 
         if($error) {
             return "Skipped bed $bbc $bid username $user due to banner error code $error";
@@ -348,7 +349,6 @@ class HMS_Autoassigner
         $assignment->asu_username = $user;
         $assignment->bed_id       = $bed->id;
         $assignment->term         = $term;
-        $assignment->meal_option  = $app->meal_plan;
 
         $assignment->save();
 

@@ -11,7 +11,6 @@ class AssignStudentCommand extends Command {
     private $username;
     private $room;
     private $bed;
-    private $mealPlan;
     private $moveConfirmed;
     private $assignmentType;
     private $notes;
@@ -27,10 +26,6 @@ class AssignStudentCommand extends Command {
 
     public function setBed($bed){
         $this->bed = $bed;
-    }
-
-    public function setMealPlan($plan){
-        $this->mealPlan = $plan;
     }
 
     public function setMoveConfirmed($move){
@@ -59,10 +54,6 @@ class AssignStudentCommand extends Command {
 
         if(isset($this->bed)){
             $vars['bed'] = $this->bed;
-        }
-
-        if(isset($this->mealPlan)){
-            $vars['meal_plan'] = $this->mealPlan;
         }
 
         if(isset($this->moveConfirmed)){
@@ -96,6 +87,7 @@ class AssignStudentCommand extends Command {
         PHPWS_Core::initModClass('hms', 'BannerQueue.php');
         PHPWS_Core::initModClass('hms', 'ContractFactory.php');
         PHPWS_Core::initModClass('hms', 'Contract.php');
+        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
         // NB: Username must be all lowercase
         $username = strtolower(trim($context->get('username')));
@@ -158,7 +150,6 @@ class AssignStudentCommand extends Command {
                 $moveConfirmCmd->setUsername($username);
                 $moveConfirmCmd->setRoom($context->get('room'));
                 $moveConfirmCmd->setBed($context->get('bed'));
-                $moveConfirmCmd->setMealPlan($context->get('meal_plan'));
                 $moveConfirmCmd->setAssignmentType($assignmentType);
                 $moveConfirmCmd->setNotes($context->get('note'));
                 $moveConfirmCmd->redirect();
@@ -223,9 +214,9 @@ class AssignStudentCommand extends Command {
         $bed = $context->get('bed');
         try {
             if(isset($bed) && $bed != 0){
-                HMS_Assignment::assignStudent($student, $term, NULL, $bed, $context->get('meal_plan'), $context->get('note'), false, $context->get('assignment_type'));
+                HMS_Assignment::assignStudent($student, $term, NULL, $bed, $context->get('note'), false, $context->get('assignment_type'));
             }else{
-                HMS_Assignment::assignStudent($student, $term, $context->get('room'), NULL, $context->get('meal_plan'), $context->get('note'), false, $context->get('assignment_type'));
+                HMS_Assignment::assignStudent($student, $term, $context->get('room'), NULL, $context->get('note'), false, $context->get('assignment_type'));
             }
         } catch(AssignmentException $e) {
             NQ::simple('hms', hms\NotificationView::ERROR, 'Assignment error: ' . $e->getMessage());
@@ -273,6 +264,14 @@ class AssignStudentCommand extends Command {
             }
         }
 
+
+        /*************
+         * Meal Plan *
+         *************/
+        // Check for a meal plan and create one based on the application, if needed
+        $this->setupMealPlan($student, $term, $housingApplication, $hall);
+
+
         // Show a success message
         if($context->get('moveConfirmed') == 'true'){
             NQ::simple('hms', hms\NotificationView::SUCCESS, 'Successfully moved ' . $username . ' to ' . $hall->hall_name . ' room ' . $room->room_number);
@@ -310,5 +309,23 @@ class AssignStudentCommand extends Command {
         }
 
         return true;
+    }
+
+    private function setupMealPlan(Student $student, $term, HousingApplication $housingApplication = null, HMS_Residence_Hall $hall)
+    {
+        // Check for a meal plan, if one exists, don't do anything
+        $mealPlan = MealPlanFactory::getMealByBannerIdTerm($student->getBannerId(), $term);
+
+        if($mealPlan !== null){
+            // Meal plan exists, so we're done here
+            return;
+        }
+
+        // Make a new MealPlan object
+        $mealPlan = MealPlanFactory::createPlan($student, $term, $housingApplication);
+
+        // Process the meal plan, if needed
+        $soap = SOAP::getInstance(UserStatus::getUsername(), SOAP::ADMIN_USER);
+        MealPlanProcessor::queueMealPlan($mealPlan, $soap);
     }
 }

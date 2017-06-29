@@ -14,14 +14,12 @@ class BannerQueueItem {
     public $term;
     public $building_code;
     public $bed_code;
-    public $meal_plan = 'HOME';
-    public $meal_code;
     public $percent_refund;
 
     public $queued_on;
     public $queued_by;
 
-    public function __construct($id = null, $type = null, Student $student = null, $term = null, HMS_Residence_Hall $hall = null, HMS_Bed $bed = null, $mealPlan = null, $mealCode = null, $percentRefund = null)
+    public function __construct($id = null, $type = null, Student $student = null, $term = null, HMS_Residence_Hall $hall = null, HMS_Bed $bed = null, $percentRefund = null)
     {
         if(!is_null($id) && $id != 0) {
             $this->load();
@@ -37,8 +35,6 @@ class BannerQueueItem {
         $this->term             = $term;
         $this->building_code    = $hall->getBannerBuildingCode();
         $this->bed_code         = $bed->getBannerId();
-        $this->meal_plan        = $mealPlan;
-        $this->meal_code        = $mealCode;
         $this->percent_refund   = $percentRefund;
         $this->banner_id        = $student->getBannerId();
 
@@ -112,9 +108,7 @@ class BannerQueueItem {
                                     $this->banner_id,
                                     $this->term,
                                     $this->building_code,
-                                    $this->bed_code,
-                                        'HOME',
-                                    $this->meal_code);
+                                    $this->bed_code);
                 if($result === TRUE) {
                     HMS_Activity_Log::log_activity(
                                     $this->asu_username,
@@ -122,9 +116,7 @@ class BannerQueueItem {
                                     Current_User::getUsername(),
                                     $this->term . ' ' .
                                     $this->building_code . ' ' .
-                                    $this->bed_code . ' ' .
-                                        'HOME' . ' ' .
-                                    $this->meal_code);
+                                    $this->bed_code);
                 }
                 break;
             case BANNER_QUEUE_REMOVAL:
@@ -146,8 +138,6 @@ class BannerQueueItem {
                 }
                 break;
         }
-
-
 
         return $result;
     }

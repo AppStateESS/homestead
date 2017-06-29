@@ -32,7 +32,7 @@ class LotteryConfirmCommand extends Command {
 
         $roomId = $context->get('roomId');
         $roommates = $context->get('roommates');
-        $mealPlan = $context->get('mealPlan');
+        $mealPlanCode = $context->get('mealPlan');
 
         $term = PHPWS_Settings::get('hms', 'lottery_term');
 
@@ -41,7 +41,7 @@ class LotteryConfirmCommand extends Command {
         $errorCmd = CommandFactory::getCommand('LotteryShowConfirm');
         $errorCmd->setRoomId($roomId);
         $errorCmd->setRoommates($roommates);
-        $errorCmd->setMealPlan($mealPlan);
+        $errorCmd->setMealPlan($mealPlanCode);
 
         $successCmd = CommandFactory::getCommand('LotteryShowConfirmed');
         $successCmd->setRoomId($roomId);
@@ -145,7 +145,7 @@ class LotteryConfirmCommand extends Command {
         $bed_id = array_search(UserStatus::getUsername(), $roommates); // Find the bed id of the student who's logged in
 
         try{
-            $result = HMS_Assignment::assignStudent($student, PHPWS_Settings::get('hms', 'lottery_term'), NULL, $bed_id, $mealPlan, 'Confirmed lottery invite', TRUE, ASSIGN_LOTTERY);
+            $result = HMS_Assignment::assignStudent($student, PHPWS_Settings::get('hms', 'lottery_term'), NULL, $bed_id, 'Confirmed lottery invite', TRUE, ASSIGN_LOTTERY);
         }catch(Exception $e){
             NQ::simple('hms', hms\NotificationView::ERROR, 'Sorry, there was an error creating your room assignment. Please try again or contact University Housing.');
             $errorCmd->redirect();
@@ -156,8 +156,12 @@ class LotteryConfirmCommand extends Command {
 
         // Update the student's meal plan in the housing application, just for future reference
         $app = HousingApplication::getApplicationByUser($student->getUsername(), $term);
-        $app->setMealPlan($mealPlan);
+        $app->setMealPlan($mealPlanCode);
         $app->save();
+
+        // Create a meal plan based on that application
+        $mealPlan = MealPlanFactory::createPlan($student, $term, $app);
+        MealPlanFactory::saveMealPlan($mealPlan); // Just put it in the queue, don't send to Banner right away
 
         // If this student was an RLC self-select, update the RLC memberhsip state
         if($rlcAssignment != null && $rlcAssignment->getStateName() == 'selfselect-invite') {

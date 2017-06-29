@@ -230,7 +230,8 @@ class HMS_Activity_Log{
             ACTIVITY_CONTRACT_CREATED               => 'Created a Contract',
             ACTIVITY_CONTRACT_SENT_EMAIL            => 'Contract Sent via Email',
             ACTIVITY_CONTRACT_STUDENT_SIGN_EMBEDDED => 'Student Signed Contract via Embedded Signing',
-            ACTIVITY_CONTRACT_REMOVED_VOIDED        => 'Removed Voided Contract'
+            ACTIVITY_CONTRACT_REMOVED_VOIDED        => 'Removed Voided Contract',
+            ACTIVITY_MEAL_PLAN_SENT                 => 'Meal Plan Reported to Banner'
         );
     }
 

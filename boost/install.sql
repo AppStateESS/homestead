@@ -318,7 +318,6 @@ CREATE TABLE hms_assignment (
     banner_id       integer     NOT NULL,
     asu_username    character varying(32) NOT NULL,
     bed_id          integer     NOT NULL REFERENCES hms_bed(id),
-    meal_option     character(2),
     lottery         smallint    NOT NULL DEFAULT 0,
     auto_assigned   smallint    NOT NULL DEFAULT 0,
     added_by        integer     NOT NULL,
@@ -358,12 +357,26 @@ CREATE TABLE hms_assignment_queue (
     asu_username    character varying(32) NOT NULL,
     building_code   character varying(6) NOT NULL,
     bed_code        character varying(15) NOT NULL,
-    meal_option     smallint default 0,
     term            integer NOT NULL REFERENCES hms_term(term),
     queued_on       integer NOT NULL,
     queued_by       integer NOT NULL,
     primary key(id)
 );
+
+CREATE TABLE hms_meal_plan (
+    id                  integer NOT NULL,
+    banner_id           integer NOT NULL,
+    term                integer NOT NULL REFERENCES hms_term(term),
+    meal_plan_code      character varying NOT NULL,
+    status              character varying NOT NULL,
+    status_timestamp    integer NOT NULL,
+    primary key(id)
+);
+
+alter table hms_meal_plan ADD CONSTRAINT hms_meal_plan_banner_term_uniq UNIQUE (banner_id, term);
+
+create sequence hms_meal_plan_seq;
+
 
 CREATE TABLE hms_learning_community_questions (
     id integer DEFAULT 0 NOT NULL,
@@ -613,18 +626,6 @@ CREATE TABLE hms_student_profiles (
 
 ALTER TABLE hms_student_profiles ADD CONSTRAINT hms_student_profile_user UNIQUE (username, term);
 
-CREATE TABLE hms_pending_assignment (
-    id               INTEGER               NOT NULL,
-    gender           SMALLINT              NOT NULL,
-    lifestyle_option SMALLINT              NOT NULL,
-    chosen           SMALLINT              NOT NULL,
-    roommate_zero    CHARACTER VARYING(32) NOT NULL,
-    meal_zero        SMALLINT              NOT NULL,
-    roommate_one     CHARACTER VARYING(32),
-    meal_one         SMALLINT,
-    PRIMARY KEY (id)
-);
-
 CREATE TABLE hms_banner_queue (
     id              integer NOT NULL,
     type            integer NOT NULL,
@@ -632,8 +633,6 @@ CREATE TABLE hms_banner_queue (
     asu_username    character varying(32) NOT NULL,
     building_code   character varying(6) NOT NULL,
     bed_code        character varying(15) NOT NULL,
-    meal_plan       character varying(5),
-    meal_code       smallint DEFAULT 0,
     term            integer NOT NULL,
     percent_refund  integer,
     queued_on       integer NOT NULL,

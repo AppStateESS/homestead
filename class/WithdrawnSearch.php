@@ -116,6 +116,19 @@ class WithdrawnSearch {
 
             $this->actions[$student->getUsername()][] = 'Removed assignment: ' . $location;
             HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_WITHDRAWN_ASSIGNMENT_DELETED, UserStatus::getUsername(), 'Withdrawn search: ' . $location);
+
+            // Check for a meal plan, and remove it if it hasn't been sent yet
+            $mealPlan = MealPlanFactory::getMealByBannerIdTerm($student->getBannerId(), $this->term);
+
+            if($mealPlan !== null){
+                if($mealPlan->getStatus() === MealPlan::STATUS_NEW){
+                    MealPlanFactory::removeMealPlan($mealPlan);
+                    $this->actions[$student->getUsername()][] = 'Removed meal plan.';
+                } else {
+                    // Show a warning that we couldn't remove this meal plan
+                    $this->actions[$student->getUsername()][] = 'Warning: Could not remove meal plan because it has been sent to Banner.';
+                }
+            }
         }
     }
 

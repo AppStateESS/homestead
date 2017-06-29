@@ -17,7 +17,6 @@ class HMS_Assignment extends HMS_Item {
     public $asu_username = null;
     public $banner_id;
     public $bed_id = 0;
-    public $meal_option = 0;
     public $letter_printed = 0;
     public $email_sent = 0;
     public $reason = null;
@@ -327,7 +326,6 @@ class HMS_Assignment extends HMS_Item {
      * @param Integer $term
      * @param Integer $room_id
      * @param Integer $bed_id
-     * @param Integer $meal_plan
      * @param String $notes
      * @param boolean $lottery
      * @param string $reason
@@ -336,7 +334,7 @@ class HMS_Assignment extends HMS_Item {
      * @throws DatabaseException
      * @throws Exception
      */
-    public static function assignStudent(Student $student, $term, $room_id = NULL, $bed_id = NULL, $meal_plan, $notes = "", $lottery = FALSE, $reason)
+    public static function assignStudent(Student $student, $term, $room_id = NULL, $bed_id = NULL, $notes = "", $lottery = FALSE, $reason)
     {
 
         /**
@@ -457,19 +455,6 @@ class HMS_Assignment extends HMS_Item {
             throw new AssignmentException('Null hall object.');
         }
 
-        if ($meal_plan == BANNER_MEAL_NONE) {
-            $meal_plan = NULL;
-        }
-
-        // Determine which meal plan to use
-        // If this is a freshmen student and they've somehow selected none or low, give them standard
-        if ($student->getType() == TYPE_FRESHMEN && ($meal_plan == BANNER_MEAL_NONE || $meal_plan == BANNER_MEAL_LOW)) {
-            $meal_plan = BANNER_MEAL_STD;
-            // If a student is living in a dorm which requires a meal plan and they've selected none, give them low
-        } else if ($hall->meal_plan_required == 1 && $meal_plan == BANNER_MEAL_NONE) {
-            $meal_plan = BANNER_MEAL_LOW;
-        }
-
         /**
          * ***************************
          * Temporary Assignment HACK *
@@ -508,7 +493,7 @@ class HMS_Assignment extends HMS_Item {
         }
 
         // Send this off to the queue for assignment in banner
-        $banner_success = BannerQueue::queueAssignment($student, $term, $hall, $vacant_bed, 'HOME', $meal_plan);
+        $banner_success = BannerQueue::queueAssignment($student, $term, $hall, $vacant_bed);
         if ($banner_success !== TRUE) {
             throw new AssignmentException('Error while adding the assignment to the Banner queue.');
         }
@@ -522,7 +507,6 @@ class HMS_Assignment extends HMS_Item {
         $assignment->term = $term;
         $assignment->letter_printed = 0;
         $assignment->email_sent = 0;
-        $assignment->meal_option = $meal_plan;
         $assignment->reason = $reason;
         $assignment->application_term = $student->getApplicationTerm();
         $assignment->class = $student->getComputedClass($term);
@@ -799,7 +783,6 @@ class HMS_Assignment extends HMS_Item {
             $assignment->term = $term;
             $assignment->letter_printed = 0;
             $assignment->email_sent = 0;
-            $assignment->meal_option = $oldAssignment->meal_option;
             $assignment->reason = $oldAssignment->getReason();
             $assignment->application_term = $studentObj->getApplicationTerm();
             $assignment->class = $studentObj->getComputedClass($term);

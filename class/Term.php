@@ -5,12 +5,13 @@
  * Maintains the "current" term, "active" term, and handles tasks related
  * to creating new terms.
  *
- * @package hms
+ * @package Homestead
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  *
  */
 
+// TODO: Move these to be class constants
 define('TERM_SPRING',   10);
 define('TERM_SUMMER1',  20);
 define('TERM_SUMMER2',  30);
@@ -25,6 +26,7 @@ class Term
 {
     public $term;
     public $banner_queue;
+    public $meal_plan_queue;
 
     public $docusign_template_id;
     public $docusign_under18_template_id;
@@ -95,6 +97,14 @@ class Term
     public function setBannerQueue($flag)
     {
         $this->banner_queue = $flag;
+    }
+
+    public function getMealPlanQueue(){
+        return $this->meal_plan_queue;
+    }
+
+    public function setMealPlanQueue($flag){
+        $this->meal_plan_queue = $flag;
     }
 
     public function getDocusignTemplate()

@@ -67,27 +67,6 @@ define('LEVEL_SPECIALIST',  'P');
 define('LEVEL_UNDECLARED',  '00');
 define('LEVEL_GRAD2',       'G2');
 
-/**
- * Meal Plans
- */
-//define('HMS_MEAL_LOW',      0);
-//define('HMS_MEAL_STD',      1);
-//define('HMS_MEAL_HIGH',     2);
-//define('HMS_MEAL_SUPER',    3);
-//define('HMS_MEAL_NONE',     4);
-
-// WTF??!? Banner sucks!
-define('BANNER_MEAL_LOW',   '2');
-define('BANNER_MEAL_STD',   '1');
-define('BANNER_MEAL_HIGH',  '0');
-define('BANNER_MEAL_SUPER', '8');
-define('BANNER_MEAL_NONE', '-1');
-
-// Summer Meal plan codes
-// 4 Week Meal Plan Removed according to ticket #709
-//define('BANNER_MEAL_4WEEK', 'S4');
-define('BANNER_MEAL_5WEEK', 'S5');
-
 /****
  * Admissions Admit Codes
  */
@@ -412,6 +391,9 @@ define('ACTIVITY_CONTRACT_CREATED',             79); // Envelope created
 define('ACTIVITY_CONTRACT_SENT_EMAIL',          80); // Envelope sent via email
 define('ACTIVITY_CONTRACT_STUDENT_SIGN_EMBEDDED',81);
 define('ACTIVITY_CONTRACT_REMOVED_VOIDED',      82);
+
+
+define('ACTIVITY_MEAL_PLAN_SENT',               83); // Meal plan reported to Banner
 
 /**
  * Errors

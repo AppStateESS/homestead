@@ -17,6 +17,7 @@ class LotteryAdminCreateAppCommand extends Command {
 
         PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+        PHPWS_Core::initModClass('hms', 'MealPlan.php');
 
         $viewCmd = CommandFactory::getCommand('ShowLotteryAdminEntry');
 
@@ -36,7 +37,7 @@ class LotteryAdminCreateAppCommand extends Command {
             $viewCmd->redirect();
         }
 
-        $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), null, BANNER_MEAL_STD, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, 0, NULL, 0, NULL, 0, 0, 0, 0);
+        $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), null, MealPlan::BANNER_MEAL_STD, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, 0, NULL, 0, NULL, 0, 0, 0, 0);
 
         try{
             $application->save();

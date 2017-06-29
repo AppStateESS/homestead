@@ -38,11 +38,6 @@
         </div>
 
         <div class="form-group">
-            {MEAL_PLAN_LABEL}
-            {MEAL_PLAN}
-        </div>
-
-        <div class="form-group">
             {ASSIGNMENT_TYPE_LABEL}
             {ASSIGNMENT_TYPE}
         </div>

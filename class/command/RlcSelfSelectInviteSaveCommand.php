@@ -4,6 +4,7 @@ PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
+PHPWS_Core::initModClass('hms', 'MealPlan.php');
 
 
 class RlcSelfSelectInviteSaveCommand extends Command {
@@ -133,7 +134,7 @@ class RlcSelfSelectInviteSaveCommand extends Command {
         if(is_null($housingApp)){
             // Make a new Housing Application
             // TODO: imporve this to mirror the regular housing application...
-        	$housingApp = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), 'C', $student->getApplicationTerm(), $cellPhone, BANNER_MEAL_STD, $student->isInternational(), NULL, 0, 0, 0, 0, 0, null);
+        	$housingApp = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), 'C', $student->getApplicationTerm(), $cellPhone, MealPlan::BANNER_MEAL_STD, $student->isInternational(), NULL, 0, 0, 0, 0, 0, null);
         } else {
             // Update the existing cell phone
         	$housingApp->setCellPhone($cellPhone);

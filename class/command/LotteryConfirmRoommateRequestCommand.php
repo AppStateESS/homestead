@@ -30,11 +30,11 @@ class LotteryConfirmRoommateRequestCommand extends Command {
         PHPWS_Core::initModClass('hms', 'RlcAssignmentSelfAssignedState.php');
 
         $requestId = $context->get('requestId');
-        $mealPlan = $context->get('meal_plan');
+        $mealPlanCode = $context->get('meal_plan');
 
         $errorCmd = CommandFactory::getCommand('LotteryShowConfirmRoommateRequest');
         $errorCmd->setRoommateRequestId($requestId);
-        $errorCmd->setMealPlan($mealPlan);
+        $errorCmd->setMealPlan($mealPlanCode);
 
         // Confirm the captcha
         PHPWS_Core::initCoreClass('Captcha.php');
@@ -45,7 +45,7 @@ class LotteryConfirmRoommateRequestCommand extends Command {
         }
 
         // Check for a meal plan
-        if(!isset($mealPlan) || $mealPlan == '') {
+        if(!isset($mealPlanCode) || $mealPlanCode == '') {
         	NQ::simple('hms', hms\NotificationView::ERROR, 'Please choose a meal plan.');
             $errorCmd->redirect();
         }
@@ -57,27 +57,18 @@ class LotteryConfirmRoommateRequestCommand extends Command {
         // Update the meal plan field on the application
         $app = HousingApplication::getApplicationByUser(UserStatus::getUsername(), $term);
 
-        $app->setMealPlan($mealPlan);
+        $app->setMealPlan($mealPlanCode);
+        $app->save();
 
-        //try{
-            $app->save();
-        //}catch(Exception $e){
-        //    PHPWS_Error::log('hms', $e->getMessage());
-        //    NQ::simple('hms', hms\NotificationView::ERROR,'Sorry, there was an error confirming your roommate invitation. Please contact University Housing.');
-        //    $errorCmd->redirect();
-        //}
+        // Create a meal plan based on that application
+        $mealPlan = MealPlanFactory::createPlan($student, $term, $app);
+        MealPlanFactory::saveMealPlan($mealPlan); // Just put it in the queue, don't send to Banner right away
 
         // Try to actually make the assignment
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        //try{
-            HMS_Lottery::confirm_roommate_request(UserStatus::getUsername(), $requestId, $mealPlan);
-        //}catch(Exception $e){
-        //    PHPWS_Error::log('hms', $e->getMessage());
-        //    NQ::simple('hms', hms\NotificationView::ERROR,'Sorry, there was an error confirming your roommate invitation. Please contact University Housing.');
-        //    $errorCmd->redirect();
-        //}
+        HMS_Lottery::confirm_roommate_request(UserStatus::getUsername(), $requestId);
 
-        # Log the fact that the roommate was accepted and successfully assigned
+        // Log the fact that the roommate was accepted and successfully assigned
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_LOTTERY_CONFIRMED_ROOMMATE,UserStatus::getUsername(), "Captcha: \"$captcha\"");
 
 

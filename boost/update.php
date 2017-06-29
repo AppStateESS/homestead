@@ -50,6 +50,8 @@ function hms_update(&$content, $currentVersion)
             homesteadRunDbMigration('00-05-10.sql');
         case version_compare($currentVersion, '0.5.11', '<'):
             homesteadRunDbMigration('00-05-11.sql');
+        case version_compare($currentVersion, '0.5.12', '<'):
+            homesteadRunDbMigration('00-05-12.sql');
     }
 
     return true;

@@ -33,6 +33,8 @@ class UnassignStudentCommand extends Command {
 
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+        PHPWS_Core::initModClass('hms', 'MealPlanFactory.php');
+        PHPWS_Core::initModClass('hms', 'MealPlan.php');
 
         $username = $context->get('username');
         $unassignReason = $context->get('unassignment_type');
@@ -87,6 +89,20 @@ class UnassignStudentCommand extends Command {
         }
 
         NQ::simple('hms', hms\NotificationView::SUCCESS, 'Successfully unassigned ' . $student->getFullName());
+
+
+        // Check for a meal plan, and remove it if it hasn't been sent yet
+        $mealPlan = MealPlanFactory::getMealByBannerIdTerm($student->getBannerId(), $term);
+
+        if($mealPlan !== null){
+            if($mealPlan->getStatus() === MealPlan::STATUS_NEW){
+                MealPlanFactory::removeMealPlan($mealPlan);
+            } else {
+                // Show a warning that we couldn't remove this meal plan
+                NQ::simple('hms', hms\NotificationView::WARNING, 'This student has a meal plan which has already been sent to Banner, so we couldn\'t remove it.');
+            }
+        }
+
         $cmd->redirect();
     }
 }

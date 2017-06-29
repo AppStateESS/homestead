@@ -76,7 +76,7 @@ class ShowHousingApplicationFormCommand extends Command {
             $agreementCmd->redirect();
         }
         */
-        
+
         // Check to see if the student's PIN is enabled. Don't let the student apply if the PIN is disabled.
         if($student->pinDisabled()){
             $pinCmd = CommandFactory::getCommand('ShowPinDisabled');
@@ -96,9 +96,10 @@ class ShowHousingApplicationFormCommand extends Command {
             $contextApplication = NULL;
         }
 
-        $appView = new HousingApplicationFormView($student, $term, $existingApplication);
+        $existingMealPlan = MealPlanFactory::getMealByBannerIdTerm($student->getBannerId(), $term);
+
+        $appView = new HousingApplicationFormView($student, $term, $existingApplication, $existingMealPlan);
 
         $context->setContent($appView->show());
     }
 }
-

@@ -40,3 +40,17 @@ function check_args($argc, $argv, &$args, &$switches)
         next($args_keys);
     }
 }
+
+
+function includePhpwsConfigFile($filePath)
+{
+    if (!is_file($filePath)) {
+        exit("Configuration file not found: $filePath\n");
+    }
+
+    require_once $filePath;
+
+    if (!defined('PHPWS_DSN')) {
+        exit("Configuration file loaded, but database connection string (DSN) not found\n");
+    }
+}

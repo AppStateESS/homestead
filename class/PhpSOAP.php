@@ -4,6 +4,7 @@ PHPWS_Core::initModClass('hms', 'SOAP.php');
 PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
 PHPWS_Core::initModClass('hms', 'exception/BannerException.php');
 PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
+PHPWS_Core::initModClass('hms', 'exception/MealPlanExistsException.php');
 
 /**
  * PhpSOAP Class - Singleton implementation of SOAP class.
@@ -245,7 +246,7 @@ class PhpSOAP extends SOAP
         return true;
     }
 
-    public function createRoomAssignment($bannerId, $term, $building, $bannerBedId, $plan = 'HOME', $meal)
+    public function createRoomAssignment($bannerId, $term, $building, $bannerBedId)
     {
         $params = array(
                         'User'      => $this->currentUser,
@@ -253,8 +254,7 @@ class PhpSOAP extends SOAP
                         'TermCode'  => $term,
                         'BldgCode'  => $building,
                         'RoomCode'  => $bannerBedId,
-                        'PlanCode'  => $plan,
-                        'MealCode'  => $meal,
+                        'PlanCode'  => 'HOME',
                         'UserType'  => $this->userType);
         try{
             $response = $this->client->CreateRoomAssignment($params);
@@ -294,7 +294,35 @@ class PhpSOAP extends SOAP
         }
 
         SOAP::logSoap('removeRoomAssignment', 'success', $params);
-        return TRUE;
+
+        return true;
+    }
+
+    public function createMealPlan($bannerId, $term, $mealCode)
+    {
+        $params = array(
+                        'User'      => $this->currentUser,
+                        'BannerID'  => $bannerId,
+                        'TermCode'  => $term,
+                        'MealCode'  => $mealCode);
+
+        try{
+            $response = $this->client->CreateMealPlan($params);
+        }catch(SoapFault $e){
+            throw new SOAPException($e->getMessage(), $e->getCode(), 'CreateMealPlan', $params);
+        }
+
+        if($response->basic_response->error_num === 1403){
+            SOAP::logSoap('createMealPlan', 'Already exists', $params, $response->basic_response->error_num);
+            throw new MealPlanExistsException('Meal plan already exists.', $response->basic_response->error_num);
+        }
+
+        if($response->basic_response->error_num !== 0){
+            SOAP::logSoap('createMealPlan', 'failed', $params, $response->basic_response->error_num, $response->basic_response->error_message);
+            throw new BannerException('Error creating meal plan: ' . $response->basic_response->error_message, $response->basic_response->error_num, 'CreateMealPlan', $params);
+        }
+
+        return true;
     }
 
     public function getHousMealRegister($bannerId, $term, $opt)

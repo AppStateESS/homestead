@@ -98,13 +98,13 @@ class ReApplicationFormView extends hms\View {
         /*
          * Meal Plan
          */
-        $mealPlans = array(BANNER_MEAL_LOW=>_('Low'),
-                            BANNER_MEAL_STD=>_('Standard'),
-                            BANNER_MEAL_HIGH=>_('High'),
-                            BANNER_MEAL_SUPER=>_('Super'));
+        $mealPlans = array(MealPlan::BANNER_MEAL_LOW=>_('Low'),
+                            MealPlan::BANNER_MEAL_STD=>_('Standard'),
+                            MealPlan::BANNER_MEAL_HIGH=>_('High'),
+                            MealPlan::BANNER_MEAL_SUPER=>_('Super'));
         $form->addDropBox('meal_plan', $mealPlans);
         $form->setLabel('meal_plan', 'Meal plan: ');
-        $form->setMatch('meal_plan', BANNER_MEAL_STD);
+        $form->setMatch('meal_plan', MealPlan::BANNER_MEAL_STD);
         $form->addCssClass('meal_plan', 'form-control');
 
         /*
