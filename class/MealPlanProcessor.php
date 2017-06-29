@@ -15,7 +15,7 @@ class MealPlanProcessor {
         $termObj = new Term($mealPlan->getTerm());
 
         // If the meal plan queue is enabled, then we're done here
-        if($termObj->getMealPlanQueue() === 1){
+        if($termObj->getMealPlanQueue() == 1){
             return;
         }
 
