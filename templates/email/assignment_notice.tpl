@@ -25,13 +25,13 @@ Check-in Time: {MOVE_IN_TIME}
 
 Unless you have been separately notified of a different move in time,
 please follow the time noted above for your move in. Additional move
-in information can be found by visiting our Move In Webpage at:
+in information can be found by visiting our website:
 http://housing.appstate.edu/fallmovein .
 
 *Note*: You may receive more than one housing assignment notification,
 this indicates a change has been made in some way to your assignment
-(room change, roommate change, etc.).  The new notification overrides
-all previous notifications.
+(room change, roommate change, etc.).  The most recent notification
+overrides all previous notifications.
 
 Should you have any questions, please feel free to contact our office
 at 828-262-2160. You may also visit our website at:
