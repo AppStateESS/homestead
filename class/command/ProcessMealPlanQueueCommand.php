@@ -28,7 +28,7 @@ class ProcessMealPlanQueueCommand extends Command {
         $queueStatus = $term->getMealPlanQueue();
 
         // Sanity check the queue status. If it's not enabled, then we can't do anything
-        if($queueStatus !== 1){
+        if($queueStatus != 1){
             NQ::Simple('hms', hms\NotificationView::ERROR, 'The Meal Plan Queue is not enabled, so we can\'t process it.');
             $cmd->redirect();
         }
