@@ -3,13 +3,13 @@
 namespace Docusign;
 
 class RecipientView {
-	
+
     private $client;
     private $envelope;
     private $clientUserId;
     private $studentName;
     private $studentEmail;
-    
+
     public function __construct(Client $client, Envelope $envelope, $clientUserId, $studentName, $studentEmail)
     {
     	$this->client = $client;
@@ -18,7 +18,7 @@ class RecipientView {
         $this->studentName = $studentName;
         $this->studentEmail = $studentEmail;
     }
-    
+
     public function getRecipientViewUrl($returnUrl)
     {
         $data = array (
@@ -31,7 +31,7 @@ class RecipientView {
 
         //var_dump($data);
         //exit;
-        
+
     	$http = new \Guzzle\Http\Client();
         try {
             //$request = $http->createRequest('POST', $this->client->getBaseUrl() . $this->envelope->getUri() . '/views/recipient', ['body' => json_encode($data)]);
@@ -40,8 +40,11 @@ class RecipientView {
             $request->setHeader('Content-Type', 'application/json');
             $request->setHeader('Accept', 'application/json');
             $request->setHeader('X-DocuSign-Authentication', $this->client->getAuthHeader());
-            $response = $http->send($request);   
+            $response = $http->send($request);
         } catch (\Guzzle\Http\Exception\RequestException $e) {
+            if (extension_loaded('newrelic')) { // Ensure PHP agent is available
+                newrelic_notice_error($e->getResponse()->json(), $e);
+            }
             //var_dump($e->getResponse()->json());
             //var_dump($e);
             //var_dump($e->getRequest());
@@ -49,7 +52,7 @@ class RecipientView {
             throw $e;
         }
         $result = $response->json();
-        //var_dump($result);exit;        
+        //var_dump($result);exit;
         return $result['url'];
     }
 }
