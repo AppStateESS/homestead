@@ -16,7 +16,7 @@
             </p>
             <p>
                 <br />
-                We encourage you to explore off-campus housing options. We recommend <a class="alert-link" href="http://www.universityhighlands.com/">University Highlands</a> and the <a href="https://offcampus.appstate.edu/off-campus-housing" class="alert-link">Off-campus Housing Webiste</a>.
+                We encourage you to explore off-campus housing options. We recommend <a class="alert-link" href="http://www.universityhighlands.com/">University Highlands</a> and the <a href="https://offcampus.appstate.edu/off-campus-housing" class="alert-link">Off-campus Housing Website</a>.
             </p>
         </div>
         <p class="lead">
