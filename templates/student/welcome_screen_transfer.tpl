@@ -11,7 +11,7 @@
         <div class="alert alert-info">
             <h4><i class="fa fa-exclamation"></i> Transfer Housing Is Very Limited</h4>
             <p>
-                On-capus housing is not guaranteed for transfer students and, due to limited space, very few transfer students are selected for on-campus housing. Transfer students are selected based on the date your housing application
+                On-campus housing is not guaranteed for transfer students and, due to limited space, very few transfer students are selected for on-campus housing. Transfer students are selected based on the date your housing application
                 is received. You will be notified by mid-July if we are able to accommodate you on-campus.
             </p>
             <p>
