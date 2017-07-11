@@ -50,9 +50,9 @@ abstract class AssignmentStrategy {
         // Check for a meal plan, create and queue a new meal plan if needed
         $existingMealPlan1 = MealPlanFactory::getMealByBannerIdTerm($pair->getStudent1()->getBannerID(), $this->term);
 
-        if($existingMealPlan1 !== null){
+        if($existingMealPlan1 === null){
             // Setup the meal plan for student 1
-            $application = HousingApplicationFactory::getApplicationByStudent($pair->getStudent1(), $this->term);
+            $application = HousingApplicationFactory::getAppByStudent($pair->getStudent1(), $this->term);
 
             $plan1 = MealPlanFactory::createPlan($pair->getStudent1(), $this->term, $application);
             MealPlanFactory::saveMealPlan($plan1);
@@ -76,9 +76,9 @@ abstract class AssignmentStrategy {
         // Check for a meal plan, create and queue a new meal plan if needed
         $existingMealPlan2 = MealPlanFactory::getMealByBannerIdTerm($pair->getStudent2()->getBannerID(), $this->term);
 
-        if($existingMealPlan2 !== null){
+        if($existingMealPlan2 === null){
             // Setup the meal plan for student 1
-            $application = HousingApplicationFactory::getApplicationByStudent($pair->getStudent2(), $this->term);
+            $application = HousingApplicationFactory::getAppByStudent($pair->getStudent2(), $this->term);
 
             $plan2 = MealPlanFactory::createPlan($pair->getStudent2(), $this->term, $application);
             MealPlanFactory::saveMealPlan($plan2);
