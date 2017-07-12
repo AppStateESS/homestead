@@ -19,6 +19,13 @@ Roommates:
 <!-- END roommates -->
 <!-- END roommate_text -->
 
+For students interested in room or roommate changes, we are unable to
+accommodate these requests at this time due to current occupancy.
+University Housing will allow room changes after the second week of
+classes (pending availability). At that time, you can log into
+https://hms.appstate.edu to submit a room change request, which will
+be reviewed by your residence hall's staff.
+
 <!-- BEGIN movein_time -->
 Check-in Time: {MOVE_IN_TIME}
 <!-- END movein_time -->
@@ -40,6 +47,6 @@ http://housing.appstate.edu.
 Sincerely,
 
 Alicia Vest
-Associate Director for Administrative and Student Services
+Associate Director for Student & Administrative Services
 University Housing
 Appalachian State University
