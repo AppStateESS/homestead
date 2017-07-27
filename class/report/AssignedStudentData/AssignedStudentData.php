@@ -36,6 +36,8 @@ class AssignedStudentData extends Report implements iCsvReport {
         $db->addColumn('hms_room.room_number');
         $db->addColumn('hms_new_application.cell_phone');
         $db->addColumn('hms_new_application.created_on');
+        $db->addColumn('hms_bed.bedroom_label');
+        $db->addColumn('hms_bed.bed_letter');
 
         $db->addWhere('hms_assignment.term', $this->term);
 
@@ -83,7 +85,7 @@ class AssignedStudentData extends Report implements iCsvReport {
                 $gender = HMS_Util::formatGender($student->getGender());
                 $dob = $student->getDob();
 
-                $room = $row['hall_name'] . ' ' . $row['room_number'];
+                $room = $row['hall_name'] . ' ' . $row['room_number'] . ' ' . $row['bedroom_label'] . ' ' . $row['bed_letter'];
 
                 $address = $student->getAddress(NULL);
 
