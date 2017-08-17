@@ -13,7 +13,7 @@ create table hms_contract (
 	term 		integer not null REFERENCES hms_term(term),
 	envelope_id character varying not null,
     envelope_status character varying not null default 'sent',
-    envelope_status_time set not null,
+    envelope_status_time integer not null,
 	PRIMARY KEY(id)
 );
 
@@ -510,7 +510,7 @@ create table hms_waitlist_application (
     id integer NOT NULL references hms_new_application (id),
     waitlist_reason character varying,
     oncampus_reason character varying,
-    oncampus_other_reason character varying
+    oncampus_other_reason character varying,
     PRIMARY KEY(id)
 );
 
