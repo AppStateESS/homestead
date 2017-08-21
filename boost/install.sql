@@ -977,5 +977,4 @@ FROM hms_bed
    JOIN hms_room ON hms_bed.room_id = hms_room.id
    JOIN hms_floor ON hms_room.floor_id = hms_floor.id
    JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id;
-
 COMMIT;
