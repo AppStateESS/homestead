@@ -36,7 +36,7 @@ class ShowCheckoutFormCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         PHPWS_Core::initModClass('hms', 'BedFactory.php');
 
-        $term = Term::getCurrentTerm();
+        $term = Term::getSelectedTerm();
 
         $bannerId = $context->get('bannerId');
         $hallId = $context->get('hallId');

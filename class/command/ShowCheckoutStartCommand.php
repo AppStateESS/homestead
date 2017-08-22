@@ -18,7 +18,7 @@ class ShowCheckoutStartCommand extends Command {
             throw new PermissionException('You do not have permission to checkin students.');
         }
 
-        $term = Term::getCurrentTerm();
+        $term = Term::getSelectedTerm();
 
         // Check role-based permissions for list of hall or all halls
         // TODO (for now just listing all halls)

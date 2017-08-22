@@ -54,7 +54,7 @@ class CheckoutFormSubmitCommand extends Command {
 
         $properCheckout = filter_input(INPUT_POST, 'properCheckout', FILTER_VALIDATE_BOOLEAN);
 
-        $term = Term::getCurrentTerm();
+        $term = Term::getSelectedTerm();
         $this->term = $term;
 
         // Lookup the student
@@ -110,13 +110,13 @@ class CheckoutFormSubmitCommand extends Command {
             $checkin->setImproperCheckout(false);
         } else {
             $checkin->setImproperCheckout(true);
-            
+
             $improperNote = filter_input(INPUT_POST, 'improperNote', FILTER_SANITIZE_SPECIAL_CHARS);
             // Add damage for improper checkout
             // TODO: Find a better way to handle the magic number for dmg type
-            $dmg = array('damage_type'=>105, 'side'=>'both', 'note'=>$improperNote, 'residents' => array(array('studentId'=> $student->getBannerId(), 'selected'=>true))); 
+            $dmg = array('damage_type'=>105, 'side'=>'both', 'note'=>$improperNote, 'residents' => array(array('studentId'=> $student->getBannerId(), 'selected'=>true)));
             $this->addDamage($dmg, $room);
-            
+
             // Add the improper checkout note
             $checkin->setImproperCheckoutNote($improperNote);
         }
@@ -125,7 +125,7 @@ class CheckoutFormSubmitCommand extends Command {
             $checkin->setKeyNotReturned(false);
         } else {
             $checkin->setKeyNotReturned(true);
-            
+
             // Add a damage record for key not returned
             // TODO: Find a better way to handle the magic number for dmg type
             $dmg = array('damage_type'=>79, 'side'=>'both', 'note'=>'Key not returned.', 'residents' => array(array('studentId'=> $student->getBannerId(), 'selected'=>true)));
@@ -139,17 +139,17 @@ class CheckoutFormSubmitCommand extends Command {
         HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CHECK_OUT, UserStatus::getUsername(), $bed->where_am_i());
 
         // Generate the RIC
-        
+
         PHPWS_Core::initModClass('hms', 'InfoCard.php');
         PHPWS_Core::initModClass('hms', 'InfoCardPdfView.php');
         $infoCard = new InfoCard($checkin);
-        
+
         /*
          * Info card removed per #869
         $infoCardView = new InfoCardPdfView();
         $infoCardView->addInfoCard($infoCard);
         */
-        
+
         // Send confirmation Email with the RIC form to the student
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         HMS_Email::sendCheckoutConfirmation($student, $infoCard);
@@ -202,4 +202,3 @@ class CheckoutFormSubmitCommand extends Command {
         }
     }
 }
-
