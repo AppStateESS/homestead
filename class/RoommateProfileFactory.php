@@ -17,13 +17,13 @@ namespace Homestead;
     //public static function checkForProfile($username, $term)
     public static function checkForProfile($bannerId, $term)
     {
-        $db = new PHPWS_DB('hms_student_profiles');
+        $db = new \PHPWS_DB('hms_student_profiles');
 
         $db->addWhere('banner_id', $bannerId);
         $db->addWhere('term', $term);
         $result = $db->select('row');
 
-        if (PHPWS_Error::logIfError($result)) {
+        if (\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -48,13 +48,13 @@ namespace Homestead;
     {
         $profile = new RoommateProfile();
 
-        $db = new PHPWS_DB('hms_student_profiles');
+        $db = new \PHPWS_DB('hms_student_profiles');
 
         $db->addWhere('banner_id', $bannerId);
         $db->addWhere('term', $term);
         $result = $db->loadObject($profile);
 
-        if (PHPWS_Error::logIfError($result)) {
+        if (\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 

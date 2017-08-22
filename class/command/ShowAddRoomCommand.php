@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 //TODO finish this class, make a view
 
 class ShowAddRoomCommand extends Command {
@@ -47,13 +51,13 @@ class ShowAddRoomCommand extends Command {
         $floor = new HMS_Floor($floor_id);
         if(!$floor){
             $tpl['ERROR_MSG'] = 'There was an error getting the floor object. Please contact ESS.';
-            return PHPWS_Template::process($tpl, 'hms', 'admin/add_room.tpl');
+            return \PHPWS_Template::process($tpl, 'hms', 'admin/add_room.tpl');
         }
 
         $hall = $floor->get_parent();
         if(!$hall){
             $tpl['ERROR_MSG'] = 'There was an error getting the hall object. Please contact ESS.';
-            return PHPWS_Template::process($tpl, 'hms', 'admin/add_room.tpl');
+            return \PHPWS_Template::process($tpl, 'hms', 'admin/add_room.tpl');
         }
 
         # Check Permissions

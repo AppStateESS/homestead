@@ -133,6 +133,6 @@ class HousingApplicationView extends View {
 
         Layout::addPageTitle("Housing Application");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/student_application.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/student_application.tpl');
     }
 }

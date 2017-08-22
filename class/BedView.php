@@ -54,7 +54,7 @@ class BedView extends hms\View
 
 
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd->initForm($form);
         $form->addText('bedroom_label', $this->bed->bedroom_label);
         $form->setClass('bedroom_label', 'form-control');
@@ -105,7 +105,7 @@ class BedView extends hms\View
         $tpl = $form->getTemplate();
         Layout::addPageTitle("Edit Bed");
         $tpl['HISTORY'] = $this->getBedHistoryContent();
-        return PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
     }
 
     private function getBedHistoryContent()

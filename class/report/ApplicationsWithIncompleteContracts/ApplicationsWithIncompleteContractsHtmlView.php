@@ -13,7 +13,7 @@ class ApplicationsWithIncompleteContractsHtmlView extends ReportHtmlView
 
         $this->tpl['rows'] = $this->report->getData();
 
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/ApplicationsWithIncompleteContracts.tpl');
+        return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/ApplicationsWithIncompleteContracts.tpl');
     }
 
 }

@@ -29,7 +29,7 @@ class CheckinFormView extends View {
         $tpl['ASSIGNMENT']	= $this->assignment->where_am_i();
         $tpl['BANNER_ID'] 	= $this->student->getBannerId();
 
-        $form = new PHPWS_Form('checkin_form');
+        $form = new \PHPWS_Form('checkin_form');
 
         $submitCmd = CommandFactory::getCommand('CheckinFormSubmit');
         $submitCmd->setBannerId($this->student->getBannerId());
@@ -51,7 +51,7 @@ class CheckinFormView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/checkinForm.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/checkinForm.tpl');
     }
 
 }

@@ -2,8 +2,7 @@
 
 namespace Homestead;
 
-/*use \hms\DocusignClientFactory;
-use \hms\HousingApplication;*/
+use \hms\DocusignClientFactory;
 
 /**
  * ProfileHousingAppList - View to show the list of houing apps on the Student Profile.
@@ -30,7 +29,7 @@ class ProfileHousingAppList extends View
 
         if (empty($this->housingApps)) {
             $tpl['APPLICATIONS_EMPTY'] = 'No applications found.';
-            return PHPWS_Template::process($tpl, 'hms', 'admin/profileHousingAppList.tpl');
+            return \PHPWS_Template::process($tpl, 'hms', 'admin/profileHousingAppList.tpl');
         }
 
         // Include javascript for cancel application jquery dialog
@@ -103,7 +102,7 @@ class ProfileHousingAppList extends View
         $tpl['APPLICATIONS'] = $app_rows;
 
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/profileHousingAppList.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/profileHousingAppList.tpl');
     }
 
 }

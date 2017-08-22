@@ -1,5 +1,8 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 

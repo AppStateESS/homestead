@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class ShowReturningStudentMenuCommand extends Command {
 
     public function getRequestVars(){
@@ -30,4 +34,3 @@ class ShowReturningStudentMenuCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

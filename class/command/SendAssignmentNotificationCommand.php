@@ -1,5 +1,10 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+use \PHPWS_Error;
+
 /**
  * Controller for sending Assignment Notifications
  *
@@ -42,7 +47,7 @@ class SendAssignmentNotificationCommand extends Command {
 
         $term = Term::getSelectedTerm();
 
-        $db = new PHPWS_DB('hms_assignment');
+        $db = new \PHPWS_DB('hms_assignment');
         $db->addWhere('email_sent', 0);
         $db->addWhere('term', $term);
 

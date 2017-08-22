@@ -5,7 +5,7 @@ namespace Homestead;
 PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initCoreClass('DBPager.php');
+\PHPWS_Core::initCoreClass('DBPager.php');
 
 class ConfirmedRoommatePager extends View {
 

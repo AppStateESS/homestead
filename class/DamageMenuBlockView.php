@@ -53,6 +53,6 @@ class DamageMenuBlockView extends View {
             $tpl['DEADLINE'] = HMS_Util::get_long_date_time($end);
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/roomDamageMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/roomDamageMenuBlock.tpl');
     }
 }

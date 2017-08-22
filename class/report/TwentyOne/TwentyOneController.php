@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\TwentyOne;
+
 /**
  *
  * @author Jeremy Booker
@@ -23,4 +25,3 @@ class TwentyOneController extends ReportController implements iSyncReport, iAsyn
     }
 
 }
-

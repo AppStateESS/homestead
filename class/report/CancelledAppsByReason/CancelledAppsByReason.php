@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\report\CancelledAppsByReason;
+
+use \PHPWS_DB;
+
 /**
  * Report for listing the number of cancelled housing applications by cancellation reason.
  *

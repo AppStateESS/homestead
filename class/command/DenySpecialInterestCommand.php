@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
   /**
    * DenySpecialInterest
    *
@@ -11,8 +15,6 @@
    *
    * @author Robert Bost <bostrt at tux dot appstate dot edu>
    */
-
-PHPWS_Core::initModClass('hms', 'Command.php');
 
 class DenySpecialInterestCommand extends Command
 {

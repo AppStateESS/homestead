@@ -24,12 +24,12 @@ class CachedStudent extends Student {
         $this->term = $term;
         $this->timestamp = time();
 
-        $db = new PHPWS_DB('hms_student_cache');
+        $db = new \PHPWS_DB('hms_student_cache');
         try {
             $result = $db->saveObject($this);
         }catch(\Exception $e){
             // Silently log any errors
-            PHPWS_Error::logIfError($e);
+            \PHPWS_Error::logIfError($e);
         }
 
     }

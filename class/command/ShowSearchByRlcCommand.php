@@ -1,5 +1,8 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'SearchByRlcView.php');
 
 class ShowSearchByRlcCommand extends Command {
@@ -28,4 +31,3 @@ class ShowSearchByRlcCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

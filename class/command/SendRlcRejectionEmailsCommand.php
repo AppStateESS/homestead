@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
   /**
    * This command will notify all rejected students that their
    * RLC Application has been denied.

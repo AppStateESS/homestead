@@ -28,6 +28,6 @@ class EditRoommateGroupsView extends View {
 
         Layout::addPageTitle("Edit Roommate Group");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/show_confirmed_roommates.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/show_confirmed_roommates.tpl');
     }
 }

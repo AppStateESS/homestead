@@ -76,7 +76,7 @@ class LotteryRoommateRequestView extends View {
         $denyCmd = CommandFactory::getCommand('LotteryShowDenyRoommateRequest');
         $denyCmd->setRequestId($this->request['id']);
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd->initForm($form);
 
         # Decide which meal plan drop box to show based on whether or not the chosen room
@@ -115,6 +115,6 @@ class LotteryRoommateRequestView extends View {
 
         Layout::addPageTitle("Lottery Request Roommate");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/lottery_roommate_request.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/lottery_roommate_request.tpl');
     }
 }

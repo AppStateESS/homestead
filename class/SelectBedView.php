@@ -34,7 +34,7 @@ class SelectBedView extends View{
         javascript('modules/hms/select_bed');
 
         // Setup the form
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $this->onSelectCmd->initForm($form);
 
         $form->setMethod('get');
@@ -60,6 +60,6 @@ class SelectBedView extends View{
 
         Layout::addPageTitle("Select Bed");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/select_bed.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/select_bed.tpl');
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\CheckinList;
+
 /**
  * Checkin List Report
  * Lists all of the currently checked-in students, ordered by hall and room number
@@ -34,7 +36,7 @@ class CheckinList extends Report implements iCsvReport {
         $term = $this->term;
 
 
-        $db = new PHPWS_DB('hms_checkin');
+        $db = new \PHPWS_DB('hms_checkin');
 
         // Join hall structure
         $db->addJoin('', 'hms_checkin', 'hms_hall_structure', 'bed_id', 'bedid');
@@ -53,7 +55,7 @@ class CheckinList extends Report implements iCsvReport {
 
         $results = $db->select();
 
-        if(PHPWS_Error::isError($results)){
+        if(\PHPWS_Error::isError($results)){
             throw new DatabaseException($results->toString());
         }
 

@@ -1,13 +1,15 @@
 <?php
 
+namespace Homestead\report\RaReport;
+
 /**
  * RaReport Report.
- * 
+ *
  * @author John Felipe
  * @package HMS
  */
 
-class RaReport extends Report implements iCsvReport 
+class RaReport extends Report implements iCsvReport
 {
 	const friendlyName = 'RA Report';
     const shortName = 'RaReport';
@@ -55,18 +57,18 @@ class RaReport extends Report implements iCsvReport
 
     }
 
-        
 
-    
+
+
 
     public function getCsvColumnsArray()
     {
         return array('Name', 'Banner ID', 'Username', 'Hall Name', 'Floor', 'Room Number');
     }
-    
+
     public function getCsvRowsArray()
     {
-        return $this->rows; 
+        return $this->rows;
     }
 
     public function setTerm($term)
@@ -78,12 +80,9 @@ class RaReport extends Report implements iCsvReport
     {
         return $this->term;
     }
-    
+
     public function getRows()
     {
         return $this->rows;
     }
 }
-
-
-

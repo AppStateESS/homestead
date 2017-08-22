@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\EarlyRelease;
+
 class EarlyRelease extends Report implements iCSVReport
 {
     const friendlyName = 'Early Release';

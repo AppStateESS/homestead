@@ -32,7 +32,7 @@ class RlcApplicationPage2View extends View{
         $template = array();
 
         $cmd = CommandFactory::getCommand('SubmitRlcApplication');
-        $rlc_form2 = new PHPWS_Form();
+        $rlc_form2 = new \PHPWS_Form();
         $cmd->initForm($rlc_form2);
 
         // Add hidden fields for fields from page 1
@@ -75,6 +75,6 @@ class RlcApplicationPage2View extends View{
 
         Layout::addPageTitle("RLC Application");
 		javascript('jquery');
-        return PHPWS_Template::process($template, 'hms', 'student/rlc_signup_form_page2.tpl');
+        return \PHPWS_Template::process($template, 'hms', 'student/rlc_signup_form_page2.tpl');
     }
 }

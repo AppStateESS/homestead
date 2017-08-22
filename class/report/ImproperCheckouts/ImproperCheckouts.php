@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\ImproperCheckouts;
+
 /**
  *
  * @author Jeremy Booker
@@ -73,4 +75,3 @@ class ImproperCheckouts extends Report implements iCsvReport {
         return $cmd;
     }
 }
-

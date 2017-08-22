@@ -4,22 +4,9 @@ namespace Homestead;
 
 use \hms\exception\DatabaseException;
 use \hms\exception\InvalidTermException;
-/*use \hms\UserStatus;
-use \hms\StudentFactory;
-use \hms\Term;
-use \hms\HMS_Activity_Log;
-use \hms\HousingApplication;
-use \hms\SpringApplication;
-use \hms\SummerApplication;
-use \hms\FallApplication;
-use \hms\HousingApplicationFactory;
-use \hms\LotteryApplication;
-use \hms\WaitingListApplication;
-use \hms\SOAP;*/
 use \PHPWS_Error;
-use \PHPWS_Core;
 use \PHPWS_DB;
-PHPWS_Core::initCoreClass('Mail.php');
+\PHPWS_Core::initCoreClass('Mail.php');
 
 /**
  * Main model class to represent a Housing Application.

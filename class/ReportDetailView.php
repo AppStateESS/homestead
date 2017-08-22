@@ -83,6 +83,6 @@ class ReportDetailView extends View {
             $tpl['RUN_SCHEDULE_DISABLED'] = ""; // dummy tag
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/reports/reportDetailView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/reports/reportDetailView.tpl');
     }
 }

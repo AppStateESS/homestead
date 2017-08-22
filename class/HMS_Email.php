@@ -40,7 +40,7 @@ class HMS_Email{
 
     public static function send_template_message($to, $subject, $tpl, $tags)
     {
-        $content = PHPWS_Template::process($tags, 'hms', $tpl);
+        $content = \PHPWS_Template::process($tags, 'hms', $tpl);
 
         HMS_Email::send_email($to, NULL, $subject, $content);
     }
@@ -69,7 +69,7 @@ class HMS_Email{
         }
 
         # Create a Mail object and set it up
-        \PHPWS_Core::initCoreClass('Mail.php');
+        \\PHPWS_Core::initCoreClass('Mail.php');
         $message = new PHPWS_Mail();
 
         $message->addSendTo($to);
@@ -94,7 +94,7 @@ class HMS_Email{
         }
 
         if(PEAR::isError($result)){
-            PHPWS_Error::log($result);
+            \PHPWS_Error::log($result);
             return false;
         }
 
@@ -595,7 +595,7 @@ class HMS_Email{
         $tags['HALL_NAME']  = $infoCard->getHall()->getHallName();
         $tags['ASSIGNMENT'] = $infoCard->getRoom()->where_am_i();
 
-        $content = PHPWS_Template::process($tags, 'hms', 'email/checkinConfirmation.tpl');
+        $content = \PHPWS_Template::process($tags, 'hms', 'email/checkinConfirmation.tpl');
 
         $htmlContent = Markdown::defaultTransform($content);
 
@@ -630,7 +630,7 @@ class HMS_Email{
         $tags['NAME']       = $student->getName();
         $tags['ASSIGNMENT'] = $infoCard->getRoom()->where_am_i();
 
-        $content = PHPWS_Template::process($tags, 'hms', 'email/checkoutConfirmation.tpl');
+        $content = \PHPWS_Template::process($tags, 'hms', 'email/checkoutConfirmation.tpl');
         $htmlContent = Markdown::defaultTransform($content);
 
         $message = Swift_Message::newInstance();
@@ -682,7 +682,7 @@ class HMS_Email{
             $to = array(($to->getUsername() . TO_DOMAIN) => $to->getName());
         }
 
-        $content = PHPWS_Template::process($tags, 'hms', $tpl);
+        $content = \PHPWS_Template::process($tags, 'hms', $tpl);
         $htmlContent = Markdown::defaultTransform($content);
 
         $message = Swift_Message::newInstance();

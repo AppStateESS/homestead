@@ -18,7 +18,7 @@ class SendRlcInvitesView extends View {
 
         $submitCmd = CommandFactory::getCommand('SendRlcInvites');
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd->initForm($form);
 
         $tpl['RESPOND_BY_DATE'] = javascript('datepicker', array('name'=>'respond_by_date', 'id'=>'respond_by_date'));
@@ -36,6 +36,6 @@ class SendRlcInvitesView extends View {
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
-        return PHPWS_Template::process($tpl, 'hms', 'admin/sendRlcInvites.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/sendRlcInvites.tpl');
     }
 }

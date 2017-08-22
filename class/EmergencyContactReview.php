@@ -38,7 +38,7 @@ class EmergencyContactReview extends View {
         $tpl['MISSING_PERSON_EMAIL'] 		= $this->app->getMissingPersonEmail();
 
 
-        $form = new PHPWS_Form('hidden_form');
+        $form = new \PHPWS_Form('hidden_form');
         $submitCmd = CommandFactory::getCommand('EmergencyContactConfirm');
         $submitCmd->setVars($_REQUEST);
         $submitCmd->initForm($form);
@@ -55,6 +55,6 @@ class EmergencyContactReview extends View {
 
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/emergency_contact_form.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/emergency_contact_form.tpl');
     }
 }

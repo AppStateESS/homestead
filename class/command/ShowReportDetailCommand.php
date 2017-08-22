@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * ShowReportDetailCommand
  *
@@ -66,4 +70,3 @@ class ShowReportDetailCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

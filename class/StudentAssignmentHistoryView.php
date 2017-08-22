@@ -88,6 +88,6 @@ class StudentAssignmentHistoryView extends View {
             $tpl['SHOW_MORE'] = "[ <a id='showMoreLink'>show more</a> ]";
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/StudentAssignmentHistoryView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/StudentAssignmentHistoryView.tpl');
     }
 }

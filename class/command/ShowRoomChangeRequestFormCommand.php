@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 PHPWS_Core::initModClass('hms', 'RoomChangeRequest.php');
 PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');

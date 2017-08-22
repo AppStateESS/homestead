@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\CheckoutList;
+
 /**
  * HTML View for CheckoutList report
  *
@@ -22,6 +24,6 @@ class CheckoutListHtmlView extends ReportHtmlView
             $this->tpl['rows'][] = $row;
         }
 
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/CheckoutList.tpl');
+        return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/CheckoutList.tpl');
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\UnassignedFreshmen;
+
 /**
  * HTML View for UnassignedFreshmen report
  *
@@ -17,13 +19,12 @@ class UnassignedFreshmenHtmlView extends ReportHtmlView {
         $this->tpl['TOTAL'] = $this->report->getTotal();
         $this->tpl['MALE'] = $this->report->getMale();
         $this->tpl['FEMALE'] = $this->report->getFemale();
-        
+
         // Copy results into the template
         foreach($this->report->getData() as $row){
             $this->tpl['rows'][] = $row;
         }
-        
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/UnassignedFreshmen.tpl');
+
+        return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/UnassignedFreshmen.tpl');
     }
 }
-

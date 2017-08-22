@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 PHPWS_Core::initModClass('hms', 'DeniedRlcApplicantView.php');
 
 class ShowDeniedRlcApplicantsCommand extends Command {
@@ -23,4 +27,3 @@ class ShowDeniedRlcApplicantsCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

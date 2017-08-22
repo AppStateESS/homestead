@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * Compatibility layer for old Roommate code.
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
@@ -56,7 +60,7 @@ class ShowRequestRoommateCommand extends Command {
             $err->redirect();
         }
 
-        $form = new PHPWS_Form;
+        $form = new \PHPWS_Form;
 
         $cmd = CommandFactory::getCommand('RequestRoommate');
         $cmd->setTerm($term);

@@ -6,7 +6,7 @@ PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 class RlcAssignmentsView extends View {
 
     public function show(){
-        PHPWS_Core::initCoreClass('DBPager.php');
+        \PHPWS_Core::initCoreClass('DBPager.php');
 
         $tags = array();
 

@@ -23,7 +23,7 @@ class SearchByRlcView extends View {
             $tpl['LEARNING_COMMUNITIES'][] = $node;
         }
 
-        $final = PHPWS_Template::processTemplate($tpl, 'hms', 'admin/search_by_rlc.tpl');
+        $final = \PHPWS_Template::processTemplate($tpl, 'hms', 'admin/search_by_rlc.tpl');
         return $final;
     }
 }

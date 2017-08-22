@@ -1,5 +1,8 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'RlcApplicationPage1View.php');
 
@@ -25,11 +28,9 @@ class ShowRlcApplicationPage1ViewCommand extends Command {
         }
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
-        
+
         $view = new RlcApplicationPage1View($context, $student);
 
         $context->setContent($view->show());
     }
 }
-
-

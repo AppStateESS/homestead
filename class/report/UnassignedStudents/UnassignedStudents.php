@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\UnassignedStudents;
+
 /**
  * Unassigned Students Report
  * Computes the list of all unassigned students for the given term.
@@ -51,7 +53,7 @@ class UnassignedStudents extends Report implements iCsvReport {
 
         $sem = Term::getTermSem($term);
 
-        $db = new PHPWS_DB('hms_new_application');
+        $db = new \PHPWS_DB('hms_new_application');
         $db->addColumn('hms_new_application.*');
 
         $applicationClassName = '';
@@ -97,7 +99,7 @@ class UnassignedStudents extends Report implements iCsvReport {
 
         $results = $db->getObjects($applicationClassName);
 
-        if(PHPWS_Error::isError($results)){
+        if(\PHPWS_Error::isError($results)){
             throw new DatabaseException($results->toString());
         }
 

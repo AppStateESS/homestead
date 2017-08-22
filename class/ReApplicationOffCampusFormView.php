@@ -20,7 +20,7 @@ class ReApplicationOffCampusFormView extends View {
         $tpl['NAME'] = $this->student->getFullName();
         $tpl['TERM'] = Term::toString($this->term) . ' - ' . Term::toString(Term::getNextTerm($this->term));
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd = CommandFactory::getCommand('OffCampusWaitingListFormSave');
         $submitCmd->setTerm($this->term);
         $submitCmd->initForm($form);
@@ -129,7 +129,7 @@ class ReApplicationOffCampusFormView extends View {
 
         $form->mergeTemplate($tpl);
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/reapplicationOffcampus.tpl');
+        return \PHPWS_Template::process($form->getTemplate(), 'hms', 'student/reapplicationOffcampus.tpl');
     }
 
 }

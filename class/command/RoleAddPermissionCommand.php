@@ -1,6 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'Command.php');
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'CommandContext.php');
 PHPWS_Core::initModClass('hms', 'HMS_Role.php');
 PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
@@ -33,4 +35,3 @@ class RoleAddPermissionCommand extends Command {
         exit;
     }
 }
-

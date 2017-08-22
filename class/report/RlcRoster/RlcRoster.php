@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\RlcRoster;
+
 /**
  * The RLC Roster report.
  * Finds and displays all members of RLCs and anyone who is

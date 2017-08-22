@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\FloorRoster;
+
 /*
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
@@ -14,5 +16,3 @@ class FloorRosterHtmlView extends ReportHtmlView {
     }
 
 }
-
-

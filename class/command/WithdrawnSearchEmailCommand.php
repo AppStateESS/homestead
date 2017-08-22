@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * Handles running the Withdrawn search process and emailing the results.
  * @package hms
@@ -64,5 +68,3 @@ class WithdrawnSearchEmailCommand extends ScheduledPulse
         HMS::quit();
     }
 }
-
-

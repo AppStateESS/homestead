@@ -1,10 +1,12 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'Command.php');
+namespace Homestead\command;
+
+use \Homestead\Command;
 
 /**
  * Controller for creating an eligibility waiver for re-application.
- * 
+ *
  * @package Hms
  * @author  Jeremy Booker
  */
@@ -31,14 +33,14 @@ class CreateWaiverCommand extends Command {
 
         $error = false;
         foreach($usernames as $user){
-            
+
             $trimmed = trim($user);
-            
+
             // Check for blank lines and skip them
             if ($trimmed == '') {
                 continue;
             }
-            
+
             // Remove everything after '@'.
             $splode = explode('@', $trimmed);
             $user = trim($splode[0]); # Username is at [0]
@@ -46,7 +48,7 @@ class CreateWaiverCommand extends Command {
             if ($user == '') {
                 continue;
             }
-            
+
             if(!$soap->isValidStudent($user, $term)){
                 NQ::simple('hms', hms\NotificationView::ERROR, "Invalid username: $user"  );
                 $error = true;
@@ -68,4 +70,3 @@ class CreateWaiverCommand extends Command {
         $cmd->redirect();
     }
 }
-

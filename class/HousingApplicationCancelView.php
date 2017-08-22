@@ -27,7 +27,7 @@ class HousingApplicationCancelView extends View {
             $tpl['NO_ASSIGNMENT'] = ""; // dummy tag
         }
 
-        $form = new PHPWS_Form('cancel_app_form');
+        $form = new \PHPWS_Form('cancel_app_form');
 
         $submitCmd = CommandFactory::getCommand('CancelHousingApplication');
         $submitCmd->initForm($form);
@@ -43,6 +43,6 @@ class HousingApplicationCancelView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/housingApplicationCancelView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/housingApplicationCancelView.tpl');
     }
 }

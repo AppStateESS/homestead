@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * SendRlcInvitesComands
  *
@@ -57,5 +61,3 @@ class SendRlcInvitesCommand extends Command {
         $resultCmd->redirect();
     }
 }
-
-

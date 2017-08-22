@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\InternationalReservedBeds;
+
 class InternationalReservedBedsHtmlView extends ReportHtmlView
 {
 
@@ -11,7 +13,7 @@ class InternationalReservedBedsHtmlView extends ReportHtmlView
 
         $this->tpl['TOTAL'] = $this->report->getTotal();
 
-        $myTpl = new PHPWS_Template('hms');
+        $myTpl = new \PHPWS_Template('hms');
         $myTpl->setFile('admin/reports/IntlReservedBeds.tpl');
 
         $myTpl->setData($this->tpl);

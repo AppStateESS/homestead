@@ -33,6 +33,6 @@ class MessagingMenu extends CommandMenu {
 
         $tpl['MENU'] = parent::show();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/menus/MessagingMenu.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/menus/MessagingMenu.tpl');
     }
 }

@@ -24,6 +24,6 @@ class LotteryChooseRoomThanksView extends View {
 
         Layout::addPageTitle("Thank you");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_room_thanks.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_room_thanks.tpl');
     }
 }

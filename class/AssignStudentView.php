@@ -33,7 +33,7 @@ class AssignStudentView extends View {
      */
     public function show()
     {
-        PHPWS_Core::initCoreClass('Form.php');
+        \PHPWS_Core::initCoreClass('Form.php');
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
@@ -48,7 +48,7 @@ class AssignStudentView extends View {
         $tpl = array();
         $tpl['TERM'] = Term::getPrintableSelectedTerm();
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
 
         $assignCmd = CommandFactory::getCommand('AssignStudent');
         $assignCmd->initForm($form);
@@ -177,6 +177,6 @@ class AssignStudentView extends View {
 
         Layout::addPageTitle("Assign Student");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/assignStudent.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/assignStudent.tpl');
     }
 }

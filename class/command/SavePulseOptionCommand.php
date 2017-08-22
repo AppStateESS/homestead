@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * @license http://opensource.org/licenses/lgpl-3.0.html
  * @author Matthew McNaney <mcnaney at gmail dot com>
@@ -75,7 +79,7 @@ class SavePulseOptionCommand extends Command
         $pulse = \pulse\PulseFactory::getByName('AutoAssign', 'hms');
         \pulse\PulseFactory::deleteResource($pulse);
     }
-    
+
     public function addAutoAssignSchedule()
     {
         $pulse = \pulse\PulseFactory::getByName('AutoAssign', 'hms');
@@ -97,7 +101,7 @@ class SavePulseOptionCommand extends Command
         $pulse = \pulse\PulseFactory::getByName('ReportRunner', 'hms');
         \pulse\PulseFactory::deleteResource($pulse);
     }
-    
+
     public function addReportRunnerSchedule()
     {
         $pulse = \pulse\PulseFactory::getByName('ReportRunner', 'hms');
@@ -119,7 +123,7 @@ class SavePulseOptionCommand extends Command
         $pulse = \pulse\PulseFactory::getByName('Withdrawn', 'hms');
         \pulse\PulseFactory::deleteResource($pulse);
     }
-    
+
     public function addWithdrawnSchedule()
     {
         $pulse = \pulse\PulseFactory::getByName('Withdrawn', 'hms');
@@ -136,13 +140,13 @@ class SavePulseOptionCommand extends Command
         pulse\PulseFactory::save($ps);
     }
 
-    
+
     public function dropNightlyCacheSchedule()
     {
         $pulse = \pulse\PulseFactory::getByName('NightlyCache', 'hms');
         \pulse\PulseFactory::deleteResource($pulse);
     }
-    
+
     public function addNightlyCacheSchedule()
     {
         $pulse = \pulse\PulseFactory::getByName('NightlyCache', 'hms');

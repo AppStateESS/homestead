@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\CancelledAppsContinuingGraph;
+
 /**
  * Main report class for the Cancelled Applications for continuing students over time report.
  *

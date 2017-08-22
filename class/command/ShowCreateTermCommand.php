@@ -1,4 +1,8 @@
 <?php
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * @author Jeremy Booker
  * @package hms

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\RaReport;
+
 /**
  * HTML View for Ra Report.
  *
@@ -19,6 +21,6 @@ class RaReportHtmlView extends ReportHtmlView
 
 		$this->tpl['TOTAL'] = count($rows);
 
-	    return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/RaReport.tpl');
+	    return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/RaReport.tpl');
 	}
 }

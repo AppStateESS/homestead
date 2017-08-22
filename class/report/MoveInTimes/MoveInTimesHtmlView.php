@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\MoveInTimes;
+
 /*
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
@@ -13,7 +15,7 @@ class MoveInTimesHtmlView extends ReportHtmlView {
         parent::render();
         $rows = $this->report->getRows();
 
-        $tpl = new PHPWS_Template('hms');
+        $tpl = new \PHPWS_Template('hms');
         $tpl->setFile('admin/reports/MoveInTimes.tpl');
         foreach ($rows as $hall) {
             $tpl->setCurrentBlock('floor-rows');
@@ -36,5 +38,3 @@ class MoveInTimesHtmlView extends ReportHtmlView {
     }
 
 }
-
-

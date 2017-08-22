@@ -93,7 +93,7 @@ class RoomView extends View {
         $tpl['NUMBER_OF_BEDS']      = $this->room->get_number_of_beds();
         $tpl['NUMBER_OF_ASSIGNEES'] = $number_of_assignees;
 
-        $form = new PHPWS_Form;
+        $form = new \PHPWS_Form;
 
         $submitCmd = CommandFactory::getCommand('EditRoom');
         $submitCmd->setRoomId($this->room->id);
@@ -224,12 +224,12 @@ class RoomView extends View {
             $tpl['ADD_DAMAGE_URI']  = $dmgCmd->getURI();
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');
     }
 
     private function roomDamagePager()
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
+        \PHPWS_Core::initCoreClass('DBPager.php');
         PHPWS_Core::initModClass('hms', 'RoomDamage.php');
 
         $pager = new DBPager('hms_room_damage', 'RoomDamageDb');

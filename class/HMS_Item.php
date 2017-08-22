@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \PHPWS_Error;
+
 abstract class HMS_Item {
     var $id         = 0;
     var $term       = null;

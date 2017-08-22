@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * Controller class for showing the interface where a student
  * can approve a pending room change request.
@@ -8,13 +12,13 @@
  * @package homestead
  */
 class ShowRoomChangeRequestApprovalCommand extends Command {
-    
+
     public function getRequestVars()
     {
         return array('action' => 'ShowRoomChangeRequestApproval');
     }
 
-    public function execute(CommandContext $context) 
+    public function execute(CommandContext $context)
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
@@ -41,5 +45,3 @@ class ShowRoomChangeRequestApprovalCommand extends Command {
         $context->setContent($view->show());
     }
 }
-
-

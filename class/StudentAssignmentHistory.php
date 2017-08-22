@@ -42,13 +42,13 @@ class StudentAssignmentHistory extends ArrayObject{
      * @return boolean flag to signal if the initialization was a success
      */
     private function init () {
-        $db = new PHPWS_DB('hms_assignment_history');
+        $db = new \PHPWS_DB('hms_assignment_history');
         $db->addWhere('banner_id', $this->bannerId);
         $db->loadClass('hms', 'AssignmentHistory.php');
         $db->addOrder(array('term DESC', 'assigned_on DESC'));
         $result = $db->getObjects('AssignmentHistory');
 
-        if(PHPWS_Error::logIfError($result)){
+        if(\PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
         }
 

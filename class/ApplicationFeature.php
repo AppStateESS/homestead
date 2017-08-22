@@ -2,6 +2,9 @@
 
 namespace Homestead;
 
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 define('APPLICATION_FEATURE_DIR', 'applicationFeature');
 
 

@@ -26,6 +26,6 @@ class HousingApplicationThanksView extends View {
 
         Layout::addPageTitle("Thank you");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/student_application_thankyou.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/student_application_thankyou.tpl');
     }
 }

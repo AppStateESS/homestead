@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \PHPWS_DB;
+
 class StatsView extends View {
 
     public function show()
@@ -99,7 +101,7 @@ class StatsView extends View {
         $tpl['JR_INVITES']              = HMS_Lottery::count_invites_by_class($lottery_term, CLASS_JUNIOR);
         $tpl['SR_INVITES']              = HMS_Lottery::count_invites_by_class($lottery_term, CLASS_SENIOR);
 
-        $final = PHPWS_Template::process($tpl, 'hms', 'admin/statistics.tpl');
+        $final = \PHPWS_Template::process($tpl, 'hms', 'admin/statistics.tpl');
 
         Layout::addPageTitle("Statistics");
 

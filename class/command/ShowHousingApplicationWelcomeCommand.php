@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class ShowHousingApplicationWelcomeCommand extends Command {
 
     private $term;
@@ -40,5 +44,3 @@ class ShowHousingApplicationWelcomeCommand extends Command {
         $context->setContent($view->show());
     }
 }
-
-

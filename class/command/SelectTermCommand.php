@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * Marks a term as 'selected' in the user's session.
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>

@@ -13,7 +13,7 @@ class HMS_Permission extends HMS_Item {
     }
 
     public static function getDb(){
-        return new PHPWS_DB('hms_permission');
+        return new \PHPWS_DB('hms_permission');
     }
 
     public static function getMembership($permission=null, $object=null, $username=null, $display_name=false){
@@ -52,7 +52,7 @@ class HMS_Permission extends HMS_Item {
 
         $result = $db->select();
 
-        if(PHPWS_Error::logIfError($result)){
+        if(\PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
         }
 
@@ -61,14 +61,14 @@ class HMS_Permission extends HMS_Item {
 
     public static function getUserRolesForInstance($instance)
     {
-        $db = new PHPWS_DB('hms_user_role');
+        $db = new \PHPWS_DB('hms_user_role');
 
         $db->addWhere('hms_user_role.class', strtolower(get_class($instance)));
         $db->addWhere('hms_user_role.instance', $instance->id);
 
         $result = $db->select();
 
-        if(PHPWS_Error::logIfError($result)){
+        if(\PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
         }
 

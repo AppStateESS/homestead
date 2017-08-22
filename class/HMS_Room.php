@@ -2,6 +2,9 @@
 
 namespace Homestead;
 
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * HMS Room class
  *
@@ -584,7 +587,7 @@ class HMS_Room extends HMS_Item
             $tpl['DELETE']       = Layout::getJavascript('confirm', $confirm);
         }
 
-        $form = new PHPWS_Form($this->id);
+        $form = new \PHPWS_Form($this->id);
         $form->addSelect('gender_type', array(FEMALE => FEMALE_DESC,
                 MALE   => MALE_DESC,
                 COED   => COED_DESC,
@@ -797,7 +800,7 @@ class HMS_Room extends HMS_Item
 
     public static function room_pager_by_floor($floor_id, $editable=false)
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
+        \PHPWS_Core::initCoreClass('DBPager.php');
         javascript('jquery');
 
         $pager = new DBPager('hms_room', 'HMS_Room');

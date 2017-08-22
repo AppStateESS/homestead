@@ -40,6 +40,6 @@ class UpdateEmergencyContactMenuBlockView extends View {
             $tpl['UPDATE_CONTACT'] = $cmd->getLink('update your emergency contact info');
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/updateEmergencyContactMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/updateEmergencyContactMenuBlock.tpl');
     }
 }

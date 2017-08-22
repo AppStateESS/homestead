@@ -60,6 +60,6 @@ class ServiceDeskMenu extends CommandMenu {
         $tpl['MENU'] = parent::show();
         $tpl['LEGEND_TITLE'] = 'Service Desk';
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/menus/AdminMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/menus/AdminMenuBlock.tpl');
     }
 }

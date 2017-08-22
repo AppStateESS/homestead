@@ -1,12 +1,14 @@
 <?php
 
+namespace Homestead\report\RaReport;
+
 /**
  *
  * @author John Felipe
  * @package HMS
  */
 
-class RaReportController extends ReportController implements iSyncReport, iHtmlReportView, iPdfReportView, iCsvReportView 
+class RaReportController extends ReportController implements iSyncReport, iHtmlReportView, iPdfReportView, iCsvReportView
 {
 	public function setParams(Array $params)
     {
@@ -22,5 +24,3 @@ class RaReportController extends ReportController implements iSyncReport, iHtmlR
         return $params;
     }
 }
-
-

@@ -39,7 +39,7 @@ class RlcAssignmentView extends View
         $tags['FILTERS'] = $this->getFilters();
         $tags['ASSIGNMENTS_PAGER'] = $this->rlcApplicationPager();
 
-        $exportForm = new PHPWS_Form('export_form');
+        $exportForm = new \PHPWS_Form('export_form');
         $exportCmd = CommandFactory::getCommand('ExportRlcApps');
         $exportCmd->initForm($exportForm);
 
@@ -51,7 +51,7 @@ class RlcAssignmentView extends View
         $exportForm->mergeTemplate($tags);
         $tags = $exportForm->getTemplate();
 
-        return PHPWS_Template::process($tags, 'hms', 'admin/make_new_rlc_assignments.tpl');
+        return \PHPWS_Template::process($tags, 'hms', 'admin/make_new_rlc_assignments.tpl');
     }
 
     /**
@@ -75,7 +75,7 @@ class RlcAssignmentView extends View
 
         // Initialize form and submit command
         $submitCmd = CommandFactory::getCommand('ShowAssignRlcApplicants');
-        $form = new PHPWS_Form('dropdown_selector');
+        $form = new \PHPWS_Form('dropdown_selector');
         $submitCmd->initForm($form);
         $form->setMethod('get');
 
@@ -97,7 +97,7 @@ class RlcAssignmentView extends View
         $form->setClass('student_type', 'form-control');
         $form->setExtra('student_type', 'onChange="refresh_page(\'dropdown_selector\')"');
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/rlcApplicationListFilters.tpl');
+        return \PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/rlcApplicationListFilters.tpl');
     }
 
     /**
@@ -107,10 +107,10 @@ class RlcAssignmentView extends View
      */
     public function rlcApplicationPager()
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
+        \PHPWS_Core::initCoreClass('DBPager.php');
 
         $submitCmd = CommandFactory::getCommand('AssignRlcApplicants');
-        $form = new PHPWS_Form;
+        $form = new \PHPWS_Form;
         $submitCmd->initForm($form);
         $form->addSubmit('submit', 'Submit Changes');
         $form->setClass('submit', 'btn btn-primary');

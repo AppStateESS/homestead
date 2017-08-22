@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \PHPWS_Error;
+use \PHPWS_DB;
 define('MAX_INVITES_PER_BATCH', 500);
 define('INVITE_TTL_HRS', 48);
 

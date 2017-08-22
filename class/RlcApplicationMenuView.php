@@ -112,6 +112,6 @@ class RlcApplicationMenuView extends View {
 
         Layout::addPageTitle("RLC Application Menu");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/RlcApplicationMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/RlcApplicationMenuBlock.tpl');
     }
 }

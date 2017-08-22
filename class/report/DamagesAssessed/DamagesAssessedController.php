@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\DamagesAssessed;
+
 /*
  *
  * @author Jeremy Booker
@@ -22,5 +24,3 @@ class DamagesAssessedController extends ReportController implements iSyncReport,
         return $params;
     }
 }
-
-

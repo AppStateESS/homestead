@@ -30,7 +30,7 @@ class SpecialInterestGroupView extends View{
         }
 
         // Show the drop down box of groups
-        $form = new PHPWS_Form('special_interest');
+        $form = new \PHPWS_Form('special_interest');
         $form->setMethod('get');
         $form->addDropBox('group', $groups);
         $form->setClass('group', 'form-control');
@@ -43,6 +43,6 @@ class SpecialInterestGroupView extends View{
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/special_interest_approval.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/special_interest_approval.tpl');
     }
 }

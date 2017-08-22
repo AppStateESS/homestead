@@ -20,7 +20,7 @@ class RlcReapplicationPageTwoView extends View {
         $tpl = array();
         $tpl['TERM'] = Term::toString($this->term);
 
-        $form = new PHPWS_Form('rlc_reapp');
+        $form = new \PHPWS_Form('rlc_reapp');
         $submitCmd = CommandFactory::getCommand('SubmitRLCReapplicationPage2');
         $submitCmd->setTerm($this->term);
         $submitCmd->initForm($form);
@@ -46,6 +46,6 @@ class RlcReapplicationPageTwoView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl,'hms', 'student/RlcReapplicationPage2.tpl');
+        return \PHPWS_Template::process($tpl,'hms', 'student/RlcReapplicationPage2.tpl');
     }
 }

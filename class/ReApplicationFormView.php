@@ -35,7 +35,7 @@ class ReApplicationFormView extends View {
         /*
          * onSubmit command
          */
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd = CommandFactory::getCommand('ReApplicationFormSubmit');
         $submitCmd->setTerm($this->term);
         $submitCmd->initForm($form);
@@ -149,6 +149,6 @@ class ReApplicationFormView extends View {
 
         Layout::addPageTitle("Re-Application Form");
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/reapplicationForm.tpl');
+        return \PHPWS_Template::process($form->getTemplate(), 'hms', 'student/reapplicationForm.tpl');
     }
 }

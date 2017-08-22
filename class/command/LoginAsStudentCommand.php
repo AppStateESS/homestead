@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class LoginAsStudentCommand extends Command {
 
     private $username;
@@ -23,12 +27,10 @@ class LoginAsStudentCommand extends Command {
         if(!isset($this->username)){
             $this->username = $context->get('username');
         }
-         
+
         UserStatus::wearMask($this->username);
-         
+
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();
     }
 }
-
-

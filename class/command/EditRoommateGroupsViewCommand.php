@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class EditRoommateGroupsViewCommand extends Command {
 
     public function getRequestVars(){

@@ -1,6 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'Command.php');
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'CommandContext.php');
 PHPWS_Core::initModClass('hms', 'HMS_Role.php');
 
@@ -26,11 +28,11 @@ class RoleRemoveUserCommand extends Command {
             exit;
         }
 
-        $db = new PHPWS_DB('hms_role');
+        $db = new \PHPWS_DB('hms_role');
         $db->addWhere('name', $rolename);
         $result = $db->select('row');
 
-        if(PHPWS_Error::logIfError($result) || is_null($result['id'])){
+        if(\PHPWS_Error::logIfError($result) || is_null($result['id'])){
             echo json_encode(false);
             exit;
         }
@@ -47,5 +49,3 @@ class RoleRemoveUserCommand extends Command {
         exit;
     }
 }
-
-

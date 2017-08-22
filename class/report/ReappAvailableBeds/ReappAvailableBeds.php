@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\ReappAvailableBeds;
+
 /**
 * Report for accessing the number of beds in each hall are still Available
 * for reapplying students.

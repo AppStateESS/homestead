@@ -1,7 +1,11 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class ShowStatsCommand extends Command {
-    
+
     public function getRequestVars(){
         return array('action'=>'ShowStats');
     }
@@ -19,5 +23,3 @@ class ShowStatsCommand extends Command {
         $context->setContent($view->show());
     }
 }
-
-

@@ -34,7 +34,7 @@ class SelectFloorView extends View
         javascript('modules/hms/select_floor');
 
         # Setup the form
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $this->onSelectCmd->initForm($form);
 
         $form->setMethod('get');
@@ -54,7 +54,7 @@ class SelectFloorView extends View
 
         Layout::addPageTitle("Select Floor");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/select_floor.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/select_floor.tpl');
     }
 
 }

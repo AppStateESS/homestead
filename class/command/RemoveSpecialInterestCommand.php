@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
   /**
    * RemoveSpecialInterest
    *
@@ -7,9 +11,6 @@
    *
    * @author Robert Bost <bostrt at tux dot appstate dot edu>
    */
-
-
-PHPWS_Core::initModClass('hms', 'Command.php');
 
 class RemoveSpecialInterestCommand extends Command
 {

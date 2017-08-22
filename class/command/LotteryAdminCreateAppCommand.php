@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class LotteryAdminCreateAppCommand extends Command {
 
     public function getRequestVars()

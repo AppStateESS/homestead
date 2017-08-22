@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class LotteryConfirmRoommateRequestCommand extends Command {
 
     private $requestId;
@@ -37,7 +41,7 @@ class LotteryConfirmRoommateRequestCommand extends Command {
         $errorCmd->setMealPlan($mealPlanCode);
 
         // Confirm the captcha
-        PHPWS_Core::initCoreClass('Captcha.php');
+        \PHPWS_Core::initCoreClass('Captcha.php');
         $captcha = Captcha::verify(TRUE);
         if($captcha === FALSE){
             NQ::simple('hms', hms\NotificationView::ERROR, 'The words you entered were incorrect. Please try again.');

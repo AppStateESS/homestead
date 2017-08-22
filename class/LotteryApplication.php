@@ -2,6 +2,9 @@
 
 namespace Homestead;
 
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * Lottery Application - Model to represent a lottery re-application
  * for continuing students.
@@ -210,7 +213,7 @@ class LotteryApplication extends HousingApplication {
 
         $template['ASU_USERNAME']        = $student->getProfileLink();
 
-        $form = new PHPWS_Form('clear_disabilities');
+        $form = new \PHPWS_Form('clear_disabilities');
         $form->addHidden('da_clear', $this->asu_username);
         $form->addHidden('type',     'lottery');
         $form->addHidden('op',       'view_lottery_needs');
@@ -406,7 +409,7 @@ class LotteryApplication extends HousingApplication {
      */
     public static function specialInterestPager($group, $term)
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
+        \PHPWS_Core::initCoreClass('DBPager.php');
 
         $pager = new DBPager('hms_new_application', 'LotteryApplication');
         $pager->setModule('hms');
@@ -449,7 +452,7 @@ class LotteryApplication extends HousingApplication {
      */
     public static function waitingListPager()
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
+        \PHPWS_Core::initCoreClass('DBPager.php');
 
         $term = PHPWS_Settings::get('hms', 'lottery_term');
 

@@ -31,7 +31,7 @@ class RoomChangeRequestStudentApprovalView {
         $declineCmd->setRequestId($this->request->getId());
 
 
-        $form = new PHPWS_Form('roomchange_student_approve');
+        $form = new \PHPWS_Form('roomchange_student_approve');
         $form->addHidden('foo', 'bar');
 
         $tpl = $form->getTemplate();
@@ -67,9 +67,9 @@ class RoomChangeRequestStudentApprovalView {
 
         $tpl['PARTICIPANTS'] = $participantRows;
 
-        PHPWS_Core::initCoreClass('Captcha.php');
+        \PHPWS_Core::initCoreClass('Captcha.php');
         $tpl['CAPTCHA'] = Captcha::get();
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/roomChangeRequestStudentApprove.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/roomChangeRequestStudentApprove.tpl');
     }
 }

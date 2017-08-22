@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\CheckinsByHall;
+
 class CheckinsByHallHtmlView extends ReportHtmlView {
 
     protected function render(){
@@ -27,6 +29,6 @@ class CheckinsByHallHtmlView extends ReportHtmlView {
 
         $this->tpl['TOTAL_CHECKINS'] = $totalAssignments;
 
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/CheckinsByHall.tpl');
+        return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/CheckinsByHall.tpl');
     }
 }

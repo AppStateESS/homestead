@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\UnassignedFreshmen;
+
 /**
  * Unassigned Freshmen Report
  * Computes the list of all unassigned freshmen for the given term.
@@ -54,7 +56,7 @@ class UnassignedFreshmen extends Report implements iCsvReport {
         // E.g. Students with an applicationt erm in Summer 1, Summer 2, and Fall all count as Freshmen for Fall.
         $applicationTerms = array();
 
-        $db = new PHPWS_DB('hms_new_application');
+        $db = new \PHPWS_DB('hms_new_application');
         $db->addColumn('hms_new_application.banner_id');
         $db->addColumn('hms_new_application.username');
         $db->addColumn('hms_new_application.term');
@@ -120,7 +122,7 @@ class UnassignedFreshmen extends Report implements iCsvReport {
         $db->addOrder(array('gender ASC', 'created_on ASC'));
         $results = $db->select();
 
-        if(PHPWS_Error::isError($results)){
+        if(\PHPWS_Error::isError($results)){
             throw new DatabaseException($results->toString());
         }
 

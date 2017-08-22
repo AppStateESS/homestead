@@ -1,12 +1,14 @@
 <?php
 
+namespace Homestead\report\CoedRooms;
+
 /**
  *
  * @author John Felipe
  * @package HMS
  */
 
-class CoedRoomsController extends ReportController implements iSyncReport, iHtmlReportView, iPdfReportView, iCsvReportView 
+class CoedRoomsController extends ReportController implements iSyncReport, iHtmlReportView, iPdfReportView, iCsvReportView
 {
 	public function setParams(Array $params)
     {
@@ -22,5 +24,3 @@ class CoedRoomsController extends ReportController implements iSyncReport, iHtml
         return $params;
     }
 }
-
-

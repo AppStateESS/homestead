@@ -1,4 +1,8 @@
 <?php
+
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
 PHPWS_Core::initModClass('hms', 'EditRlcView.php');
 

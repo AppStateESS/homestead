@@ -22,6 +22,6 @@ class DeniedRlcApplicantView extends View{
 
         Layout::addPageTitle("Denied RLC Applications");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/view_denied_rlc_applications.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/view_denied_rlc_applications.tpl');
     }
 }

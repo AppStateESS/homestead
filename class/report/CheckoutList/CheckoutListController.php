@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\CheckoutList;
+
 /**
  * Controller for the CheckinList report.
  *

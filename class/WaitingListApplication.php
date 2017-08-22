@@ -2,6 +2,9 @@
 
 namespace Homestead;
 
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 class WaitingListApplication extends HousingApplication {
 
     public $waitlist_reason;
@@ -185,7 +188,7 @@ class WaitingListApplication extends HousingApplication {
 
     public static function waitingListPager()
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
+        \PHPWS_Core::initCoreClass('DBPager.php');
 
         $term = PHPWS_Settings::get('hms', 'lottery_term');
 

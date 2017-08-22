@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * ExecReportSycCommand
  *
@@ -76,4 +80,3 @@ class ExecReportSyncCommand extends Command {
         $viewCmd->redirect();
     }
 }
-

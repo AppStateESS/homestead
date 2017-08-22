@@ -2,10 +2,7 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'UserStatus.php');
-PHPWS_Core::initModClass('hms', 'Command.php');
-PHPWS_Core::initModClass('hms', 'View.php');
-PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
+use \Homestead\exception\DatabaseException;
 
 class HMSFactory
 {
@@ -24,17 +21,13 @@ class HMSFactory
             || isset($_REQUEST['callback'])
             || (array_key_exists('Accept', $rh)
                 && stripos($rh['Accept'], 'application/json') !== FALSE)) {
-            PHPWS_Core::initModClass('hms', 'AjaxHMS.php');
             HMSFactory::$hms = new AjaxHMS();
         } else if (UserStatus::isAdmin()) {
-            PHPWS_Core::initModClass('hms', 'AdminHMS.php');
             HMSFactory::$hms = new AdminHMS();
         } else if (UserStatus::isUser()) {
-            PHPWS_Core::initModClass('hms', 'UserHMS.php');
             HMSFactory::$hms = new UserHMS();
         } else {
             // Guest
-            PHPWS_Core::initModClass('hms', 'GuestHMS.php');
             HMSFactory::$hms = new GuestHMS();
         }
 

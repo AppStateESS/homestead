@@ -32,7 +32,7 @@ class ReviewHallNotificationMessageView extends View {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         $tpl = array();
 
-        $template = new PHPWS_Template('hms');
+        $template = new \PHPWS_Template('hms');
         $template->setFile('admin/review_hall_email.tpl');
 
         if(is_array($this->floors)){
@@ -68,7 +68,7 @@ class ReviewHallNotificationMessageView extends View {
         */
 
 
-        $form2 = new PHPWS_Form('review_email');
+        $form2 = new \PHPWS_Form('review_email');
 
         $sendCmd = CommandFactory::getCommand('SendNotificationEmails');
         $sendCmd->initForm($form2);

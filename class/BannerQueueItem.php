@@ -2,6 +2,9 @@
 
 namespace Homestead;
 
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * BannerQueueItem - Represents an single item in the BannerQueue
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>

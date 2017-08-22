@@ -1,6 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'Command.php');
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'Term.php');
 
 class AjaxGetUsernameSuggestionsCommand extends Command {
@@ -52,9 +54,9 @@ class AjaxGetUsernameSuggestionsCommand extends Command {
 
         //test($sql,1);
 
-        $this->db = new PHPWS_DB('hms_student_autocomplete');
+        $this->db = new \PHPWS_DB('hms_student_autocomplete');
 
-        $results = PHPWS_DB::getAll($sql);
+        $results = \PHPWS_DB::getAll($sql);
 
         //test($results,1);
 
@@ -64,7 +66,7 @@ class AjaxGetUsernameSuggestionsCommand extends Command {
         }
 
         // Log any DB errors and echo an empty result
-        if(PHPWS_Error::logIfError($results)){
+        if(\PHPWS_Error::logIfError($results)){
             echo json_encode(array());
             exit;
         }

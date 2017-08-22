@@ -151,7 +151,7 @@ class RoomChangeManageView extends View {
         $tpl['REQUEST_REASON'] = $this->request->getReason();
 
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/roomChangeManageView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/roomChangeManageView.tpl');
     }
 
     /**

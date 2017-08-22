@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\MismatchedRoommates;
+
 /**
  * Controller for the Mismatched Roommates report.
  *
@@ -25,5 +27,3 @@ class MismatchedRoommatesController extends ReportController
     }
 
 }
-
-

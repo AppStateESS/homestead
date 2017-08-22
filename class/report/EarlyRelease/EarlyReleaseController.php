@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\EarlyRelease;
+
   class EarlyReleaseController extends ReportController
         implements iSyncReport, iAsyncReport, iSchedReport, iHtmlReportView,
                     iPdfReportView, iCsvReportView

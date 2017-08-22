@@ -19,7 +19,7 @@ class HallOverview extends View{
 
     public function show()
     {
-        $tpl = new PHPWS_Template('hms');
+        $tpl = new \PHPWS_Template('hms');
 
         if(!$tpl->setFile('admin/reports/hall_overview.tpl')){
             return 'Template error.';

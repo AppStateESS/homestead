@@ -30,7 +30,7 @@ class AppliedStudentData extends Report implements iCsvReport {
         PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
-        $db = new PHPWS_DB('hms_new_application');
+        $db = new \PHPWS_DB('hms_new_application');
         $db->addColumn('hms_new_application.*');
         $db->addWhere('term', $this->term);
         $db->addWhere('cancelled', 0);

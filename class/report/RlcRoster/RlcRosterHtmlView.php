@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\RlcRoster;
+
 class RlcRosterHtmlView extends ReportHtmlView {
 
   protected function render()
@@ -18,7 +20,7 @@ class RlcRosterHtmlView extends ReportHtmlView {
           $this->tpl['rows'][] = $row;
       }
 
-      return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/RlcRoster.tpl');
+      return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/RlcRoster.tpl');
 
   }
 

@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /*
  * Ajax command that returns error codes and does not allow reassignment.
  *

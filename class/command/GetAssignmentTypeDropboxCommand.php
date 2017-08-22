@@ -1,5 +1,8 @@
-
 <?php
+
+namespace Homestead\command;
+
+use \Homestead\Command;
 
 class GetAssignmentTypeDropboxCommand extends Command {
 
@@ -28,7 +31,7 @@ class GetAssignmentTypeDropboxCommand extends Command {
                 ASSIGN_SPECIAL           => 'Special Needs',
                 ASSIGN_RHA               => 'RHA/NRHH',
                 ASSIGN_SCHOLARS          => 'Diversity &amp; Plemmons Scholars');
-        $form = new PHPWS_Form('select_assignment');
+        $form = new \PHPWS_Form('select_assignment');
         $form->addSelect('type', $options);
         $form->setMatch('type', ASSIGN_ADMIN);
         $form->setClass('type', 'form-control');
@@ -37,4 +40,3 @@ class GetAssignmentTypeDropboxCommand extends Command {
         exit();
     }
 }
-

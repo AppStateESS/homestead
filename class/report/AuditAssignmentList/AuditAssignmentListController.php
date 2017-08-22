@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\AuditAssignmentList;
+
 /*
  *
  * @author Jeremy Booker
@@ -22,5 +24,3 @@ class AuditAssignmentListController extends ReportController implements iSyncRep
         return $params;
     }
 }
-
-

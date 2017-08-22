@@ -37,6 +37,6 @@ class StudentMenuTermBlock {
             $tpl['BLOCKS'][] = array('BLOCK'=>$feat->getMenuBlockView($this->student)->show());
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/studentMenuTermBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/studentMenuTermBlock.tpl');
     }
 }

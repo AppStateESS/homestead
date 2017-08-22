@@ -34,7 +34,7 @@ class SelectRoomView extends View{
         javascript('modules/hms/select_room');
 
         # Setup the form
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $this->onSelectCmd->initForm($form);
 
         $form->setMethod('get');
@@ -58,6 +58,6 @@ class SelectRoomView extends View{
 
         Layout::addPageTitle("Select Room");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/select_room.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/select_room.tpl');
     }
 }

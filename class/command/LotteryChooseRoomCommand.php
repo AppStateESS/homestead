@@ -1,18 +1,22 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class LotteryChooseRoomCommand extends Command {
-    
+
     private $roomId;
-    
+
     public function setRoomId($id){
         $this->roomId = $id;
     }
-    
+
     public function getRequestVars()
     {
         return array('action'=>'LotteryChooseRoom', 'roomId'=>$this->roomId);
     }
-    
+
     public function execute(CommandContext $context)
     {
         $roomCmd = CommandFactory::getCommand('LotteryShowChooseRoommates');
@@ -20,4 +24,3 @@ class LotteryChooseRoomCommand extends Command {
         $roomCmd->redirect();
     }
 }
-

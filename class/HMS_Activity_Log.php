@@ -38,10 +38,10 @@ class HMS_Activity_Log{
             $this->set_notes($notes);
         } else {
             $this->id = $id;
-            $db = new PHPWS_DB($table);
+            $db = new \PHPWS_DB($table);
             $db->addWhere('id', $this->id);
             $result = $db->loadObject($this);
-            if(!$result || PHPWS_Error::logIfError($result)) {
+            if(!$result || \PHPWS_Error::logIfError($result)) {
                 $tis->id = 0;
             }
         }
@@ -57,7 +57,7 @@ class HMS_Activity_Log{
             return FALSE;
         }
 
-        $db = new PHPWS_DB('hms_activity_log');
+        $db = new \PHPWS_DB('hms_activity_log');
         $db->addValue('user_id',     $this->get_user_id());
         $db->addValue('timestamp',   $this->get_timestamp());
         $db->addValue('activity',    $this->get_activity());
@@ -66,7 +66,7 @@ class HMS_Activity_Log{
 
         $result = $db->insert();
 
-        if(PHPWS_Error::logIfError($result)){
+        if(\PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
         }else{
             return TRUE;

@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class ShowHousingApplicationThanksCommand extends Command {
 
     public function getRequestVars()
@@ -14,4 +18,3 @@ class ShowHousingApplicationThanksCommand extends Command {
         $context->setContent('Submitted housing application');
     }
 }
-

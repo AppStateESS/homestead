@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\FloorRoster;
+
 /**
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
@@ -28,7 +30,7 @@ class FloorRoster extends Report {
 
     public function execute()
     {
-        $db = new PHPWS_DB;
+        $db = new \PHPWS_DB;
 
         $query = <<<EOF
 SELECT

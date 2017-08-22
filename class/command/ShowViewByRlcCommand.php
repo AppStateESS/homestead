@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
 PHPWS_Core::initModClass('hms', 'ShowViewByRlc.php');
 
@@ -33,16 +37,15 @@ class ShowViewByRlcCommand extends Command {
         }
 
         $rlcId = $context->get('rlc');
-        
+
         if(!isset($rlcId)){
             throw new InvalidArgumentException('Missing RLC id.');
         }
-        
+
         $rlc = new HMS_Learning_Community($rlcId);
-        
+
         $view = new ShowViewByRlc($rlc);
 
         $context->setContent($view->show());
     }
 }
-

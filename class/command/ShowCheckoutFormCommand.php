@@ -1,5 +1,8 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
 
 class ShowCheckoutFormCommand extends Command {
 

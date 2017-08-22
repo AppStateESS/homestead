@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\CheckinList;
+
 /**
  * HTML View for CheckinList report
  *
@@ -21,7 +23,6 @@ class CheckinListHtmlView extends ReportHtmlView {
             $this->tpl['rows'][] = $row;
         }
 
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/CheckinList.tpl');
+        return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/CheckinList.tpl');
     }
 }
-

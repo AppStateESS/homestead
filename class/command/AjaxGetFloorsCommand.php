@@ -1,6 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'Command.php');
+namespace Homestead\command;
+
+use \Homestead\Command;
 
 class AjaxGetFloorsCommand extends Command {
 
@@ -22,7 +24,7 @@ class AjaxGetFloorsCommand extends Command {
         $floors = $hall->get_floors();
 
         #test($floors, 1);
-         
+
         $json_floors = array();
         $json_floors[0] = 'Select...';
 
@@ -41,4 +43,3 @@ class AjaxGetFloorsCommand extends Command {
         $context->setContent(json_encode($json_floors));
     }
 }
-

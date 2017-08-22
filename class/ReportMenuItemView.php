@@ -31,6 +31,6 @@ class ReportMenuItemView extends View {
             $tpl['LAST_EXEC']    = $this->report->getRelativeLastRun();
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/reports/reportMenuItem.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/reports/reportMenuItem.tpl');
     }
 }

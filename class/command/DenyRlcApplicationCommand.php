@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class DenyRlcApplicationCommand extends Command {
 
     private $applicationId;
@@ -18,7 +22,7 @@ class DenyRlcApplicationCommand extends Command {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to approve/deny RLC applications.');
         }
-        
+
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 
         $app = HMS_RLC_Application::getApplicationById($context->get('applicationId'));
@@ -29,8 +33,7 @@ class DenyRlcApplicationCommand extends Command {
         HMS_Activity_Log::log_activity($app->username, 28, Current_User::getUsername(), 'Application Denied');
 
         NQ::simple('hms', hms\NotificationView::SUCCESS, 'Application denied.');
-        
+
         $context->goBack();
     }
 }
-

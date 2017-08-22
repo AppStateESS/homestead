@@ -143,6 +143,6 @@ class AssignmentDemographicsHtmlView extends ReportHtmlView {
         	$this->tpl['problems'][] = $row;
         }
 
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/AssignmentDemographics.tpl');
+        return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/AssignmentDemographics.tpl');
     }
 }

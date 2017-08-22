@@ -1,5 +1,8 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
 
 class CreateCsvByRlcCommand extends Command {
 
@@ -16,7 +19,7 @@ class CreateCsvByRlcCommand extends Command {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to view RLC members.');
         }
-        
+
         $input = $_REQUEST['id'];
         $term = Term::getSelectedTerm();
         $memberList = RlcMembershipFactory::getRlcMembersByCommunityId($input, $term);

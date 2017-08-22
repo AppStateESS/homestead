@@ -44,7 +44,7 @@ class FreshmenMainMenuView extends View {
 
         Layout::addPageTitle("Main Menu");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/freshmenMenu.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/freshmenMenu.tpl');
     }
 
 }

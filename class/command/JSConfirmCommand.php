@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class JSConfirmCommand extends Command {
 
     private $onConfirmCommand; // the command to execute if the user confirms

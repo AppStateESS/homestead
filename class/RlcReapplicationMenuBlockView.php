@@ -80,6 +80,6 @@ class RlcReapplicationMenuBlockView extends View {
             }
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/rlcReapplicationMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/rlcReapplicationMenuBlock.tpl');
     }
 }

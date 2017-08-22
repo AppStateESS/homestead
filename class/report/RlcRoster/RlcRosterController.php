@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\RlcRoster;
+
 class RlcRosterController extends ReportController
     implements iSyncReport, iAsyncReport, iSchedReport, iHtmlReportView, iPdfReportView, iCsvReportView {
 

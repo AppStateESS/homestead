@@ -53,7 +53,7 @@ class ReportRunner
 
 
         // Check for any pending reports (scheduled for any time up until now)
-        $db = new PHPWS_DB('hms_report');
+        $db = new \PHPWS_DB('hms_report');
         $db->addWhere('completed_timestamp', null, 'IS'); // not completed
         $db->addWhere('began_timestamp', null, 'IS'); // not already running somewhere
         $db->addWhere('scheduled_exec_time', time(), '<='); // scheduled exec time is now or before

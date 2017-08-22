@@ -40,7 +40,7 @@ class AssignmentMoveConfirmationView extends View
         $submitCmd->setAssignmentType($this->assignmentType);
         $submitCmd->setNotes($this->notes);
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd->initForm($form);
 
         $form->addSubmit('submit', 'Confirm Move');
@@ -57,7 +57,7 @@ class AssignmentMoveConfirmationView extends View
 
         Layout::addPageTitle("Assignment Move Confirmation");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/assign_student_move_confirm.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/assign_student_move_confirm.tpl');
     }
 
 }

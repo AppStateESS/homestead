@@ -2,6 +2,9 @@
 
 namespace Homestead;
 
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * Learning Community objects for HMS
  *
@@ -314,7 +317,7 @@ class HMS_Learning_Community extends HMS_Item
     {
         if( !Current_User::allow('hms', 'view_rlc_applications') ){
             $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+            return \PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
 
         $db = new PHPWS_DB('hms_learning_communities');

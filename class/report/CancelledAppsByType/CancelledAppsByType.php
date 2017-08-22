@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\CancelledAppsByType;
+
 /**
  * Report fo listing the number of cancelled housing application by student type.
  *
@@ -16,7 +18,7 @@ class CancelledAppsByType extends Report {
 
     public function execute()
     {
-        $db = new PHPWS_DB('hms_new_application');
+        $db = new \PHPWS_DB('hms_new_application');
 
         $db->addColumn('student_type');
         $db->addColumn('id', null, 'count', true);

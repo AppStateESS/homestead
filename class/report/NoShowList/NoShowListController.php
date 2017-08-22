@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\NoShowList;
+
 /**
  * Controller for the NoShowList report.
  *
@@ -24,4 +26,3 @@ class NoShowListController extends ReportController implements iSyncReport, iAsy
     }
 
 }
-

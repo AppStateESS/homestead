@@ -1,12 +1,17 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+use \PHPWS_Error;
+use \PHPWS_DB;
 
 class ExportRlcAppsCommand extends Command {
-    
+
     public function getRequestVars(){
         return array('action'=>'ExportRlcApps');
     }
-    
+
     // TODO: rewrite this
     public function execute(CommandContext $context)
     {
@@ -51,12 +56,12 @@ class ExportRlcAppsCommand extends Command {
             }
 
             $student = StudentFactory::getStudentByUsername($user['username'], Term::getSelectedTerm());
-            
+
             $buffer .= '"' . $student->getLastName() . '",';
             $buffer .= '"' . $student->getFirstName() . '",';
             $buffer .= '"' . $student->getMiddleName() . '",';
             $buffer .= '"' . $student->getPrintableGender() . '",';
-            
+
             if($roomie != NULL) {
                 $buffer .= '"' . $roomie->getFullName() . '",';
             } else {
@@ -106,7 +111,7 @@ class ExportRlcAppsCommand extends Command {
 
         //HERES THE QUERY:
         //select hms_learning_community_applications.user_id, date_submitted, rlc_first_choice.abbreviation as first_choice, rlc_second_choice.abbreviation as second_choice, rlc_third_choice.abbreviation as third_choice FROM (SELECT hms_learning_community_applications.user_id, hms_learning_communities.abbreviation FROM hms_learning_communities,hms_learning_community_applications WHERE hms_learning_communities.id = hms_learning_community_applications.rlc_first_choice_id) as rlc_first_choice, (SELECT hms_learning_community_applications.user_id, hms_learning_communities.abbreviation FROM hms_learning_communities,hms_learning_community_applications WHERE hms_learning_communities.id = hms_learning_community_applications.rlc_second_choice_id) as rlc_second_choice, (SELECT hms_learning_community_applications.user_id, hms_learning_communities.abbreviation FROM hms_learning_communities,hms_learning_community_applications WHERE hms_learning_communities.id = hms_learning_community_applications.rlc_third_choice_id) as rlc_third_choice, hms_learning_community_applications WHERE rlc_first_choice.user_id = hms_learning_community_applications.user_id AND rlc_second_choice.user_id = hms_learning_community_applications.user_id AND rlc_third_choice.user_id = hms_learning_community_applications.user_id;
-         
+
         //Download file
         if(ob_get_contents())
         print('Some data has already been output, can\'t send file');
@@ -122,5 +127,3 @@ class ExportRlcAppsCommand extends Command {
         die();
     }
 }
-
-

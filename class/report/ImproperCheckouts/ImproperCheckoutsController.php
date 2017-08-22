@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\ImproperCheckouts;
+
 /*
  *
  * @author Jeremy Booker
@@ -22,5 +24,3 @@ class ImproperCheckoutsController extends ReportController implements iSyncRepor
         return $params;
     }
 }
-
-

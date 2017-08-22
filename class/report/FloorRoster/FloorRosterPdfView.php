@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\FloorRoster;
+
 /*
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
@@ -32,7 +34,7 @@ class FloorRosterPdfView extends ReportPdfView
     public function render()
     {
         $hall = null;
-        $tpl = new PHPWS_Template('hms');
+        $tpl = new \PHPWS_Template('hms');
         $tpl->setFile('admin/reports/FloorRoster.tpl');
 
         $rows = & $this->report->rows;

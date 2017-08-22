@@ -79,6 +79,6 @@ class VerifyAssignmentView extends View{
 
         Layout::addPageTitle("Verify Assignment");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/verify_assignment.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/verify_assignment.tpl');
     }
 }

@@ -85,6 +85,6 @@ class RoommateSelectionMenuBlockView extends View {
 
         Layout::addPageTitle("Roommate Selection");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/roommateMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/roommateMenuBlock.tpl');
     }
 }

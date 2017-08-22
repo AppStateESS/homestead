@@ -34,7 +34,7 @@ class HousingApplicationNotAvailableView extends View {
         $contactCmd = CommandFactory::getCommand('ShowContactForm');
         $tpl['CONTACT_LINK'] = $contactCmd->getLink('click here to contact us');
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/welcomeScreenNotAvailable.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/welcomeScreenNotAvailable.tpl');
     }
 
 }

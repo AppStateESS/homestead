@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class CreateTermCommand extends Command {
 
     public function getRequestVars()
@@ -49,7 +53,7 @@ class CreateTermCommand extends Command {
             $term = new Term($year . $sem);
 
             // The term already exists, make sure there are no halls for this term
-            $db = new PHPWS_DB('hms_residence_hall');
+            $db = new \PHPWS_DB('hms_residence_hall');
             $db->addWhere('term', $term->getTerm());
             $num = $db->count();
 
@@ -92,7 +96,7 @@ class CreateTermCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
-        $db = new PHPWS_DB();
+        $db = new \PHPWS_DB();
 
         try{
             $db->query('BEGIN');
@@ -109,7 +113,7 @@ class CreateTermCommand extends Command {
         }catch(Exception $e){
 
             $db->query('ROLLBACK');
-            PHPWS_Error::log(print_r($e, true), 'hms');
+            \PHPWS_Error::log(print_r($e, true), 'hms');
             NQ::simple('hms', hms\NotificationView::ERROR, 'There was an error copying the hall structure and/or assignments. The term was created, but nothing was copied.');
             $errorCmd->redirect();
         }

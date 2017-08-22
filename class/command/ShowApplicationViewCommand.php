@@ -1,5 +1,8 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'HousingApplicationView.php');
 
 class ShowApplicationViewCommand extends Command {
@@ -37,4 +40,3 @@ class ShowApplicationViewCommand extends Command {
         }
     }
 }
-

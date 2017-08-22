@@ -37,6 +37,6 @@ class AssignmentsByTypeHtmlView extends ReportHtmlView {
 
         $this->tpl['TOTAL_ASSIGNMENTS'] = $totalAssignments;
 
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/AssignmentsByType.tpl');
+        return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/AssignmentsByType.tpl');
     }
 }

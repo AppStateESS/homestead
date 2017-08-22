@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\CheckinList;
+
 /**
  * Controller for the CheckinList report.
  *
@@ -24,4 +26,3 @@ class CheckinListController extends ReportController implements iSyncReport, iAs
     }
 
 }
-

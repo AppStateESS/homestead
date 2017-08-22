@@ -92,6 +92,6 @@ class ReapplicationMenuBlockView extends View {
             }
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/reApplicationMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/reApplicationMenuBlock.tpl');
     }
 }

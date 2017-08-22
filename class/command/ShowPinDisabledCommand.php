@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * ShowPinDisabledCommand
  *
@@ -24,4 +28,3 @@ class ShowPinDisabledCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

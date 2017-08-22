@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\ReappAvailableBeds;
+
 class ReappAvailableBedsController extends ReportController implements iSyncReport, iHtmlReportView, iPdfReportView, iCsvReportView
 {
 

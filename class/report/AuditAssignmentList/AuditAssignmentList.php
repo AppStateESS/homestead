@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\AuditAssignmentList;
+
 /**
  *
  * @author Jeremy Booker

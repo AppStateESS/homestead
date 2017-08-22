@@ -36,6 +36,6 @@ class AdminMaintenanceMenuView extends View {
 
         Layout::addPageTitle("Main Menu");
 
-        return PHPWS_Template::process($tpl, 'hms', 'AdminMaintenanceMenu.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'AdminMaintenanceMenu.tpl');
     }
 }

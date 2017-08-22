@@ -35,6 +35,6 @@ class ApplicationFeatureListView extends View{
             $tpl['features'][] = array('feature' => $view->show());
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/ApplicationFeaturesList.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/ApplicationFeaturesList.tpl');
     }
 }

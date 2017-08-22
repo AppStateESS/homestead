@@ -2,6 +2,9 @@
 
 namespace Homestead;
 
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * Contains administrative public functionality
  *
@@ -14,12 +17,12 @@ class HMS_Admin
     {
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'username_change')){
             $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+            return \PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
 
-        PHPWS_Core::initCoreClass('Form.php');
+        \PHPWS_Core::initCoreClass('Form.php');
 
-        $form = &new PHPWS_Form();
+        $form = &new \PHPWS_Form();
         $form->addTextarea('usernames');
         $form->addSubmit('submit', 'Submit');
 
@@ -27,14 +30,14 @@ class HMS_Admin
         $form->addHidden('type', 'admin');
         $form->addHidden('op', 'process_username_change');
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/username_change.tpl');
+        return \PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/username_change.tpl');
     }
 
     public function process_username_change()
     {
         if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'username_change')){
             $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+            return \PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
@@ -177,6 +180,6 @@ class HMS_Admin
             }
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/process_username_change.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/process_username_change.tpl');
     }
 }

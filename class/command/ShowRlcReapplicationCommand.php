@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class ShowRlcReapplicationCommand extends Command {
 
     private $term;
@@ -33,7 +37,7 @@ class ShowRlcReapplicationCommand extends Command {
             NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, RLC re-applications are not avaialable for this term.");
             $errorCmd->redirect();
         }
-        
+
         if($feature->getStartDate() > time()){
             NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, it is too soon to submit a RLC re-application.");
             $errorCmd->redirect();
@@ -41,7 +45,7 @@ class ShowRlcReapplicationCommand extends Command {
             NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, the RLC re-application deadline has already passed. Please contact University Housing if you are interested in applying for a RLC.");
             $errorCmd->redirect();
         }
-        
+
         // Double check the the student is eligible
         $housingApp = HousingApplication::getApplicationByUser($student->getUsername(), $term);
         if(!$housingApp instanceof LotteryApplication){
@@ -76,17 +80,15 @@ class ShowRlcReapplicationCommand extends Command {
 
         session_write_close();
         session_start();
-        
+
         if(isset($_SESSION['RLC_REAPP'])){
             $reApp = $_SESSION['RLC_REAPP'];
         }else{
             $reApp = null;
         }
-        
+
         $view = new RlcReapplicationView($student, $term, $rlcAssignment, $communities, $reApp);
 
         $context->setContent($view->show());
     }
 }
-
-

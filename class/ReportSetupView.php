@@ -25,7 +25,7 @@ class ReportSetupView extends View {
 
     public function __construct(Report $report){
         $this->report = $report;
-        //$this->form = new PHPWS_Form('report-setup-form');
+        //$this->form = new \PHPWS_Form('report-setup-form');
         $this->tpl = array();
         $this->useDatePicker = false;
         $this->runNow = false;
@@ -43,7 +43,7 @@ class ReportSetupView extends View {
 
         $js = javascript('modules/hms/reportSetupDialog', $params);
 
-        $this->form = new PHPWS_Form($this->formId);
+        $this->form = new \PHPWS_Form($this->formId);
 
         $this->tpl['LINK_TEXT'] = $this->linkText;
         $this->tpl['LINK_ID'] = $this->dialogId . "-link";
@@ -61,7 +61,7 @@ class ReportSetupView extends View {
         $this->form->mergeTemplate($this->tpl);
         $this->tpl = $this->form->getTemplate();
 
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/SetupDialog.tpl') . $js;
+        return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/SetupDialog.tpl') . $js;
     }
 
     protected function getDialogContents()

@@ -1,5 +1,8 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 PHPWS_Core::initModClass('hms', 'WaitingListApplication.php');
@@ -25,7 +28,7 @@ class OpenWaitingListRemoveCommand extends Command {
             $app->waiting_list_hide = 1;
             $result = $app->save();
 
-            if(!PHPWS_Error::logIfError($result)){
+            if(!\PHPWS_Error::logIfError($result)){
                 NQ::simple('hms', hms\NotificationView::SUCCESS, "$username removed from the waiting list!");
                 $cmd->redirect();
             }
@@ -34,5 +37,3 @@ class OpenWaitingListRemoveCommand extends Command {
         $cmd->redirect();
     }
 }
-
-

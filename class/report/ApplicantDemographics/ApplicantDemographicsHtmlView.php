@@ -42,6 +42,6 @@ class ApplicantDemographicsHtmlView extends ReportHtmlView {
 
         $this->tpl['ALL_TOTAL'] = $this->report->getTotal();
 
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/ApplicantDemographics.tpl');
+        return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/ApplicantDemographics.tpl');
     }
 }

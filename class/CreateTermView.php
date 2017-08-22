@@ -32,7 +32,7 @@ class CreateTermView extends View {
 
         $submitCmd = CommandFactory::getCommand('CreateTerm');
 
-        $form = new PHPWS_Form('new_term_form');
+        $form = new \PHPWS_Form('new_term_form');
         $submitCmd->initForm($form);
 
         $form->addDropBox('from_term', Term::getTermsAssoc());
@@ -60,6 +60,6 @@ class CreateTermView extends View {
 
         Layout::addPageTitle("Create Term");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/add_term.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/add_term.tpl');
     }
 }

@@ -65,7 +65,7 @@ class FreshmenApplicationReview extends View {
             $tpl['RLC_REVIEW'] = $this->app->rlc_interest == 0?'No':'Yes';
         }
 
-        $form = new PHPWS_Form('hidden_form');
+        $form = new \PHPWS_Form('hidden_form');
         $submitCmd = CommandFactory::getCommand('HousingApplicationConfirm');
         $submitCmd->setVars($_REQUEST);
 
@@ -83,6 +83,6 @@ class FreshmenApplicationReview extends View {
 
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
     }
 }

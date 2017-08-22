@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\KeysNotReturned;
+
 /*
  *
  * @author Jeremy Booker
@@ -22,5 +24,3 @@ class KeysNotReturnedController extends ReportController implements iSyncReport,
         return $params;
     }
 }
-
-

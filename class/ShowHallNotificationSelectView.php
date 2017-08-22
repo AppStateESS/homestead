@@ -24,13 +24,13 @@ class ShowHallNotificationSelectView extends View{
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
         $submitCmd = CommandFactory::getCommand('ShowHallNotificationEdit');
-        $form = new PHPWS_Form('select_halls_to_email');
+        $form = new \PHPWS_Form('select_halls_to_email');
         $submitCmd->initForm($form);
 
         javascript('jquery_ui');
 
         $cmd = CommandFactory::getCommand('ShowHallNotificationEdit');
-        $form = new PHPWS_Form("select_halls");
+        $form = new \PHPWS_Form("select_halls");
         $cmd->initForm($form);
         $form->addSubmit('submit', 'Submit');
         $form->setExtra('submit', 'onclick="submitHallList();"');
@@ -38,6 +38,6 @@ class ShowHallNotificationSelectView extends View{
 
         Layout::addPageTitle("Hall Notification Select");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/messages.tpl').Layout::getJavascript("modules/hms/hall_expander", array("DIV"=>"hall_list", "FORM"=>"select_halls"));
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/messages.tpl').Layout::getJavascript("modules/hms/hall_expander", array("DIV"=>"hall_list", "FORM"=>"select_halls"));
     }
 }

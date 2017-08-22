@@ -1,5 +1,8 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'SpecialInterestGroupView.php');
 
 class ShowSpecialInterestGroupApprovalCommand extends Command {
@@ -32,4 +35,3 @@ class ShowSpecialInterestGroupApprovalCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

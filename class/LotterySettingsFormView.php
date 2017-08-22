@@ -10,7 +10,7 @@ class LotterySettingsFormView extends View {
 
         $tpl = array();
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
 
         $submitCmd = CommandFactory::getCommand('LotterySettingsSubmit');
         $submitCmd->initForm($form);
@@ -47,6 +47,6 @@ class LotterySettingsFormView extends View {
 
         Layout::addPageTitle("Lottery Settings");
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/lottery_settings.tpl');
+        return \PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/lottery_settings.tpl');
     }
 }

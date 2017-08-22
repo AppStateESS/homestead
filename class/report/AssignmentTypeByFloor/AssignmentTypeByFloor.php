@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\AssignmentTypeByFloor;
+
 /**
  * Assignment Type By Floor Report class
  *
@@ -34,9 +36,9 @@ class AssignmentTypeByFloor extends Report {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
         foreach($this->getHalls() as $hall){
-            $hallCount = PHPWS_DB::getAssoc("select reason, count(*) from hms_assignment JOIN hms_bed ON hms_assignment.bed_id = hms_bed.id JOIN hms_room ON hms_bed.room_id = hms_room.id JOIN hms_floor ON hms_room.floor_id = hms_floor.id JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id where hms_residence_hall.id = {$hall->getId()} AND hms_assignment.term = {$this->getTerm()} group by reason order by reason");
+            $hallCount = \PHPWS_DB::getAssoc("select reason, count(*) from hms_assignment JOIN hms_bed ON hms_assignment.bed_id = hms_bed.id JOIN hms_room ON hms_bed.room_id = hms_room.id JOIN hms_floor ON hms_room.floor_id = hms_floor.id JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id where hms_residence_hall.id = {$hall->getId()} AND hms_assignment.term = {$this->getTerm()} group by reason order by reason");
 
-            if(PHPWS_Error::isError($hallCount)){
+            if(\PHPWS_Error::isError($hallCount)){
                 throw new DatabaseException($hallCount->toString());
             }
 
@@ -45,9 +47,9 @@ class AssignmentTypeByFloor extends Report {
             $floors = $hall->get_floors();
 
             foreach($floors as $floor){
-                $floorCount = PHPWS_DB::getAssoc("select reason, count(*) from hms_assignment JOIN hms_bed ON hms_assignment.bed_id = hms_bed.id JOIN hms_room ON hms_bed.room_id = hms_room.id JOIN hms_floor ON hms_room.floor_id = hms_floor.id where hms_floor.id = {$floor->getId()} AND hms_assignment.term = {$this->getTerm()} group by reason order by reason");
+                $floorCount = \PHPWS_DB::getAssoc("select reason, count(*) from hms_assignment JOIN hms_bed ON hms_assignment.bed_id = hms_bed.id JOIN hms_room ON hms_bed.room_id = hms_room.id JOIN hms_floor ON hms_room.floor_id = hms_floor.id where hms_floor.id = {$floor->getId()} AND hms_assignment.term = {$this->getTerm()} group by reason order by reason");
 
-                if(PHPWS_Error::isError($floorCount)){
+                if(\PHPWS_Error::isError($floorCount)){
                     throw new DatabaseException($floorCount->toString());
                 }
 

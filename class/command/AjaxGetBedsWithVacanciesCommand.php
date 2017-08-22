@@ -1,6 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'Command.php');
+namespace Homestead\command;
+
+use \Homestead\Command;
 
 class AjaxGetBedsWithVacanciesCommand extends Command {
 
@@ -18,7 +20,7 @@ class AjaxGetBedsWithVacanciesCommand extends Command {
         $room = new HMS_Room($context->get('roomId'));
 
         $beds = $room->getBedsWithVacancies();
-         
+
         $json_beds = array();
         $json_beds[0] = 'Select ...';
 
@@ -38,4 +40,3 @@ class AjaxGetBedsWithVacanciesCommand extends Command {
         $context->setContent(json_encode($json_beds));
     }
 }
-

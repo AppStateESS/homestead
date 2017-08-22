@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\HallOccupancy;
+
 /*
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
@@ -26,5 +28,3 @@ class HallOccupancyController extends ReportController implements iSyncReport, i
         return $params;
     }
 }
-
-

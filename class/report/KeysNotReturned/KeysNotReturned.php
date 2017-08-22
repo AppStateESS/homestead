@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\KeysNotReturned;
+
 /**
  *
  * @author Jeremy Booker
@@ -73,4 +75,3 @@ class KeysNotReturned extends Report implements iCsvReport {
         return $cmd;
     }
 }
-

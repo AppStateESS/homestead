@@ -2,6 +2,8 @@
 
 namespace Homestead\report\ApplicantDemographics;
 
+use \PHPWS_DB;
+
 /**
  * The Applicant Demographics report.
  * Calculates totals breaking down who's applied
@@ -90,7 +92,7 @@ class ApplicantDemographics extends Report {
 
         $results = $db->select();
 
-        if(PHPWS_Error::logIfError($results)) {
+        if(\PHPWS_Error::logIfError($results)) {
             throw new DatabaseException($results->toString());
         }
 
@@ -150,7 +152,7 @@ class ApplicantDemographics extends Report {
         $db->addWhere('hms_new_application.cancelled', 1);
 
         $results = $db->select();
-        if(PHPWS_Error::logIfError($results)) {
+        if(\PHPWS_Error::logIfError($results)) {
             throw new DatabaseException($results->toString());
         }
 

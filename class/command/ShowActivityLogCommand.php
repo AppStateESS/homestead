@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class ShowActivityLogCommand extends Command {
 
     private $acteeUsername;

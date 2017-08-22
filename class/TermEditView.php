@@ -100,6 +100,6 @@ class TermEditView extends View {
 
         Layout::addPageTitle("Term Settings");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/TermEditView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/TermEditView.tpl');
     }
 }

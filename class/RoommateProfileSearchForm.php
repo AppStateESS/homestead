@@ -33,7 +33,7 @@ class RoommateProfileSearchForm extends View {
         $submitCmd = CommandFactory::getCommand('RoommateProfileSearch');
         $submitCmd->setTerm($this->term);
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd->initForm($form);
         $form->setMethod('get');
         $form->useRowRepeat();
@@ -105,6 +105,6 @@ class RoommateProfileSearchForm extends View {
 
         Layout::addPageTitle("Roommate Profile Search");
 
-        return PHPWS_Template::process($tags,'hms','student/profile_search.tpl');
+        return \PHPWS_Template::process($tags,'hms','student/profile_search.tpl');
     }
 }

@@ -28,7 +28,7 @@ class ResidenceHallFactory {
 
         $halls = array();
 
-        $db = new PHPWS_DB('hms_residence_hall');
+        $db = new \PHPWS_DB('hms_residence_hall');
         $db->addColumn('id');
         $db->addOrder('hall_name', 'DESC');
 
@@ -36,7 +36,7 @@ class ResidenceHallFactory {
 
         $results = $db->select();
 
-        if(PHPWS_Error::logIfError($results)){
+        if(\PHPWS_Error::logIfError($results)){
             throw new DatabaseException($result->toString());
         }
 

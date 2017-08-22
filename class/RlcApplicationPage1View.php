@@ -38,7 +38,7 @@ class RlcApplicationPage1View extends View{
 
         $template = array();
 
-        $rlc_form = new PHPWS_Form();
+        $rlc_form = new \PHPWS_Form();
         $page2Cmd = CommandFactory::getCommand('ShowRlcApplicationPage2View');
         $page2Cmd->setTerm($context->get('term'));
         $page2Cmd->initForm($rlc_form);
@@ -103,6 +103,6 @@ class RlcApplicationPage1View extends View{
         $rlc_form->mergeTemplate($template);
         $template = $rlc_form->getTemplate();
 
-        return PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
+        return \PHPWS_Template::process($template,'hms','student/rlc_signup_form_page1.tpl');
     }
 }

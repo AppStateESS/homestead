@@ -87,7 +87,7 @@ class RlcApplicationReView extends View {
             }
         }
 
-        return PHPWS_Template::process($tags, 'hms', 'student/rlc_application.tpl');
+        return \PHPWS_Template::process($tags, 'hms', 'student/rlc_application.tpl');
     }
 
     /**
@@ -111,7 +111,7 @@ class RlcApplicationReView extends View {
      */
     private function getApprovalForm()
     {
-        $approveForm = new PHPWS_Form('approve_form');
+        $approveForm = new \PHPWS_Form('approve_form');
         $approveForm->addSubmit('approve', 'Approve');
         $approveForm->addCssClass('approve', 'btn btn-md btn-success');
         $approveCmd = CommandFactory::getCommand('AssignRlcApplicants');

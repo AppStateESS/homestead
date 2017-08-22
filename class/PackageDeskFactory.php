@@ -7,11 +7,11 @@ class PackageDeskFactory {
 
     public static function getPackageDesks()
     {
-        $db = new PHPWS_DB('hms_package_desk');
+        $db = new \PHPWS_DB('hms_package_desk');
 
         $result = $db->select();
 
-        if (PHPWS_Error::logIfError($result)) {
+        if (\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 

@@ -62,6 +62,6 @@ class RoomChangeApprovalView extends View {
         $tpl['INACTIVE'] = $inactiveList->show();
         $tpl['INACTIVE_COUNT'] = count($this->inactive);
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/RoomChangeApprovalView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/RoomChangeApprovalView.tpl');
     }
 }

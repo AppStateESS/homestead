@@ -88,6 +88,6 @@ class RlcSelfSelectionMenuBlockView extends View {
             }
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/rlcSelfSelection.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/rlcSelfSelection.tpl');
     }
 }

@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
   /**
    * DeleteRlcApplication
    *
@@ -55,4 +59,3 @@ class DeleteRlcApplicationCommand extends Command
 
     }
 }
-

@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class ShowScheduleReportCommand extends Command {
 
     private $reportName;
@@ -40,4 +44,3 @@ class ShowScheduleReportCommand extends Command {
         $report->schedule();
     }
 }
-

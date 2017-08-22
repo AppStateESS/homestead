@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\CancelledAppsContinuingGraph;
+
 class CancelledAppsContinuingGraphHtmlView extends ReportHtmlView {
 
     protected function render()
@@ -13,6 +15,6 @@ class CancelledAppsContinuingGraphHtmlView extends ReportHtmlView {
         $this->tpl['lastYearSeries'] = $this->report->getLastYearJson();
         $this->tpl['thisYearSeries'] = $this->report->getThisYearJson();
 
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/CancelledAppsContinuingGraph.tpl');
+        return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/CancelledAppsContinuingGraph.tpl');
     }
 }

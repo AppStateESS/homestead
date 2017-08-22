@@ -16,7 +16,7 @@ class ContactFormView extends View {
         $tpl = array();
         $tpl['TITLE'] = 'Contact Form';
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
 
         $form->addText('name');
         $form->setLabel('name', 'Name');
@@ -46,6 +46,6 @@ class ContactFormView extends View {
         $tpl = $form->getTemplate();
         //var_dump($tpl);exit;
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/contact_page.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/contact_page.tpl');
     }
 }

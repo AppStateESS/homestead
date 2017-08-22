@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\PackageDeskExport;
+
 class PackageDeskExportController extends ReportController implements iSyncReport, iAsyncReport, iSchedReport, iCsvReportView{
 
     public function setParams(Array $params)

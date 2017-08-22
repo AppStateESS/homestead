@@ -61,6 +61,6 @@ class RoomChangeMenuBlockView extends View {
             $tpl['NEW_REQUEST'] = $changeReqCmd->getLink('request a room change');
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/roomChangeMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/roomChangeMenuBlock.tpl');
     }
 }

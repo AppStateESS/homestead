@@ -22,7 +22,7 @@ class CreateRoommateGroupView extends View {
 
         $tpl['TERM'] = Term::getPrintableSelectedTerm();
 
-        $form = new PHPWS_Form('roommate_group');
+        $form = new \PHPWS_Form('roommate_group');
 
         $submitCmd = CommandFactory::getCommand('CreateRoommateGroup');
         $submitCmd->initForm($form);
@@ -49,6 +49,6 @@ class CreateRoommateGroupView extends View {
 
         Layout::addPageTitle("Create Roommate Group");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/createRoommateGroup.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/createRoommateGroup.tpl');
     }
 }

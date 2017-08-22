@@ -22,8 +22,8 @@ class HousingApplicationFormView extends View
 
     public function show()
     {
-        PHPWS_Core::initCoreClass('Form.php');
-        $form = new PHPWS_Form();
+        \PHPWS_Core::initCoreClass('Form.php');
+        $form = new \PHPWS_Form();
 
         $submitCmd = CommandFactory::getCommand('HousingApplicationFormSubmit');
         $submitCmd->setTerm($this->term);
@@ -253,7 +253,7 @@ class HousingApplicationFormView extends View
 
         Layout::addPageTitle("Housing Application Form");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
     }
 
 }

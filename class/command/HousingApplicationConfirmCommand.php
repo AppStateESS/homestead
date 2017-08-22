@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class HousingApplicationConfirmCommand extends Command {
 
     private $vars;

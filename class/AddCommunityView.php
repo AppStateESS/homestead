@@ -37,7 +37,7 @@ class AddCommunityView extends View {
             $tpl['COMMUNITY'] = $this->community->get_community_name();
         }
 
-        $form = new PHPWS_Form('add_learning_community');
+        $form = new \PHPWS_Form('add_learning_community');
 
         $submitCommand = CommandFactory::getCommand('SaveRlc');
         $submitCommand->initForm($form);
@@ -119,6 +119,6 @@ class AddCommunityView extends View {
 
         $this->setTitle("Add/Edit RLC");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/editLearningCommunity.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/editLearningCommunity.tpl');
     }
 }

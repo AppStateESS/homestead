@@ -18,7 +18,7 @@ class TermsAgreementView extends View {
     public function show()
     {
 
-        $form = new PHPWS_Form;
+        $form = new \PHPWS_Form;
         $this->submitCommand->initForm($form);
 
         $tpl = $form->getTemplate();
@@ -33,6 +33,6 @@ class TermsAgreementView extends View {
         javascript('jquery');
         Layout::addPageTitle("License Agreement");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/contract.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/contract.tpl');
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\NoShowList;
+
 /**
  * No-show List report
  * Lists all of the students who are currently assigned, but have never checked in
@@ -108,5 +110,3 @@ class NoShowList extends Report implements iCsvReport {
         return $this->total;
     }
 }
-
-

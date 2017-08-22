@@ -2,6 +2,9 @@
 
 namespace Homestead;
 
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * The HMS_RLC_Assignment class
  *
@@ -253,7 +256,7 @@ class HMS_RLC_Assignment {
 
     public function rlc_assignment_admin_pager()
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
+        \PHPWS_Core::initCoreClass('DBPager.php');
 
         $tags = array();
 

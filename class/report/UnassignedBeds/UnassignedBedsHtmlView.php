@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\UnassignedBeds;
+
 /**
  * HTML View for UnassignedBeds report
  *
@@ -38,6 +40,6 @@ class UnassignedBedsHtmlView extends ReportHtmlView {
             $this->tpl['rows'][] = $row;
         }
 
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/UnassignedBeds.tpl');
+        return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/UnassignedBeds.tpl');
     }
 }

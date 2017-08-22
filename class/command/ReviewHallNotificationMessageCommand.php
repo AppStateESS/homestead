@@ -1,4 +1,9 @@
 <?php
+
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * ReviewHallNotificationMessageCommand
  *
@@ -54,4 +59,3 @@ class ReviewHallNotificationMessageCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

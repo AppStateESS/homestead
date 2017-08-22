@@ -1,4 +1,9 @@
 <?php
+
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * SendNotificationEmailsCommand
  *

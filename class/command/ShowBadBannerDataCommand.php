@@ -1,12 +1,16 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class ShowBadBannerDataCommand extends Command {
-    
+
     public function getRequestVars()
     {
         return array('action'=>'ShowBadBannerData');
     }
-    
+
     public function execute(CommandContext $context)
     {
         PHPWS_Core::initModClass('hms', 'BadBannerDataView.php');
@@ -14,4 +18,3 @@ class ShowBadBannerDataCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

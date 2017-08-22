@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class LotterySettingsSubmitCommand extends Command {
 
     public function getRequestVars()
@@ -24,7 +28,7 @@ class LotterySettingsSubmitCommand extends Command {
 
         PHPWS_Settings::set('hms', 'lottery_term', $lotteryTerm);
         PHPWS_Settings::set('hms', 'lottery_hard_cap', $hardCap);
-        
+
         PHPWS_Settings::set('hms', 'lottery_jr_goal', $jrGoal);
         PHPWS_Settings::set('hms', 'lottery_sr_goal', $srGoal);
 
@@ -34,4 +38,3 @@ class LotterySettingsSubmitCommand extends Command {
         $viewCmd->redirect();
     }
 }
-

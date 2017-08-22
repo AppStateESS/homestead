@@ -1,5 +1,8 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'RoomChangeRequest.php');
 PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
@@ -26,7 +29,7 @@ class ShowStudentAddRoomDamagesCommand extends Command {
     public function execute(CommandContext $context)
     {
         $term = $context->get('term');
-        
+
         // Create the student
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 

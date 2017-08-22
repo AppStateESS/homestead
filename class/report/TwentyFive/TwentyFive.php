@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\TwentyFive;
+
 /**
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
@@ -27,7 +29,7 @@ class TwentyFive extends Report implements iCsvReport {
             throw new InvalidArgumentException('Missing term.');
         }
 
-        $db = new PHPWS_DB('hms_new_application');
+        $db = new \PHPWS_DB('hms_new_application');
 
         $db->addColumn('banner_id');
         $db->addColumn('username');
@@ -41,7 +43,7 @@ class TwentyFive extends Report implements iCsvReport {
         }
 
         $twentyFiveYearsAgo = strtotime("-25 years");
-        
+
         foreach ($results as $student) {
             try {
                 $sf = StudentFactory::getStudentByBannerId($student['banner_id'], $this->term);
@@ -78,11 +80,9 @@ class TwentyFive extends Report implements iCsvReport {
     {
         $this->term = $term;
     }
-    
+
     public function getTerm()
     {
         return $this->term;
     }
 }
-
-

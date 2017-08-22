@@ -48,6 +48,6 @@ class StudentMenuProfileView extends View {
             $tpl['CREATE_PROFILE'] = $createCmd->getLink('Create your profile');
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/StudentProfileMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/StudentProfileMenuBlock.tpl');
     }
 }

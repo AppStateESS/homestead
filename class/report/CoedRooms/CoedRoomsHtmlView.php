@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\CoedRooms;
+
 /**
  * HTML View for TwentyOne report
  *
@@ -7,7 +9,7 @@
  * @package HMS
  */
 
-class CoedRoomsHtmlView extends ReportHtmlView 
+class CoedRoomsHtmlView extends ReportHtmlView
 {
 	protected function render()
     {
@@ -18,7 +20,6 @@ class CoedRoomsHtmlView extends ReportHtmlView
 
 	    $this->tpl['totalCoed'] = $this->report->getTotalCoed();
 
-	    return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/CoedRooms.tpl');
+	    return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/CoedRooms.tpl');
 	}
 }
-

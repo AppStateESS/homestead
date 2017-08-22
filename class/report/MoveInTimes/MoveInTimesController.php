@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\MoveInTimes;
+
 /*
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
@@ -22,5 +24,3 @@ class MoveInTimesController extends ReportController implements iSyncReport, iHt
         return $params;
     }
 }
-
-

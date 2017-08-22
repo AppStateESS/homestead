@@ -47,6 +47,6 @@ class CheckinHistoryView extends View {
 
         $tpl['HISTORY'] = $historyRows;
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/StudentCheckinHistoryView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/StudentCheckinHistoryView.tpl');
     }
 }

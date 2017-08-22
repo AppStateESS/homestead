@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\UnavailableBeds;
+
 /**
  * Lists unavailable beds
  *
@@ -31,8 +33,8 @@ class UnavailableBeds extends Report {
         /*****
          * Total Beds
          */
-        $db = new PHPWS_DB('hms_bed');
-        
+        $db = new \PHPWS_DB('hms_bed');
+
         $db->addJoin('', 'hms_bed', 'hms_room', 'room_id', 'id');
         $db->addJoin('', 'hms_room', 'hms_floor', 'floor_id', 'id');
         $db->addJoin('', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
@@ -41,23 +43,23 @@ class UnavailableBeds extends Report {
 
         $this->totalBedCount = $db->count();
 
-        if(PHPWS_Error::logIfError($this->totalBedCount)){
+        if(\PHPWS_Error::logIfError($this->totalBedCount)){
             PHPWS_Core::initModClass('hms', 'exception', 'DatabaseException.php');
             throw new DatabaseException($this->totalBedCount->toString());
         }
-        
+
         /*******
          * Unavailable Beds
          */
-        $db = new PHPWS_DB('hms_bed');
+        $db = new \PHPWS_DB('hms_bed');
         $db->addColumn('hms_residence_hall.hall_name');
         $db->addColumn('hms_bed.*');
         $db->addColumn('hms_room.*');
-        
+
         $db->addJoin('', 'hms_bed', 'hms_room', 'room_id', 'id');
         $db->addJoin('', 'hms_room', 'hms_floor', 'floor_id', 'id');
         $db->addJoin('', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
-        
+
         $db->addWhere('hms_room.reserved', 1, null, 'OR', 'foo');
         $db->addWhere('hms_room.ra', 1, null, 'OR', 'foo');
         $db->addWhere('hms_room.private', 1, null, 'OR', 'foo');
@@ -66,14 +68,14 @@ class UnavailableBeds extends Report {
         $db->addWhere('hms_room.offline', 1, null, 'OR', 'foo');
         $db->addWhere('hms_bed.ra_roommate', 1, null, 'OR', 'foo');
         $db->addWhere('hms_bed.international_reserved', 1, null, 'OR', 'foo');
-        
+
         $db->addWhere('hms_bed.term', $this->term);
-        
+
         $db->addOrder(array('hms_residence_hall.hall_name', 'hms_room.room_number', 'bed_letter'));
-        
+
         $this->unavailableBeds = $db->select();
-        
-        if(PHPWS_Error::logIfError($this->unavailableBeds)){
+
+        if(\PHPWS_Error::logIfError($this->unavailableBeds)){
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($this->unavailableBeds->toString());
         }
@@ -93,11 +95,9 @@ class UnavailableBeds extends Report {
     {
         $this->term = $term;
     }
-    
+
     public function getTerm()
     {
         return $this->term;
     }
 }
-
-

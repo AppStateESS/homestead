@@ -47,6 +47,6 @@ class ResidenceHallMenu extends CommandMenu {
 
         $tpl['MENU'] = parent::show();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/menus/ResidenceHallMenu.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/menus/ResidenceHallMenu.tpl');
     }
 }

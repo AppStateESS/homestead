@@ -45,6 +45,6 @@ class OffCampusWaitingListMenuBlockView extends View {
             $tpl['WAIT_LIST_LINK'] = $waitListCommand->getLink('Apply to the waiting list');
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/OffCampusWaitingListMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/OffCampusWaitingListMenuBlock.tpl');
     }
 }

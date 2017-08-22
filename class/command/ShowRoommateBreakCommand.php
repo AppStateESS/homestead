@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * Description
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
@@ -43,12 +47,12 @@ class ShowRoommateBreakCommand extends Command
             throw new PermissionException("$username tried to break roommate pairing {$roommate->id}");
         }
 
-        PHPWS_Core::initCoreClass('Captcha.php');
+        \PHPWS_Core::initCoreClass('Captcha.php');
 
         // get other roommate
         $other = StudentFactory::getStudentByUsername($roommate->get_other_guy($username), $roommate->term);
 
-        $form = new PHPWS_Form;
+        $form = new \PHPWS_Form;
 
         $cmd = CommandFactory::getCommand('RoommateBreak');
         $cmd->setRoommateId($id);

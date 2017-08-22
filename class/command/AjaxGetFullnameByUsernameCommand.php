@@ -1,9 +1,12 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'Term.php');
 class AjaxGetFullnameByUsernameCommand extends Command {
-    
+
     public function getRequestVars(){
         return array();
     }
@@ -20,7 +23,7 @@ class AjaxGetFullnameByUsernameCommand extends Command {
                 echo "";
                 exit;
             }
-        
+
             $student = StudentFactory::getStudentByUsername($username, Term::getSelectedTerm());
 
             echo $student->getFullName();

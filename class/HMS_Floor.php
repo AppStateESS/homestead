@@ -2,6 +2,9 @@
 
 namespace Homestead;
 
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * HMS Floor class
  *
@@ -663,7 +666,7 @@ class HMS_Floor extends HMS_Item
 
     public static function get_pager_by_hall($hall_id)
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
+        \PHPWS_Core::initCoreClass('DBPager.php');
 
         $pager = new DBPager('hms_floor', 'HMS_Floor');
 

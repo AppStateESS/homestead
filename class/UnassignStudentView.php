@@ -13,7 +13,7 @@ class UnassignStudentView extends View{
 
     public function show()
     {
-        PHPWS_Core::initCoreClass('Form.php');
+        \PHPWS_Core::initCoreClass('Form.php');
 
         javascript('jquery');
         javascript('modules/hms/assign_student');
@@ -21,7 +21,7 @@ class UnassignStudentView extends View{
 
         $unassignCmd = CommandFactory::getCommand('UnassignStudent');
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $unassignCmd->initForm($form);
 
         $form->addText('username');
@@ -60,7 +60,7 @@ class UnassignStudentView extends View{
 
         Layout::addPageTitle("Unassign Student");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/unassignStudent.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/unassignStudent.tpl');
     }
 
 }

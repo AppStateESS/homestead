@@ -74,6 +74,6 @@ class HMS_Student_UI{
 
         $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Back to Main Menu', 'hms', array('type'=>'student', 'op'=>'show_main_menu'));
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/verify_assignment.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/verify_assignment.tpl');
     }
 }

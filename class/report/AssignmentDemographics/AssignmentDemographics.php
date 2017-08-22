@@ -89,7 +89,7 @@ class AssignmentDemographics extends Report {
 
     private function getHallList()
     {
-        $db = new PHPWS_DB('hms_residence_hall');
+        $db = new \PHPWS_DB('hms_residence_hall');
         $db->addColumn('id');
         $db->addColumn('hall_name');
         $db->addWhere('term', $this->term);
@@ -97,7 +97,7 @@ class AssignmentDemographics extends Report {
         $db->addOrder('hall_name', 'asc');
         $result = $db->select();
 
-        if(PHPWS_Error::logIfError($result)) {
+        if(\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -106,7 +106,7 @@ class AssignmentDemographics extends Report {
 
     private function getAssignmentsByHall($hallId)
     {
-        $db = new PHPWS_DB('hms_assignment');
+        $db = new \PHPWS_DB('hms_assignment');
         $db->addColumn('hms_assignment.banner_id');
 
         // Limit to just the requested hall id
@@ -125,7 +125,7 @@ class AssignmentDemographics extends Report {
 
         $assignments = $db->select();
 
-        if(PHPWS_Error::logIfError($assignments)) {
+        if(\PHPWS_Error::logIfError($assignments)) {
             throw new DatabaseException($assignments->toString());
         }
 

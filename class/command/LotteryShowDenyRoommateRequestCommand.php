@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class LotteryShowDenyRoommateRequestCommand extends Command {
 
     private $requestId;
@@ -25,4 +29,3 @@ class LotteryShowDenyRoommateRequestCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

@@ -20,8 +20,8 @@ class EmergencyContactFormView extends View {
 
     public function show()
     {
-        PHPWS_Core::initCoreClass('Form.php');
-        $form = new PHPWS_Form();
+        \PHPWS_Core::initCoreClass('Form.php');
+        $form = new \PHPWS_Form();
 
         $submitCmd = CommandFactory::getCommand('EmergencyContactFormSubmit');
         $submitCmd->setTerm($this->term);
@@ -81,6 +81,6 @@ class EmergencyContactFormView extends View {
 
         Layout::addPageTitle("Emergency Contact Form");
 
-        return PHPWS_Template::process($tpl,'hms','student/emergency_contact_form.tpl');
+        return \PHPWS_Template::process($tpl,'hms','student/emergency_contact_form.tpl');
     }
 }

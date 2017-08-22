@@ -254,7 +254,7 @@ class StudentProfileView extends View {
         $addNoteCmd = CommandFactory::getCommand('AddNote');
         $addNoteCmd->setUsername($this->student->getUsername());
 
-        $form = new PHPWS_Form('add_note_dialog');
+        $form = new \PHPWS_Form('add_note_dialog');
         $addNoteCmd->initForm($form);
 
         $form->addTextarea('note');
@@ -291,6 +291,6 @@ class StudentProfileView extends View {
         // TODO tabs
 
         Layout::addPageTitle("Student Profile");
-        return PHPWS_Template::process($tpl, 'hms', 'admin/StudentProfile.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/StudentProfile.tpl');
     }
 }

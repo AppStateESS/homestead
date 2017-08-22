@@ -28,7 +28,7 @@ class LotteryConfirmView extends View {
         $submitCmd->setRoomId($this->roomId);
         $submitCmd->setMealPlan($this->mealPlan);
 
-        $form = new PHPWS_Form;
+        $form = new \PHPWS_Form;
         $submitCmd->initForm($form);
 
         # Add the beds and user names back to the form so they end up in the request in a pretty way
@@ -89,7 +89,7 @@ class LotteryConfirmView extends View {
         $tpl['MEAL_PLAN'] = HMS_Util::formatMealOption($this->mealPlan);
         $form->addHidden('meal_plan', $this->mealPlan);
 
-        PHPWS_Core::initCoreClass('Captcha.php');
+        \PHPWS_Core::initCoreClass('Captcha.php');
         $form->addTplTag('CAPTCHA_IMAGE', Captcha::get());
 
         $form->addSubmit('submit_form', 'Confirm room & roommates');
@@ -97,6 +97,6 @@ class LotteryConfirmView extends View {
 
         Layout::addPageTitle("Confirm Re-Application");
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/lottery_confirm.tpl');
+        return \PHPWS_Template::process($form->getTemplate(), 'hms', 'student/lottery_confirm.tpl');
     }
 }

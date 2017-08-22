@@ -117,12 +117,12 @@ abstract class AssignmentStrategy {
                (count($moar) > 0 ? ' AND ' . implode(' AND ', $moar) : '') .
                $post_sql;
 
-        $db = new PHPWS_DB;
+        $db = new \PHPWS_DB;
         $db->setSQLQuery($sql);
 
         $result = $db->select('row');
 
-        if(PHPWS_Error::logIfError($result)) {
+        if(\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->getMessage());
         }
 

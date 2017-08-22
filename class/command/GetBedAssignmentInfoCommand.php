@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 class GetBedAssignmentInfoCommand extends Command {
@@ -40,4 +44,3 @@ class GetBedAssignmentInfoCommand extends Command {
         exit;
     }
 }
-

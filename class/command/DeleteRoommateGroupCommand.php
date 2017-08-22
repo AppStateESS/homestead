@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class DeleteRoommateGroupCommand extends Command {
 
     private $id;
@@ -42,10 +46,8 @@ class DeleteRoommateGroupCommand extends Command {
         $notes = "{$roommate->getRequestor()} requested {$roommate->getRequestee()}";
         HMS_Activity_Log::log_activity($roommate->getRequestor(), ACTIVITY_ADMIN_REMOVED_ROOMMATE, UserStatus::getUsername(), $notes);
         HMS_Activity_Log::log_activity($roommate->getRequestee(), ACTIVITY_ADMIN_REMOVED_ROOMMATE, UserStatus::getUsername(), $notes);
-        
+
         NQ::simple('hms', hms\NotificationView::SUCCESS, 'Roommate group successfully deleted.');
         $viewCmd->redirect();
     }
 }
-
-

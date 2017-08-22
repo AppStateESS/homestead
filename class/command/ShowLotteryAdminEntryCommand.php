@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class ShowLotteryAdminEntryCommand extends Command {
 
     public function getRequestVars()
@@ -13,11 +17,10 @@ class ShowLotteryAdminEntryCommand extends Command {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to add lottery entries.');
         }
-         
+
         PHPWS_Core::initModClass('hms', 'LotteryAdminEntryView.php');
         $view = new LotteryAdminEntryView();
 
         $context->setContent($view->show());
     }
 }
-

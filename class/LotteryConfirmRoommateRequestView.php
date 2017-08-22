@@ -63,14 +63,14 @@ class LotteryConfirmRoommateRequestView extends View {
 
         $tpl['MEAL_PLAN'] = HMS_Util::formatMealOption($this->mealPlan);
 
-        PHPWS_Core::initCoreClass('Captcha.php');
+        \PHPWS_Core::initCoreClass('Captcha.php');
         $tpl['CAPTCHA'] = Captcha::get();
 
         $submitCmd = CommandFactory::getCommand('LotteryConfirmRoommateRequest');
         $submitCmd->setRequestId($this->request['id']);
         $submitCmd->setMealPlan($this->mealPlan);
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd->initForm($form);
 
         $form->addSubmit('confirm', 'Confirm Roommate');
@@ -80,6 +80,6 @@ class LotteryConfirmRoommateRequestView extends View {
 
         Layout::addPageTitle("Lottery Confirm Roommate");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/lottery_confirm_roommate_request.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/lottery_confirm_roommate_request.tpl');
     }
 }

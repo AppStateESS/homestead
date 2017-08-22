@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\MoveInTimes;
+
 /*
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>

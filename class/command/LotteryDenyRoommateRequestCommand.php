@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class LotteryDenyRoommateRequestCommand extends Command {
 
     private $requestId;
@@ -23,7 +27,7 @@ class LotteryDenyRoommateRequestCommand extends Command {
         $errorCmd->setRequestId($requestId);
 
         # Confirm the captcha
-        PHPWS_Core::initCoreClass('Captcha.php');
+        \PHPWS_Core::initCoreClass('Captcha.php');
         $captcha = Captcha::verify(TRUE);
         if($captcha === FALSE){
             NQ::simple('hms', hms\NotificationView::ERROR, 'The words you entered were incorrect. Please try again.');

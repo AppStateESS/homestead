@@ -30,6 +30,6 @@ class StudentMenuWithdrawnTermBlock {
         // In case there are no features enabled for this term
         $tpl['BLOCKS'][] = array('BLOCK'=>'Your application has been cancelled for this term. If this is an error please ' . $contactFormLink . '.');
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/studentMenuTermBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/studentMenuTermBlock.tpl');
     }
 }

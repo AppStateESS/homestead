@@ -1,4 +1,8 @@
 <?php
+
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'CommandFactory.php');
 
 class CreateMoveinTimeCommand extends Command {
@@ -24,7 +28,7 @@ class CreateMoveinTimeCommand extends Command {
 
         $result = $movein_time->save();
 
-        if(!$result || PHPWS_Error::logIfError($result)){
+        if(!$result || \PHPWS_Error::logIfError($result)){
             NQ::simple('hms', hms\NotificationView::ERROR, 'There was an error saving the move-in time.');
         } else {
             NQ::simple('hms', hms\NotificationView::SUCCESS, 'Move-in time saved successfully.');
@@ -34,4 +38,3 @@ class CreateMoveinTimeCommand extends Command {
     }
 
 }
-

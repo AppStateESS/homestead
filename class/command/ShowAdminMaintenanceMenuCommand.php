@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class ShowAdminMaintenanceMenuCommand extends Command {
 
     public function getRequestVars(){

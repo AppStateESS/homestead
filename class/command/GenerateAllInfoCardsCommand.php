@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * Controller/command for generating the entire set of RIC forms for a semester.
  *

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\MismatchedRoommates;
+
 /**
  * HTML View for MismatchedRoommates report
  *
@@ -23,9 +25,7 @@ class MismatchedRoommatesHtmlView extends ReportHtmlView
             $this->tpl['rows'][] = $row;
         }
 
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/MismatchedRoommates.tpl');
+        return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/MismatchedRoommates.tpl');
     }
 
 }
-
-

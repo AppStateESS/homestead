@@ -97,12 +97,12 @@ class ReportFactory {
     public static function getReportById($reportId)
     {
         // Get the class of the requested report
-        $db = new PHPWS_DB('hms_report');
+        $db = new \PHPWS_DB('hms_report');
         $db->addColumn('report');
         $db->addWhere('id', $reportId);
         $result = $db->select('one');
 
-        if(PHPWS_Error::logIfError($result)){
+        if(\PHPWS_Error::logIfError($result)){
             throw new DatabaseExecption($result->toString());
         }
 

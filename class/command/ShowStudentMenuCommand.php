@@ -1,5 +1,8 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 PHPWS_Core::initModClass('hms', 'HousingApplication.php');
@@ -41,7 +44,7 @@ class ShowStudentMenuCommand extends Command {
         is_null($dob))
         {
             # TODO: HMS_Mail here
-            PHPWS_Error::log('Initial banner lookup failed', 'hms', 'show_welcome_screen', "username: " . UserStatus::getUsername());
+            \PHPWS_Error::log('Initial banner lookup failed', 'hms', 'show_welcome_screen', "username: " . UserStatus::getUsername());
             $badDataCmd = CommandFactory::getCommand('ShowBadBannerData');
             $badDataCmd->redirect();
         }

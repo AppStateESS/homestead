@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\TwentyFive;
+
 /**
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
@@ -23,5 +25,3 @@ class TwentyFiveController extends ReportController implements iSyncReport, iHtm
     }
 
 }
-
-

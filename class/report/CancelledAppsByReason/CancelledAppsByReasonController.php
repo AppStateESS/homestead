@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\CancelledAppsByReason;
+
 /**
  * Cancelled Application by Reason Controller
  *
@@ -23,4 +25,3 @@ class CancelledAppsByReasonController extends ReportController implements iSyncR
         return $params;
     }
 }
-

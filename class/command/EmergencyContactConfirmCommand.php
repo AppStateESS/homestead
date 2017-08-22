@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class EmergencyContactConfirmCommand extends Command {
 
     private $vars;
@@ -105,5 +109,3 @@ class EmergencyContactConfirmCommand extends Command {
         $successCmd->redirect();
     }
 }
-
-

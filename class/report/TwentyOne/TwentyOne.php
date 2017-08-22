@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\TwentyOne;
+
 /**
  * TwentyOne - Report that calculates % of students 21 or older.
  *

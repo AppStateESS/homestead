@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * Description
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>

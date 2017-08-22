@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\CancelledAppsByReason;
+
 /**
  * HTLM view for Cancelled Housing Applications by Reason report.
  *
@@ -69,6 +71,6 @@ class CancelledAppsByReasonHtmlView extends ReportHtmlView {
         $this->tpl['CONTINUING_TOTAL'] = $continuingCancellations;
 
 
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/CancelledAppsByReason.tpl');
+        return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/CancelledAppsByReason.tpl');
     }
 }

@@ -2,6 +2,9 @@
 
 namespace Homestead;
 
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * The HMS_RLC_Application class
  * Implements the RLC_Application object and methods to load/save
@@ -395,7 +398,7 @@ class HMS_RLC_Application extends HMS_Item
     public static function denied_pager()
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initCoreClass('DBPager.php');
+        \PHPWS_Core::initCoreClass('DBPager.php');
 
         $pager = new DBPager('hms_learning_community_applications', 'HMS_RLC_Application');
 

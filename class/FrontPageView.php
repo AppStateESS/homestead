@@ -9,6 +9,6 @@ class FrontPageView extends View{
         $tpl = array();
         $tpl['LOGIN_LINK'] = ''; // a dummy tag to make the actual login content show
 
-        return PHPWS_Template::process($tpl, 'hms', 'misc/login.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'misc/login.tpl');
     }
 }

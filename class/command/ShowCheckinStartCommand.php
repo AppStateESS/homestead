@@ -1,5 +1,8 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
 
 /**
  * ShowCheckinStartCommand - Shows the iniital interface for beginning a checkin
@@ -43,4 +46,3 @@ class ShowCheckinStartCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

@@ -2,6 +2,9 @@
 
 namespace Homestead;
 
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
@@ -726,7 +729,7 @@ class HMS_Bed extends HMS_Item {
      */
     public static function bed_pager_by_room($room_id)
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
+        \PHPWS_Core::initCoreClass('DBPager.php');
 
         $pager = new DBPager('hms_bed', 'HMS_Bed');
         $pager->db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');

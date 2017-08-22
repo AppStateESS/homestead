@@ -6,7 +6,7 @@ PHPWS_Core::initModClass('hms', 'CommandFactory.php');
 class LotteryEligibilityWaiverView extends View {
 
     public function show(){
-        $form = new PHPWS_Form('waiver');
+        $form = new \PHPWS_Form('waiver');
         $form->addTextArea('usernames');
         $form->setLabel('usernames', 'ASU User names (one per line):');
         $form->setExtra('usernames', 'autofocus');
@@ -22,6 +22,6 @@ class LotteryEligibilityWaiverView extends View {
 
         Layout::addPageTitle("Lottery Eligibility Waiver");
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/eligibility_waiver.tpl');
+        return \PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/eligibility_waiver.tpl');
     }
 }

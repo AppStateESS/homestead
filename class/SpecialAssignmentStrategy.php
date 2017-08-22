@@ -11,11 +11,11 @@ class SpecialAssignmentStrategy extends Assignmentstrategy
     {
         parent::__construct($term);
 
-        $db = new PHPWS_DB('hms_special_assignment');
+        $db = new \PHPWS_DB('hms_special_assignment');
         $db->addWhere('term', $this->term);
         $result = $db->getObjects('SpecialAssignment');
 
-        if(PHPWS_Error::logIfError($result)) {
+        if(\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->getMessage());
         }
 

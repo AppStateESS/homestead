@@ -39,9 +39,9 @@ class WithdrawnSearch {
         $term = $this->term;
 
         $query = "select DISTINCT * FROM (select hms_new_application.username from hms_new_application WHERE term=$term AND cancelled != 1 UNION select hms_assignment.asu_username from hms_assignment WHERE term=$term) as foo";
-        $result = PHPWS_DB::getCol($query);
+        $result = \PHPWS_DB::getCol($query);
 
-        if(PHPWS_Error::logIfError($result)){
+        if(\PHPWS_Error::logIfError($result)){
             throw new Exception($result->toString());
         }
 
@@ -201,7 +201,7 @@ class WithdrawnSearch {
      */
     public function getTextView()
     {
-        $tpl = new PHPWS_Template('hms');
+        $tpl = new \PHPWS_Template('hms');
 
         if(!$tpl->setFile('admin/withdrawnSearchTextOutput.tpl')) {
             return 'Template error...';
@@ -216,7 +216,7 @@ class WithdrawnSearch {
      */
     public function getHTMLView()
     {
-        $tpl = new PHPWS_Template('hms');
+        $tpl = new \PHPWS_Template('hms');
 
         if(!$tpl->setFile('admin/withdrawnSearchOutput.tpl')) {
             return 'Template error...';
@@ -226,8 +226,8 @@ class WithdrawnSearch {
     }
 
     /**
-     * Takes a PHPWS_Template object and plugs the various variables into it
-     * @param PHPWS_Template $tpl
+     * Takes a \PHPWS_Template object and plugs the various variables into it
+     * @param \PHPWS_Template $tpl
      *
      * @return Array template tags
      */

@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * Description
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
@@ -43,11 +47,11 @@ class ShowRoommateConfirmAcceptCommand extends Command
             throw new PermissionException("$username tried to display accept confirmation for roommate pairing {$roommate->id}");
         }
 
-        PHPWS_Core::initCoreClass('Captcha.php');
+        \PHPWS_Core::initCoreClass('Captcha.php');
 
         $requestor = StudentFactory::getStudentByUsername($roommate->requestor, $roommate->term);
 
-        $form = new PHPWS_Form;
+        $form = new \PHPWS_Form;
 
         $cmd = CommandFactory::getCommand('RoommateAccept');
         $cmd->setRoommateId($id);

@@ -1,5 +1,8 @@
 <?php
-PHPWS_Core::initModClass('hms', 'Command.php');
+
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'CommandContext.php');
 PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 PHPWS_Core::initModClass('hms', 'RlcApplicationPage2View.php');
@@ -75,5 +78,3 @@ class ShowRlcApplicationPage2ViewCommand extends Command
         $context->setContent($view->show());
     }
 }
-
-

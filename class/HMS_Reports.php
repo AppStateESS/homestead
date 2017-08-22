@@ -2,6 +2,7 @@
 
 namespace Homestead;
 
+use \PHPWS_DB;
 PHPWS_Core::initModClass('hms', 'StudentFactory.php'); // Just go ahead and do this here, since a lot of reports use it
 
 class HMS_Reports{
@@ -18,7 +19,7 @@ class HMS_Reports{
 
         $result = $db->select();
 
-        if(PHPWS_Error::logIfError($result)){
+        if(\PHPWS_Error::logIfError($result)){
             PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($result->toString());
         }
@@ -97,7 +98,7 @@ class HMS_Reports{
         $db->setIndexBy('hall_name');
         $lotteryBeds = $db->select();
 
-        $tpl = new PHPWS_Template('hms');
+        $tpl = new \PHPWS_Template('hms');
         $tpl->setFile('admin/reports/reapp_availability.tpl');
 
         //

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\DamagesAssessed;
+
 /**
  *
  * @author Jeremy Booker
@@ -73,4 +75,3 @@ class DamagesAssessed extends Report implements iCsvReport {
         return $cmd;
     }
 }
-

@@ -1,4 +1,8 @@
 <?php
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * ShowHallNotificationSelectCommand
  *
@@ -24,4 +28,3 @@ class ShowHallNotificationSelectCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

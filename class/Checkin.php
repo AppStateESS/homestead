@@ -46,7 +46,7 @@ class Checkin {
 
     public function save()
     {
-        $db = new PHPWS_DB('hms_checkin');
+        $db = new \PHPWS_DB('hms_checkin');
 
         try {
             $result = $db->saveObject($this);
@@ -55,7 +55,7 @@ class Checkin {
             throw $e;
         }
 
-        if (PHPWS_Error::logIfError($result)) {
+        if (\PHPWS_Error::logIfError($result)) {
             throw new Exception($result->toString());
         }
 

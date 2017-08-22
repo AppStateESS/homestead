@@ -50,7 +50,7 @@ class ListReportsView extends View{
             $tpl['REPORTS'][]['ITEM'] = $itemView->show();
         }
 
-        $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_reports.tpl');
+        $final = \PHPWS_Template::process($tpl, 'hms', 'admin/display_reports.tpl');
         return $final;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \PHPWS_Error;
+use \PHPWS_DB;
 PHPWS_Core::initModClass('hms', 'Checkin.php');
 PHPWS_Core::initModClass('hms', 'PdoFactory.php');
 

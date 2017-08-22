@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\ReappAvailableBeds;
+
 class ReappAvailableBedsHtmlView extends ReportHtmlView
 {
 
@@ -14,7 +16,7 @@ class ReappAvailableBedsHtmlView extends ReportHtmlView
             $this->tpl['halls'][] = $row;
         }
 
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/ReappAvailableBeds.tpl');
+        return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/ReappAvailableBeds.tpl');
     }
 
 }

@@ -1,4 +1,9 @@
 <?php
+
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
 PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
@@ -13,11 +18,11 @@ class ListAllowedHallsCommand extends Command {
 
         $messageAll = Current_User::allow('hms', 'email_all');
 
-        $db = new PHPWS_DB('hms_residence_hall');
+        $db = new \PHPWS_DB('hms_residence_hall');
         $db->addWhere('term', $term);
         $results = $db->getObjects('HMS_Residence_Hall');
 
-        if(PHPWS_Error::logIfError($results) || is_null($results)){
+        if(\PHPWS_Error::logIfError($results) || is_null($results)){
             $errorMsg = array();
 
             if(is_null($results)){

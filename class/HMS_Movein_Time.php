@@ -2,6 +2,9 @@
 
 namespace Homestead;
 
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * HMS Move-in Time class
  *
@@ -119,7 +122,7 @@ class HMS_Movein_Time
     }
 
     public static function get_movein_times_pager(){
-        PHPWS_Core::initCoreClass('DBPager.php');
+        \PHPWS_Core::initCoreClass('DBPager.php');
 
         $pager = new DBPager('hms_movein_time', 'HMS_Movein_Time');
 

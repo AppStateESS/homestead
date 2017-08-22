@@ -44,7 +44,7 @@ class SearchProfilesMenuBlockView extends View {
             $tpl['SEARCH_ROOMMATES'] = $searchCmd->getLink('Search roommate profiles.');
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/searchProfilesMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/searchProfilesMenuBlock.tpl');
     }
 
 }

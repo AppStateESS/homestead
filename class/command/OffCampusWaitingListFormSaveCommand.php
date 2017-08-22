@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class OffCampusWaitingListFormSaveCommand extends Command {
 
     private $term;

@@ -1,6 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'Command.php');
+namespace Homestead\command;
+
+use \Homestead\Command;
 
 class ShowEmergencyContactFormCommand extends Command {
 
@@ -51,5 +53,3 @@ class ShowEmergencyContactFormCommand extends Command {
         $context->setContent($formView->show());
     }
 }
-
-

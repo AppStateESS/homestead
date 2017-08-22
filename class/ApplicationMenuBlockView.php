@@ -59,6 +59,6 @@ class ApplicationMenuBlockView extends View {
             }
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/applicationMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/applicationMenuBlock.tpl');
     }
 }

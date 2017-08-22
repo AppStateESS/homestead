@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\NoShowList;
+
 /**
  * HTML View for NoShowList report
  *
@@ -21,7 +23,6 @@ class NoShowListHtmlView extends ReportHtmlView {
             $this->tpl['rows'][] = $row;
         }
 
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/NoShowList.tpl');
+        return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/NoShowList.tpl');
     }
 }
-

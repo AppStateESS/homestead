@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * Description
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
@@ -46,7 +50,7 @@ class RoommateAcceptCommand extends Command
         $err = CommandFactory::getCommand('ShowRoommateConfirmAccept');
         $err->setRoommateId($id);
 
-        PHPWS_Core::initCoreClass('Captcha.php');
+        \PHPWS_Core::initCoreClass('Captcha.php');
         $verified = Captcha::verify(TRUE);
         if($verified === FALSE || is_null($verified)) {
             NQ::Simple('hms', hms\NotificationView::ERROR, 'Sorry, please try again.');
@@ -89,5 +93,3 @@ class RoommateAcceptCommand extends Command
         $cmd->redirect();
     }
 }
-
-

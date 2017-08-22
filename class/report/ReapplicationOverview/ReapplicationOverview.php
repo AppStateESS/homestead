@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\ReapplicationOverview;
+
 /**
  * ReapplicationOverview report.
  * Gives various statistics related to re-application.
@@ -90,7 +92,7 @@ class ReapplicationOverview extends Report implements iCsvReport {
 
 
         //TODO make this based on lottery assignment reason
-        $db = new PHPWS_DB('hms_assignment');
+        $db = new \PHPWS_DB('hms_assignment');
         $db->addWhere('term', $lotteryTerm);
         $db->addWhere('reason', 'lottery');
         $numLotteryAssigned = $db->select('count');

@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class LotteryShowChooseFloorCommand extends Command {
 
     private $hallId;

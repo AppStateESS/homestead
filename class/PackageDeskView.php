@@ -32,7 +32,7 @@ class PackageDeskView {
 
         Layout::addPageTitle('Package Desk');
 
-        $form = new PHPWS_Form('pd');
+        $form = new \PHPWS_Form('pd');
 
         // Package desk drop down
         $form->addDropBox('desk', array('Select a Package Desk...') + $this->packageDesks);
@@ -41,6 +41,6 @@ class PackageDeskView {
 
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/packageDesk.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/packageDesk.tpl');
     }
 }

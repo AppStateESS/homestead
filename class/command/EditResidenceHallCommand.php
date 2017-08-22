@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * Controller for saving the attributes of a ResidenceHall object to the database.
  *
@@ -103,7 +107,7 @@ class EditResidenceHallCommand extends Command {
 
         $result = $hall->save();
 
-        if (!$result || PHPWS_Error::logIfError($result)) {
+        if (!$result || \PHPWS_Error::logIfError($result)) {
             NQ::simple('hms', hms\NotificationView::ERROR, 'There was a problem saving the Residence Hall. No changes were made.');
             $viewCmd->redirect();
         }

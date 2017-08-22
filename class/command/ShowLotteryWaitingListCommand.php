@@ -1,5 +1,8 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'LotteryWaitingListView.php');
 
 class ShowLotteryWaitingListCommand extends Command {
@@ -14,10 +17,8 @@ class ShowLotteryWaitingListCommand extends Command {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to add lottery entries.');
         }
-         
+
         $view = new LotteryWaitingListView();
         $context->setContent($view->show());
     }
 }
-
-

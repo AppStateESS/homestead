@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\GenderDistributionByHall;
+
 /**
  * TwentyOne - Report that calculates % of students 21 or older.
  *
@@ -67,7 +69,7 @@ class GenderDistributionByHall extends Report implements iCsvReport {
             // Get all the assignments for this hall, joined up to the
             // room level so we can determine gender, and joined up to the
             // hall level so we can limit by hall
-            $db = new PHPWS_DB('hms_assignment');
+            $db = new \PHPWS_DB('hms_assignment');
             $db->addColumn('hms_assignment.*');
             $db->addColumn('hms_room.gender_type');
 

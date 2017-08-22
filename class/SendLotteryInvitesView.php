@@ -15,7 +15,7 @@ class SendLotteryInvitesView extends View {
 
         $submitCmd = CommandFactory::getCommand('SendLotteryInvites');
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd->initForm($form);
 
         $form->addCheckAssoc('send_reminders', array('send_reminders'=>"Send Invite Reminders"));
@@ -53,6 +53,6 @@ class SendLotteryInvitesView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/SendLotteryInvitesView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/SendLotteryInvitesView.tpl');
     }
 }

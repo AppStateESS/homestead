@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\EarlyRelease;
+
   class EarlyReleaseHtmlView extends ReportHtmlView
   {
     protected function render()
@@ -62,6 +64,6 @@
             $this->tpl['rows'][] = $row;
       }
 
-      return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/EarlyRelease.tpl');
+      return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/EarlyRelease.tpl');
     }
   }

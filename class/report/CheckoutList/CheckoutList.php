@@ -1,5 +1,6 @@
 <?php
 
+namespace Homestead\report\CheckoutList;
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
 /**

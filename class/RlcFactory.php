@@ -32,14 +32,14 @@ class RlcFactory {
             throw new InvalidArgumentException('Missing RLC id.');
         }
 
-        $db = new PHPWS_DB('hms_learning_communities');
+        $db = new \PHPWS_DB('hms_learning_communities');
         $db->addWhere('id', $id);
 
         $community = new RestoredRlc();
 
         $result = $db->loadObject($community);
 
-        if (PHPWS_Error::logIfError($result)) {
+        if (\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -57,7 +57,7 @@ class RlcFactory {
      */
     public static function getRlcList($term, $studentType = NULL, $hidden = NULL)
     {
-        $db = new PHPWS_DB('hms_learning_communities');
+        $db = new \PHPWS_DB('hms_learning_communities');
         $db->addColumn('id');
         $db->addColumn('community_name');
 
@@ -73,7 +73,7 @@ class RlcFactory {
 
         $rlcs = $db->select('assoc');
 
-        if (PHPWS_Error::logIfError($rlcs)) {
+        if (\PHPWS_Error::logIfError($rlcs)) {
             throw new DatabaseException($rlcs->toString());
         }
 

@@ -64,6 +64,6 @@ class CommandMenu extends View {
 
         $this->plugCommands($tpl);
 
-        return PHPWS_Template::process($tpl, 'hms', 'CommandMenu.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'CommandMenu.tpl');
     }
 }

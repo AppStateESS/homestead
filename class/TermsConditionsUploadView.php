@@ -25,7 +25,7 @@ class TermsConditionsUploadView extends View{
         $term = $this->term;
         $type = $this->type;
 
-        $form = new PHPWS_Form('upload_terms_conditions');
+        $form = new \PHPWS_Form('upload_terms_conditions');
 
         $cmd = CommandFactory::getCommand('UploadTermsConditions');
         $cmd->setTerm($term);
@@ -42,6 +42,6 @@ class TermsConditionsUploadView extends View{
                         ($type == 'pdf' ? 'PDF' : 'SOMETHING WENT WRONG')) .
                         ' file to upload.';
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/TermsConditionsUploadView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/TermsConditionsUploadView.tpl');
     }
 }

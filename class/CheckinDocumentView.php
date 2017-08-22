@@ -32,6 +32,6 @@ class CheckinDocumentView extends View {
 
         $tpl['INFO_CARD_LINK'] = $pdfCmd->getLink('Resident Information Card', '_blank');
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/checkinComplete.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/checkinComplete.tpl');
     }
 }

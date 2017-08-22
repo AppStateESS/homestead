@@ -35,11 +35,11 @@ class HousingApplicationFactory {
         PHPWS_Core::initModClass('hms', 'WaitingListApplication.php');
 
         $application = new HousingApplication();
-        $db = new PHPWS_DB('hms_new_application');
+        $db = new \PHPWS_DB('hms_new_application');
         $db->addWhere('id', $id);
         $result = $db->loadObject($application);
 
-        if(PHPWS_Error::logIfError($result)){
+        if(\PHPWS_Error::logIfError($result)){
             throw new Exception("There was an retreiving the HousingApplication object from the database.");
         }
 
@@ -94,7 +94,7 @@ class HousingApplicationFactory {
         PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
         PHPWS_Core::initModClass('hms', 'WaitingListApplication.php');
 
-        $db = new PHPWS_DB('hms_new_application');
+        $db = new \PHPWS_DB('hms_new_application');
         $db->addWhere('banner_id', $student->getBannerId());
         $db->addWhere('term', $term);
 
@@ -104,7 +104,7 @@ class HousingApplicationFactory {
 
         $result = $db->select('row');
 
-        if (PHPWS_Error::logIfError($result)) {
+        if (\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 

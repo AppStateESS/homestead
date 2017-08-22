@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\CancelledAppsByType;
+
 /**
  * Cancelled Application by Student Type Controller
  *

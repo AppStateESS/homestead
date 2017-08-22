@@ -1,5 +1,8 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
 
 /**
 * Controller class for getting membership data in JSON format.

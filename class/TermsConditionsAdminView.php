@@ -15,7 +15,7 @@ class TermsConditionsAdminView extends View{
     {
         $submitCmd = CommandFactory::getCommand('SaveTermSettings');
 
-        $form = new PHPWS_Form('docusign');
+        $form = new \PHPWS_Form('docusign');
         $submitCmd->initForm($form);
 
 
@@ -47,6 +47,6 @@ class TermsConditionsAdminView extends View{
 
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/TermsConditionsAdminView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/TermsConditionsAdminView.tpl');
     }
 }

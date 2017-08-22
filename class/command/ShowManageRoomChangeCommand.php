@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class ShowManageRoomChangeCommand extends Command {
 
     private $requestId;
@@ -38,4 +42,3 @@ class ShowManageRoomChangeCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

@@ -41,7 +41,7 @@ class AddBedView extends View
 
         $tpl['HALL_ABBR'] = $this->hall->getBannerBuildingCode();
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd->initForm($form);
 
         if (isset($this->bedLetter)) {
@@ -96,6 +96,6 @@ class AddBedView extends View
         Layout::addPageTitle("Add Bed");
 
         // Reusing the edit bed template here
-        return PHPWS_Template::process($tpl, 'hms', 'admin/addBed.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/addBed.tpl');
     }
 }

@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * RemoveMaskAsSelfCommand
  * Allows RAs to login/logout as the student version of themselves.
@@ -22,9 +26,8 @@ class RemoveMaskAsSelfCommand extends Command {
         }
 
         UserStatus::removeMaskAsSelf();
-         
+
         $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
         $cmd->redirect();
     }
 }
-

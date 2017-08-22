@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\CancelledAppsList;
+
 /**
  * Cancelled Housing Applications List
  * Generates a list of all cancelled housing aplications
@@ -32,7 +34,7 @@ class CancelledAppsList extends Report implements iCsvReport{
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         // Select all cancelled apps for the given term
-        $db = new PHPWS_DB('hms_new_application');
+        $db = new \PHPWS_DB('hms_new_application');
 
         $db->addWhere('cancelled', 1);
         $db->addWhere('term', $this->term);
@@ -80,4 +82,3 @@ class CancelledAppsList extends Report implements iCsvReport{
         return $cmd;
     }
 }
-

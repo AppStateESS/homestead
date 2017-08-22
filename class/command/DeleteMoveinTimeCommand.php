@@ -1,5 +1,8 @@
 <?php
-PHPWS_Core::initModClass('hms', 'CommandFactory.php');
+
+namespace Homestead\command;
+
+use \Homestead\Command;
 
 class DeleteMoveinTimeCommand extends Command {
     protected $id;
@@ -31,7 +34,7 @@ class DeleteMoveinTimeCommand extends Command {
         $movein_time->id = $id;
         $result = $movein_time->delete();
 
-        if(!$result || PHPWS_Error::logIfError($result)){
+        if(!$result || \PHPWS_Error::logIfError($result)){
             NQ::simple('hms', hms\NotificationView::ERROR, 'Database error while attempting to delete movein time.');
         } else {
             NQ::simple('hms', hms\NotificationView::SUCCESS, 'Movein time deleted successfully.');

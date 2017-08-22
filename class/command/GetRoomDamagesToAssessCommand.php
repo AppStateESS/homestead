@@ -1,4 +1,8 @@
 <?php
+
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
 
@@ -101,6 +105,3 @@ class GetRoomDamagesToAssessCommand extends Command {
         $context->setContent(json_encode($rooms));
     }
 }
-
-
-

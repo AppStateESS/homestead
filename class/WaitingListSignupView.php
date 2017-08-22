@@ -17,7 +17,7 @@ class WaitingListSignupView extends View {
         $tpl['TERM'] = Term::toString($this->term);
         $tpl['NEXT_TERM'] = Term::toString(Term::getNextTerm($this->term));
 
-        $form = new PHPWS_Form('waitinglist-signup');
+        $form = new \PHPWS_Form('waitinglist-signup');
 
         $submitCmd = CommandFactory::getCommand('WaitingListSignup');
         $submitCmd->initForm($form);
@@ -28,6 +28,6 @@ class WaitingListSignupView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/waitinglistSignup.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/waitinglistSignup.tpl');
     }
 }

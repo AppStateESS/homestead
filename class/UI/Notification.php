@@ -36,7 +36,7 @@ class Notification {
     {
         /*
         if(!Current_User::allow('hms', 'email_hall')){
-             return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+             return \PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
         */
 
@@ -45,7 +45,7 @@ class Notification {
         $tpl=array();
         if(Current_User::allow('hms', 'email_all')){
             $halls = HMS_Residence_Hall::get_halls(HMS_Term::get_selected_term());
-            $form = new PHPWS_Form('select_halls_to_email');
+            $form = new \PHPWS_Form('select_halls_to_email');
             foreach($halls as $hall){
                 if($hall->is_online != 1){
                     continue;
@@ -83,7 +83,7 @@ class Notification {
             $tpl['SELECT'] = HMS_Residence_Hall::show_select_residence_hall('Select recipient Hall', 'notification', 'edit');
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/messages.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/messages.tpl');
     }
 
     public function show_edit_email($error=null, $subject=null, $body=null)
@@ -95,7 +95,7 @@ class Notification {
         }
 
         $tpl['HEADER'] = 'Email';
-        $form = new PHPWS_Form('email_content');
+        $form = new \PHPWS_Form('email_content');
 
         if(Current_User::allow('hms', 'anonymous_notifications')){
             $form->addCheck('anonymous');
@@ -120,7 +120,7 @@ class Notification {
 
         $tpl['EMAIL'] = preg_replace('/<br \/>/', '', implode('<br />', $form->getTemplate()), 2);
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/hall_notification_email_page.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/hall_notification_email_page.tpl');
     }
 
     public function show_review_email()
@@ -146,7 +146,7 @@ class Notification {
         $tpl['SUBJECT'] = $_REQUEST['subject'];
         $tpl['BODY']    = $_REQUEST['body'];
 
-        $form = new PHPWS_Form('edit_email');
+        $form = new \PHPWS_Form('edit_email');
         $form->addHidden('anonymous',   isset($_REQUEST['anonymous']) ? $_REQUEST['anonymous'] : '');
         $form->addHidden('subject',     $_REQUEST['subject']);
         $form->addHidden('body',        $_REQUEST['body']);
@@ -156,7 +156,7 @@ class Notification {
         $form->addSubmit('back',        'Edit Message');
         $tpl['BACK'] = implode('', $form->getTemplate());
 
-        $form2 = new PHPWS_Form('review_email');
+        $form2 = new \PHPWS_Form('review_email');
         $form2->addHidden('anonymous',  isset($_REQUEST['anonymous']) ? $_REQUEST['anonymous'] : '');
         $form2->addHidden('subject',    $_REQUEST['subject']);
         $form2->addHidden('body',       $_REQUEST['body']);
@@ -166,7 +166,7 @@ class Notification {
         $form2->addSubmit('Send Emails');
         $tpl['SUBMIT'] = implode('', $form2->getTemplate());
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/review_hall_email.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/review_hall_email.tpl');
     }
 
     public function send_emails()

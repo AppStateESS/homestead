@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class CreateRoommateGroupViewCommand extends Command {
 
     private $roommate1;

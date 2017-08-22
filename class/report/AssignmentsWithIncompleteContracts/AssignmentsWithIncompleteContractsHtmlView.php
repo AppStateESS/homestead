@@ -13,7 +13,7 @@ class AssignmentsWithIncompleteContractsHtmlView extends ReportHtmlView
 
         $this->tpl['rows'] = $this->report->getData();
 
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/AssignmentsWithIncompleteContracts.tpl');
+        return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/AssignmentsWithIncompleteContracts.tpl');
     }
 
 }

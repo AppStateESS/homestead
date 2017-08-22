@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\InternationalReservedBeds;
+
 class InternationalReservedBedsController extends ReportController implements iSyncReport, iHtmlReportView, iPdfReportView
 {
 

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\CheckinsByHall;
+
 class CheckinsByHallController extends ReportController implements iSyncReport, iAsyncReport, iSchedReport, iHtmlReportView, iPdfReportView {
 
     public function setParams(Array $params)
@@ -16,4 +18,3 @@ class CheckinsByHallController extends ReportController implements iSyncReport, 
         return $params;
     }
 }
-

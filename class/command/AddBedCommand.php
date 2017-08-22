@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class AddBedCommand extends Command {
 
     private $roomId;
@@ -70,7 +74,7 @@ class AddBedCommand extends Command {
         }
 
         $term = $room->term;
-        
+
         $persistentId = uniqid();
 
         # Try to create the bed

@@ -8,7 +8,7 @@ class LotteryAutoWinnersView extends View {
 
         $submitCmd = CommandFactory::getCommand('LotteryAdminSetWinner');
 
-        $form = new PHPWS_Form('magic_form');
+        $form = new \PHPWS_Form('magic_form');
         $submitCmd->initForm($form);
 
         $form->addTextArea('banner_ids');
@@ -17,6 +17,6 @@ class LotteryAutoWinnersView extends View {
 
         Layout::addPageTitle("Automatic Lottery Winners");
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/lotteryAutoWinnersView.tpl');
+        return \PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/lotteryAutoWinnersView.tpl');
     }
 }

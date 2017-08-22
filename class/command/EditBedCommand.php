@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * Contoller to handle saving changes to a bed.
  *
@@ -64,7 +68,7 @@ class EditBedCommand extends Command {
 
         $result = $bed->save();
 
-        if(!$result || PHPWS_Error::logIfError($result)){
+        if(!$result || \PHPWS_Error::logIfError($result)){
             NQ::simple('hms', hms\NotificationView::ERROR, 'Error: There was a problem while saving the bed. No changes were made');
             $viewCmd->redirect();
         }

@@ -10,6 +10,6 @@ class ContactFormThankYouView extends View{
 
         Layout::addPageTitle("Contact");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/contact_form_thankyou.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/contact_form_thankyou.tpl');
     }
 }

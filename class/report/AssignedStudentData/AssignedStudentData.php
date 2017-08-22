@@ -31,7 +31,7 @@ class AssignedStudentData extends Report implements iCsvReport {
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
-        $db = new PHPWS_DB('hms_assignment');
+        $db = new \PHPWS_DB('hms_assignment');
         $db->addColumn('hms_assignment.banner_id');
         $db->addColumn('hms_assignment.reason');
         $db->addColumn('hms_residence_hall.hall_name');
@@ -59,7 +59,7 @@ class AssignedStudentData extends Report implements iCsvReport {
 
         $results = $db->select();
 
-        if (PHPWS_Error::logIfError($results)) {
+        if (\PHPWS_Error::logIfError($results)) {
             return $results;
         }
 

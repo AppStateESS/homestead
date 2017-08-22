@@ -32,7 +32,7 @@ class ResidenceHallView extends View {
         $submitCmd = CommandFactory::getCommand('EditResidenceHall');
         $submitCmd->setHallId($this->hall->getId());
 
-        $form = new PHPWS_Form;
+        $form = new \PHPWS_Form;
         $submitCmd->initForm($form);
 
         // This is unused, as far as I can tell, so comment it out for now.
@@ -136,10 +136,10 @@ class ResidenceHallView extends View {
 
         $tpl['FLOOR_PAGER'] = HMS_Floor::get_pager_by_hall($this->hall->getId());
         javascript('modules/hms/role_editor');
-        $tpl['ROLE_EDITOR'] = PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Residence_Hall'", 'ID'=>$this->hall->id), 'hms', 'admin/role_editor.tpl');
+        $tpl['ROLE_EDITOR'] = \PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Residence_Hall'", 'ID'=>$this->hall->id), 'hms', 'admin/role_editor.tpl');
 
         Layout::addPageTitle("Edit Residence Hall");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/edit_residence_hall.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/edit_residence_hall.tpl');
     }
 }

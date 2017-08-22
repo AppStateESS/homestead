@@ -2,6 +2,9 @@
 
 namespace Homestead;
 
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 class FallApplication extends HousingApplication{
 
     public $lifestyle_option    = null;

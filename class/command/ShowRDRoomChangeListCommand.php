@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
 PHPWS_Core::initModClass('hms', 'RoomChangeApprovalView.php');
 PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
@@ -22,7 +26,7 @@ class ShowRDRoomChangeListCommand extends Command {
         $hms_perm = new HMS_Permission();
         $memberships = $hms_perm->getMembership('room_change_approve', NULL, UserStatus::getUsername());
 
-        
+
 
         // Use the roles to instantiate a list of floors this user has access to
         $floors = array();
@@ -40,7 +44,7 @@ class ShowRDRoomChangeListCommand extends Command {
 
             } else if ($member['class'] == 'hms_floor') {
                 $f = new HMS_Floor($member['instance']);
-               
+
                 // Filter out floors that aren't in the current term
                 if($f->getTerm() != $term) {
                     continue;
@@ -90,4 +94,3 @@ class ShowRDRoomChangeListCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

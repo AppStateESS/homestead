@@ -52,6 +52,6 @@ class RLCMenu extends CommandMenu {
 
         $tpl['MENU'] = parent::show();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/menus/RLCMenu.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/menus/RLCMenu.tpl');
     }
 }

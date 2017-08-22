@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class LotteryConfirmCommand extends Command {
 
     private $roomId;
@@ -46,7 +50,7 @@ class LotteryConfirmCommand extends Command {
         $successCmd = CommandFactory::getCommand('LotteryShowConfirmed');
         $successCmd->setRoomId($roomId);
 
-        PHPWS_Core::initCoreClass('Captcha.php');
+        \PHPWS_Core::initCoreClass('Captcha.php');
         $captcha = Captcha::verify(TRUE); // returns the words entered if correct, FALSE otherwise
         //$captcha = TRUE;
         if($captcha === FALSE) {

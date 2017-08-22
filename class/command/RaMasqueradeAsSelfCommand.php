@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * RaMasqueradeAsSelfCommand
  * Allows RAs to login as the student version of themselves.
@@ -22,9 +26,8 @@ class RaMasqueradeAsSelfCommand extends Command {
         }
 
         UserStatus::wearMaskAsSelf();
-         
+
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();
     }
 }
-

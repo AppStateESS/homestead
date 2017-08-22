@@ -18,6 +18,6 @@ class BadBannerDataView extends View {
 
         Layout::addPageTitle("Contact");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/badBannerDataView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/badBannerDataView.tpl');
     }
 }

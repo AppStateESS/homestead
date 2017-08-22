@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * @author Jeremy Booker <jbooker AT tux DOT appstate DOT edu>
  */

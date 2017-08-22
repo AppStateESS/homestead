@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class AjaxGetRLCExtraInfoCommand extends Command {
 
     public function getRequestVars()
@@ -18,7 +22,7 @@ class AjaxGetRLCExtraInfoCommand extends Command {
             $tpl['INFO'] = $rlc->extra_info;
 
             $returnData = array();
-            $returnData['content']  = PHPWS_Template::process($tpl, 'hms', 'student/rlcExtraInfoDialog.tpl');
+            $returnData['content']  = \PHPWS_Template::process($tpl, 'hms', 'student/rlcExtraInfoDialog.tpl');
             $returnData['title']    = 'Extra Info for ' . $rlc->community_name;
 
             $context->setContent(json_encode($returnData));

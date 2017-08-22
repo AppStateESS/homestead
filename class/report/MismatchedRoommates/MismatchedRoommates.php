@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\MismatchedRoommates;
+
 /*
  * Mismatched Roommates Report
  * Lists all of the students assigned to rooms that do not contain their roommate.

@@ -23,7 +23,7 @@ class RlcReapplicationView extends View {
     {
         $this->setTitle('RLC Re-application Form');
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd = CommandFactory::getCommand('SubmitRLCReapplicationPageOne');
         $submitCmd->initForm($form);
 
@@ -78,6 +78,6 @@ class RlcReapplicationView extends View {
 
         $form->mergeTemplate($tpl);
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/rlcReapplicationView.tpl');
+        return \PHPWS_Template::process($form->getTemplate(), 'hms', 'student/rlcReapplicationView.tpl');
     }
 }

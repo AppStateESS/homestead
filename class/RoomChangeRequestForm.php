@@ -18,7 +18,7 @@ class RoomChangeRequestForm extends View {
 
     public function show()
     {
-        $form = new PHPWS_Form('room_change_request');
+        $form = new \PHPWS_Form('room_change_request');
 
         /* Cell phone */
         $form->addText('cell_num');
@@ -59,6 +59,6 @@ class RoomChangeRequestForm extends View {
 
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/roomChangeRequestForm.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/roomChangeRequestForm.tpl');
     }
 }

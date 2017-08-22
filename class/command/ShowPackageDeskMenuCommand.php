@@ -1,5 +1,8 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
 
 /**
  * Command/controller for showing the PackageDesk interface
@@ -16,7 +19,7 @@ class ShowPackageDeskMenuCommand extends Command {
     {
         return array('action'=>'ShowPackageDeskMenu');
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Command::execute()
@@ -28,15 +31,14 @@ class ShowPackageDeskMenuCommand extends Command {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to access the Package Desk.');
         }
-        
+
         PHPWS_Core::initModClass('hms', 'PackageDeskFactory.php');
         $desks = PackageDeskFactory::getPackageDesksAssoc();
-        
+
         PHPWS_Core::initModClass('hms', 'PackageDeskView.php');
         $view = new PackageDeskView($desks);
-        
+
         $context->setContent($view->show());
     }
-    
-}
 
+}

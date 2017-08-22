@@ -1,5 +1,8 @@
 <?php
-PHPWS_Core::initModClass('hms', 'Command.php');
+
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'MoveinTimesView.php');
   /*
    * ShowMoveinTimesViewCommand
@@ -18,4 +21,3 @@ class ShowMoveinTimesViewCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

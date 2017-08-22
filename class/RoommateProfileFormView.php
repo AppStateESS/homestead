@@ -30,7 +30,7 @@ class RoommateProfileFormView extends View {
         $submitCmd = CommandFactory::getCommand('SubmitRoommateProfile');
         $submitCmd->setTerm($this->term);
 
-        $profile_form = new PHPWS_Form('profile_form');
+        $profile_form = new \PHPWS_Form('profile_form');
         $profile_form->useRowRepeat();
 
         $submitCmd->initForm($profile_form);
@@ -192,6 +192,6 @@ class RoommateProfileFormView extends View {
 
         Layout::addPageTitle("Roommate Profile Form");
         javascript('jquery');
-        return PHPWS_Template::process($template,'hms','student/profile_form.tpl');
+        return \PHPWS_Template::process($template,'hms','student/profile_form.tpl');
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\GenderDistributionByHall;
+
 /**
  *
  * @author Jeremy Booker
@@ -23,4 +25,3 @@ class GenderDistributionByHallController extends ReportController implements iSy
     }
 
 }
-

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\InternationalReservedBeds;
+
 /**
 * Report for accessing the number of beds in each hall are internationally reserved
 * for reapplying students.

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\CheckinsByHall;
+
 /**
  * The Checkins By Hall Report.
  *
@@ -28,9 +30,9 @@ class CheckinsByHall extends Report {
 
     public function execute()
     {
-        $this->checkinCounts = PHPWS_DB::getAssoc("select hall_name, count(*) from hms_checkin JOIN hms_hall_structure ON hms_checkin.bed_id = hms_hall_structure.bedid WHERE term = {$this->term} and checkout_date IS NULL GROUP BY hall_name ORDER BY hall_name");
+        $this->checkinCounts = \PHPWS_DB::getAssoc("select hall_name, count(*) from hms_checkin JOIN hms_hall_structure ON hms_checkin.bed_id = hms_hall_structure.bedid WHERE term = {$this->term} and checkout_date IS NULL GROUP BY hall_name ORDER BY hall_name");
 
-        if(PHPWS_Error::isError($this->checkinCounts)){
+        if(\PHPWS_Error::isError($this->checkinCounts)){
             throw new DatabaseException($this->checkinCounts->toString());
         }
     }
@@ -52,4 +54,3 @@ class CheckinsByHall extends Report {
         return $this->checkinCounts;
     }
 }
-

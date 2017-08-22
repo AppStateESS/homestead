@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 PHPWS_Core::initModClass('hms', 'RlcApplicationPage1View.php');
 PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');

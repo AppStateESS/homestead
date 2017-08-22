@@ -1,8 +1,10 @@
 <?php
 
+namespace Homestead\report\UnassignedStudents;
+
 /**
  * Controller for the UnassignedStudents report.
- * 
+ *
  * @author Jeremy Booker
  * @package HMS
  */
@@ -24,4 +26,3 @@ class UnassignedStudentsController extends ReportController implements iSyncRepo
     }
 
 }
-

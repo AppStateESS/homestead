@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 PHPWS_Core::initModClass('hms', 'RoomFactory.php');
 PHPWS_Core::initModClass('hms', 'RoomDamage.php');
 PHPWS_Core::initModClass('hms', 'UserStatus.php');

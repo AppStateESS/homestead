@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 //TODO make this better
 
 class WithdrawnSearchCommand extends Command {
@@ -21,4 +25,3 @@ class WithdrawnSearchCommand extends Command {
     }
 
 }
-

@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class GetRoomDamagesCommand extends Command {
 
     public function getRequestVars()

@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class UnDenyRlcApplicationCommand extends Command {
 
     private $applicationId;
@@ -20,7 +24,7 @@ class UnDenyRlcApplicationCommand extends Command {
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-        
+
         $app = HMS_RLC_Application::getApplicationById($context->get('applicationId'));
         $app->denied = 0;
         $app->save();
@@ -34,4 +38,3 @@ class UnDenyRlcApplicationCommand extends Command {
         $successCmd->redirect();
     }
 }
-

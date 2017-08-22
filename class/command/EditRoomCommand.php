@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 /**
  * EditRoomCommand
  *
@@ -117,7 +121,7 @@ class EditRoomCommand extends Command {
 
         $result = $room->save();
 
-        if(!$result || PHPWS_Error::logIfError($result)){
+        if(!$result || \PHPWS_Error::logIfError($result)){
             NQ::simple('hms', hms\NotificationView::ERROR, 'There was a problem saving the room data. No changes were made.');
             $viewCmd->redirect();
         }

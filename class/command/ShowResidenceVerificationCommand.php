@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class ShowResidenceVerificationCommand extends Command {
 
     public function getRequestVars()

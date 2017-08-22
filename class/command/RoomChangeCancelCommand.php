@@ -1,5 +1,8 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
 
 class RoomChangeCancelCommand extends Command {
@@ -67,5 +70,3 @@ class RoomChangeCancelCommand extends Command {
         $cmd->redirect();
     }
 }
-
-

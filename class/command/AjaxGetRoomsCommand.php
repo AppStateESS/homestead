@@ -1,6 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'Command.php');
+namespace Homestead\command;
+
+use \Homestead\Command;
 
 class AjaxGetRoomsCommand extends Command {
 
@@ -31,4 +33,3 @@ class AjaxGetRoomsCommand extends Command {
         $context->setContent(json_encode($json_rooms));
     }
 }
-

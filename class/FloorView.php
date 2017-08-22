@@ -31,7 +31,7 @@ class FloorView extends View{
         $submitCmd = CommandFactory::getCommand('EditFloor');
         $submitCmd->setFloorId($this->floor->getId());
 
-        $form = new PHPWS_Form;
+        $form = new \PHPWS_Form;
         $submitCmd->initForm($form);
 
         $tpl['HALL_NAME']           = $this->hall->getLink();
@@ -127,12 +127,12 @@ class FloorView extends View{
 
         if(Current_User::allow('hms', 'edit_role_members')){
             javascript('modules/hms/role_editor');
-            $tpl['ROLE_EDITOR'] = PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Floor'", 'ID'=>$this->floor->id), 'hms', 'admin/role_editor.tpl');
+            $tpl['ROLE_EDITOR'] = \PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Floor'", 'ID'=>$this->floor->id), 'hms', 'admin/role_editor.tpl');
         }
 
         Layout::addPageTitle("Edit Floor");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/edit_floor.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/edit_floor.tpl');
     }
 }
 

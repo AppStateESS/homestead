@@ -17,7 +17,7 @@ abstract class Command
     public abstract function execute(CommandContext $context);
 
     /**
-     * Initializes a {@link PHPWS_Form} with hidden values such that
+     * Initializes a {@link \PHPWS_Form} with hidden values such that
      * it will properly call this command when submitted.
      *
      * Make sure that if you're going to set any member variables, you
@@ -25,14 +25,14 @@ abstract class Command
      * {@link getRequestVars} and sets what variables are available at
      * call time.
      *
-     * @param PHPWS_Form &$form The form to be initialized
+     * @param \PHPWS_Form &$form The form to be initialized
      *
      * @see getRequestVars
      * @see getLink
      * @see getURI
      * @see redirect
      */
-    public function initForm(PHPWS_Form &$form)
+    public function initForm(\PHPWS_Form &$form)
     {
         $moduleElement = $form->get('module');
         if(PEAR::isError($moduleElement)) {

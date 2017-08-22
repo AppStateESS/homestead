@@ -1,4 +1,8 @@
 <?php
+
+namespace Homestead\command;
+
+use \Homestead\Command;
 PHPWS_Core::initModClass('hms', 'HMS_Room.php');
 
 /**
@@ -89,7 +93,7 @@ class UpdateRoomFieldCommand extends Command {
                 die();
             }
         }
-        
+
         /* RLC Reservation */
         if($element == 'rlc_reserved') {
             if($value <= 0) {

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\CancelledAppsList;
+
 /**
  * Cancelled Applications List Controller
  *

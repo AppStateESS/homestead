@@ -1,6 +1,10 @@
 <?php
 
+namespace Homestead;
+
 use \phpws2\Database;
+use \PHPWS_Error;
+use \PHPWS_DB;
 
 /**
  * HMS Roommate class - Handles creating, confirming, and deleting roommate groups
@@ -763,7 +767,7 @@ class HMS_Roommate
      */
     public static function display_requests($asu_username, $term)
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
+        \PHPWS_Core::initCoreClass('DBPager.php');
         $pager = new DBPager('hms_roommate', 'HMS_Roommate');
         $pager->setModule('hms');
         $pager->setTemplate('student/requested_roommate_list.tpl');
@@ -780,7 +784,7 @@ class HMS_Roommate
      */
     public static function roommate_pager()
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
+        \PHPWS_Core::initCoreClass('DBPager.php');
 
         $pager = new DBPager('hms_roommate', 'HMS_Roommate');
 

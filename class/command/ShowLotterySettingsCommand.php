@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class ShowLotterySettingsCommand extends Command {
 
     public function getRequestVars()
@@ -21,4 +25,3 @@ class ShowLotterySettingsCommand extends Command {
         $context->setContent($view->show());
     }
 }
-

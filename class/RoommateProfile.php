@@ -254,10 +254,10 @@ class RoommateProfile {
             return false;
         }
 
-        $db = new PHPWS_DB('hms_student_profiles');
+        $db = new \PHPWS_DB('hms_student_profiles');
         $result = $db->loadObject($this);
 
-        if (PHPWS_Error::logIfError($result)) {
+        if (\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -266,7 +266,7 @@ class RoommateProfile {
 
     public function save()
     {
-        $db = new PHPWS_DB('hms_student_profiles');
+        $db = new \PHPWS_DB('hms_student_profiles');
 
         if ($this->get_date_submitted() == NULL) {
             $this->set_date_submitted();
@@ -274,7 +274,7 @@ class RoommateProfile {
 
         $result = $db->saveObject($this);
 
-        if (PHPWS_Error::logIfError($result)) {
+        if (\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 

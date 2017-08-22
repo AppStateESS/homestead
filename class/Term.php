@@ -2,6 +2,9 @@
 
 namespace Homestead;
 
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * HMS Term
  * Maintains the "current" term, "active" term, and handles tasks related

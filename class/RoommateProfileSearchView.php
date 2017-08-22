@@ -19,7 +19,7 @@ namespace Homestead;
 
         $gender = $student->getGender();
 
-        PHPWS_Core::initCoreClass('DBPager.php');
+        \PHPWS_Core::initCoreClass('DBPager.php');
 
         $pageTags = array();
 

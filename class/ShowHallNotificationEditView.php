@@ -34,7 +34,7 @@ class ShowHallNotificationEditView extends View{
         $tpl = array();
 
         $submitCmd = CommandFactory::getCommand('ReviewHallNotificationMessage');
-        $form = new PHPWS_Form('email_content');
+        $form = new \PHPWS_Form('email_content');
         $submitCmd->initForm($form);
 
         if(Current_User::allow('hms', 'anonymous_notifications')){
@@ -61,6 +61,6 @@ class ShowHallNotificationEditView extends View{
             $form->addHidden('floor', $this->floors);
         }
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/hall_notification_email_page.tpl');
+        return \PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/hall_notification_email_page.tpl');
     }
 }

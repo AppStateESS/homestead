@@ -38,6 +38,6 @@ class ReapplicationMaintenanceMenu extends CommandMenu {
 
         $tpl['MENU'] = parent::show();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/menus/ReapplicationMaintenanceMenu.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/menus/ReapplicationMaintenanceMenu.tpl');
     }
 }

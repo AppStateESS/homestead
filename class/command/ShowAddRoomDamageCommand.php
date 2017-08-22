@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class ShowAddRoomDamageCommand extends Command{
 
     private $room;
@@ -52,4 +56,3 @@ class ShowAddRoomDamageCommand extends Command{
         exit;
     }
 }
-

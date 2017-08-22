@@ -20,7 +20,7 @@ class RoommateProfileView extends View {
         $majors = hms\MajorFactory::getMajorsList();
 
         $tpl = array();
-        $profile_form = new PHPWS_Form('profile_form');
+        $profile_form = new \PHPWS_Form('profile_form');
         $profile_form->useRowRepeat();
 
         $none_given = '<span style="color:#CCC;">none given</span>';
@@ -151,6 +151,6 @@ class RoommateProfileView extends View {
 
         Layout::addPageTitle("Roommate Profile");
 
-        return PHPWS_Template::process($tpl,'hms','student/profile_form.tpl');
+        return \PHPWS_Template::process($tpl,'hms','student/profile_form.tpl');
     }
 }

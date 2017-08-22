@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\AssignmentTypeByFloor;
+
 class AssignmentTypeByFloorHtmlView extends ReportHtmlView {
 
     protected function render(){
@@ -10,7 +12,7 @@ class AssignmentTypeByFloorHtmlView extends ReportHtmlView {
         $halls = $this->report->getHalls();
 
         // Need to create our own Template object
-        $myTpl = new PHPWS_Template('hms');
+        $myTpl = new \PHPWS_Template('hms');
         $myTpl->setFile('admin/reports/AssignmentTypeByFloor.tpl');
 
         // Set the existing tags
@@ -54,7 +56,7 @@ class AssignmentTypeByFloorHtmlView extends ReportHtmlView {
             $myTpl->parseCurrentBlock();
         }
 
-        //return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/AssignmentTypeByFloor.tpl');
+        //return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/AssignmentTypeByFloor.tpl');
         return $myTpl->get();
     }
 }

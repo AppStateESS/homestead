@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead\command;
+
+use \Homestead\Command;
+
 class GenerateInfoCardCommand extends Command {
 
     private $checkinId;
@@ -35,5 +39,3 @@ class GenerateInfoCardCommand extends Command {
         exit;
     }
 }
-
-

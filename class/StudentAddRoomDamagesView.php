@@ -32,6 +32,6 @@ class StudentAddRoomDamagesView extends View {
         $tpl['ROOM_LOCATION'] = $room->where_am_i();
         $tpl['TERM'] = $this->term;
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/addRoomDamages.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/addRoomDamages.tpl');
     }
 }

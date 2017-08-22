@@ -27,11 +27,11 @@ class VerifyAssignmentMenuBlockView extends View {
             $cmd->setUsername($this->student->getUsername());
             $tpl['VIEW_APP'] = $cmd->getLink('here');
             $tpl['ICON'] = FEATURE_OPEN_ICON;
-            return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/verifyAssignmentMenuBlock.tpl');
+            return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/verifyAssignmentMenuBlock.tpl');
         } else {
             $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate);
             $tpl['ICON'] = FEATURE_NOTYET_ICON;
-            return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/verifyAssignmentMenuBlock.tpl');
+            return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/verifyAssignmentMenuBlock.tpl');
         }
     }
 }

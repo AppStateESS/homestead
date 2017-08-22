@@ -19,7 +19,7 @@ class MoveinTimesView extends View {
 
         $tpl['TITLE'] = 'Edit Move-in Times';
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
 
         $form->addDropBox('begin_day', HMS_Util::get_days());
         $form->addCssClass('begin_day', 'form-control');
@@ -57,7 +57,7 @@ class MoveinTimesView extends View {
 
         Layout::addPageTitle("Move-in Times");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/edit_movein_time.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/edit_movein_time.tpl');
     }
 
 }

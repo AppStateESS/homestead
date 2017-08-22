@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\HallOccupancy;
+
 /*
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
@@ -12,7 +14,7 @@ class HallOccupancyHtmlView extends ReportHtmlView {
     {
         parent::render();
         $rows = $this->report->getRows();
-        $tpl = new PHPWS_Template('hms');
+        $tpl = new \PHPWS_Template('hms');
         $tpl->setFile('admin/reports/HallOccupancy.tpl');
         foreach ($rows['hall_rows'] as $hall) {
             $tpl->setCurrentBlock('floor-rows');
@@ -36,5 +38,3 @@ class HallOccupancyHtmlView extends ReportHtmlView {
     }
 
 }
-
-

@@ -1,8 +1,10 @@
 <?php
 
+namespace Homestead\report\ReapplicationOverview;
+
 /**
  * Controller for the ReapplicationOverview report.
- * 
+ *
  * @author Jeremy Booker
  * @package HMS
  */
@@ -24,4 +26,3 @@ class ReapplicationOverviewController extends ReportController implements iSyncR
     }
 
 }
-

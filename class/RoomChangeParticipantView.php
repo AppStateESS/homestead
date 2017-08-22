@@ -100,7 +100,7 @@ class RoomChangeParticipantView extends View {
          */
         $particpantState = $this->participant->getState();
 
-        $form = new PHPWS_Form('participant_form');
+        $form = new \PHPWS_Form('participant_form');
 
         if ($particpantState instanceof ParticipantStateNew) {
             // Particpant is in new state, waiting on this student'a approval
@@ -195,6 +195,6 @@ class RoomChangeParticipantView extends View {
 
         $tpl['history_rows'] = $stateRows;
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/roomChangeParticipantView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/roomChangeParticipantView.tpl');
     }
 }

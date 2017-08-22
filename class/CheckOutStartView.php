@@ -25,7 +25,7 @@ class CheckoutStartView extends View
 
         $tpl = array();
 
-        $form = new PHPWS_Form('checkin_form');
+        $form = new \PHPWS_Form('checkin_form');
 
         $submitCmd = CommandFactory::getCommand('StartCheckoutSubmit');
         $submitCmd->initForm($form);
@@ -57,7 +57,7 @@ class CheckoutStartView extends View
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/checkoutStart.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/checkoutStart.tpl');
     }
 
 }

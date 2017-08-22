@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\CancelledAppsByType;
+
 /**
  * HTML view for the Cancelled Housing Applications by Student Type report.
  *
@@ -35,8 +37,6 @@ class CancelledAppsByTypeHtmlView extends ReportHtmlView {
 
         $this->tpl['TOTAL_CANCELLATIONS'] = $totalCancellations;
 
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/CancelledAppsByType.tpl');
+        return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/CancelledAppsByType.tpl');
     }
 }
-
-

@@ -1,8 +1,10 @@
 <?php
 
+namespace Homestead\report\UnassignedBeds;
+
 /**
  * Controller for the UnassignedBeds report.
- * 
+ *
  * @author Jeremy Booker
  * @package HMS
  */
@@ -24,4 +26,3 @@ class UnassignedBedsController extends ReportController implements iSyncReport, 
     }
 
 }
-

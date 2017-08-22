@@ -28,7 +28,7 @@ class AddRoomView extends View {
         $cmd = CommandFactory::getCommand('AddRoom');
         $cmd->floor = $this->floor->id;
 
-        $form = new PHPWS_Form;
+        $form = new \PHPWS_Form;
         $cmd->initForm($form);
 
         $form->addText('room_number');
@@ -92,6 +92,6 @@ class AddRoomView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/addRoom.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/addRoom.tpl');
     }
 }

@@ -48,7 +48,7 @@ class BannerQueue {
         }
 
         // Otherwise, look for an corresponding assignment
-        $db = new PHPWS_DB('hms_banner_queue');
+        $db = new \PHPWS_DB('hms_banner_queue');
         $db->addWhere('type',           BANNER_QUEUE_ASSIGNMENT);
         $db->addWhere('banner_id',      $student->getBannerId());
         $db->addWhere('building_code',  $hall->getBannerBuildingCode());
@@ -56,7 +56,7 @@ class BannerQueue {
         $db->addWhere('term',           $term);
         $result = $db->count();
 
-        if(PHPWS_Error::logIfError($result)) {
+        if(\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -79,7 +79,7 @@ class BannerQueue {
 
     public static function processAll($term)
     {
-        $db = new PHPWS_DB('hms_banner_queue');
+        $db = new \PHPWS_DB('hms_banner_queue');
         $db->addWhere('term', $term);
         $db->addOrder('id');
         $items = $db->getObjects('BannerQueueItem');

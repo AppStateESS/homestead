@@ -62,6 +62,6 @@ class ReturningMainMenuView extends View {
 
         Layout::addPageTitle("Main Menu");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/returningMenu.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/returningMenu.tpl');
     }
 }
