@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /*
  * BedFactory.php
  *
@@ -39,7 +41,7 @@ class BedFactory {
 
         $query = "select * from hms_bed where id = :bedId AND term = :term";
         $stmt = $db->prepare($query);
-        
+
         $params = array(
                     'bedId' 	   => $bedId,
                     'term'         => $term

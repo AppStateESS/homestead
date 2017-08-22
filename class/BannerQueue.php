@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * BannerQueue - Manages the Banner Queue
  * Queues up assignments so if we can't SOAP it over to Banner, Housing

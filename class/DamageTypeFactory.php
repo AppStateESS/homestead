@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * Factory class for handling room damage types.
  *

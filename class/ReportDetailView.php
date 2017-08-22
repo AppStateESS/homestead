@@ -1,5 +1,6 @@
 <?php
 
+namespace Homestead;
 PHPWS_Core::initModClass('hms', 'ReportHistoryPager.php');
 PHPWS_Core::initModClass('hms', 'ReportSchedulePager.php');
 
@@ -11,7 +12,7 @@ PHPWS_Core::initModClass('hms', 'ReportSchedulePager.php');
  * @author jbooker
  * @package HMS
  */
-class ReportDetailView extends hms\View {
+class ReportDetailView extends View {
 
     private $reportCtrl; // ReportController for the report class requested
     private $report;

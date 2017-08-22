@@ -1,5 +1,6 @@
 <?php
 
+namespace Homestead;
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'RoomChangeListView.php');
 
@@ -10,7 +11,7 @@ PHPWS_Core::initModClass('hms', 'RoomChangeListView.php');
  * @author jbooker
  * @package hms
  */
-class RoomChangeApprovalView extends hms\View {
+class RoomChangeApprovalView extends View {
 
     private $needsApproval;
     private $approved;

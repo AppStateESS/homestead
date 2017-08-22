@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * Primary HMS class
  *
@@ -59,7 +61,7 @@ abstract class HMS {
 
                 $user = Current_User::getUserObj();
                 $e->username = $user->getUsername();
-                
+
                 if(isset($_SERVER['HTTP_REFERER'])){
                     $e->referrer = $_SERVER['HTTP_REFERER'];
                 }else{

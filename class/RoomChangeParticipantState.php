@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 class RoomChangeParticipantState {
 
     const STATE_NAME = 'ParentState'; // Text state name
@@ -223,4 +225,3 @@ class ParticipantStateCancelled extends RoomChangeParticipantState {
 
     // TODO Move request to cancelled, which will notify everyone
 }
-

@@ -1,7 +1,8 @@
 <?php
 
+namespace Homestead;
 
-class ReApplicationOffCampusFormView extends hms\View {
+class ReApplicationOffCampusFormView extends View {
 
     private $student;
     private $term;

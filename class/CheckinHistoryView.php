@@ -1,11 +1,13 @@
 <?php
 
+namespace Homestead;
+
 /**
  * CheckinHistoryView class - Genereated the view for a students checkin/checkout history
  * @author jbooker
  * @package hms
  */
-class CheckinHistoryView extends hms\View {
+class CheckinHistoryView extends View {
 
     private $checkins;
 

@@ -1,5 +1,6 @@
 <?php
 
+namespace Homestead;
 PHPWS_Core::initModClass('hms', 'View.php');
 
 /**
@@ -26,4 +27,3 @@ abstract class ReportView {
         $this->report = $report;
     }
 }
-

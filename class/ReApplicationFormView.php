@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * Shows the re-application (lottery) form.
  *
@@ -7,7 +9,7 @@
  * @package hms
  */
 
-class ReApplicationFormView extends hms\View {
+class ReApplicationFormView extends View {
 
     private $student;
     private $term;

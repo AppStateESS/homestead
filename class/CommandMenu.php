@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * HMS Command Menu
  *
@@ -8,7 +10,7 @@
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
 
-class CommandMenu extends hms\View {
+class CommandMenu extends View {
     protected $context;
     protected $commands;
 

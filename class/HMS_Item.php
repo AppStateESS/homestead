@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 abstract class HMS_Item {
     var $id         = 0;
     var $term       = null;

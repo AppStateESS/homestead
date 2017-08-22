@@ -1,12 +1,14 @@
 <?php
 
+namespace Homestead;
+
 /**
  * TermEditView - View class for editing terms
  *
  * @package Homestead
  * @author jbooker
  */
-class TermEditView extends hms\View {
+class TermEditView extends View {
 
     private $term;
 

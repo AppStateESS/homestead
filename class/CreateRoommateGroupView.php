@@ -1,10 +1,12 @@
 <?php
 
+namespace Homestead;
+
 /**
  * The UI for administratively creating a roommate group
  */
 
-class CreateRoommateGroupView extends hms\View {
+class CreateRoommateGroupView extends View {
 
     private $roommate1;
     private $roommate2;

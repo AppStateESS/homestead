@@ -1,6 +1,8 @@
 <?php
 
-class WelcomeScreenViewInvalidTerm extends hms\View{
+namespace Homestead;
+
+class WelcomeScreenViewInvalidTerm extends View{
 
     private $term;
     private $cmd;

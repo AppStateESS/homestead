@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 require_once PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php';
 
 class AutoassignPulse
@@ -41,5 +43,3 @@ class AutoassignPulse
         return TRUE;
     }
 }
-
-

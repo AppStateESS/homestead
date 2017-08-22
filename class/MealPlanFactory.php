@@ -1,5 +1,6 @@
 <?php
 
+namespace Homestead;
 PHPWS_Core::initModClass('hms', 'PdoFactory.php');
 PHPWS_Core::initModClass('hms', 'MealPlan.php');
 PHPWS_Core::initModClass('hms', 'MealPlanRestored.php');

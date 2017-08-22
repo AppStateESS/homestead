@@ -1,6 +1,8 @@
 <?php
 
-class RlcReapplicationView extends hms\View {
+namespace Homestead;
+
+class RlcReapplicationView extends View {
 
     private $student;
     private $term;
@@ -79,5 +81,3 @@ class RlcReapplicationView extends hms\View {
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/rlcReapplicationView.tpl');
     }
 }
-
-

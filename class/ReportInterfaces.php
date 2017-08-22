@@ -1,4 +1,7 @@
 <?php
+
+namespace Homestead;
+
 /**
  * Report Interfaces
  *

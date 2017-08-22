@@ -1,6 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'exception/HMSException.php');
+namespace Homestead\exception;
 
 class InvalidTermException extends HMSException {
 

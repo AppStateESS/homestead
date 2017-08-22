@@ -1,6 +1,8 @@
 <?php
 
-class TermsConditionsAdminView extends hms\View{
+namespace Homestead;
+
+class TermsConditionsAdminView extends View{
 
     private $term;
 

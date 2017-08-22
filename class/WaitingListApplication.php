@@ -1,6 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+namespace Homestead;
 
 class WaitingListApplication extends HousingApplication {
 

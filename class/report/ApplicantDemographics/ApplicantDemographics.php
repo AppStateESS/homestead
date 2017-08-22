@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\ApplicantDemographics;
+
 /**
  * The Applicant Demographics report.
  * Calculates totals breaking down who's applied

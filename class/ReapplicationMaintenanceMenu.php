@@ -1,6 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'CommandMenu.php');
+namespace Homestead;
 
 class ReapplicationMaintenanceMenu extends CommandMenu {
 

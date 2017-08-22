@@ -1,4 +1,7 @@
 <?php
+
+namespace Homestead;
+
 PHPWS_Core::initModClass('hms', 'PdoFactory.php');
 PHPWS_Core::initModClass('hms', 'RoomChangeRequest.php');
 

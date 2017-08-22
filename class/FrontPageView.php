@@ -1,6 +1,8 @@
 <?php
 
-class FrontPageView extends hms\View{
+namespace Homestead;
+
+class FrontPageView extends View{
 
     public function show()
     {

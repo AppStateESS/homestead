@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * Damage - Model class for representing Room Damages.
  *

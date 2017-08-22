@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /*
  * ShowRlcApplicationPage1View
  *
@@ -8,7 +10,7 @@
  *
  */
 
-class RlcApplicationPage1View extends hms\View{
+class RlcApplicationPage1View extends View{
 
     protected $context;
     private $student;

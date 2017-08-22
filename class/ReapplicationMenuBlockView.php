@@ -1,9 +1,10 @@
 <?php
 
+namespace Homestead;
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 PHPWS_Core::initModClass('hms', 'LotteryProcess.php');
 
-class ReapplicationMenuBlockView extends hms\View {
+class ReapplicationMenuBlockView extends View {
 
     private $term;
     private $startDate;

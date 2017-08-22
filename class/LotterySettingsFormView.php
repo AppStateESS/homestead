@@ -1,6 +1,8 @@
 <?php
 
-class LotterySettingsFormView extends hms\View {
+namespace Homestead;
+
+class LotterySettingsFormView extends View {
 
     public function show()
     {
@@ -22,18 +24,18 @@ class LotterySettingsFormView extends hms\View {
         $form->setLabel('hard_cap', 'Max # Returning Students (hard cap):');
         $form->setValue('hard_cap', PHPWS_Settings::get('hms', 'lottery_hard_cap'));
         $form->setClass('hard_cap', 'form-control');
-        
+
         /*
         $form->addText('soph_goal');
         $form->setLabel('soph_goal', 'Sophomores:');
         $form->setValue('soph_goal', PHPWS_Settings::get('hms', 'lottery_soph_goal'));
         */
-        
+
         $form->addText('jr_goal');
         $form->setLabel('jr_goal', 'Juniors:');
         $form->setValue('jr_goal', PHPWS_Settings::get('hms', 'lottery_jr_goal'));
         $form->setClass('jr_goal', 'form-control');
-        
+
         $form->addText('sr_goal');
         $form->setLabel('sr_goal', 'Senior:');
         $form->setValue('sr_goal', PHPWS_Settings::get('hms', 'lottery_sr_goal'));
@@ -48,6 +50,3 @@ class LotterySettingsFormView extends hms\View {
         return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/lottery_settings.tpl');
     }
 }
-
-
-

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\AssignmentsWithIncompleteContracts;
+
 /**
  * Cancelled Applications List Controller
  *

@@ -1,4 +1,7 @@
 <?php
+
+namespace Homestead;
+
 /**
  * ShowHallNotificationSelectView
  *
@@ -9,7 +12,7 @@
  * @subpackage hms
  */
 
-class ShowHallNotificationSelectView extends hms\View{
+class ShowHallNotificationSelectView extends View{
 
     public function show(){
         /*

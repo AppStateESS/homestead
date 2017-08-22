@@ -1,7 +1,5 @@
 <?php
-namespace Docusign;
-
-\PHPWS_Core::initModClass('hms', 'Docusign/Envelope.php');
+namespace Homestead\Docusign;
 
 class EnvelopeFactory {
 

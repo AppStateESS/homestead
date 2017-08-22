@@ -1,6 +1,8 @@
 <?php
 
-class CheckinFormView extends hms\View {
+namespace Homestead;
+
+class CheckinFormView extends View {
 
     private $student;
     private $assignment;

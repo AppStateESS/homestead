@@ -1,5 +1,6 @@
 <?php
 
+namespace Homestead;
 
 /**
  * Checkin - Model class for representing checkins and checkouts
@@ -187,7 +188,7 @@ class Checkin {
     {
         $this->improper_checkout = $improper;
     }
-    
+
     public function setImproperCheckoutNote($note)
     {
     	$this->improper_checkout_note = $note;
@@ -216,4 +217,3 @@ class RestoredCheckin extends Checkin {
     { // Empty constructor for resotring state
     }
 }
-

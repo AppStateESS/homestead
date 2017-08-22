@@ -1,6 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'exception/HMSException.php');
+namespace Homestead\exception;
+
+use \PHPWS_Core;
 
 class SOAPException extends HMSException {
 
@@ -10,4 +12,3 @@ class SOAPException extends HMSException {
         PHPWS_Core::log($errorMsg, 'soapError.log', ('BannerError'));
     }
 }
-

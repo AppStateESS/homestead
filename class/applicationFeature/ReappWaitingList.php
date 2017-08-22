@@ -1,6 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
+namespace Homestead\applicationFeature;
+
+use \hms\ApplicationFeatureRegistration;
 
 class ReappWaitingListRegistration extends ApplicationFeatureRegistration {
     public function __construct()

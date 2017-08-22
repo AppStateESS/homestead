@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * HMS Move-in Time class
  *

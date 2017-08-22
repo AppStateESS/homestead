@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * The RoommateProfile class
  * Implements the RoommateProfile object and methods to load/save

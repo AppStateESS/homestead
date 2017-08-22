@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /*
  * MoveinTimesView
  *
@@ -8,7 +10,7 @@
  * @author Daniel West <dwest at tux dot appstate dot edu>
  * @package hms
  */
-class MoveinTimesView extends hms\View {
+class MoveinTimesView extends View {
 
     public function show(){
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');

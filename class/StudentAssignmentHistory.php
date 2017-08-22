@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * StudentAssignmentHistory.php
  *
@@ -16,7 +18,7 @@ class StudentAssignmentHistory extends ArrayObject{
 
     // http://weierophinney.net/matthew/archives/131-Overloading-arrays-in-PHP-5.2.0.html
     public function __construct($bannerId) {
-         
+
         if(is_null($bannerId)){
             throw InvalidArgumentException('Missing id.');
         }else{
@@ -104,5 +106,3 @@ class StudentAssignmentHistory extends ArrayObject{
         return $sah;
     }
 }
-
-

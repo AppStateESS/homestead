@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 PHPWS_Core::initModClass('hms', 'RoomChangeRequestState.php');
 
 class RoomChangeRequestStateFactory {
@@ -25,4 +27,3 @@ class RoomChangeRequestStateFactory {
         //TODO
     }
 }
-

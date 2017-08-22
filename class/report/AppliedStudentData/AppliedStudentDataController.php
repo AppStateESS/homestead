@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\AppliedStudentData;
+
 /*
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>

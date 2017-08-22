@@ -1,6 +1,8 @@
 <?php
 
-class HousingApplicationNotAvailableView extends hms\View {
+namespace Homestead;
+
+class HousingApplicationNotAvailableView extends View {
 
     private $student;
     private $feature;
@@ -36,5 +38,3 @@ class HousingApplicationNotAvailableView extends hms\View {
     }
 
 }
-
-

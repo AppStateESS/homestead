@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 PHPWS_Core::initModClass('hms', 'FallApplication.php');
 PHPWS_Core::initModClass('hms', 'SpringApplication.php');

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * BannerQueueItem - Represents an single item in the BannerQueue
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>

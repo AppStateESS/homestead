@@ -1,6 +1,8 @@
 <?php
 
-class LotteryDenyRoommateRequestView extends hms\View {
+namespace Homestead;
+
+class LotteryDenyRoommateRequestView extends View {
 
     private $request;
     private $term;

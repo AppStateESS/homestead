@@ -1,8 +1,8 @@
 <?php
 
-// TODO: consider renaming this to HallMaintenanceMenu
+namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'CommandMenu.php');
+// TODO: consider renaming this to HallMaintenanceMenu
 
 class ResidenceHallMenu extends CommandMenu {
 

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\AssignmentsByType;
+
 class AssignmentsByTypeHtmlView extends ReportHtmlView {
 
     protected function render(){

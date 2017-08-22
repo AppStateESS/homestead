@@ -1,6 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'SOAP.php');
+namespace Homestead;
 PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
 PHPWS_Core::initModClass('hms', 'exception/BannerException.php');
 PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');

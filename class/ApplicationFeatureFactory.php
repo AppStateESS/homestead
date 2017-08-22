@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 class ApplicationFeatureFactory
 {
     public static function getForTerm($term)

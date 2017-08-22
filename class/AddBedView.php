@@ -1,6 +1,8 @@
 <?php
 
-class AddBedView extends hms\View
+namespace Homestead;
+
+class AddBedView extends View
 {
     private $hall;
     private $floor;

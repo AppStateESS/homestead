@@ -1,6 +1,8 @@
 <?php
 
-class RlcSelfAssignStartView extends Hms\View {
+namespace Homestead;
+
+class RlcSelfAssignStartView extends View {
 
     private $student;
     private $term;

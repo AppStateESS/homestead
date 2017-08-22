@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 abstract class StudentDataProvider {
 
     // For singleton pattern

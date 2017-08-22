@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * SOAP parent class. Defines the basic functions of the SOAP interface and handles some utility functions.
  *

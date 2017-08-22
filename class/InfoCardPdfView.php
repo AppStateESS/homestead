@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 require_once PHPWS_SOURCE_DIR . 'mod/hms/vendor/autoload.php';
 
 /**

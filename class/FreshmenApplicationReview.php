@@ -1,8 +1,10 @@
 <?php
 
+namespace Homestead;
+
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-class FreshmenApplicationReview extends hms\View {
+class FreshmenApplicationReview extends View {
 
     private $student;
     private $term;

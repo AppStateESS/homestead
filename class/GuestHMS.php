@@ -1,12 +1,12 @@
 <?php
 
+namespace Homestead;
+
 /**
  * HMS Guest Controller
  * Controls information that Guests have access to (the login screen, for now).
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
-
-PHPWS_Core::initModClass('hms', 'HMS.php');
 
 class GuestHMS extends HMS
 {

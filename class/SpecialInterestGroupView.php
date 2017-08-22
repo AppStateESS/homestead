@@ -1,7 +1,9 @@
 <?php
 
-class SpecialInterestGroupView extends hms\View{
-    
+namespace Homestead;
+
+class SpecialInterestGroupView extends View{
+
     protected $group;
 
     public function __construct($group = NULL)
@@ -44,5 +46,3 @@ class SpecialInterestGroupView extends hms\View{
         return PHPWS_Template::process($tpl, 'hms', 'admin/special_interest_approval.tpl');
     }
 }
-
-

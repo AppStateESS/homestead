@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 class PreferencesRoommatePairingStrategy extends RoommatePairingStrategy {
 
     private $values;

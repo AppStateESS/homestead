@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 define('APPLICATION_FEATURE_DIR', 'applicationFeature');
 
 

@@ -1,6 +1,8 @@
 <?php
 
-class BadBannerDataView extends hms\View {
+namespace Homestead;
+
+class BadBannerDataView extends View {
 
     public function __construct()
     {
@@ -13,11 +15,9 @@ class BadBannerDataView extends hms\View {
         $contactCmd = CommandFactory::getCommand('ShowContactForm');
 
         $tpl['CONTACT_LINK'] = $contactCmd->getLink('click here to contact us.');
-        
+
         Layout::addPageTitle("Contact");
 
         return PHPWS_Template::process($tpl, 'hms', 'student/badBannerDataView.tpl');
     }
 }
-
-

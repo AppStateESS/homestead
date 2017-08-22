@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * Handles display of the RLC application menu block on the student main menu.
  *
@@ -7,7 +9,7 @@
  * @author Jeremy Booker
  */
 
-class RlcApplicationMenuView extends hms\View {
+class RlcApplicationMenuView extends View {
 
     private $term;
     private $student;

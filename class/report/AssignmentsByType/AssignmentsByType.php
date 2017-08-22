@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\AssignmentsByType;
+
 /**
  * The Assignments By Type Report.
  *

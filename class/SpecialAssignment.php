@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 class SpecialAssignment
 {
     var $id;
@@ -50,5 +52,3 @@ class SpecialAssignment
         return true;
     }
 }
-
-

@@ -1,4 +1,5 @@
 <?php
+namespace Homestead;
 
 class Student
 {

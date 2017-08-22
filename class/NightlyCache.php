@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead;
+
+use \phpws2\Database;
+
 define('HMS_CACHE_ERROR_THRESHOLD', 30);
 
 /**
@@ -34,7 +38,7 @@ class NightlyCache
         $t2->addFieldConditional('term', $term);
         $t2->addField('asu_username');
 
-        $union = new \Database\Union(array($db1, $db2));
+        $union = new Database\Union(array($db1, $db2));
         $result = $union->select();
 
         if (empty($result)) {

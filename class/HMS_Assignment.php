@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * Provides public functionality to actually assign students to a room
  *
@@ -9,8 +11,6 @@
  *         Some code copied from:
  * @author Kevin Wilcox <kevin at tux dot appstate dot edu>
  */
-PHPWS_Core::initModClass('hms', 'HMS_Item.php');
-
 
 class HMS_Assignment extends HMS_Item {
 

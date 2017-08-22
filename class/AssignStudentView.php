@@ -1,12 +1,14 @@
 <?php
 
+namespace Homestead;
+
 /**
  * View for showing the Assign Student interface.
  *
  * @author jbooker
  * @package hms
  */
-class AssignStudentView extends hms\View {
+class AssignStudentView extends View {
 
     private $student;
     private $bed;

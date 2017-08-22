@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * Handles running scheduled reports in the background.
  * Invoked by Pulse once a minute. Upon being invoked,
@@ -38,7 +40,7 @@ class ReportRunner
           $sp = $this->makeClone();
           $sp->execute_at = strtotime("+1 minutes");
           $sp->save();
-         * 
+         *
          */
 
         // Load necessary classes

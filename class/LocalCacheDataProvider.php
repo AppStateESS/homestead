@@ -1,5 +1,6 @@
 <?php
 
+namespace Homestead;
 PHPWS_Core::initModClass('hms', 'CachedStudent.php');
 
 class LocalCacheDataProvider extends StudentDataProvider {

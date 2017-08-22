@@ -1,6 +1,8 @@
 <?php
 
-class AdminAddRlcMemberView extends hms\View {
+namespace Homestead;
+
+class AdminAddRlcMemberView extends View {
 
     private $community;
 

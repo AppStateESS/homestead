@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 class RoomChangeRequestStudentApprovalView {
 
     private $student;

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 class AdminHMS extends HMS
 {
     public function process()

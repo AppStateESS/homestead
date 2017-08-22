@@ -1,8 +1,10 @@
 <?php
 
+namespace Homestead;
+
 PHPWS_Core::initModClass('hms', 'RlcFactory.php');
 
-class RlcSelfSelectionMenuBlockView extends hms\View {
+class RlcSelfSelectionMenuBlockView extends View {
 
     private $term;
     private $startDate;

@@ -1,13 +1,13 @@
 <?php
 
+namespace Homestead;
+
 /**
  * HMS User Controller
  *  Controls the interface for authenticated non-admin users.
  *
  *  @author Jeremy Booker <jbooker AT tux DOT appstate DOT edu>
  */
-
-PHPWS_Core::initModClass('hms', 'HMS.php');
 
 class UserHMS extends HMS
 {
@@ -29,4 +29,3 @@ class UserHMS extends HMS
         $this->saveState();
     }
 }
-

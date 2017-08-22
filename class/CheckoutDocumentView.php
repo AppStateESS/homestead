@@ -1,10 +1,12 @@
 <?php
 
+namespace Homestead;
+
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
-class CheckoutDocumentView extends hms\View {
+class CheckoutDocumentView extends View {
 
     private $checkin;
 
@@ -33,5 +35,3 @@ class CheckoutDocumentView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'admin/checkoutComplete.tpl');
     }
 }
-
-

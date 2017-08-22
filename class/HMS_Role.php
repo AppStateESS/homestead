@@ -1,5 +1,6 @@
 <?php
-PHPWS_Core::initModClass('hms', 'HMS_Item.php');
+
+namespace Homestead;
 PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
 
 class HMS_Role extends HMS_Item {
@@ -109,5 +110,3 @@ class HMS_Role extends HMS_Item {
         return true;
     }
 }
-
-

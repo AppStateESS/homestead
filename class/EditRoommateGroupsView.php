@@ -1,12 +1,14 @@
 <?php
 
+namespace Homestead;
+
 PHPWS_Core::initModClass('hms', 'ConfirmedRoommatePager.php');
 
 /**
  * The UI for viewing and deleting confirmed roommate groups
  */
 
-class EditRoommateGroupsView extends hms\View {
+class EditRoommateGroupsView extends View {
 
     private $roommatePager;
 

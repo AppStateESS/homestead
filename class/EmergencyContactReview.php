@@ -1,6 +1,8 @@
 <?php
 
-class EmergencyContactReview extends hms\View {
+namespace Homestead;
+
+class EmergencyContactReview extends View {
 
     private $student;
     private $term;

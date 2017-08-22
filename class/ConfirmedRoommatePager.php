@@ -1,11 +1,13 @@
 <?php
 
+namespace Homestead;
+
 PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initCoreClass('DBPager.php');
 
-class ConfirmedRoommatePager extends hms\View {
+class ConfirmedRoommatePager extends View {
 
     public function __construct(){
     }
@@ -28,5 +30,3 @@ class ConfirmedRoommatePager extends hms\View {
         return $pager->get();
     }
 }
-
-

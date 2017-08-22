@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 PHPWS_Core::initModClass('hms', 'UserStatus.php');
 PHPWS_Core::initModClass('hms', 'Command.php');
 PHPWS_Core::initModClass('hms', 'View.php');

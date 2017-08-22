@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 // Location to save the generated report files
 // I'd rather this be a private static or class const, but you can't
 // calculate the path dynamically that way.

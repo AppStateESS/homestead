@@ -1,11 +1,11 @@
 <?php
 
+namespace Homestead\exception;
+
 /**
  * Description
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
-
-PHPWS_Core::initModClass('hms', 'exception/RoommateException.php');
 
 class RoommateCompatibilityException extends RoommateException
 {
@@ -58,5 +58,3 @@ class RoommateCompatibilityException extends RoommateException
         }
     }
 }
-
-

@@ -1,5 +1,6 @@
 <?php
-PHPWS_Core::initModClass('hms', 'HMS_Item.php');
+
+namespace Homestead;
 
 class HMS_Permission extends HMS_Item {
     public $id;

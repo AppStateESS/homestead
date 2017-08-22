@@ -1,11 +1,11 @@
 <?php
 
+namespace Homestead;
+
 /**
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
  */
-PHPWS_Core::initModClass('hms', 'HMS_Item.php');
-
 
 class HMS_Bed extends HMS_Item {
 

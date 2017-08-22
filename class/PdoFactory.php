@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead;
+
+use \phpws2\Database;
+
 /**
  * Singleton Factory class for creating PDO objects based on
  * PHPWS database configuration. Somewhat of a wrapper
@@ -44,7 +48,7 @@ class PdoFactory {
         if (!defined('PHPWS_DSN')) {
             throw new Exception('Database connection DSN is not set.');
         }
-        $dsnArray = \Database::parseDSN(PHPWS_DSN);
+        $dsnArray = Database::parseDSN(PHPWS_DSN);
 
         $dsn = $this->createDsn($dsnArray['dbtype'], $dsnArray['dbhost'], $dsnArray['dbname']);
 

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * View for the Package Desk UI
  *

@@ -1,6 +1,8 @@
 <?php
 
-class AssignByFloorView extends hms\View
+namespace Homestead;
+
+class AssignByFloorView extends View
 {
     public function __construct()
     {

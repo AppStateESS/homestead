@@ -1,4 +1,7 @@
 <?php
+
+namespace Homestead;
+
 define('MAX_INVITES_PER_BATCH', 500);
 define('INVITE_TTL_HRS', 48);
 

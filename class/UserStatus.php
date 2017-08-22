@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * HMS User Status
  * Used to quickly determine proper permissioning and displaying the login

@@ -1,4 +1,7 @@
 <?php
+
+namespace Homestead\UI;
+
 /**
   * Interface for sending hall emails.
   *

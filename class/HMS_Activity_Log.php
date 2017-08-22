@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * The HMS_Acivity_Log class
  * Handles logging of various activities and produces the log pager.

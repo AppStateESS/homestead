@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 define('LO_SINGLE_GENDER', 1);
 define('LO_COED', 2);
 

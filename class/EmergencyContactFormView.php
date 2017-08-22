@@ -1,9 +1,11 @@
 <?php
 
+namespace Homestead;
+
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
 
-class EmergencyContactFormView extends hms\View {
+class EmergencyContactFormView extends View {
 
     private $student;
     private $application;

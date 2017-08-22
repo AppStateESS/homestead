@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * HMS Floor class
  *
@@ -7,8 +9,6 @@
  * Some code copied from:
  * @author Kevin Wilcox <kevin at tux dot appstate dot edu>
  */
-
-PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
 class HMS_Floor extends HMS_Item
 {

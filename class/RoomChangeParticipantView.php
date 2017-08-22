@@ -1,4 +1,7 @@
 <?php
+
+namespace Homestead;
+
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
@@ -12,7 +15,7 @@ PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
  * @author jbooker
  * @package hms
  */
-class RoomChangeParticipantView extends hms\View {
+class RoomChangeParticipantView extends View {
 
     private $participant; // The single partticpant this view is for
     private $request; // The parent request that this particpant is a part of

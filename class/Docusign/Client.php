@@ -1,7 +1,6 @@
 <?php
-namespace Docusign;
+namespace Homestead\Docusign;
 
-\PHPWS_Core::initModClass('hms', 'Docusign/Creds.php');
 require_once PHPWS_SOURCE_DIR . 'mod/hms/vendor/autoload.php';
 
 /*

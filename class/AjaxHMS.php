@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * HMS Ajax ViewController
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>

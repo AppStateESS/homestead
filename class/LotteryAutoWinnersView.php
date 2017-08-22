@@ -1,6 +1,8 @@
 <?php
 
-class LotteryAutoWinnersView extends hms\View {
+namespace Homestead;
+
+class LotteryAutoWinnersView extends View {
 
     public function show() {
 

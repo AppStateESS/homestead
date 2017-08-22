@@ -1,6 +1,8 @@
 <?php
 
-class AssignmentMoveConfirmationView extends hms\View
+namespace Homestead;
+
+class AssignmentMoveConfirmationView extends View
 {
     private $student;
     private $assignment;

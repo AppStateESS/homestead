@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\ApplicationsWithIncompleteContracts;
+
 class ApplicationsWithIncompleteContractsHtmlView extends ReportHtmlView
 {
 

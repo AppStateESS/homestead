@@ -1,11 +1,16 @@
 <?php
 
+namespace Homestead;
+
+/*use \hms\DocusignClientFactory;
+use \hms\HousingApplication;*/
+
 /**
  * ProfileHousingAppList - View to show the list of houing apps on the Student Profile.
  *
  * @author jbooker
  */
-class ProfileHousingAppList extends hms\View
+class ProfileHousingAppList extends View
 {
     private $student;
     private $housingApps;

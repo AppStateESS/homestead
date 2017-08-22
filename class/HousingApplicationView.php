@@ -1,4 +1,7 @@
 <?php
+
+namespace Homestead;
+
 /*
  * HousingApplicationView
  *
@@ -17,7 +20,7 @@ PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
-class HousingApplicationView extends hms\View {
+class HousingApplicationView extends View {
 
     protected $id;
 

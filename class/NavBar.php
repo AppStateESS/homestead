@@ -1,5 +1,6 @@
 <?php
-namespace hms;
+
+namespace Homestead;
 
 /**
  * NavBar.php

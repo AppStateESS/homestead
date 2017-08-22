@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * Represents a package desk where students can pickup a package.
  *

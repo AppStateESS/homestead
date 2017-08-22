@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 PHPWS_Core::initModClass('hms', 'CommandMenu.php');
 PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
 

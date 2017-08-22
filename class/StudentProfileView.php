@@ -1,9 +1,11 @@
 <?php
 
+namespace Homestead;
+
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 PHPWS_Core::initModClass('hms', 'ActivityLogView.php');
 
-class StudentProfileView extends hms\View {
+class StudentProfileView extends View {
 
     private $student;
     private $applications;

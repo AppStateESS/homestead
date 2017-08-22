@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\AssignmentsWithIncompleteContracts;
+
 /**
  * Cancelled Housing Assignments List
  * Generates a list of all cancelled housing aplications

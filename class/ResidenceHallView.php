@@ -1,6 +1,8 @@
 <?php
 
-class ResidenceHallView extends hms\View {
+namespace Homestead;
+
+class ResidenceHallView extends View {
 
     private $hall;
 
@@ -62,7 +64,7 @@ class ResidenceHallView extends hms\View {
         $form->setMatch('assignment_notifications', $this->hall->assignment_notifications);
 
         //Package Desks
-       
+
         $packageDesks = PackageDeskFactory::getPackageDesksAssoc();
         $packageDesks = array('-1' => 'None') + $packageDesks;
         $form->addDropBox('package_desk', $packageDesks);

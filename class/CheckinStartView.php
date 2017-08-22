@@ -1,6 +1,8 @@
 <?php
 
-class CheckinStartView extends hms\View {
+namespace Homestead;
+
+class CheckinStartView extends View {
 
     private $halls;
     private $term;

@@ -1,4 +1,7 @@
 <?php
+
+namespace Homestead;
+
 class Contract {
 
     protected $id;

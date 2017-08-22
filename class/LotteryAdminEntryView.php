@@ -1,6 +1,8 @@
 <?php
 
-class LotteryAdminEntryView extends hms\View {
+namespace Homestead;
+
+class LotteryAdminEntryView extends View {
 
     public function __construct()
     {

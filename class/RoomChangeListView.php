@@ -1,6 +1,8 @@
 <?php
 
-class RoomChangeListView extends hms\View {
+namespace Homestead;
+
+class RoomChangeListView extends View {
 
     private $requests;
     private $term;

@@ -1,6 +1,8 @@
 <?php
 
-class LotteryConfirmView extends hms\View {
+namespace Homestead;
+
+class LotteryConfirmView extends View {
 
     private $roomId;
     private $mealPlan;

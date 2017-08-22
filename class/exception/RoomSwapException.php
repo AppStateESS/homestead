@@ -1,6 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'exception/HMSException.php');
+namespace Homestead\exception;
+
+use \PHPWS_Core;
 
 class RoomSwapException extends HMSException {
 

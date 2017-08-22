@@ -1,6 +1,8 @@
 <?php
 
-class StatsView extends hms\View {
+namespace Homestead;
+
+class StatsView extends View {
 
     public function show()
     {

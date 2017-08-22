@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * ReportManger - Utility class which helps with getting
  * instances of reports
@@ -16,7 +18,7 @@ class ReportFactory {
 
     /**
      * Returns the class name for the controller based on the report's class name.
-     * 
+     *
      * @param String $reportName Class name of a report.
      * @return String Class name of the given report's controller class.
      */
@@ -24,13 +26,13 @@ class ReportFactory {
     {
         $dir = PHPWS_SOURCE_DIR . 'mod/hms/class/' . self::$dir;
         $className = $reportName . 'Controller';
-        
+
         return $className;
     }
-    
+
     /**
      * Loads the controller class for a given report.
-     * 
+     *
      * @param String $reportName
      * @param String $controllerName
      */
@@ -38,10 +40,10 @@ class ReportFactory {
     {
         PHPWS_Core::initModClass('hms', self::$dir . "/$reportName/$controllerName.php");
     }
-    
+
     /**
      * Returns an instance of the corresponding ReportController given a report class name.
-     * 
+     *
      * @param String $reportName Report class name.
      * @return ReportContoller A ReportController object of the sub-class for the given report class.
      */
@@ -49,14 +51,14 @@ class ReportFactory {
     {
         $ctrlClassName = self::getControllerClassName($reportName);
         self::loadControllerClass($reportName, $ctrlClassName);
-        
+
         return new $ctrlClassName;
     }
-    
+
     /**
      * Loads the proper ReportController sub-class, creates an instance
      * of that controller class, and initializes the controller with the given report.
-     * 
+     *
      * @param Report $report
      * @return ReportController An instance of the proper ReportController sub-class, initialized with the given report object.
      */
@@ -64,14 +66,14 @@ class ReportFactory {
     {
         $ctrlClassName = self::getControllerClassName($report->getClass());
         self::loadControllerClass($report->getClass(), $ctrlClassName);
-        
+
         return new $ctrlClassName($report);
     }
-    
+
     /**
      * Returns a ReportController object initialized with the Report object
      * identified by the given id.
-     * 
+     *
      * @param integer $reportId
      * @return ReportController
      */
@@ -79,14 +81,14 @@ class ReportFactory {
     {
         // Get the report object by ID
         $report = self::getReportById($reportId);
-        
+
         // Instanciate the the proper controller
         return self::getControllerInstanceByReport($report);
     }
-    
+
     /**
      * Returns the Report object identified by the given id.
-     * 
+     *
      * @param integer $reportId
      * @return Report
      * @throws DatabaseExecption
@@ -103,21 +105,21 @@ class ReportFactory {
         if(PHPWS_Error::logIfError($result)){
             throw new DatabaseExecption($result->toString());
         }
-        
+
         if(is_null($result)){
             throw new InvalidArgumentException('The given report ID does not exist.');
         }
-        
+
         self::loadReportClass($result);
-        
+
         $report = new $result($reportId);
-        
+
         return $report;
     }
-    
+
     /**
      * Loads the class file for the given report class name.
-     * 
+     *
      * @param String $name Report class name.
      */
     public static function loadReportClass($name)
@@ -125,10 +127,10 @@ class ReportFactory {
         $dir = PHPWS_SOURCE_DIR . 'mod/hms/class/' . ReportFactory::$dir;
         PHPWS_Core::initModClass('hms', ReportFactory::$dir . "/$name/$name.php");
     }
-    
+
     /**
      * Returns an array of Report objects
-     * 
+     *
      * @return array An array of all available ReportController objects.
      */
     public static function getAllReportControllers()
@@ -154,4 +156,3 @@ class ReportFactory {
         return $reportControllers;
     }
 }
-

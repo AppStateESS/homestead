@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 PHPWS_Core::initModClass('hms', 'StudentMenuTermBlock.php');
 PHPWS_Core::initModClass('hms', 'StudentMenuWithdrawnTermBlock.php');
 PHPWS_Core::initModClass('hms', 'HousingApplication.php');
@@ -9,7 +11,7 @@ define('FEATURE_NOTYET_ICON',   '<i class="fa fa-calendar"></i>');
 define('FEATURE_OPEN_ICON',     '<i class="fa fa-arrow-right"></i>');
 define('FEATURE_COMPLETED_ICON','<i class="fa fa-check"></i>');
 
-class FreshmenMainMenuView extends hms\View {
+class FreshmenMainMenuView extends View {
 
     private $student;
 

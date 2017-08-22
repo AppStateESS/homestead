@@ -1,5 +1,7 @@
 0<?php
 
+namespace Homestead;
+
 /**
  * Contains administrative public functionality
  *

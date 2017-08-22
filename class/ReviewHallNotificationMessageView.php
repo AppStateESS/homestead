@@ -1,4 +1,7 @@
 <?php
+
+namespace Homestead;
+
 /**
  * ReviewHallNotificationMessageView
  *
@@ -10,7 +13,7 @@
  */
 PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
 
-class ReviewHallNotificationMessageView extends hms\View {
+class ReviewHallNotificationMessageView extends View {
 
     private $subject;
     private $body;

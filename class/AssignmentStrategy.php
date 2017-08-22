@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 
 abstract class AssignmentStrategy {

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 PHPWS_Core::initModClass('hms', 'Contract.php');
 PHPWS_Core::initModClass('hms', 'PdoFactory.php');
 PHPWS_Core::initModClass('hms', 'DocusignClientFactory.php');

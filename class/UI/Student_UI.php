@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\UI;
+
 /**
  * Student_UI.php
  * A class for consolidating the the methods for student UI/Interface handling.

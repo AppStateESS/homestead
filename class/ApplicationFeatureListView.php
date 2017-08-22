@@ -1,6 +1,8 @@
 <?php
 
-class ApplicationFeatureListView extends hms\View{
+namespace Homestead;
+
+class ApplicationFeatureListView extends View{
 
     public static $dir = 'applicationFeature';
     private $features;

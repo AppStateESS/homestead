@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * ReportSetupView
  *
@@ -8,7 +10,7 @@
  *
  * @author jbooker
  */
-class ReportSetupView extends hms\View {
+class ReportSetupView extends View {
 
     protected $report;
     protected $datePicker;

@@ -1,8 +1,10 @@
 <?php
 
+namespace Homestead;
+
 //TODO update/convert this view
 
-class HousingApplicationThanksView extends hms\View {
+class HousingApplicationThanksView extends View {
 
     public function __construct()
     {

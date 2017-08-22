@@ -1,12 +1,14 @@
 <?php
 
+namespace Homestead;
+
 /**
  * View class responsible for showing the 'Edit Room' interface
  *
  * @author jbooker
  * @package HMS
  */
-class RoomView extends hms\View {
+class RoomView extends View {
 
     private $hall;
     private $floor;

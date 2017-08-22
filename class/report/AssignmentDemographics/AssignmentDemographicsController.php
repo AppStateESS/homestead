@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\AssignmentDemographics;
+
 class AssignmentDemographicsController extends ReportController implements iSyncReport, iAsyncReport, iSchedReport, iHtmlReportView, iPdfReportView {
 
     public function setParams(Array $params)

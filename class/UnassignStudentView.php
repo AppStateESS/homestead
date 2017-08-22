@@ -1,6 +1,8 @@
 <?php
 
-class UnassignStudentView extends hms\View{
+namespace Homestead;
+
+class UnassignStudentView extends View{
 
     private $student;
 
@@ -62,5 +64,3 @@ class UnassignStudentView extends hms\View{
     }
 
 }
-
-

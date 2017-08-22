@@ -1,6 +1,8 @@
 <?php
 
-class DamageMenuBlockView extends hms\View {
+namespace Homestead;
+
+class DamageMenuBlockView extends View {
 
     private $student;
     private $startDate;

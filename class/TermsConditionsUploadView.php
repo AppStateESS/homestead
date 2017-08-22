@@ -1,6 +1,8 @@
 <?php
 
-class TermsConditionsUploadView extends hms\View{
+namespace Homestead;
+
+class TermsConditionsUploadView extends View{
 
     private $term;
     private $type;
@@ -43,5 +45,3 @@ class TermsConditionsUploadView extends hms\View{
         return PHPWS_Template::process($tpl, 'hms', 'admin/TermsConditionsUploadView.tpl');
     }
 }
-
-

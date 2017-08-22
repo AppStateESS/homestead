@@ -1,6 +1,8 @@
 <?php
 
-class ApplicationFeatureSettingsView extends hms\View{
+namespace Homestead;
+
+class ApplicationFeatureSettingsView extends View{
 
     private $feature;
 

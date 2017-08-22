@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * SendRlcInvitesView
  *
@@ -8,7 +10,7 @@
  * @author jbooker
  * @package HMS
  */
-class SendRlcInvitesView extends hms\View {
+class SendRlcInvitesView extends View {
 
     public function show()
     {
@@ -37,5 +39,3 @@ class SendRlcInvitesView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'admin/sendRlcInvites.tpl');
     }
 }
-
-

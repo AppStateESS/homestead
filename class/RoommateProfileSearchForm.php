@@ -1,6 +1,8 @@
 <?php
 
-class RoommateProfileSearchForm extends hms\View {
+namespace Homestead;
+
+class RoommateProfileSearchForm extends View {
 
     private $term;
 

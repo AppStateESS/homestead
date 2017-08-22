@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\Scheduled;
+
 //use \Homestead\DocusignClientFactory;
 //use \Homestead\Docusign\Client;
 

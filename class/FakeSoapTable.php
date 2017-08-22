@@ -1,6 +1,10 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'SOAP.php');
+namespace Homestead;
+
+use \hms\exception\StudentNotFoundException;
+use \hms\SOAP;
+use \phpws2\Database;
 
 // Seconds of delay you want to replicate for each query.
 define('FAKE_SOAP_DELAY', 0);
@@ -37,7 +41,6 @@ class TestSOAP extends SOAP
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (empty($result)) {
-            require_once PHPWS_SOURCE_DIR . 'mod/hms/class/exception/StudentNotFoundException.php';
             throw new StudentNotFoundException('User not found', 0, $bannerId);
         }
         $student = new stdClass();
@@ -105,7 +108,7 @@ class TestSOAP extends SOAP
     public function getUsername($bannerId)
     {
         $this->createDelay();
-        $db = \Database::newDB();
+        $db = Database::newDB();
         $t = $db->addTable('fake_soap');
         $t->addFieldConditional('banner_id', (string) $bannerId);
         $t->addField('username');
@@ -115,7 +118,7 @@ class TestSOAP extends SOAP
     public function getBannerId($username)
     {
         $this->createDelay();
-        $db = \Database::newDB();
+        $db = Database::newDB();
         $t = $db->addTable('fake_soap');
         $t->addFieldConditional('username', (string) $username);
         $t->addField('banner_id');

@@ -1,13 +1,15 @@
 <?php
-PHPWS_Core::initModClass('hms', 'DamageTypeFactory.php');
 
+namespace Homestead;
+
+PHPWS_Core::initModClass('hms', 'DamageTypeFactory.php');
 
 /**
  *
  * @author jbooker
  * @deprecated
  */
-class AddRoomDamageView extends hms\View {
+class AddRoomDamageView extends View {
 
     private $room;
 

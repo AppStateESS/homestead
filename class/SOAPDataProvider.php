@@ -1,5 +1,6 @@
 <?php
 
+namespace Homestead;
 PHPWS_Core::initModClass('hms', 'SOAP.php');
 
 class SOAPDataProvider extends StudentDataProvider {
@@ -78,7 +79,7 @@ class SOAPDataProvider extends StudentDataProvider {
         }else{
             $student->setApplicationTerm(null);
         }
-        
+
         $student->setType($soapData->student_type);
         $student->setClass($soapData->projected_class);
         $student->setCreditHours($soapData->credhrs_completed);

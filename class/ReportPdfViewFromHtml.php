@@ -1,6 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'ReportPdfView.php');
+namespace Homestead;
 PHPWS_Core::initModClass('hms', 'WKPDF.php');
 
 if (!defined('WKPDF_PATH')) {

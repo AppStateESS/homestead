@@ -1,8 +1,10 @@
 <?php
 
+namespace Homestead;
+
 PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 
-class ShowViewByRlc extends hms\View{
+class ShowViewByRlc extends View{
 
     private $rlc;
 

@@ -1,6 +1,8 @@
 <?php
 
-class SelectFloorView extends hms\View
+namespace Homestead;
+
+class SelectFloorView extends View
 {
     private $title;
     private $term;

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 class HMS_Eligibility_Waiver{
 
     public $id = 0;
@@ -42,7 +44,7 @@ class HMS_Eligibility_Waiver{
     /******************
      * Static methods *
      ******************/
-    
+
     public static function checkForWaiver($username, $term = NULL)
     {
         $db = new PHPWS_DB('hms_eligibility_waiver');
@@ -59,7 +61,7 @@ class HMS_Eligibility_Waiver{
 
     public function createWaiver()
     {
-        
+
     }
 
     public function getPager()
@@ -67,5 +69,3 @@ class HMS_Eligibility_Waiver{
         #TODO
     }
 }
-
-

@@ -1,6 +1,8 @@
 <?php
 
-class ContactFormThankYouView extends hms\View{
+namespace Homestead;
+
+class ContactFormThankYouView extends View{
 
     public function show(){
         $tpl = array();

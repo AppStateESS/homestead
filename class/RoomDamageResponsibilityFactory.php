@@ -1,5 +1,6 @@
 <?php
 
+namespace Homestead;
 PHPWS_Core::initModClass('hms', 'RoomDamageResponsibility.php');
 PHPWS_Core::initModClass('hms', 'PdoFactory.php');
 
@@ -74,5 +75,3 @@ class RoomDamageResponsibilityFactory {
         }
     }
 }
-
-

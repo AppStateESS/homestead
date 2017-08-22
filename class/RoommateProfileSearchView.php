@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
     class RoommateProfileSearchView extends DBPager{
     /**
      * Sets up the pager object for searching questionnairs.

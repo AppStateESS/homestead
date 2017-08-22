@@ -1,5 +1,6 @@
 <?php
 
+namespace Homestead;
 
 abstract class RoomChangeRequestState {
 

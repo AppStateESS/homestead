@@ -1,10 +1,12 @@
 <?php
 
+namespace Homestead;
+
 /**
  * @author jbooker
  * @package hms
  */
-class SelectHallView extends hms\View{
+class SelectHallView extends View{
 
     private $title;
     private $term;

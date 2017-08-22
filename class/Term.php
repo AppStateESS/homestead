@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * HMS Term
  * Maintains the "current" term, "active" term, and handles tasks related

@@ -1,6 +1,8 @@
 <?php
 
-class VerifyAssignmentView extends hms\View{
+namespace Homestead;
+
+class VerifyAssignmentView extends View{
 
     private $student;
     private $term;

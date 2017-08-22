@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /*
  * ShowRlcApplicationPage2View
  *
@@ -7,7 +9,7 @@
  * function by the same name.
  *
  */
-class RlcApplicationPage2View extends hms\View{
+class RlcApplicationPage2View extends View{
 
     protected $context;
 

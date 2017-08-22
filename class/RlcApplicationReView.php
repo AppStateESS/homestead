@@ -1,12 +1,14 @@
 <?php
 
+namespace Homestead;
+
 /**
  * View class for displaying an existing RLC application.
  *
  * @author jbooker
  * @package HMS
  */
-class RlcApplicationReView extends hms\View {
+class RlcApplicationReView extends View {
 
     private $student;
     private $application;

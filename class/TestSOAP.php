@@ -1,6 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'SOAP.php');
+namespace Homestead;
 
 class TestSOAP extends SOAP{
 

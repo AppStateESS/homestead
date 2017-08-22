@@ -1,6 +1,8 @@
 <?php
 
-class TermsAgreementView extends hms\View {
+namespace Homestead;
+
+class TermsAgreementView extends View {
 
     private $term;
     private $submitCommand;

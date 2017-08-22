@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 class StudentProfile {
 
     private $student;
@@ -121,12 +123,12 @@ class StudentProfile {
 
         $applications = HousingApplication::getAllApplicationsForStudent($this->student);
         $subTypeApps = array();
-        
+
         // Convert each of the general HousingApplication objets to its specific sub type (e.g. FallApplication)
         foreach($applications as $app){
             $subTypeApps[] = HousingApplicationFactory::getApplicationById($app->id);
         }
-        
+
         return new StudentProfileView($this->student, $subTypeApps, $assignment, $this->roommates);
     }
 

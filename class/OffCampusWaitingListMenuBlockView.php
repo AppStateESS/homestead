@@ -1,6 +1,8 @@
 <?php
 
-class OffCampusWaitingListMenuBlockView extends hms\View {
+namespace Homestead;
+
+class OffCampusWaitingListMenuBlockView extends View {
 
     private $term;
     private $startDate;
@@ -18,7 +20,7 @@ class OffCampusWaitingListMenuBlockView extends hms\View {
     public function show()
     {
         PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-        
+
         $tpl = array();
 
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
@@ -46,5 +48,3 @@ class OffCampusWaitingListMenuBlockView extends hms\View {
         return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/OffCampusWaitingListMenuBlock.tpl');
     }
 }
-
-

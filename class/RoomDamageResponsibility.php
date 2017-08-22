@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 class RoomDamageResponsibility {
 
     public $id;

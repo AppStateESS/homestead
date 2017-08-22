@@ -1,10 +1,13 @@
 <?php
+
+namespace Homestead;
+
 /**
  * @author jbooker
  * @package hms
  */
 
-class HallOverview extends hms\View{
+class HallOverview extends View{
 
     private $hall;
     private $nakedDisplay;

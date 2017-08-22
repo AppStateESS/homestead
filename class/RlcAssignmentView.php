@@ -1,5 +1,6 @@
 <?php
 
+namespace Homestead;
 PHPWS_Core::initModClass('hms', 'RlcFactory.php');
 PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 
@@ -9,7 +10,7 @@ PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
  * @author Jeremy Booker
  * @package hms
  */
-class RlcAssignmentView extends hms\View
+class RlcAssignmentView extends View
 {
     private $term; // The terms we're looking at applications for.
     private $rlc; // the rlc to limit this view to

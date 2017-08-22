@@ -1,6 +1,8 @@
 <?php
 
-class CheckoutStartView extends hms\View
+namespace Homestead;
+
+class CheckoutStartView extends View
 {
     private $halls;
     private $term;

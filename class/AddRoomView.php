@@ -1,11 +1,13 @@
 <?php
 
+namespace Homestead;
+
 /*
  * View for adding rooms.
  * @package hms
  */
 
-class AddRoomView extends hms\View {
+class AddRoomView extends View {
 
     private $hall;
     private $floor;

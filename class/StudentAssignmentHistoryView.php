@@ -1,12 +1,14 @@
 <?php
 
+namespace Homestead;
+
 /**
  * StudentAssignmentHistoryView class - Represents the view for a StudentAssignmentHistory set.
  *
  * @author jbooker
  * @package HMS
  */
-class StudentAssignmentHistoryView extends hms\View {
+class StudentAssignmentHistoryView extends View {
 
     private $assignmentHistory;
 

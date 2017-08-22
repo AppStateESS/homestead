@@ -1,5 +1,7 @@
 <?php
 
+use \phpws2\Database;
+
 /**
  * HMS Roommate class - Handles creating, confirming, and deleting roommate groups
  *
@@ -239,7 +241,7 @@ class HMS_Roommate
         $db = PdoFactory::getInstance()->getPdo();
 	*/
 
-	$db = \Database::newDB();
+	$db = Database::newDB();
         $db = $db->getPdo();
 
         $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term AND confirmed = 1");
@@ -282,7 +284,7 @@ class HMS_Roommate
         $db = PdoFactory::getInstance()->getPdo();
 	*/
 
-        $db = \Database::newDB();
+        $db = Database::newDB();
 	$db = $db->getPdo();
 
         $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term AND confirmed = 0 and requested_on >= :ttl");

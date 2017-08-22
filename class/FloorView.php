@@ -1,6 +1,8 @@
 <?php
 
-class FloorView extends hms\View{
+namespace Homestead;
+
+class FloorView extends View{
 
     private $hall;
     private $floor;

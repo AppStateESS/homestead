@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * The HMS_RLC_Assignment class
  *

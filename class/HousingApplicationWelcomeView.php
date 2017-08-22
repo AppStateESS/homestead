@@ -1,6 +1,8 @@
 <?php
 
-class HousingApplicationWelcomeView extends hms\View {
+namespace Homestead;
+
+class HousingApplicationWelcomeView extends View {
 
     private $student;
     private $submitCmd;

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead\report\AssignmentDemographics;
+
 class AssignmentDemographicsHtmlView extends ReportHtmlView {
 
     protected function render()

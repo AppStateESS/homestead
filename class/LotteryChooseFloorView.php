@@ -1,6 +1,8 @@
 <?php
 
-class LotteryChooseFloorView extends hms\View {
+namespace Homestead;
+
+class LotteryChooseFloorView extends View {
 
     private $student;
     private $term;

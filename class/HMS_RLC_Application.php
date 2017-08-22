@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * The HMS_RLC_Application class
  * Implements the RLC_Application object and methods to load/save

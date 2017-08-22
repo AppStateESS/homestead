@@ -1,9 +1,12 @@
 <?php
+
+namespace Homestead;
+
 /**
  * @author Jeremy Booker
  * @package hms
  */
-class CreateTermView extends hms\View {
+class CreateTermView extends View {
 
     public function __construct(){}
 

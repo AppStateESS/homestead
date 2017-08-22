@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 PHPWS_Core::initModClass('hms', 'AssignmentPairing.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 

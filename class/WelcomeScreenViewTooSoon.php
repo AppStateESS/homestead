@@ -1,6 +1,8 @@
 <?php
 
-class WelcomeScreenViewTooSoon extends hms\View{
+namespace Homestead;
+
+class WelcomeScreenViewTooSoon extends View{
 
     public function show()
     {
@@ -8,5 +10,3 @@ class WelcomeScreenViewTooSoon extends hms\View{
         return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_too_soon.tpl');
     }
 }
-
-
