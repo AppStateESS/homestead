@@ -2,8 +2,6 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
 class ApplicationMenuBlockView extends View {
 
     private $term;

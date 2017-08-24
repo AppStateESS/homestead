@@ -2,10 +2,9 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
 use \PHPWS_Error;
 use \PHPWS_DB;
-PHPWS_Core::initModClass('hms', 'Checkin.php');
-PHPWS_Core::initModClass('hms', 'PdoFactory.php');
 
 class CheckinFactory {
 
@@ -154,7 +153,7 @@ class CheckinFactory {
         $stmt = $db->prepare($query);
         $stmt->execute(array('term' => $term));
 
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RestoredCheckin');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'RestoredCheckin');
 
         return $stmt->fetchAll();
     }

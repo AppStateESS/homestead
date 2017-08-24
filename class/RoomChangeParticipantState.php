@@ -66,7 +66,7 @@ class RoomChangeParticipantState {
 
     public function getValidTransitions()
     {
-        throw new Exception('No transitions implemented.');
+        throw new \Exception('No transitions implemented.');
     }
 
     public function canTransition(RoomChangeParticipantState $toState)

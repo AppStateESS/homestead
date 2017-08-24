@@ -2,6 +2,7 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
 use \PHPWS_Error;
 use \PHPWS_DB;
 
@@ -91,7 +92,7 @@ class BannerQueueItem {
     public function stamp()
     {
         $this->queued_on = time();
-        $this->queued_by = Current_User::getId();
+        $this->queued_by = \Current_User::getId();
     }
 
     /**
@@ -100,9 +101,6 @@ class BannerQueueItem {
      */
     public function process()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        PHPWS_Core::initModClass('hms', 'SOAP.php');
-
         $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
 
         $result = null;
@@ -118,7 +116,7 @@ class BannerQueueItem {
                     HMS_Activity_Log::log_activity(
                                     $this->asu_username,
                                     ACTIVITY_ASSIGNMENT_REPORTED,
-                                    Current_User::getUsername(),
+                                    \Current_User::getUsername(),
                                     $this->term . ' ' .
                                     $this->building_code . ' ' .
                                     $this->bed_code);
@@ -136,7 +134,7 @@ class BannerQueueItem {
                     HMS_Activity_Log::log_activity(
                                     $this->asu_username,
                                     ACTIVITY_REMOVAL_REPORTED,
-                                    Current_User::getUsername(),
+                                    \Current_User::getUsername(),
                                     $this->term . ' ' .
                                     $this->building_code . ' ' .
                                     $this->bed_code . ' ');

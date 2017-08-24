@@ -2,9 +2,6 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-
 class Autoassigner {
 
     private $term;
@@ -21,16 +18,6 @@ class Autoassigner {
         $this->term = $term;
 
         echo "Term is $term\n\n";
-
-        PHPWS_Core::initModClass('hms', 'RoommatePairingStrategy.php');
-        PHPWS_Core::initModClass('hms', 'RequestedRoommatePairingStrategy.php');
-        PHPWS_Core::initModClass('hms', 'PreferencesRoommatePairingStrategy.php');
-
-        PHPWS_Core::initModClass('hms', 'AssignmentStrategy.php');
-        PHPWS_Core::initModClass('hms', 'SpecialAssignmentStrategy.php');
-        PHPWS_Core::initModClass('hms', 'SingleGenderAssignmentStrategy.php');
-        PHPWS_Core::initModClass('hms', 'CoedAssignmentStrategy.php');
-        PHPWS_Core::initModClass('hms', 'RandomAssignmentStrategy.php');
 
         # Load all the unassigned applicants for this term
         $this->applications     = HousingApplication::getUnassignedFreshmenApplications($term, null);

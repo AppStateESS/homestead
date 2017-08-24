@@ -15,8 +15,6 @@ class LotteryDenyRoommateRequestView extends View {
 
     public function show()
     {
-
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         \PHPWS_Core::initCoreClass('Captcha.php');
 
         $requestor = StudentFactory::getStudentByUsername($this->request['requestor'], $this->term);

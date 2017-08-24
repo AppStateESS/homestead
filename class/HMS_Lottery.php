@@ -2,6 +2,7 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
 use \PHPWS_Error;
 use \PHPWS_DB;
 define('MAX_INVITES_PER_BATCH', 500);
@@ -291,10 +292,6 @@ class HMS_Lottery {
 
     public static function send_winning_reminder_emails($term)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        PHPWS_Core::initModclass('hms', 'StudentFactory.php');
-
         // Get a list of lottery winners who have not chosen a room yet, send them reminder emails
         $query = "select hms_new_application.username, hms_lottery_application.invite_expires_on FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                 LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term AND lottery = 1) as foo ON hms_new_application.username = foo.asu_username
@@ -319,9 +316,6 @@ class HMS_Lottery {
 
     public static function send_roommate_reminder_emails($term)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-        PHPWS_Core::initModclass('hms', 'StudentFactory.php');
-
         // Get a list of outstanding roommate requests, send them reminder emails
         $query = "select hms_lottery_reservation.* FROM hms_lottery_reservation
                 LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term AND lottery = 1) as foo ON hms_lottery_reservation.asu_username = foo.asu_username
@@ -416,12 +410,6 @@ class HMS_Lottery {
 
     public static function confirm_roommate_request($username, $requestId)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $term = PHPWS_Settings::get('hms', 'lottery_term');
 
         // Get the roommate invite
@@ -474,9 +462,6 @@ class HMS_Lottery {
     */
     public static function determineEligibility($username)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Eligibility_Waiver.php');
-
         // First, check for an assignment in the current term
         if (HMS_Assignment::checkForAssignment($username, Term::getCurrentTerm())) {
             return true;

@@ -1,8 +1,6 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'PdoFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 
 class RlcMembershipFactory {
 

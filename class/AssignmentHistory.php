@@ -2,6 +2,7 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
 use \PHPWS_Error;
 use \PHPWS_DB;
 
@@ -11,7 +12,6 @@ use \PHPWS_DB;
  * @author Adam D. Dixon
  * @package HMS
  */
-PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
 class AssignmentHistory extends HMS_Item {
 
@@ -102,7 +102,7 @@ class AssignmentHistory extends HMS_Item {
      * @return none
      */
     private function getTimestamp() {
-        $date = new DateTime();
+        $date = new \DateTime();
         return $date->getTimestamp();
     }
 
@@ -209,7 +209,7 @@ class AssignmentHistory extends HMS_Item {
      */
     public static function makeAssignmentHistory(HMS_Assignment $assignment, $reason=null) {
         if(is_null($assignment)) {
-            throw new InvalidArgumentException('Missing HMS_Assignment object.');
+            throw new \InvalidArgumentException('Missing HMS_Assignment object.');
         }
 
         if(is_null($reason)){

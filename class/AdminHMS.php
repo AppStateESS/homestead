@@ -9,10 +9,10 @@ class AdminHMS extends HMS
         $this->context->setDefault('action', 'ShowAdminMaintenanceMenu');
         parent::process();
 
-        $view = new hms\UserView();
+        $view = new UserView();
         $view->setMain($this->context->getContent());
 
-        $nv = new hms\NotificationView();
+        $nv = new NotificationView();
         $nv->popNotifications();
         $view->addNotifications($nv->show());
 

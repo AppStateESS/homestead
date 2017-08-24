@@ -2,7 +2,7 @@
 
 namespace Homestead\applicationFeature;
 
-use \hms\ApplicationFeatureRegistration;
+use \Homestead\ApplicationFeatureRegistration;
 
 class OffCampusWaitingListRegistration extends ApplicationFeatureRegistration {
 

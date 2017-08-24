@@ -2,10 +2,6 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'PdoFactory.php');
-PHPWS_Core::initModClass('hms', 'RoomChangeRequest.php');
-
-
 /**
  * Factory class for loading RoomChangeRequest objects from
  * the database.
@@ -18,7 +14,7 @@ class RoomChangeRequestFactory {
     public static function getRequestById($id)
     {
         if (!isset($id) || is_null($id)) {
-            throw new InvalidArgumentException('Missing request id.');
+            throw new \InvalidArgumentException('Missing request id.');
         }
 
         $db = PdoFactory::getPdoInstance();
@@ -45,7 +41,7 @@ class RoomChangeRequestFactory {
     public static function getCurrentRequestByBed(HMS_Bed $bed)
     {
         if (!isset($bed) || is_null($bed)) {
-            throw new InvalidArgumentException('Missing bed.');
+            throw new \InvalidArgumentException('Missing bed.');
         }
 
         $db = PdoFactory::getPdoInstance();
@@ -98,7 +94,7 @@ class RoomChangeRequestFactory {
 
         // If more than one pending request is found, throw an exception
         if (sizeof($results) > 1) {
-            throw new InvalidArgumentException('More than one pending room change detected.');
+            throw new \InvalidArgumentException('More than one pending room change detected.');
         } else if (sizeof($results) == 0) {
             return null;
         } else {
@@ -335,7 +331,7 @@ class RoomChangeRequestFactory {
 
         // If more than one pending request is found, throw an exception
         if (sizeof($results) > 1) {
-            throw new InvalidArgumentException('More than one pending room change detected.');
+            throw new \InvalidArgumentException('More than one pending room change detected.');
         } else if (sizeof($results) == 0) {
             return null;
         } else {

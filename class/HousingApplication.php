@@ -2,8 +2,8 @@
 
 namespace Homestead;
 
-use \hms\exception\DatabaseException;
-use \hms\exception\InvalidTermException;
+use \Homestead\exception\DatabaseException;
+use \Homestead\exception\InvalidTermException;
 use \PHPWS_Error;
 use \PHPWS_DB;
 \PHPWS_Core::initCoreClass('Mail.php');
@@ -224,12 +224,12 @@ class HousingApplication {
         try {
             $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
             $soap->createHousingApp($this->getBannerId(), $this->getTerm());
-        } catch(Exception $e) {
+        } catch(\Exception $e) {
             // Send an email notification
             $send_to = array();
             $send_to[] = 'jb67803@appstate.edu';
 
-            $mail = new PHPWS_Mail;
+            $mail = new \PHPWS_Mail;
 
             $mail->addSendTo($send_to);
             $mail->setFrom(FROM_ADDRESS);
@@ -319,19 +319,19 @@ class HousingApplication {
     public function cancel($reasonKey)
     {
         $this->cancelled = 1;
-        $this->cancelled_by = Current_User::getUsername();
+        $this->cancelled_by = \Current_User::getUsername();
         $this->cancelled_on = time();
 
         $reasons = self::getCancellationReasons();
 
         if ($reasonKey == "0" || !array_key_exists($reasonKey, $reasons)) {
-            throw new InvalidArgumentException('Invalid cancellation reason key.');
+            throw new \InvalidArgumentException('Invalid cancellation reason key.');
         }
 
         $this->cancelled_reason = $reasonKey;
 
         // Log that this happened
-        HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_CANCEL_HOUSING_APPLICATION, Current_User::getUsername(), Term::toString($this->getTerm()) . ': ' . $reasons[$reasonKey]);
+        HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_CANCEL_HOUSING_APPLICATION, \Current_User::getUsername(), Term::toString($this->getTerm()) . ': ' . $reasons[$reasonKey]);
     }
 
 
@@ -430,7 +430,7 @@ class HousingApplication {
                 $app = new WaitingListApplication($result['id']);
                 break;
             default:
-                throw new InvalidArgumentException('Unknown application type: ' . $result['application_type']);
+                throw new \InvalidArgumentException('Unknown application type: ' . $result['application_type']);
         }
 
         return $app;
@@ -492,7 +492,7 @@ class HousingApplication {
         $db = new PHPWS_DB('hms_new_application');
 
         if (!isset($student) || empty($student) || is_null($student)) {
-            throw new InvalidArgumentException('Missing/invalid student.');
+            throw new \InvalidArgumentException('Missing/invalid student.');
         }
 
         $db->addWhere('banner_id', $student->getBannerId());

@@ -19,8 +19,6 @@ class OffCampusWaitingListMenuBlockView extends View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         $tpl = array();
 
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);

@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\exception\PermissionException;
+use \Homestead\exception\DatabaseException;
 use \PHPWS_Error;
 use \PHPWS_DB;
 
@@ -11,8 +13,6 @@ use \PHPWS_DB;
  * @author jbooker
  * @package HMS
  */
-
-PHPWS_Core::initModClass('hms','StudentFactory.php');
 
 class HMS_RLC_Assignment {
 
@@ -76,8 +76,7 @@ class HMS_RLC_Assignment {
 
     public function delete()
     {
-        if(!Current_User::allow('hms', 'remove_rlc_members') ){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+        if(!\Current_User::allow('hms', 'remove_rlc_members') ){
             throw new PermissionException('You do not have permission to remove RLC members.');
         }
 
@@ -119,7 +118,6 @@ class HMS_RLC_Assignment {
      */
     public function getRlc()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         return new HMS_Learning_Community($this->getRlcId());
     }
 
@@ -132,11 +130,10 @@ class HMS_RLC_Assignment {
 
     public function getApplication()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         $application = new HMS_RLC_Application($this->getApplicationId());
 
         if(!isset($application)){
-            throw Exception('Could not load RLC application.');
+            throw \Exception('Could not load RLC application.');
         }
 
         return $application;
@@ -148,7 +145,7 @@ class HMS_RLC_Assignment {
         $this->state = $newState->getStateName();
         try{
             $this->save();
-        }catch(Exception $e){
+        }catch(\Exception $e){
             throw $e;
         }
 
@@ -229,8 +226,6 @@ class HMS_RLC_Assignment {
      * @return NULL|HMS_RLC_Assignment
      */
     public static function getAssignmentByUsername($username, $term){
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-
         $app = HMS_RLC_Application::getApplicationByUsername($username, $term);
 
         if(is_null($app)){
@@ -284,8 +279,6 @@ class HMS_RLC_Assignment {
 
     public function getAdminPagerTags()
     {
-        PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
-
         $rlc_list = HMS_Learning_Community::getRLCListAbbr();
 
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
@@ -326,9 +319,6 @@ class HMS_RLC_Assignment {
      */
     public function getAdminCsvRow()
     {
-        PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
-
         $row = array();
 
         // Get the RLC Application

@@ -10,9 +10,6 @@ namespace Homestead;
   * @package mod
   * @subpackage hms
   **/
-PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-PHPWS_Core::initModClass('hms', 'HMS_Room.php');
 
 class Consistancy_Checker {
 

@@ -73,7 +73,7 @@ class AjaxGetUsernameSuggestionsCommand extends Command {
 
         $resultObjects = array();
         foreach($results as $row){
-            $obj = new stdClass();
+            $obj = new \stdClass();
             $obj->banner_id = $row['banner_id'];
             $obj->name      = $row['first_name'] . ' ' . $row['last_name'];
             $obj->username  = $row['username'];

@@ -15,11 +15,10 @@ class GuestHMS extends HMS
         $this->context->setDefault('action', 'ShowFrontPage');
         parent::process();
 
-        PHPWS_Core::initModClass('hms', 'GuestView.php');
-        $view = new hms\GuestView();
+        $view = new GuestView();
         $view->setMain($this->context->getContent());
 
-        $nv = new hms\NotificationView();
+        $nv = new NotificationView();
         $nv->popNotifications();
         $view->addNotifications($nv->show());
 

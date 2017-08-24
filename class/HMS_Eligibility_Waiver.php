@@ -16,7 +16,7 @@ class HMS_Eligibility_Waiver{
         $this->asu_username = $asu_username;
         $this->term = $term;
         $this->created_on = time();
-        $this->created_by = Current_User::getUsername();
+        $this->created_by = \Current_User::getUsername();
     }
 
     public function save()

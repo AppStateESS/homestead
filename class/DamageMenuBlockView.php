@@ -21,8 +21,6 @@ class DamageMenuBlockView extends View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'RoomChangeParticipantFactory.php');
-
         $checkin = CheckinFactory::getCheckinByBannerId($this->student->getBannerId(), $this->term);
 
 
@@ -33,7 +31,6 @@ class DamageMenuBlockView extends View {
             $end = strtotime(RoomDamage::SELF_REPORT_DEADLINE, $checkin->getCheckinDate());
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
 
         if (time() > $end){ // too late

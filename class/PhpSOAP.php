@@ -1,10 +1,11 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'exception/SOAPException.php');
-PHPWS_Core::initModClass('hms', 'exception/BannerException.php');
-PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
-PHPWS_Core::initModClass('hms', 'exception/MealPlanExistsException.php');
+
+use \Homestead\exception\SOAPException;
+use \Homestead\exception\BannerException;
+use \Homestead\exception\StudentNotFoundException;
+use \Homestead\exception\MealPlanExistsException;
 
 /**
  * PhpSOAP Class - Singleton implementation of SOAP class.
@@ -27,7 +28,7 @@ class PhpSOAP extends SOAP
     {
         parent::__construct($username,$userType);
         ini_set('soap.wsdl_cache_enabled', 0);
-        $this->client = new SoapClient('file://' . PHPWS_SOURCE_DIR . WSDL_FILE_PATH, array('trace'=>true, 'connection_timeout'=>30));
+        $this->client = new \SoapClient('file://' . PHPWS_SOURCE_DIR . WSDL_FILE_PATH, array('trace'=>true, 'connection_timeout'=>30));
     }
 
     public function getStudentProfile($bannerId, $term)
@@ -35,12 +36,12 @@ class PhpSOAP extends SOAP
 
         // Sanity checking on Banner Id
         if(empty($bannerId) || is_null($bannerId) || !isset($bannerId)){
-            throw new InvalidArgumentException('Missing Banner Id.');
+            throw new \InvalidArgumentException('Missing Banner Id.');
         }
 
         // Sanity checking on the term
         if(empty($term) || is_null($term) || !isset($term)){
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         $params = array('User'      => $this->currentUser,
@@ -52,7 +53,7 @@ class PhpSOAP extends SOAP
 
         try{
             $response = $this->client->GetStudentProfile($params);
-        }catch(SoapFault $e){
+        }catch(\SoapFault $e){
             throw new SOAPException($e->getMessage(), $e->getCode(), 'getStudentProfile', $params);
         }
 
@@ -65,7 +66,7 @@ class PhpSOAP extends SOAP
     {
         // Sanity checking on Banner Id
         if(empty($bannerId) || is_null($bannerId) || !isset($bannerId)){
-            throw new InvalidArgumentException('Missing Banner Id.');
+            throw new \InvalidArgumentException('Missing Banner Id.');
         }
 
         $params = array('User'=>$this->currentUser,
@@ -74,7 +75,7 @@ class PhpSOAP extends SOAP
 
         try{
             $response = $this->client->getUserName($params);
-        }catch(SoapFault $e){
+        }catch(\SoapFault $e){
             throw new SOAPException($e->getMessage(), $e->getCode(), 'getUsername', $params);
         }
 
@@ -91,7 +92,7 @@ class PhpSOAP extends SOAP
     public function getBannerId($username)
     {
         if(empty($username) || is_null($username) || !isset($username)){
-            throw new InvalidArgumentException('Missing username');
+            throw new \InvalidArgumentException('Missing username');
         }
 
         $params = array('User'      => $this->currentUser,
@@ -100,7 +101,7 @@ class PhpSOAP extends SOAP
 
         try{
             $response = $this->client->GetBannerID($params);
-        }catch(SoapFault $e){
+        }catch(\SoapFault $e){
             throw new SOAPException($e->getMessage(), $e->getCode(), 'getUsername', $params);
         }
 
@@ -129,7 +130,7 @@ class PhpSOAP extends SOAP
 
         // Sanity checking on the term
         if(empty($term) || is_null($term) || !isset($term)){
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         $bannerId = $this->getBannerId($username);
@@ -141,7 +142,7 @@ class PhpSOAP extends SOAP
 
         try{
             $response = $this->client->GetStudentProfile($params);
-        }catch(SoapFault $e){
+        }catch(\SoapFault $e){
             throw new SOAPException($e->getMessage(), $e->getCode(), 'isValidStudent', $params);
         }
 
@@ -157,7 +158,7 @@ class PhpSOAP extends SOAP
     public function hasParentPin($bannerId)
     {
         if(empty($bannerId) || is_null($bannerId) || !isset($bannerId)){
-            throw new InvalidArgumentException('Missing Banner Id.');
+            throw new \InvalidArgumentException('Missing Banner Id.');
         }
 
         $params = array('User'       => $this->currentUser,
@@ -165,7 +166,7 @@ class PhpSOAP extends SOAP
 
         try {
             $response = $this->client->HasParentPin($params);
-        }catch(SoapFault $e){
+        }catch(\SoapFault $e){
             throw new SOAPException($e->getMessage(), $e->getCode(), 'isValidStudent', $params);
         }
 
@@ -189,11 +190,11 @@ class PhpSOAP extends SOAP
     public function getParentAccess($bannerId, $parentPin)
     {
         if(empty($bannerId) || is_null($bannerId) || !isset($bannerId)){
-            throw new InvalidArgumentException('Missing Banner Id.');
+            throw new \InvalidArgumentException('Missing Banner Id.');
         }
 
         if(empty($parentPin) || is_null($parentPin) || !isset($parentPin)){
-            throw new InvalidArgumentException('Missing parent PIN.');
+            throw new \InvalidArgumentException('Missing parent PIN.');
         }
 
         $params = array('User'      => $this->currentUser,
@@ -202,7 +203,7 @@ class PhpSOAP extends SOAP
 
         try {
             $response = $this->client->getParentAccess($params);
-        }catch(SoapFault $e){
+        }catch(\SoapFault $e){
             throw new SOAPException($e->getMessage(), $e->getCode(), 'getParentAccess', $params);
         }
 
@@ -214,11 +215,11 @@ class PhpSOAP extends SOAP
     public function createHousingApp($bannerId, $term)
     {
         if(empty($bannerId) || is_null($bannerId) || !isset($bannerId)){
-            throw new InvalidArgumentException('Missing BannerID');
+            throw new \InvalidArgumentException('Missing BannerID');
         }
 
         if(empty($term) || is_null($term) || !isset($term)){
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         $params = array(
@@ -231,7 +232,7 @@ class PhpSOAP extends SOAP
 
         try{
             $response = $this->client->CreateHousingApp($params);
-        }catch(SoapFault $e){
+        }catch(\SoapFault $e){
             throw new SOAPException($e->getMessage(), $e->getCode(), 'createHousingApp', $params);
         }
 
@@ -284,7 +285,7 @@ class PhpSOAP extends SOAP
 
         try{
             $response = $this->client->RemoveRoomAssignment($params);
-        }catch(SoapFault $e){
+        }catch(\SoapFault $e){
             throw new SOAPException($e->getMessage(), $e->getCode(), 'removeRoomAssignment', $params);
         }
 
@@ -308,7 +309,7 @@ class PhpSOAP extends SOAP
 
         try{
             $response = $this->client->CreateMealPlan($params);
-        }catch(SoapFault $e){
+        }catch(\SoapFault $e){
             throw new SOAPException($e->getMessage(), $e->getCode(), 'CreateMealPlan', $params);
         }
 
@@ -336,7 +337,7 @@ class PhpSOAP extends SOAP
 
         try{
             $response = $this->client->GetHousMealRegister($params);
-        }catch(SoapFault $e){
+        }catch(\SoapFault $e){
             throw new SOAPException($e->getMessage(), $e->getCode(), 'getHousMealRegister', $params);
         }
 
@@ -354,7 +355,7 @@ class PhpSOAP extends SOAP
 
         try{
             $response = $this->client->GetBannerIDbyBuildingRoom($params);
-        }catch(SoapFault $e){
+        }catch(\SoapFault $e){
             throw new SOAPException($e->getMessage(), $e->getCode(), 'getBannerIdByBuildingRoom', $params);
         }
 
@@ -376,7 +377,7 @@ class PhpSOAP extends SOAP
 
         try{
             $response = $this->client->SetHousingWaiver($params);
-        }catch(SoapFault $e){
+        }catch(\SoapFault $e){
             throw new SOAPException($e->getMessage(), $e->getCode(), 'setHousingWaiver', $params);
         }
 
@@ -398,7 +399,7 @@ class PhpSOAP extends SOAP
 
         try{
             $response = $this->client->ClearHousingWaiver($params);
-        }catch(SoapFault $e){
+        }catch(\SoapFault $e){
             throw new SOAPException($e->getMessage(), $e->getCode(), 'clearHousingWaiver', $params);
         }
 
@@ -426,7 +427,7 @@ class PhpSOAP extends SOAP
 
         try {
             $response = $this->client->AddRoomDamageToStudentAccount($params);
-        }catch(SoapFault $e){
+        }catch(\SoapFault $e){
             throw new SOAPException($e->getMessage(), $e->getCode(), 'AddRoomDamageToStudentAccount', $params);
         }
 
@@ -452,7 +453,7 @@ class PhpSOAP extends SOAP
 
         try {
             $response = $this->client->MoveRoomAssignment($params);
-        }catch(SoapFault $e){
+        }catch(\SoapFault $e){
             throw new SOAPException($e->getMessage(), $e->getCode(), 'MoveRoomAssignmentResult', $params);
         }
 

@@ -2,6 +2,7 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
 define('LO_SINGLE_GENDER', 1);
 define('LO_COED', 2);
 

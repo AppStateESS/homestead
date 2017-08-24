@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\exception\HMSException;
+
 class PreferencesRoommatePairingStrategy extends RoommatePairingStrategy {
 
     private $values;
@@ -57,7 +59,7 @@ class PreferencesRoommatePairingStrategy extends RoommatePairingStrategy {
                 }
                 $v->increment();
             }
-        } catch (CanNotIncrementException $e) {}
+        } catch (HMSException $e) {}
 
         return $k;
     }
@@ -74,8 +76,6 @@ class PreferencesRoommatePairingStrategy extends RoommatePairingStrategy {
         $app->smoking_preference;
     }
 }
-
-class CanNotIncrementException extends Exception {}
 
 class PreferenceValues
 {
@@ -121,7 +121,7 @@ class PreferenceValues
                       if($this->gender < 1) {
                         $this->gender = 1;
                       } else {
-                        throw new CanNotIncrementException();
+                        throw new HMSException("Can Not Increment.");
                       }
                     }
                 }

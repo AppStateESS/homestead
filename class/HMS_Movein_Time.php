@@ -62,7 +62,6 @@ class HMS_Movein_Time
 
     public function get_formatted_begin_end()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         // Check for multi-day move in time. If days-of-month aren't equal then it'multi-day move in.
         if(date('d', $this->begin_timestamp) != date('d', $this->end_timestamp)){
             // Multi-day move in time.
@@ -94,7 +93,6 @@ class HMS_Movein_Time
     public static function get_movein_times_array($term = NULL)
     {
         if(!isset($term)){
-            PHPWS_Core::initModClass('hms', 'Term.php');
             $term = Term::getSelectedTerm();
         }
 

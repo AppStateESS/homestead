@@ -34,8 +34,6 @@ class RlcApplicationMenuView extends View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         $tpl = array();
 
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
@@ -69,7 +67,6 @@ class RlcApplicationMenuView extends View {
 
             // The student can also delete their application if
             // they aren't already assigned
-            PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
             if(!HMS_RLC_Assignment::checkForAssignment(UserStatus::getUsername(), $this->term)){
 
                 $delCmd = CommandFactory::getCommand('DeleteRlcApplication');

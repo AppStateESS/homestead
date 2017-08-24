@@ -2,6 +2,10 @@
 
 namespace Homestead;
 
+use \Homestead\exception\StudentNotFoundException;
+use \Homestead\exception\DatabaseException;
+use \Homestead\exception\PermissionException;
+use \Homestead\exception\HallStructureException;
 use \PHPWS_Error;
 use \PHPWS_DB;
 
@@ -59,21 +63,15 @@ class HMS_Bed extends HMS_Item {
 
         try {
             $new_bed->save();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw $e;
         }
         // Copy assignment
         if ($assignments) {
             // echo "loading assignments for this bed<br>";
-            PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-            PHPWS_Core::initModClass('hms', 'Term.php');
-            PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-            PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-            PHPWS_Core::initModClass('hms', 'MealPlanFactory.php');
-
             try {
                 $this->loadAssignment();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 throw $e;
             }
 
@@ -83,13 +81,13 @@ class HMS_Bed extends HMS_Item {
                         $student = StudentFactory::getStudentByUsername($this->_curr_assignment->asu_username, Term::getCurrentTerm());
                         //$app = HousingApplication::getApplicationByUser($this->_curr_assignment->asu_username, Term::getCurrentTerm());
                     } catch (StudentNotFoundException $e) {
-                        NQ::simple('hms', hms\NotificationView::ERROR, 'Could not copy assignment for ' . $this->_curr_assignment->asu_username);
+                        NQ::simple('hms', NotificationView::ERROR, 'Could not copy assignment for ' . $this->_curr_assignment->asu_username);
                         return;
                     }
 
                     $note = "Assignment copied from " . Term::getPrintableCurrentTerm() . " to " . Term::toString($to_term);
                     HMS_Assignment::assignStudent($student, $to_term, null, $new_bed->id, $note, false, $this->_curr_assignment->getReason());
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     throw $e;
                 }
 
@@ -148,7 +146,6 @@ class HMS_Bed extends HMS_Item {
 
     public function loadRoom()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         $result = new HMS_Room($this->room_id);
         if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
@@ -175,8 +172,6 @@ class HMS_Bed extends HMS_Item {
 
     public function get_assignee()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         if (!$this->loadAssignment()) {
             return false;
         }
@@ -204,7 +199,7 @@ class HMS_Bed extends HMS_Item {
     public function delete()
     {
         if (is_null($this->id) || !isset($this->id)) {
-            throw new InvalidArgumentException('Invalid bed id.');
+            throw new \InvalidArgumentException('Invalid bed id.');
         }
 
         $db = new PHPWS_DB('hms_bed');
@@ -272,7 +267,7 @@ class HMS_Bed extends HMS_Item {
         if (isset($this->_curr_assignment)) {
             $link_re = '';
             $link_un = '';
-            if (UserStatus::isAdmin() && Current_User::allow('hms', 'assignment_maintenance')) {
+            if (UserStatus::isAdmin() && \Current_User::allow('hms', 'assignment_maintenance')) {
                 $reAssignCmd = CommandFactory::getCommand('ShowAssignStudent');
                 $reAssignCmd->setUsername($this->_curr_assignment->asu_username);
                 $reAssignCmd->setBedId($this->id);
@@ -292,7 +287,7 @@ class HMS_Bed extends HMS_Item {
             return $student->getProfileLink() . ' ' . $link_re . ' ' . $link_un;
         } else {
             $text = '&lt;unassigned&gt';
-            if (UserStatus::isAdmin() && Current_User::allow('hms', 'assignment_maintenance')) {
+            if (UserStatus::isAdmin() && \Current_User::allow('hms', 'assignment_maintenance')) {
                 $assignCmd = CommandFactory::getCommand('ShowAssignStudent');
                 $assignCmd->setBedId($this->id);
                 if ($newWindow) {
@@ -315,7 +310,7 @@ class HMS_Bed extends HMS_Item {
         $tags['RA'] = $this->ra_roommate ? 'Yes' : 'No';
 
         $this->loadAssignment();
-        if ($this->_curr_assignment == NULL && Current_User::allow('hms', 'bed_structure') && UserStatus::isAdmin()) {
+        if ($this->_curr_assignment == NULL && \Current_User::allow('hms', 'bed_structure') && UserStatus::isAdmin()) {
             $deleteBedCmd = CommandFactory::getCommand('DeleteBed');
             $deleteBedCmd->setBedId($this->id);
             $deleteBedCmd->setRoomId($this->room_id);
@@ -659,13 +654,12 @@ class HMS_Bed extends HMS_Item {
     public static function addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raRoommate, $intlReserved, $raBed, $persistentId)
     {
         // Check permissions
-        if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'bed_structure')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+        if (!UserStatus::isAdmin() || !\Current_User::allow('hms', 'bed_structure')) {
             throw new PermissionException('You do not have permission to add a bed.');
         }
 
         if ($raBed != 0 && $raBed != 1) {
-            throw new InvalidArgumentException('Invalid RA bed flag.');
+            throw new \InvalidArgumentException('Invalid RA bed flag.');
         }
 
         // Create a new bed object
@@ -693,13 +687,12 @@ class HMS_Bed extends HMS_Item {
 
     public static function deleteBed($bedId)
     {
-        if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'bed_structure')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+        if (!UserStatus::isAdmin() || !\Current_User::allow('hms', 'bed_structure')) {
             throw new PermissionException('You do not have permission to delete a bed.');
         }
 
         if (!isset($bedId)) {
-            throw new InvalidArgumentException('Invalid bed id.');
+            throw new \InvalidArgumentException('Invalid bed id.');
         }
 
         // Create the bed object
@@ -709,7 +702,6 @@ class HMS_Bed extends HMS_Item {
         $bed->loadAssignment();
 
         if ($bed->_curr_assignment != NULL) {
-            PHPWS_Core::initModClass('hms', 'exception/HallStructureException.php');
             throw new HallStructureException('A student is currently assigned to that bed and therefore it cannot deleted.');
         }
 
@@ -747,7 +739,7 @@ class HMS_Bed extends HMS_Item {
 
         $pager->setDefaultLimit(50);
 
-        if (Current_User::allow('hms', 'bed_structure') && UserStatus::isAdmin()) {
+        if (\Current_User::allow('hms', 'bed_structure') && UserStatus::isAdmin()) {
             $addBedCmd = CommandFactory::getCommand('ShowAddBed');
             $addBedCmd->setRoomId($room_id);
             $page_tags['ADD_BED_URI'] = $addBedCmd->getURI();

@@ -17,7 +17,7 @@ class RoommateProfileView extends View {
     {
         require(PHPWS_SOURCE_DIR . 'mod/hms/inc/profile_options.php');
 
-        $majors = hms\MajorFactory::getMajorsList();
+        $majors = MajorFactory::getMajorsList();
 
         $tpl = array();
         $profile_form = new \PHPWS_Form('profile_form');

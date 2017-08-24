@@ -1,7 +1,6 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'View.php');
 
 /**
  * ReportView - Parent class for various ReportView subclasses.

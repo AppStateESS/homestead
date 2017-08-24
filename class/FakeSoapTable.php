@@ -2,8 +2,7 @@
 
 namespace Homestead;
 
-use \hms\exception\StudentNotFoundException;
-use \hms\SOAP;
+use \Homestead\exception\StudentNotFoundException;
 use \phpws2\Database;
 
 // Seconds of delay you want to replicate for each query.
@@ -22,15 +21,15 @@ class TestSOAP extends SOAP
     {
         // Sanity checking on the username
         if (empty($bannerId) || is_null($bannerId) || !isset($bannerId)) {
-            throw new InvalidArgumentException('Bad BannerId.');
+            throw new \InvalidArgumentException('Bad BannerId.');
         }
 
         // Sanity checking on the term
         if (empty($term) || is_null($term) || !isset($term)) {
-            throw new InvalidArgumentException('Bad term');
+            throw new \InvalidArgumentException('Bad term');
         }
 
-        $student = new stdClass();
+        $student = new \stdClass();
 
         $db = PdoFactory::getPdoInstance();
 
@@ -43,7 +42,7 @@ class TestSOAP extends SOAP
         if (empty($result)) {
             throw new StudentNotFoundException('User not found', 0, $bannerId);
         }
-        $student = new stdClass();
+        $student = new \stdClass();
         $student->banner_id = $result['banner_id'];
         $student->user_name = $result['username'];
         $student->last_name = $result['last_name'];
@@ -196,20 +195,20 @@ class TestSOAP extends SOAP
     public function getHousMealRegister($username, $term, $opt)
     {
         // Assemble the housing_app object
-        $housing_app = new stdClass();
+        $housing_app = new \stdClass();
         $housing_app->plan_code = 'HOME';
         $housing_app->status_code = 'AC';
         $housing_app->status_date = '2007-02-20';
 
         // Assemble the room_assign object
-        $room_assign = new stdClass();
+        $room_assign = new \stdClass();
         $room_assign->bldg_code = 'JTR';
         $room_assign->room_code = 02322;
         $room_assign->status_code = 'AC';
         $room_assign->status_date = '2008-01-14';
 
         // Assemble the meal_assign object
-        $meal_assign = new stdClass();
+        $meal_assign = new \stdClass();
         $meal_assign->plan_code = 1;
         $meal_assign->status_code = 'AC';
         $meal_assign->status_date = '2007-11-20';

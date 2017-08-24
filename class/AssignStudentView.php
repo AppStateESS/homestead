@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\exception\PermissionException;
+
 /**
  * View for showing the Assign Student interface.
  *
@@ -34,11 +36,8 @@ class AssignStudentView extends View {
     public function show()
     {
         \PHPWS_Core::initCoreClass('Form.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
-        if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+        if (!UserStatus::isAdmin() || !\Current_User::allow('hms', 'assignment_maintenance')) {
             throw new PermissionException('You do not have permission to unassign students.');
         }
 

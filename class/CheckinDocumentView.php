@@ -2,10 +2,6 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-
 class CheckinDocumentView extends View {
 
     private $checkin;

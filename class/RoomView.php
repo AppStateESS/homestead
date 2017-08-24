@@ -109,7 +109,7 @@ class RoomView extends View {
             $roomGenders = array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, AUTO=>AUTO_DESC);
 
             // Check if the user is allowed to set rooms to co-ed, if so add Co-ed to the drop down
-            if(Current_User::allow('hms', 'coed_rooms')){
+            if(\Current_User::allow('hms', 'coed_rooms')){
                 $roomGenders[COED] = COED_DESC;
             }
 
@@ -183,9 +183,9 @@ class RoomView extends View {
 
         // if the user has permission to view the form but not edit it then
         // disable it
-        if(    Current_User::allow('hms', 'room_view')
-        && !Current_User::allow('hms', 'room_attributes')
-        && !Current_User::allow('hms', 'room_structure'))
+        if(    \Current_User::allow('hms', 'room_view')
+        && !\Current_User::allow('hms', 'room_attributes')
+        && !\Current_User::allow('hms', 'room_structure'))
         {
             $form_vars = get_object_vars($form);
             $elements = $form_vars['_elements'];
@@ -218,7 +218,7 @@ class RoomView extends View {
         $tpl['ROOM_DAMAGE_LIST'] = $this->roomDamagePager();
 
 
-        if(Current_User::allow('hms', 'add_room_dmg')){
+        if(\Current_User::allow('hms', 'add_room_dmg')){
             $dmgCmd = CommandFactory::getCommand('ShowAddRoomDamage');
             $dmgCmd->setRoom($this->room);
             $tpl['ADD_DAMAGE_URI']  = $dmgCmd->getURI();
@@ -230,7 +230,6 @@ class RoomView extends View {
     private function roomDamagePager()
     {
         \PHPWS_Core::initCoreClass('DBPager.php');
-        PHPWS_Core::initModClass('hms', 'RoomDamage.php');
 
         $pager = new DBPager('hms_room_damage', 'RoomDamageDb');
         $pager->db->addJoin('LEFT OUTER', 'hms_room_damage', 'hms_damage_type', 'damage_type', 'id');

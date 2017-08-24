@@ -2,7 +2,7 @@
 
 namespace Homestead;
 
-use \hms\DocusignClientFactory;
+use \Homestead\Docusign\EnvelopeFactory;
 
 /**
  * ProfileHousingAppList - View to show the list of houing apps on the Student Profile.
@@ -78,7 +78,7 @@ class ProfileHousingAppList extends View
                 $row['row_style'] = 'warning';
             } else {
                 // Show Cancel Command, if user has permission to cancel apps
-                if (Current_User::allow('hms', 'cancel_housing_application')) {
+                if (\Current_User::allow('hms', 'cancel_housing_application')) {
                     $cancelCmd = CommandFactory::getCommand('ShowCancelHousingApplication');
                     $cancelCmd->setHousingApp($app);
                     $cancel = $cancelCmd->getURI();
@@ -87,7 +87,7 @@ class ProfileHousingAppList extends View
 
                 $contract = ContractFactory::getContractByStudentTerm($this->student, $app->getTerm());
                 if($contract !== false){
-                    $envelope = \Docusign\EnvelopeFactory::getEnvelopeById($this->docusignClient, $contract->getEnvelopeId());
+                    $envelope = EnvelopeFactory::getEnvelopeById($this->docusignClient, $contract->getEnvelopeId());
                     $row['contract'] = $envelope->getEnvelopeViewURI($this->docusignClient);
                 } else {
                     $row['contract'] = 'No Contract';

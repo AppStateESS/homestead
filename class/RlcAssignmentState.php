@@ -23,7 +23,7 @@ abstract class RlcAssignmentState {
 
     public function getStateName(){
         if($this->stateName == null){
-            throw new InvalidArgumentException('Invalid RlcAssignmentState name.');
+            throw new \InvalidArgumentException('Invalid RlcAssignmentState name.');
         }
 
         return $this->stateName;

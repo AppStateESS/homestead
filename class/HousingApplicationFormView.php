@@ -2,9 +2,6 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
-PHPWS_Core::initModClass('hms', 'MealPlan.php');
-
 class HousingApplicationFormView extends View
 {
     private $student;

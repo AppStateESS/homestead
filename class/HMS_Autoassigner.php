@@ -11,14 +11,6 @@ class HMS_Autoassigner
 {
     public function auto_assign($test = 0)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php'); // TODO update this to use HousignAssignment
-        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'BannerQueue.php');
-
         $term = Term::get_selected_term();
 
         // In both cases: Random, and include Banner info
@@ -114,7 +106,7 @@ class HMS_Autoassigner
             }
 
             // Prepare for assignment
-            $room = &new HMS_Room($room);
+            $room = new HMS_Room($room);
             $room->loadBeds();
 
             $bed_a_text = $room->_beds[0]->get_banner_building_code() . ' ' . $room->_beds[0]->banner_id;
@@ -216,7 +208,7 @@ class HMS_Autoassigner
             }
 
             // Prepare for assignment
-            $room = &new HMS_Room($room);
+            $room = new HMS_Room($room);
             $room->loadBeds();
 
             $bed_a_text = $room->_beds[0]->get_banner_building_code() . ' ' . $room->_beds[0]->banner_id;
@@ -355,7 +347,7 @@ class HMS_Autoassigner
         $assignment->save();
 
         HMS_Activity_Log::log_activity($user, ACTIVITY_AUTO_ASSIGNED,
-            Current_User::getUsername(), "$term $bbc $bid");
+            \Current_User::getUsername(), "$term $bbc $bid");
 
         return TRUE;
     }

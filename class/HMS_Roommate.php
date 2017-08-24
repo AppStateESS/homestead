@@ -2,6 +2,10 @@
 
 namespace Homestead;
 
+use \Homestead\exception\RoommateException;
+use \Homestead\exception\RoommateCompatibilityException;
+use \Homestead\exception\DatabaseException;
+use \Homestead\exception\StudentNotFoundException;
 use \phpws2\Database;
 use \PHPWS_Error;
 use \PHPWS_DB;
@@ -15,9 +19,6 @@ use \PHPWS_DB;
 
 // The number of seconds before a roommate request expires, (hrs * 60 * 60)
 define('ROOMMATE_REQ_TIMEOUT', 259200); // 259200 = 72 hours
-
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'exception/RoommateException.php');
 
 /**
  * HMS Roommate Class - Represents a freshmen roommate request object
@@ -66,7 +67,6 @@ class HMS_Roommate
 
         $result = $this->is_request_valid();
         if ($result != E_SUCCESS) {
-            PHPWS_Core::initModClass('hms', 'exception/RoommateCompatibilityException.php');
             throw new RoommateCompatibilityException($result);
         }
 
@@ -77,7 +77,6 @@ class HMS_Roommate
     {
         $result = $this->can_live_together();
         if ($result != E_SUCCESS) {
-            PHPWS_Core::initModClass('hms', 'exception/RoommateCompatibilityException.php');
             throw new RoommateCompatibilityException($result);
         }
 
@@ -140,7 +139,6 @@ class HMS_Roommate
 
     public static function getByUsernames($a, $b, $term)
     {
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
 
         $query = $db->prepare("SELECT * FROM hms_roommate WHERE term = :term AND ((requestor ILIKE :usera AND requestee ILIKE :userb) OR (requestor ILIKE :userb AND requestee ILIKE :usera))");
@@ -205,7 +203,6 @@ class HMS_Roommate
      */
     public static function has_confirmed_roommate($asu_username, $term)
     {
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
 
         $query = $db->prepare("SELECT COUNT(*) FROM hms_roommate WHERE term = :term AND (requestor ILIKE :user OR requestee ILIKE :user) AND confirmed = 1");
@@ -241,11 +238,10 @@ class HMS_Roommate
         $db->addColumn('requestor');
         $db->addColumn('requestee');
 
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
-	*/
+	    */
 
-	$db = Database::newDB();
+	    $db = Database::newDB();
         $db = $db->getPdo();
 
         $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term AND confirmed = 1");
@@ -284,12 +280,11 @@ class HMS_Roommate
         $db->addColumn('requestee');
         $result = $db->select('row');
 
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
-	*/
+	    */
 
         $db = Database::newDB();
-	$db = $db->getPdo();
+	    $db = $db->getPdo();
 
         $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term AND confirmed = 0 and requested_on >= :ttl");
         $stmt->bindParam(':user', $asu_username);
@@ -413,7 +408,6 @@ class HMS_Roommate
         }
         */
 
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
 
         $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term");
@@ -445,7 +439,6 @@ class HMS_Roommate
         }
         */
 
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
 
         $query = $db->prepare("SELECT * FROM hms_roommate WHERE (requestee ILIKE :user OR requestor ILIKE :user) AND term = :term AND confirmed = 0");
@@ -459,7 +452,6 @@ class HMS_Roommate
             return true;
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         foreach ($requests as $request) {
             HMS_Activity_Log::log_activity($request->requestor, ACTIVITY_AUTO_CANCEL_ROOMMATE_REQ, UserStatus::getUsername(), "$request->requestee: Due to confirmed roommate");
             HMS_Activity_Log::log_activity($request->requestee, ACTIVITY_AUTO_CANCEL_ROOMMATE_REQ, UserStatus::getUsername(), "$request->requestor: Due to confirmed roommate");
@@ -475,7 +467,6 @@ class HMS_Roommate
      */
     public function check_rlc_applications()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         $result  = HMS_RLC_Application::checkForApplication($this->requestor, $this->term, false);
         $resultb = HMS_RLC_Application::checkForApplication($this->requestee, $this->term, false);
 
@@ -507,7 +498,6 @@ class HMS_Roommate
      */
     public function check_rlc_assignments()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
         $resulta = HMS_RLC_Assignment::checkForAssignment($this->requestor, $this->term);
         $resultb = HMS_RLC_Assignment::checkForAssignment($this->requestee, $this->term);
 
@@ -644,7 +634,6 @@ class HMS_Roommate
             return E_ROOMMATE_GENDER_MISMATCH;
         }
 
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         // Make sure the requestee has filled out an application
         if (HousingApplication::checkForApplication($requestee, $term) === false) {
             return E_ROOMMATE_NO_APPLICATION;

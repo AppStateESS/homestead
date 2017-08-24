@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
+
 /**
  * The RoommateProfile class
  * Implements the RoommateProfile object and methods to load/save
@@ -278,7 +280,6 @@ class RoommateProfile {
             throw new DatabaseException($result->toString());
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_PROFILE_CREATED, UserStatus::getUsername(), '');
 
         return $result;

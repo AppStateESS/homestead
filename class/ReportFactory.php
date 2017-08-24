@@ -91,7 +91,7 @@ class ReportFactory {
      *
      * @param integer $reportId
      * @return Report
-     * @throws DatabaseExecption
+     * @throws DatabaseException
      * @throws InvalidArgumentException
      */
     public static function getReportById($reportId)
@@ -103,7 +103,7 @@ class ReportFactory {
         $result = $db->select('one');
 
         if(\PHPWS_Error::logIfError($result)){
-            throw new DatabaseExecption($result->toString());
+            throw new DatabaseException($result->toString());
         }
 
         if(is_null($result)){

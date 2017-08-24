@@ -6,8 +6,6 @@ class LotterySettingsFormView extends View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-
         $tpl = array();
 
         $form = new \PHPWS_Form();

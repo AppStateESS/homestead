@@ -1,20 +1,16 @@
 <?php
 
 namespace Homestead;
-require_once PHPWS_SOURCE_DIR . 'mod/hms/vendor/autoload.php';
 
 use \Michelf\Markdown;
+require_once PHPWS_SOURCE_DIR . 'mod/hms/vendor/autoload.php';
+require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
 
 /**
  * HMS_Email class - A class which handles the various Email delivery needs of HMS.
  *
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  */
-
-require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
-
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
 class HMS_Email{
 
@@ -69,7 +65,7 @@ class HMS_Email{
         }
 
         # Create a Mail object and set it up
-        \\PHPWS_Core::initCoreClass('Mail.php');
+        \PHPWS_Core::initCoreClass('Mail.php');
         $message = new PHPWS_Mail();
 
         $message->addSendTo($to);
@@ -136,9 +132,9 @@ class HMS_Email{
     }
 
     /**
-     * Log a Swift_Message object to a text file
+     * Log a \Swift_Message object to a text file
      */
-    public static function logSwiftmailMessageLong(Swift_Message $message)
+    public static function logSwiftmailMessageLong(\Swift_Message $message)
     {
         $fd = fopen(PHPWS_SOURCE_DIR . 'logs/email.log', 'a');
         fprintf($fd, "=======================\n");
@@ -176,7 +172,7 @@ class HMS_Email{
      * PHPWS_Email has a built-in simple logging function.  This replicates
      * the functionality of that function for SwiftMail.
      */
-    public static function logSwiftmailMessage(Swift_Message $message)
+    public static function logSwiftmailMessage(\Swift_Message $message)
     {
         $id      = 'id:'       . $message->getId();
         $from    = 'from:'     . $message->getSender();
@@ -189,7 +185,7 @@ class HMS_Email{
 
         $subject = 'subject:'  . $message->getSubject();
         $module  = 'module:'   . PHPWS_Core::getCurrentModule();
-        $user    = 'user:'     . (Current_User::isLogged() ? Current_User::getUsername() : '');
+        $user    = 'user:'     . (\Current_User::isLogged() ? \Current_User::getUsername() : '');
 
         PHPWS_Core::log("$id $module $user $subject $from $to $cc $bcc $replyto", 'phpws-mail.log', 'mail');
     }
@@ -221,8 +217,6 @@ class HMS_Email{
 
     public static function send_lottery_invite($to, $name, $year)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         $tpl = array();
 
         $tpl['NAME']        = $name;
@@ -233,8 +227,6 @@ class HMS_Email{
 
     public static function send_lottery_invite_reminder($to, $name, $year)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         $tpl = array();
 
         $tpl['NAME']        = $name;
@@ -272,8 +264,6 @@ class HMS_Email{
 
     public static function send_lottery_application_confirmation(Student $student, $year)
     {
-        PHPWS_Core::initModClass('hms', 'Term.php');
-
         $tpl = array();
 
         $tpl['NAME'] = $student->getName();
@@ -285,7 +275,6 @@ class HMS_Email{
 
     public static function send_lottery_assignment_confirmation(Student $to, $location, $term)
     {
-        PHPWS_Core::initModClass('hms', 'Term.php');
         $tpl = array();
 
         $tpl['NAME']     = $to->getName();
@@ -371,8 +360,6 @@ class HMS_Email{
      */
     public static function send_hms_application_confirmation(Student $to, $term)
     {
-        PHPWS_Core::initModClass('hms', 'Term.php');
-
         $tpl = array();
         $tpl['NAME'] = $to->getName();
 
@@ -393,8 +380,6 @@ class HMS_Email{
      * @param $term The term the emergency contact info was updated for
      */
     public static function send_emergency_contact_updated_confirmation(Student $to, $term) {
-        PHPWS_Core::initModClass('hms', 'Term.php');
-
         $tpl = array();
         $tpl['NAME'] = $to->getName();
         $tpl['TERM'] = Term::toString($term);
@@ -407,8 +392,6 @@ class HMS_Email{
      ********************/
     public static function send_request_emails(HMS_Roommate $request)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-
         $requestorStudent = StudentFactory::getStudentByUsername($request->requestor, $request->term);
         $requesteeStudent = StudentFactory::getStudentByUsername($request->requestee, $request->term);
 
@@ -433,8 +416,6 @@ class HMS_Email{
 
     public static function send_confirm_emails(HMS_Roommate $request)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-
         $requestorStudent = StudentFactory::getStudentByUsername($request->requestor, $request->term);
         $requesteeStudent = StudentFactory::getStudentByUsername($request->requestee, $request->term);
 
@@ -455,8 +436,6 @@ class HMS_Email{
 
     public static function send_reject_emails(HMS_Roommate $request)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-
         $requestorStudent = StudentFactory::getStudentByUsername($request->requestor, $request->term);
         $requesteeStudent = StudentFactory::getStudentByUsername($request->requestee, $request->term);
 
@@ -479,8 +458,6 @@ class HMS_Email{
 
     public static function send_break_emails(HMS_Roommate $request, $breaker)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-
         $breakee = $request->get_other_guy($breaker);
 
         $breakerStudent = StudentFactory::getStudentByUsername($breaker, $request->term);
@@ -503,8 +480,6 @@ class HMS_Email{
 
     public static function send_cancel_emails(HMS_Roommate $request)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-
         $requestorStudent = StudentFactory::getStudentByUsername($request->requestor, $request->term);
         $requesteeStudent = StudentFactory::getStudentByUsername($request->requestee, $request->term);
 
@@ -528,8 +503,6 @@ class HMS_Email{
      *******/
     public static function send_rlc_application_confirmation(Student $to)
     {
-        PHPWS_Core::initModClass('hms', 'Term.php');
-
         $tpl = array();
         $tpl['NAME'] = $to->getName();
         $tpl['TERM'] = Term::toString($to->getApplicationTerm());
@@ -539,8 +512,6 @@ class HMS_Email{
 
     public static function sendRlcApplicationRejected(Student $to, $term)
     {
-        PHPWS_Core::initModClass('hms', 'Term.php');
-
         $tpl = array();
         $tpl['NAME'] = $to->getName();
         $tpl['TERM'] = Term::toString($term);
@@ -599,7 +570,7 @@ class HMS_Email{
 
         $htmlContent = Markdown::defaultTransform($content);
 
-        $message = Swift_Message::newInstance();
+        $message = \Swift_Message::newInstance();
 
         $message->setSubject('Check-in Confirmation');
         $message->setFrom(array(FROM_ADDRESS => SYSTEM_NAME));
@@ -609,7 +580,7 @@ class HMS_Email{
         $message->addPart($htmlContent, 'text/html');
 
         // Attach info card
-        $attachment = Swift_Attachment::newInstance($infoCardView->getPdf()->output('my-pdf-file.pdf', 'S'), 'ResidentInfoCard.pdf', 'application/pdf');
+        $attachment = \Swift_Attachment::newInstance($infoCardView->getPdf()->output('my-pdf-file.pdf', 'S'), 'ResidentInfoCard.pdf', 'application/pdf');
         $message->attach($attachment);
 
         if(EMAIL_TEST_FLAG) {
@@ -617,8 +588,8 @@ class HMS_Email{
             return;
         }
 
-        $transport = Swift_SmtpTransport::newInstance('localhost');
-        $mailer = Swift_Mailer::newInstance($transport);
+        $transport = \Swift_SmtpTransport::newInstance('localhost');
+        $mailer = \Swift_Mailer::newInstance($transport);
 
         $mailer->send($message);
     }
@@ -633,7 +604,7 @@ class HMS_Email{
         $content = \PHPWS_Template::process($tags, 'hms', 'email/checkoutConfirmation.tpl');
         $htmlContent = Markdown::defaultTransform($content);
 
-        $message = Swift_Message::newInstance();
+        $message = \Swift_Message::newInstance();
 
         $message->setSubject('Check-out Confirmation');
         $message->setFrom(array(FROM_ADDRESS => SYSTEM_NAME));
@@ -643,7 +614,7 @@ class HMS_Email{
         $message->addPart($htmlContent, 'text/html');
 
         // Attach info card
-        //$attachment = Swift_Attachment::newInstance($infoCardView->getPdf()->output('my-pdf-file.pdf', 'S'), 'ResidentInfoCard.pdf', 'application/pdf');
+        //$attachment = \Swift_Attachment::newInstance($infoCardView->getPdf()->output('my-pdf-file.pdf', 'S'), 'ResidentInfoCard.pdf', 'application/pdf');
         //$message->attach($attachment);
 
         if(EMAIL_TEST_FLAG) {
@@ -651,8 +622,8 @@ class HMS_Email{
             return;
         }
 
-        $transport = Swift_SmtpTransport::newInstance('localhost');
-        $mailer = Swift_Mailer::newInstance($transport);
+        $transport = \Swift_SmtpTransport::newInstance('localhost');
+        $mailer = \Swift_Mailer::newInstance($transport);
 
         $mailer->send($message);
     }
@@ -673,7 +644,7 @@ class HMS_Email{
      * @param $subject string The subject line
      * @param $tags Array The template tags to replace
      * @param $tpl string The template file (module 'hms' is implied)
-     * @return Swift_Message An instance of Swift_Message with text and html parts,
+     * @return \Swift_Message An instance of \Swift_Message with text and html parts,
      *                        from, to, and subject already set up
      */
     public static function makeSwiftmailMessage($to, $subject, $tags, $tpl)
@@ -685,7 +656,7 @@ class HMS_Email{
         $content = \PHPWS_Template::process($tags, 'hms', $tpl);
         $htmlContent = Markdown::defaultTransform($content);
 
-        $message = Swift_Message::newInstance();
+        $message = \Swift_Message::newInstance();
 
         $message->setSubject($subject);
         $message->setFrom(array(FROM_ADDRESS => SYSTEM_NAME));
@@ -704,21 +675,21 @@ class HMS_Email{
      * sendSwiftmailMessage
      *
      * Sets up transports so you don't have to; a convenience function to use a sensible
-     * transport to send a Swift_Message object.
+     * transport to send a \Swift_Message object.
      *
-     * You can either make a Swift_Message manually or use
+     * You can either make a \Swift_Message manually or use
      * @see HMS_Email::makeSwiftmailMessageFromSystemToStudent()
      *
-     * @param $message Swift_Message The message to send
+     * @param $message \Swift_Message The message to send
      * @return mixed Whatever comes back from Swift_Mailer::send()
      */
-    public static function sendSwiftmailMessage(Swift_Message $message)
+    public static function sendSwiftmailMessage(\Swift_Message $message)
     {
         if(EMAIL_TEST_FLAG) {
             self::logSwiftmailMessageLong($message);
         } else {
-            $transport = Swift_SmtpTransport::newInstance('localhost');
-            $mailer = Swift_Mailer::newInstance($transport);
+            $transport = \Swift_SmtpTransport::newInstance('localhost');
+            $mailer = \Swift_Mailer::newInstance($transport);
 
             self::logSwiftmailMessage($message);
             return $mailer->send($message);
@@ -765,10 +736,6 @@ class HMS_Email{
      */
     public static function sendRoomChangeParticipantNotice(RoomChangeParticipant $requestor, RoomChangeParticipant $requestee)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-
         $subject = 'Room Change Requested';
         $template = 'email/roomChangeParticipantNotice.tpl';
         $term = Term::getCurrentTerm();
@@ -821,10 +788,6 @@ class HMS_Email{
      */
     public static function sendRoomChangeCurrRDNotice(RoomChangeRequest $request)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClasS('hms', 'HMS_Bed.php');
-
         $subject = 'Room Change Approval Required';
         $template = 'email/roomChangeCurrRDNotice.tpl';
 
@@ -959,10 +922,6 @@ class HMS_Email{
      */
     public static function sendRoomChangeFutureRDNotice(RoomChangeRequest $request)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-
         $subject = 'Room Change Approval Required';
         $template = 'email/roomChangeFutureRDNotice.tpl';
 
@@ -1013,8 +972,6 @@ class HMS_Email{
      */
     public static function sendRoomChangeAdministratorNotice(RoomChangeRequest $r)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $subject = 'Room Change Approval Required';
         $template = 'email/roomChangeAdministratorNotice.tpl';
 
@@ -1044,8 +1001,6 @@ class HMS_Email{
      */
     public static function sendRoomChangeInProcessNotice(RoomChangeRequest $r)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $subject = 'Room Change Approved!';
         $template = 'email/roomChangeApprovalNotice.tpl';
 

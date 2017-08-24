@@ -19,8 +19,6 @@ class LotteryChooseRoomView extends View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-
         $floor  = new HMS_Floor($this->floorId);
 
         $tpl = array();
@@ -28,6 +26,7 @@ class LotteryChooseRoomView extends View {
         $tpl['HALL_FLOOR'] = $floor->where_am_i();
 
         if(isset($floor->floor_plan_image_id) && $floor->floor_plan_image_id != 0){
+            PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
             $file = Cabinet::getFile($floor->floor_plan_image_id);
 
             //if the image loaded properly

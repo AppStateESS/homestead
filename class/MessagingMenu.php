@@ -12,7 +12,7 @@ class MessagingMenu extends CommandMenu {
         //}
 
         if(UserStatus::isAdmin() &&
-                Current_User::allow('hms', 'assignment_notify')){
+                \Current_User::allow('hms', 'assignment_notify')){
             $cmd = CommandFactory::getCommand('JSConfirm');
             $cmd->setLink('Send assignment notifications');
             $cmd->setTitle('Send assignment notification emails');

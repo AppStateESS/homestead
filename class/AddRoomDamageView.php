@@ -2,8 +2,6 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'DamageTypeFactory.php');
-
 /**
  *
  * @author jbooker
@@ -16,7 +14,7 @@ class AddRoomDamageView extends View {
     public function __construct(HMS_Room $room)
     {
         if ($room->getId() == 0) {
-            throw new Exception('Ivalid room object.');
+            throw new \Exception('Ivalid room object.');
         }
 
         $this->room = $room;

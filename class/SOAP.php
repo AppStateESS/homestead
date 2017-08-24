@@ -275,7 +275,7 @@ abstract class SOAP
      * @param String $bannerId
      * @param Integer $term
      * @param String $opt
-     * @return stdClass
+     * @return \stdClass
      * @throws InvalidArgumentException, SOAPException
      */
     public abstract function getHousMealRegister($bannerId, $term, $opt);

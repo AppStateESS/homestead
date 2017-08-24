@@ -2,6 +2,7 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
 use \PHPWS_Error;
 use \PHPWS_DB;
 
@@ -171,7 +172,6 @@ class LotteryApplication extends HousingApplication {
      */
     public function isWinner()
     {
-        PHPWS_Core::initModClass('hms', 'LotteryProcess.php');
         $ttl = INVITE_TTL_HRS * 3600;
 
         if(!is_null($this->invited_on) && ($this->invited_on + $ttl) > time()){
@@ -206,7 +206,6 @@ class LotteryApplication extends HousingApplication {
      * @return Array Array of row tags for this LotteryApplication.
      */
     public function getRowTags(){
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
 
         $template = array();
@@ -231,8 +230,6 @@ class LotteryApplication extends HousingApplication {
      */
     public function specialInterestTags()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $this->load($this->id);
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
 
@@ -266,7 +263,6 @@ class LotteryApplication extends HousingApplication {
      */
     public function specialInterestCsvRow()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
         $tags = array();
 
@@ -283,8 +279,6 @@ class LotteryApplication extends HousingApplication {
      */
     public function waitingListTags()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
 
         $tags = array();
@@ -317,8 +311,6 @@ class LotteryApplication extends HousingApplication {
      */
     public function waitingListCsvTags()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
 
         $tags = array();
@@ -435,7 +427,7 @@ class LotteryApplication extends HousingApplication {
             $pager->addWhere('hms_lottery_application.sorority_pref', $group);
         }else{
             // bad group
-            throw new InvalidArgumentException('Invalid special interest group specified.');
+            throw new \InvalidArgumentException('Invalid special interest group specified.');
         }
 
         $pager->setOrder('hms_lottery_application.special_interest', 'desc');

@@ -2,8 +2,8 @@
 
 namespace Homestead;
 
-use \hms\exception\InvalidConfigurationException;
-use \hms\Docusign\Client;
+use \Homestead\exception\InvalidConfigurationException;
+use \Homestead\Docusign\Client;
 use \PHPWS_Settings;
 
 /**

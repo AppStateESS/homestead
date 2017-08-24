@@ -43,14 +43,8 @@ class ReportRunner
          *
          */
 
-        // Load necessary classes
-        PHPWS_Core::initModClass('hms', 'UserStatus.php');
-        PHPWS_Core::initModClass('hms', 'ReportFactory.php');
-        PHPWS_Core::initModCLass('hms', 'HMS_Email.php');
-
         // Fake a user, in case we need that
         UserStatus::wearMask('HMS System');
-
 
         // Check for any pending reports (scheduled for any time up until now)
         $db = new \PHPWS_DB('hms_report');
@@ -82,7 +76,7 @@ class ReportRunner
                 $reportCtrl->generateReport();
 
                 $report = $reportCtrl->getReport();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 // handle the exception nicely
                 self::emailError(self::formatException($e));
                 exit;
@@ -104,7 +98,7 @@ class ReportRunner
         return;
     }
 
-    private static function formatException(Exception $e)
+    private static function formatException(\Exception $e)
     {
         ob_start();
         echo "Ohes Noes!  An HMS report threw an exception that was not caught!\n\n";
@@ -117,7 +111,7 @@ class ReportRunner
         }
         echo "Remote addr: {$_SERVER['REMOTE_ADDR']}\n\n";
 
-        $user = Current_User::getUserObj();
+        $user = \Current_User::getUserObj();
         if (isset($user) && !is_null($user)) {
             echo "User name: {$user->getUsername()}\n\n";
         } else {
@@ -135,7 +129,6 @@ class ReportRunner
 
     private static function emailError($message)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         //$to = HMSSettings::getUberAdminEmail();
         $to = HMS_Email::get_tech_contacts();
 

@@ -23,9 +23,6 @@ class RoommateSelectionMenuBlockView extends View {
     {
         $tpl = array();
 
-        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         $roommate = HMS_Roommate::get_confirmed_roommate(UserStatus::getUsername(), $this->term);
         $requests = HMS_Roommate::countPendingRequests(UserStatus::getUsername(), $this->term);
 

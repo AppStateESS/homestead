@@ -15,7 +15,6 @@ class RoommateProfileFormView extends View {
     public function show()
     {
         require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/profile_options.php');
-        PHPWS_Core::initModClass('hms','RoommateProfile.php');
 
         $template = array();
 
@@ -118,7 +117,7 @@ class RoommateProfileFormView extends View {
         $profile_form->addCssClass('about_me', 'form-control');
 
         /***** College Life *****/
-        $profile_form->addDropBox('major', hms\MajorFactory::getMajorsList());
+        $profile_form->addDropBox('major', MajorFactory::getMajorsList());
         $profile_form->setLabel('major','My intended academic major: ');
         if($profile_exists){
             $profile_form->setMatch('major',$this->profile->get_text('major'));

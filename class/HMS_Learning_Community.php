@@ -2,6 +2,7 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
 use \PHPWS_Error;
 use \PHPWS_DB;
 
@@ -212,7 +213,7 @@ class HMS_Learning_Community extends HMS_Item
      */
     public function JSONLearningCommunity($id)
     {
-        if( !Current_User::allow('hms', 'learning_community_maintenance') ){
+        if( !\Current_User::allow('hms', 'learning_community_maintenance') ){
             die();
         }
         if(is_numeric($id)){
@@ -315,7 +316,7 @@ class HMS_Learning_Community extends HMS_Item
      */
     public function rlc_assignment_export()
     {
-        if( !Current_User::allow('hms', 'view_rlc_applications') ){
+        if( !\Current_User::allow('hms', 'view_rlc_applications') ){
             $tpl = array();
             return \PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }

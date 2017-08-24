@@ -11,9 +11,6 @@ namespace Homestead;
     public static function profile_search_pager($term)
     {
         // get the current student's gender
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), Term::getCurrentTerm());
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $student->getApplicationTerm());
 

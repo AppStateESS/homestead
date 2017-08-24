@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\exception\PermissionException;
+
 class ResidenceHallView extends View {
 
     private $hall;
@@ -13,7 +15,6 @@ class ResidenceHallView extends View {
     public function show()
     {
         if(!UserStatus::isAdmin()){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You are not allowed to view residence halls');
         }
 
@@ -120,9 +121,9 @@ class ResidenceHallView extends View {
 
         # if the user has permission to view the form but not edit it then
         # disable it
-        if(    Current_User::allow('hms', 'hall_view')
-        && !Current_User::allow('hms', 'hall_attributes')
-        && !Current_User::allow('hms', 'hall_structure'))
+        if(    \Current_User::allow('hms', 'hall_view')
+        && !\Current_User::allow('hms', 'hall_attributes')
+        && !\Current_User::allow('hms', 'hall_structure'))
         {
             $form_vars = (array)$form;
             $elements = $form_vars["\0PHPWS_Form\0_elements"]; //NB: this is a weird results of casting the object to an array

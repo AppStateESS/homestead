@@ -2,14 +2,14 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
+
 /**
  * RlcFactory.php
  *
  * @copyright Appalachian State University, 2013
  * @license http://opensource.org/licenses/gpl-3.0.html GNU GPLv3
  */
-
-PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
 
 /**
  * RlcFactory - Factory class for loading Rlc objects.
@@ -29,7 +29,7 @@ class RlcFactory {
     public static function getRlcById($id)
     {
         if (is_null($id) || !is_numeric($id)) {
-            throw new InvalidArgumentException('Missing RLC id.');
+            throw new \InvalidArgumentException('Missing RLC id.');
         }
 
         $db = new \PHPWS_DB('hms_learning_communities');

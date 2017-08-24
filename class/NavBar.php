@@ -23,7 +23,7 @@ class NavBar extends View {
 
         $this->addUserStatus();
 
-    	if(\UserStatus::isAdmin())
+    	if(UserStatus::isAdmin())
         {
         	$this->addTermSelector();
         }
@@ -38,42 +38,42 @@ class NavBar extends View {
 
     private function addSignInOut()
     {
-    	if(\UserStatus::isGuest())
+    	if(UserStatus::isGuest())
         {
         	$this->tpl['SIGNIN_URL'] = './secure';
         } else {
-        	$this->tpl['SIGNOUT_URL'] = \UserStatus::getLogoutURI();
+        	$this->tpl['SIGNOUT_URL'] = UserStatus::getLogoutURI();
         }
     }
 
     private function addUserStatus()
     {
         // If the user is not logged in, then we have nothing to do here
-    	  if(\UserStatus::isGuest()){
+    	  if(UserStatus::isGuest()){
     		    return;
     	  }
 
 				$userTpl = array();
 
-        $userTpl['FULL_NAME'] = \UserStatus::getDisplayName();
+        $userTpl['FULL_NAME'] = UserStatus::getDisplayName();
         $useDropdown = false;
 
-        if (\UserStatus::isMasquerading() && \UserStatus::isMasqueradingAsSelf()) {
+        if (UserStatus::isMasquerading() && UserStatus::isMasqueradingAsSelf()) {
             // User is masquerading as student version of self
             $useDropdown = true;
-            $userTpl['FULL_NAME'] = \UserStatus::getDisplayName() . ' (student)';
-            $cmd = \CommandFactory::getCommand('RemoveMaskAsSelf');
+            $userTpl['FULL_NAME'] = UserStatus::getDisplayName() . ' (student)';
+            $cmd = CommandFactory::getCommand('RemoveMaskAsSelf');
             $userTpl['STUDENT_SELF_RETURN'] = $cmd->getURI(); // Link to return to admin version of self
         } else if (\UserStatus::isMasquerading()) {
             // User is masquerading as a student
             $useDropdown = true;
-            $cmd = \CommandFactory::getCommand('RemoveMask');
+            $cmd = CommandFactory::getCommand('RemoveMask');
             $userTpl['REMOVE_MASK'] = $cmd->getURI();
-            $userTpl['FULL_NAME'] = '<strong class="text-danger">' . \UserStatus::getDisplayName() . '</strong>';
+            $userTpl['FULL_NAME'] = '<strong class="text-danger">' . UserStatus::getDisplayName() . '</strong>';
         } else if (\Current_User::allow('hms', 'ra_login_as_self')) {
             // User is not masquerading, but do have permission to change to student self-view
             $useDropdown = true;
-            $studentViewCmd = \CommandFactory::getCommand('RaMasqueradeAsSelf');
+            $studentViewCmd = CommandFactory::getCommand('RaMasqueradeAsSelf');
             $userTpl['STUDENT_VIEW_URI'] = $studentViewCmd->getURI();
         }
 
@@ -83,13 +83,12 @@ class NavBar extends View {
 
         }else{
             // No other options, so the user status is just the display name
-        	$this->tpl['DISPLAY_NAME'] = \UserStatus::getDisplayName();
+        	$this->tpl['DISPLAY_NAME'] = UserStatus::getDisplayName();
         }
     }
 
     private function addTermSelector()
     {
-    	\PHPWS_Core::initModClass('hms', 'TermSelector.php');
         $termSelector = new TermSelector();
         $this->tpl['TERM_SELECTOR'] = $termSelector->show();
     }
@@ -97,8 +96,8 @@ class NavBar extends View {
     private function addHallLink()
     {
     	if(\Current_User::allow('hms', 'hall_view')) {
-            $residenceHallCmd = \CommandFactory::getCommand('SelectResidenceHall');
-            $residenceHallCmd->setOnSelectCmd(\CommandFactory::getCommand('EditResidenceHallView'));
+            $residenceHallCmd = CommandFactory::getCommand('SelectResidenceHall');
+            $residenceHallCmd->setOnSelectCmd(CommandFactory::getCommand('EditResidenceHallView'));
     		$this->tpl['HALL_VIEW'] = $residenceHallCmd->getURI();
     	}
     }
@@ -106,7 +105,7 @@ class NavBar extends View {
     private function addReportLink()
     {
     	if(\Current_User::allow('hms', 'reports')) {
-            $cmd = \CommandFactory::getCommand('ListReports');
+            $cmd = CommandFactory::getCommand('ListReports');
             $this->tpl['REPORT_LINK'] = $cmd->getURI();
         }
     }
@@ -126,20 +125,20 @@ class NavBar extends View {
         //$this->tpl['SETTINGS'][] = array('LINK' => $ctrlPanel->getLink('Control Panel'));
 
         if(\Current_User::allow('hms', 'edit_terms')) {
-            $termCmd = \CommandFactory::getCommand('ShowEditTerm');
+            $termCmd = CommandFactory::getCommand('ShowEditTerm');
         	$this->tpl['EDIT_TERM_URI'] = $termCmd->getURI();
         }
 
         if(\Current_User::allow('hms', 'view_activity_log')) {
-            $termCmd = \CommandFactory::getCommand('ShowActivityLog');
+            $termCmd = CommandFactory::getCommand('ShowActivityLog');
             $this->tpl['ACTIVITY_LOG_URI'] = $termCmd->getURI();
         }
 
     	if(\Current_User::isDeity()) {
-            $ctrlPanel = \CommandFactory::getCommand('ShowControlPanel');
+            $ctrlPanel = CommandFactory::getCommand('ShowControlPanel');
             $this->tpl['CTRL_PANEL_URI'] = $ctrlPanel->getURI();
 
-            $pulse = \CommandFactory::getCommand('ShowPulseOption');
+            $pulse = CommandFactory::getCommand('ShowPulseOption');
             $this->tpl['PULSE_URI'] = $pulse->getURI();
     	}
     }

@@ -1,7 +1,9 @@
 <?php
 namespace Homestead;
 
-    class RoommateProfileFactory {
+use \Homestead\exception\DatabaseException;
+
+class RoommateProfileFactory {
     /**
      * check_for_profile
      * Returns the id number of a profile, if it

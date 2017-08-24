@@ -19,7 +19,6 @@ class ReapplicationWaitingListMenuBlockView extends View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $tpl = array();
 
         $now = time();

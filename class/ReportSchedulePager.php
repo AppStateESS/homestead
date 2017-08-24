@@ -2,8 +2,6 @@
 
 namespace Homestead;
 \PHPWS_Core::initCoreClass('DBPager.php');
-PHPWS_Core::initModClass('hms', 'Report.php');
-PHPWS_Core::initModClass('hms', 'GenericReport.php');
 
 /**
 * ReportSchedulePager

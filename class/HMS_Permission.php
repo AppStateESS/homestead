@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
+
 class HMS_Permission extends HMS_Item {
     public $id;
     public $name;
@@ -77,8 +79,6 @@ class HMS_Permission extends HMS_Item {
 
     public static function getUsersInRoleForInstance($roleName, $instance)
     {
-    	PHPWS_Core::initModClass('hms', 'PdoFactory.php');
-
         $pdo = PdoFactory::getPdoInstance();
 
         $query = "SELECT user_id FROM hms_user_role JOIN hms_role ON hms_user_role.role = hms_role.id WHERE hms_role.name = :roleName AND class = :className AND instance = :instanceId";

@@ -2,8 +2,6 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'RlcFactory.php');
-
 class RlcSelfSelectionMenuBlockView extends View {
 
     private $term;

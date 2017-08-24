@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
+use \Homestead\exception\MissingDataException;
 use \PHPWS_Error;
 use \PHPWS_DB;
 
@@ -155,7 +157,6 @@ abstract class ApplicationFeature
 
         $missing = $this->validate();
         if(!empty($missing)) {
-            PHPWS_Core::initModClass('hms', 'exception/MissingDataException.php');
             throw new MissingDataException('Missing required data.', $missing);
         }
 
@@ -230,7 +231,7 @@ abstract class ApplicationFeature
     /**
      *
      * @param $student - The student we're generating a menu for.
-     * @return hms\View - A View object which can generate the HTML for this block
+     * @return View - A View object which can generate the HTML for this block
      */
     public abstract function getMenuBlockView(Student $student);
 
@@ -409,7 +410,7 @@ abstract class ApplicationFeature
             // Check for conflicting priorities in the array, make sure we don't overwrite
             // an existing key
             if(array_key_exists($reg->getPriority(), $features)){
-                throw new Exception("Conflicting menu item priorities: {$result['name']}, $term");
+                throw new \Exception("Conflicting menu item priorities: {$result['name']}, $term");
             }
 
             $features[$reg->getPriority()] = new $className($result['id']);
@@ -436,11 +437,11 @@ abstract class ApplicationFeature
     public static function getInstanceByNameAndTerm($name, $term)
     {
         if(!isset($name)){
-            throw new InvalidArgumentException('Missing feature name.');
+            throw new \InvalidArgumentException('Missing feature name.');
         }
 
         if(!isset($term)){
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         $db = new PHPWS_DB('hms_application_feature');

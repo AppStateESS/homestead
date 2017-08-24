@@ -2,6 +2,7 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
 use \PHPWS_Error;
 
 abstract class HMS_Item {
@@ -70,10 +71,10 @@ abstract class HMS_Item {
 
         if(!$this->id) {
             $this->added_on = & $now;
-            $this->added_by = Current_User::getId();
+            $this->added_by = \Current_User::getId();
         }
         $this->updated_on = & $now;
-        $this->updated_by = Current_User::getId();
+        $this->updated_by = \Current_User::getId();
     }
 
     public function delete()

@@ -2,14 +2,6 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'AssignmentMenu.php');
-PHPWS_Core::initModClass('hms', 'ResidenceHallMenu.php');
-PHPWS_Core::initModClass('hms', 'RLCMenu.php');
-PHPWS_Core::initModClass('hms', 'ReapplicationMaintenanceMenu.php');
-PHPWS_Core::initModClass('hms', 'MessagingMenu.php');
-PHPWS_Core::initModClass('hms', 'ServiceDeskMenu.php');
-
-
 class AdminMaintenanceMenuView extends View {
 
     public function show()

@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
+
 class ApplicationFeatureFactory
 {
     public static function getForTerm($term)

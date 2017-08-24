@@ -18,7 +18,6 @@ class DamageTypeFactory {
      */
     public static function getDamageTypeAssoc()
     {
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getPdoInstance();
 
         $query = "SELECT * FROM hms_damage_type WHERE active = 1 ORDER BY category ASC, description ASC";

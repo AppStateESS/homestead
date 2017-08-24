@@ -2,7 +2,7 @@
 
 namespace Homestead\applicationFeature;
 
-use \hms\ApplicationFeatureRegistration;
+use \Homestead\ApplicationFeatureRegistration;
 
 class ApplicationRegistration extends ApplicationFeatureRegistration {
     public function __construct()

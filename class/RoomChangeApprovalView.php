@@ -1,8 +1,6 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'RoomChangeListView.php');
 
 /**
  * Shows an overview of all pending and inactive requests

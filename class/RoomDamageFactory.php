@@ -1,9 +1,8 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'RoomDamage.php');
-PHPWS_Core::initModClass('hms', 'PdoFactory.php');
 
+use \Homestead\exception\DatabaseException;
 
 /**
  * RoomDamageFactory - Factory class with various
@@ -68,7 +67,7 @@ class RoomDamageFactory {
     public static function getDamagesBefore(HMS_Room $room, $timestamp)
     {
         if(!isset($timestamp)){
-            throw new InvalidArgumentException('Missing timestamp.');
+            throw new \InvalidArgumentException('Missing timestamp.');
         }
 
         $db = new \PHPWS_DB('hms_room_damage');
@@ -96,7 +95,7 @@ class RoomDamageFactory {
     public static function getDamagesToAssessByFloor(Array $floorList, $term)
     {
         if(sizeof($floorList) == 0){
-            throw new InvalidArgumentException('No floors given to check for damages on.');
+            throw new \InvalidArgumentException('No floors given to check for damages on.');
         }
 
         $floorIdList = array();
@@ -128,7 +127,7 @@ class RoomDamageFactory {
         if (isset($id)) {
             // Update
             // TODO
-            throw new Exception('Not yet implemented.');
+            throw new \Exception('Not yet implemented.');
 
             $query = "";
             $params = array();

@@ -24,7 +24,6 @@ class RoomDamageResponsibility {
 
     public function reportToStudentAccount()
     {
-        PHPWS_Core::initModClass('hms', 'SOAP.php');
         $soap = SOAP::getInstance(UserStatus::getUsername(), SOAP::ADMIN_USER);
 
         $damage = RoomDamageFactory::getDamageById($this->getDamageId());

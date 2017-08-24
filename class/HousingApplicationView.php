@@ -11,14 +11,6 @@ namespace Homestead;
  * @package mod
  * @subpacakge hms
  */
-PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-PHPWS_Core::initModClass('hms', 'FallApplication.php');
-PHPWS_Core::initModClass('hms', 'SpringApplication.php');
-PHPWS_Core::initModClass('hms', 'SummerApplication.php');
-
-PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
 class HousingApplicationView extends View {
 
@@ -56,7 +48,7 @@ class HousingApplicationView extends View {
         // isWithdrawn() has been depricated, but I'm leaving it here just for historical sake
         // on the off-chance that it catches an older application that's withdrawn but not cancelled.
         if($application->isCancelled() || $application->isWithdrawn()){
-            NQ::simple('hms', hms\NotificationView::WARNING, 'This application has been cancelled.');
+            NQ::simple('hms', NotificationView::WARNING, 'This application has been cancelled.');
         }
 
         $tpl['STUDENT_NAME']                = $student->getFullName();
@@ -110,7 +102,7 @@ class HousingApplicationView extends View {
         $tpl['EMERGENCY_MEDICAL_CONDITION'] = $application->getEmergencyMedicalCondition();
 
         /* Missing Person */
-        if(Current_User::allow('hms', 'view_missing_person_info')) {
+        if(\Current_User::allow('hms', 'view_missing_person_info')) {
             $tpl['MISSING_PERSON_NAME'] 		= $application->getMissingPersonName();
             $tpl['MISSING_PERSON_RELATIONSHIP']	= $application->getMissingPersonRelationship();
             $tpl['MISSING_PERSON_PHONE'] 		= $application->getMissingPersonPhone();
@@ -118,7 +110,6 @@ class HousingApplicationView extends View {
         }
 
         if($application instanceof FallApplication){
-            PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
             $rlcApp = HMS_RLC_Application::getApplicationByUsername($student->getUsername(), $application->getTerm());
             if(!is_null($rlcApp)){
                 $tpl['RLC_INTEREST_1'] = 'Yes (Completed - Use the main menu to view/modify.)';
@@ -127,7 +118,7 @@ class HousingApplicationView extends View {
             }
         }
 
-        if(Current_User::getUsername() == "hms_student"){
+        if(\Current_User::getUsername() == "hms_student"){
             $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Back to main menu', 'hms', array('type'=>'student', 'op'=>'show_main_menu'));
         }
 

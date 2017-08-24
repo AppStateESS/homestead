@@ -2,13 +2,14 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
+
 /**
  * BannerQueue - Manages the Banner Queue
  * Queues up assignments so if we can't SOAP it over to Banner, Housing
  * can still do their jobs
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
-PHPWS_Core::initModClass('hms', 'BannerQueueItem.php');
 
 class BannerQueue {
 
@@ -90,7 +91,7 @@ class BannerQueue {
 
             try{
                 $result = $item->process();
-            }catch(Exception $e){
+            }catch(\Exception $e){
                 $error = array();
                 $error['bannerid']  = $item->banner_id;
                 $error['username']  = $item->asu_username;

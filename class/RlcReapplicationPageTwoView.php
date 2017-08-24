@@ -28,7 +28,7 @@ class RlcReapplicationPageTwoView extends View {
         foreach($this->rlcs as $i=>$rlc){
             $question = $this->rlcs[$i]->getReturningQuestion();
             if(!isset($question)){
-                throw new Exception("Missing returning question for {$this->rlcs[$i]->get_community_name()}");
+                throw new \Exception("Missing returning question for {$this->rlcs[$i]->get_community_name()}");
             }
             if(isset($this->reApp) && isset($this->reApp->{"rlc_question_$i"})){
                 $form->addTextArea("rlc_question_$i", $this->reApp->{"rlc_question_$i"});

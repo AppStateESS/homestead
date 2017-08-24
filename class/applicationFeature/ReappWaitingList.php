@@ -2,7 +2,7 @@
 
 namespace Homestead\applicationFeature;
 
-use \hms\ApplicationFeatureRegistration;
+use \Homestead\ApplicationFeatureRegistration;
 
 class ReappWaitingListRegistration extends ApplicationFeatureRegistration {
     public function __construct()

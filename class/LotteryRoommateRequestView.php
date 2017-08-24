@@ -18,10 +18,6 @@ class LotteryRoommateRequestView extends View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         # Get the roommate request record from the database
         $bed = new HMS_Bed($this->request['bed_id']);
         $room = $bed->get_parent();

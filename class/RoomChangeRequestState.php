@@ -94,7 +94,7 @@ abstract class RoomChangeRequestState {
 
     public function getValidTransitions()
     {
-        throw new Exception('No transitions implemented.');
+        throw new \Exception('No transitions implemented.');
     }
 
     public function canTransition(RoomChangeRequestState $toState)

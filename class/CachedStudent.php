@@ -2,8 +2,6 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'Student.php');
-
 class CachedStudent extends Student {
 
     public $term;

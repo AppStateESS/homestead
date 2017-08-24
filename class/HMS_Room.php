@@ -2,6 +2,9 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
+use \Homestead\exception\PermissionException;
+use \Homestead\exception\HallStructureException;
 use \PHPWS_Error;
 use \PHPWS_DB;
 
@@ -104,7 +107,7 @@ class HMS_Room extends HMS_Item
     public function delete()
     {
         if (is_null($this->id) || !isset($this->id)) {
-            throw new InvalidArgumentException('Invalid room id.');
+            throw new \InvalidArgumentException('Invalid room id.');
         }
 
         $db = new PHPWS_DB('hms_room');
@@ -163,7 +166,7 @@ class HMS_Room extends HMS_Item
 
         try{
             $new_room->save();
-        }catch(Exception $e) {
+        }catch(\Exception $e) {
             throw $e;
         }
 
@@ -173,7 +176,7 @@ class HMS_Room extends HMS_Item
         if (empty($this->_beds)) {
             try{
                 $this->loadBeds();
-            }catch(Exception $e) {
+            }catch(\Exception $e) {
                 throw $e;
             }
         }
@@ -191,7 +194,7 @@ class HMS_Room extends HMS_Item
             foreach ($this->_beds as $bed) {
                 try{
                     $bed->copy($to_term, $new_room->id, $assignments);
-                }catch(Exception $e) {
+                }catch(\Exception $e) {
                     throw $e;
                 }
             }
@@ -550,7 +553,7 @@ class HMS_Room extends HMS_Item
         $tpl['OFFLINE']        = $this->isOffline()   ? 'Yes' : 'No';
         $tpl['ADA']            = $this->isADA()       ? 'Yes' : 'No';
 
-        if (Current_User::allow('hms','room_structure') && $this->get_number_of_assignees() == 0) {
+        if (\Current_User::allow('hms','room_structure') && $this->get_number_of_assignees() == 0) {
             $deleteRoomCmd = CommandFactory::getCommand('DeleteRoom');
             $deleteRoomCmd->setRoomId($this->id);
             $deleteRoomCmd->setFloorId($this->floor_id);
@@ -575,7 +578,7 @@ class HMS_Room extends HMS_Item
         $tpl['ID']           = $this->id;
         $tpl['ROOM_NUMBER']  = PHPWS_Text::secureLink($this->room_number, 'hms', array('action'=>'EditRoomView', 'room'=>$this->id));
 
-        if (Current_User::allow('hms','room_structure') && $this->get_number_of_assignees() == 0) {
+        if (\Current_User::allow('hms','room_structure') && $this->get_number_of_assignees() == 0) {
             $deleteRoomCmd = CommandFactory::getCommand('DeleteRoom');
             $deleteRoomCmd->setRoomId($this->id);
             $deleteRoomCmd->setFloorId($this->floor_id);
@@ -809,7 +812,7 @@ class HMS_Room extends HMS_Item
 
         $page_tags = array();
 
-        if (Current_User::allow('hms', 'room_structure')) {
+        if (\Current_User::allow('hms', 'room_structure')) {
             $addRoomCmd = CommandFactory::getCommand('ShowAddRoom');
             $addRoomCmd->setFloorId($floor_id);
             $page_tags['ADD_ROOM_URI'] = $addRoomCmd->getURI();
@@ -843,21 +846,19 @@ class HMS_Room extends HMS_Item
     public static function deleteRoom($roomId)
     {
 
-        if (!Current_User::allow('hms', 'room_structure')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+        if (!\Current_User::allow('hms', 'room_structure')) {
             throw new PermissionException('You do not have permission to delete a room.');
         }
 
         // check that we're not about to do something stupid
         if (!isset($roomId)) {
-            throw new InvalidArgumentException('Invalid room id.');
+            throw new \InvalidArgumentException('Invalid room id.');
         }
 
         $room = new HMS_Room($roomId);
 
         // make sure there isn't an assignment
         if ($room->get_number_of_assignees() != 0) {
-            PHPWS_Core::initModClass('hms', 'exception/HallStructureException.php');
             throw new HallStructureException('One or more students are currently assigned to that room and therefore it cannot deleted.');
         }
 
@@ -872,7 +873,7 @@ class HMS_Room extends HMS_Item
             }
 
             $room->delete();
-        }catch(Exception $e) {
+        }catch(\Exception $e) {
             throw $e;
         }
 

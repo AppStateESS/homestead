@@ -2,7 +2,8 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+use \Homestead\exception\AssignmentException;
+use \Homestead\exception\DatabaseException;
 
 abstract class AssignmentStrategy {
 
@@ -33,7 +34,6 @@ abstract class AssignmentStrategy {
     protected function assign(AssignmentPairing $pair, HMS_Room $room)
     {
         if(!$this->allowed($pair, $room)) {
-            PHPWS_Core::initModClass('hms', 'exception/AssignmentException.php');
             throw new AssignmentException('Cannot assign ' . $pair->__tostring() . ' to ' . $room->__tostring());
         }
 
@@ -43,7 +43,7 @@ abstract class AssignmentStrategy {
         // Actually assign the given pairing to the given room
         try{
             HMS_Assignment::assignStudent($pair->getStudent1(), $this->term, $room->id, NULL, 'Auto-assigned', false, ASSIGN_FR_AUTO);
-        }catch(Exception $e){
+        }catch(\Exception $e){
             echo "Could not assign '{$pair->getStudent1()->getUsername()}': {get_class($e)}: {$e->getMessage()}<br />\n";
         }
 
@@ -69,7 +69,7 @@ abstract class AssignmentStrategy {
 
         try{
             HMS_Assignment::assignStudent($pair->getStudent2(), $this->term, $room->id, NULL, 'Auto-assigned', false, ASSIGN_FR_AUTO);
-        }catch(Exception $e){
+        }catch(\Exception $e){
             echo "Could not assign '{$pair->getStudent2()->getUsername()}': " . get_class($e) . ": {$e->getMessage()}<br />\n";
         }
 
@@ -131,7 +131,7 @@ abstract class AssignmentStrategy {
         }
 
         $room = new HMS_Room();
-        PHPWS_Core::plugObject($room, $result);
+        \PHPWS_Core::plugObject($room, $result);
         return $room;
     }
 

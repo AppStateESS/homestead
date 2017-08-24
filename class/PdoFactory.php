@@ -46,7 +46,7 @@ class PdoFactory {
     private function __construct()
     {
         if (!defined('PHPWS_DSN')) {
-            throw new Exception('Database connection DSN is not set.');
+            throw new \Exception('Database connection DSN is not set.');
         }
         $dsnArray = Database::parseDSN(PHPWS_DSN);
 

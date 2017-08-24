@@ -24,7 +24,7 @@ class InfoCardPdfView {
      */
     public function __construct()
     {
-        $this->pdf = new FPDF('L', 'mm', 'Letter');
+        $this->pdf = new \FPDF('L', 'mm', 'Letter');
 
         $this->damageTypes = DamageTypeFactory::getDamageTypeAssoc();
     }

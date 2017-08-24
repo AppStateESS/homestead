@@ -2,8 +2,6 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
 class ContactFormView extends View {
 
     public function show()

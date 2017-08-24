@@ -2,9 +2,9 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
 use \PHPWS_Error;
 use \PHPWS_DB;
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
 /**
  * iCsvReport Interface

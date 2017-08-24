@@ -1,7 +1,6 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'DamageTypeFactory.php');
 
 /**
  * Model class for representing a room damage

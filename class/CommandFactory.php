@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\exception\CommandNotFoundException;
+
 /**
  * Description
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
@@ -41,16 +43,14 @@ class CommandFactory {
         $dir = self::$dir;
 
         if(preg_match('/\W/', $action)) {
-            PHPWS_Core::initModClass('hms', 'exception/IllegalCommandException.php');
-            throw new IllegalCommandException("Illegal characters in command {$action}");
+            throw new InvalidArgumentException("Illegal characters in command {$action}");
         }
 
         $class = $action.'Command';
 
         try {
             PHPWS_Core::initModClass('hms', "{$dir}/{$class}.php");
-        }catch(Exception $e){
-            PHPWS_Core::initModClass('hms', 'exception/CommandNotFoundException.php');
+        }catch(\Exception $e){
             throw new CommandNotFoundException("Could not initialize {$class}: {$e->getMessage()}");
         }
 

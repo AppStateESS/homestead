@@ -2,9 +2,9 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
 use \PHPWS_Error;
 use \PHPWS_DB;
-PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
 
 class HMS_Role extends HMS_Item {
     public $id;
@@ -65,7 +65,7 @@ class HMS_Role extends HMS_Item {
         }
 
         if(is_null($result['id'])){
-            throw new InvalidArgumentException('User name "' . $username . '" does not exist.');
+            throw new \InvalidArgumentException('User name "' . $username . '" does not exist.');
         }
 
         $user_id = $result['id'];

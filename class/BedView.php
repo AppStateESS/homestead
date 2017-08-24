@@ -1,8 +1,11 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\exception\PermissionException;
 use \phpws2\Database;
 
-class BedView extends hms\View
+class BedView extends View
 {
     private $hall;
     private $floor;
@@ -19,16 +22,10 @@ class BedView extends hms\View
 
     public function show()
     {
-        if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'bed_view')) {
+        if (!UserStatus::isAdmin() || !\Current_User::allow('hms', 'bed_view')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You are not allowed to edit or view beds.');
         }
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         $tpl = array();
         $tpl['TERM'] = Term::toString($this->bed->getTerm());
@@ -91,9 +88,9 @@ class BedView extends hms\View
         $form->addSubmit('submit', 'Submit');
 
         # if the user has permission to view the form but not edit it
-        if (!Current_User::allow('hms', 'bed_view')
-                && !Current_User::allow('hms', 'bed_attributes')
-                && !Current_User::allow('hms', 'bed_structure')) {
+        if (!\Current_User::allow('hms', 'bed_view')
+                && !\Current_User::allow('hms', 'bed_attributes')
+                && !\Current_User::allow('hms', 'bed_structure')) {
             $form_vars = get_object_vars($form);
             $elements = $form_vars['_elements'];
 

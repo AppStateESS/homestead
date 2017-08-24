@@ -1,7 +1,8 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms','PackageDesk.php');
+
+use \Homestead\exception\DatabaseException;
 
 class PackageDeskFactory {
 

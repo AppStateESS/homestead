@@ -1,7 +1,6 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'WKPDF.php');
 
 if (!defined('WKPDF_PATH')) {
     define('WKPDF_PATH', PHPWS_SOURCE_DIR . 'mod/hms/vendor/ioki/wkhtmltopdf-amd64-centos6/bin/wkhtmltopdf-amd64-centos6');
@@ -37,7 +36,7 @@ class ReportPdfViewFromHtml extends ReportPdfView
         parent::__construct($report);
 
         $this->htmlView = $htmlView;
-        $this->pdf = new \WKPDF(WKPDF_PATH);
+        $this->pdf = new WKPDF(WKPDF_PATH);
         if (USE_XVFB) {
             $this->pdf->setXVFB(XVFB_PATH);
         }

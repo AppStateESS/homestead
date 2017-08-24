@@ -1,8 +1,6 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'ReportHistoryPager.php');
-PHPWS_Core::initModClass('hms', 'ReportSchedulePager.php');
 
 /**
  * ReportDetailView

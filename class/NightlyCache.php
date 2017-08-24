@@ -19,11 +19,8 @@ class NightlyCache
     public static function execute()
     {
         session_start();
-        PHPWS_Core::initModClass('hms', 'Term.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('users', 'Users.php');
         PHPWS_Core::initModClass('users', 'Current_User.php');
-        PHPWS_Core::initModClass('hms', 'UserStatus.php');
 
         $errors = null;
         $term = Term::getSelectedTerm();
@@ -57,7 +54,7 @@ class NightlyCache
             try {
                 //asking for the student updates the cache since the ttl is zero
                 StudentFactory::getStudentByUsername($row['username'], $term);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $errors[] = $e->getMessage() . "\n";
                 $error_count++;
             }

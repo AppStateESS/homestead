@@ -17,7 +17,6 @@ class HousingApplicationNotAvailableView extends View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $tpl = array();
 
         if(is_null($this->feature) || !$this->feature->isEnabled()){

@@ -11,7 +11,6 @@ namespace Homestead;
  * @package mod
  * @subpackage hms
  */
-PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
 
 class ReviewHallNotificationMessageView extends View {
 
@@ -29,7 +28,6 @@ class ReviewHallNotificationMessageView extends View {
     }
 
     public function show(){
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         $tpl = array();
 
         $template = new \PHPWS_Template('hms');
@@ -51,7 +49,7 @@ class ReviewHallNotificationMessageView extends View {
             $tpl['halls'][$floor->_hall->getHallName()][] = 'Floor '.$floor->getFloorNumber();
         }
 
-        $tpl['FROM']    = ($this->anonymous && Current_User::allow('hms', 'anonymous_notifications')) ? FROM_ADDRESS : (Current_User::getUsername() . '@' . DOMAIN_NAME);
+        $tpl['FROM']    = ($this->anonymous && \Current_User::allow('hms', 'anonymous_notifications')) ? FROM_ADDRESS : (\Current_User::getUsername() . '@' . DOMAIN_NAME);
         $tpl['SUBJECT'] = $this->subject;
         $tpl['BODY']    = preg_replace('/\n/', '<br />', $this->body);
 

@@ -1,9 +1,6 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'RoomChangeParticipantState.php');
-PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
-PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
 /**
  * Model class to represent a student participating in a room change request.
@@ -108,7 +105,7 @@ class RoomChangeParticipant {
         }
 
         if (!$this->state->canTransition($toState)) {
-            throw new InvalidArgumentException("Invalid state change from: {$this->state->getName()} to {$toState->getName()}.");
+            throw new \InvalidArgumentException("Invalid state change from: {$this->state->getName()} to {$toState->getName()}.");
         }
 
         // Set the end date on the current state
@@ -132,8 +129,6 @@ class RoomChangeParticipant {
 
     public function getState()
     {
-        PHPWS_Core::initModClass('hms', 'RoomChangeParticipantStateFactory.php');
-
         $this->state = RoomChangeParticipantStateFactory::getCurrentStateForParticipant($this);
 
         return $this->state;
@@ -159,7 +154,7 @@ class RoomChangeParticipant {
         $toBed = $this->getToBed();
 
         if(!isset($toBed) || is_null($toBed)){
-            throw new InvalidArgumentException('No destination bed set.');
+            throw new \InvalidArgumentException('No destination bed set.');
         }
 
         return $this->getApproverList($toBed);

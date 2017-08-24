@@ -15,7 +15,7 @@ class HMS_Admin
 {
     public function show_username_change()
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'username_change')){
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'username_change')){
             $tpl = array();
             return \PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
@@ -35,12 +35,11 @@ class HMS_Admin
 
     public function process_username_change()
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'username_change')){
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'username_change')){
             $tpl = array();
             return \PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         require_once('mod/hms/inc/defines.php');
 
         $tpl = array();

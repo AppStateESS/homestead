@@ -1,7 +1,6 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
 /**
  * ReportCsvView class

@@ -2,7 +2,7 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+use \Homestead\exception\DatabaseException;
 
 /**
  * ResidenceHallFactory - Factory methods to aid in creating HMS_Residence_Hall objects.
@@ -23,7 +23,7 @@ class ResidenceHallFactory {
     public static function getHallsForTerm($term)
     {
         if(!isset($term)){
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         $halls = array();
@@ -58,7 +58,7 @@ class ResidenceHallFactory {
     public static function getHallNamesAssoc($term)
     {
         if(!isset($term)){
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         $hallArray = array();

@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\exception\PermissionException;
+
 /**
  * @author Jeremy Booker
  * @package hms
@@ -12,11 +14,9 @@ class CreateTermView extends View {
 
     public function show()
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'edit_terms')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'edit_terms')){
             throw new PermissionException('You do not have permission to edit terms.');
         }
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         javascript('jquery');
         javascript('modules/hms/newTermCopyPick');
 

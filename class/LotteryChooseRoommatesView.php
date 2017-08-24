@@ -17,11 +17,6 @@ class LotteryChooseRoommatesView extends View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-
         javascript('jquery');
 
         $tpl = array();

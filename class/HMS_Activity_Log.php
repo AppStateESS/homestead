@@ -2,6 +2,9 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
+use \Homestead\exception\StudentNotFoundException;
+
 /**
  * The HMS_Acivity_Log class
  * Handles logging of various activities and produces the log pager.
@@ -91,13 +94,12 @@ class HMS_Activity_Log{
      */
     public function getPagerTags()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $tpl = array();
 
         try {
             $student = StudentFactory::getStudentByUsername($this->get_user_id(), Term::getSelectedTerm());
         }catch(StudentNotFoundException $e){
-            NQ::simple('hms', hms\NotificationView::WARNING, "Could not find data for student: {$this->get_user_id()}");
+            NQ::simple('hms', NotificationView::WARNING, "Could not find data for student: {$this->get_user_id()}");
             $student = null;
         }
 

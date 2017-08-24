@@ -2,8 +2,6 @@
 
 namespace Homestead;
 
-use \Homestead\exception\DatabaseException;
-
 class HMSFactory
 {
     private static $hms;

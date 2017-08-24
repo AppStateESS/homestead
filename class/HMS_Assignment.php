@@ -2,6 +2,9 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
+use \Homestead\exception\AssignmentException;
+use \Homestean\exception\PermissionException;
 use \PHPWS_Error;
 use \PHPWS_DB;
 
@@ -54,7 +57,7 @@ class HMS_Assignment extends HMS_Item {
 
         try {
             $new_ass->save();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw $e;
         }
     }
@@ -85,7 +88,6 @@ class HMS_Assignment extends HMS_Item {
     */
     public function loadBed()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         $bed = new HMS_Bed($this->bed_id);
 
         $this->_bed = &$bed;
@@ -345,25 +347,15 @@ class HMS_Assignment extends HMS_Item {
          * the lottery/re-application code)
          *
          * if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')) {
-         * PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
          * throw new PermissionException('You are not allowed to edit student assignments.');
          * }
          */
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        PHPWS_Core::initModClass('hms', 'BannerQueue.php');
-        PHPWS_Core::initModClass('hms', 'AssignmentHistory.php');
-
-        PHPWS_Core::initModClass('hms', 'exception/AssignmentException.php');
 
         $username = $student->getUsername();
 
         // Make sure a username was entered
         if (!isset($username) || $username == '') {
-            throw new InvalidArgumentException('Bad username.');
+            throw new \InvalidArgumentException('Bad username.');
         }
 
         $username = strtolower($username);
@@ -442,7 +434,7 @@ class HMS_Assignment extends HMS_Item {
         // We probably shouldn't check permissions inside this method, since sometimes this can be
         // called from student-facing interfaces.. But, since I want to be really careful with co-ed rooms,
         // I'm going to take the extra step of making sure no students are putting themselves in co-ed rooms.
-        if ($room->getGender() == COED && !Current_User::allow('hms', 'coed_assignment')) {
+        if ($room->getGender() == COED && !\Current_User::allow('hms', 'coed_assignment')) {
             throw new AssignmentException('You do not have permission to make assignments for Co-ed rooms.');
         }
 
@@ -479,7 +471,7 @@ class HMS_Assignment extends HMS_Item {
             $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin() ? (SOAP::ADMIN_USER) : (SOAP::STUDENT_USER));
             try {
                 $soap->removeRoomAssignment($student->getBannerId(), $term, 'TMPR', $result[0]['room_number'], 100); // Hard-code to 100% refund
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 throw $e;
             }
 
@@ -492,7 +484,7 @@ class HMS_Assignment extends HMS_Item {
                 throw new DatabaseException($result->toString());
             }
 
-            NQ::simple('hms', hms\NotificationView::WARNING, 'Temporary assignment was removed.');
+            NQ::simple('hms', NotificationView::WARNING, 'Temporary assignment was removed.');
         }
 
         // Send this off to the queue for assignment in banner
@@ -579,38 +571,31 @@ class HMS_Assignment extends HMS_Item {
     public static function unassignStudent(Student $student, $term, $notes = "", $reason, $refund)
     {
         if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to unassign students.');
         }
-
-        PHPWS_Core::initModClass('hms', 'BannerQueue.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        PHPWS_Core::initModClass('hms', 'AssignmentHistory.php');
-
-        PHPWS_Core::initModClass('hms', 'exception/AssignmentException.php');
 
         $username = $student->getUsername();
 
         // Make sure a username was entered
         if (!isset($username) || $username == '') {
-            throw new InvalidArgumentException('Bad username.');
+            throw new \InvalidArgumentException('Bad username.');
         }
 
         $username = strtolower($username);
 
         // Check refund field, required field
         if(!isset($refund) || $refund == '') {
-            throw new InvalidArgumentException('Please enter a refund percentage.');
+            throw new \InvalidArgumentException('Please enter a refund percentage.');
         }
 
         // Refund must be numeric
         if(!is_numeric($refund) || $refund < 0 || $refund > 100) {
-            throw new InvalidArgumentException('The refund percentage must be between 0 and 100 percent.');
+            throw new \InvalidArgumentException('The refund percentage must be between 0 and 100 percent.');
         }
 
         // Must be whole number
         if (is_float($refund)) {
-            throw new InvalidArgumentException('Only whole number refund percentages are supported, no decimal place is allowed.');
+            throw new \InvalidArgumentException('Only whole number refund percentages are supported, no decimal place is allowed.');
         }
 
         // Make sure the requested username is actually assigned
@@ -680,8 +665,6 @@ class HMS_Assignment extends HMS_Item {
      */
     public static function moveAssignments(Array $students, $term)
     {
-        PHPWS_Core::initModClass('hms', 'exception/AssignmentException.php');
-
         // Update the assignments in Banner through the Web Service
         $soap = SOAP::getInstance(UserStatus::getUsername(), SOAP::ADMIN_USER);
         $soap->moveRoomAssignment($students, $term);

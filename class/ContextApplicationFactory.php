@@ -2,11 +2,6 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'FallApplication.php');
-PHPWS_Core::initModClass('hms', 'SpringApplication.php');
-PHPWS_Core::initModClass('hms', 'SummerApplication.php');
-PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
-
 abstract class ContextApplicationFactory {
 
     protected $context;

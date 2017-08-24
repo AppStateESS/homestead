@@ -2,8 +2,6 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'RoomChangeRequestState.php');
-
 class RoomChangeRequestStateFactory {
 
     public static function getCurrentState(RoomChangeRequest $request)

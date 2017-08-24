@@ -1,8 +1,6 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'RoomChangeRequestState.php');
-
 
 /**
  * Room change types
@@ -121,7 +119,7 @@ class RoomChangeRequest {
         }
 
         if (!$this->state->canTransition($toState)) {
-            throw new InvalidArgumentException("Invalid state change from: {$this->state->getName()} to {$toState->getName()}.");
+            throw new \InvalidArgumentException("Invalid state change from: {$this->state->getName()} to {$toState->getName()}.");
         }
 
         // Set the end date on the current state
@@ -139,8 +137,6 @@ class RoomChangeRequest {
 
     public function getState()
     {
-        PHPWS_Core::initModClass('hms', 'RoomChangeRequestStateFactory.php');
-
         $this->state = RoomChangeRequestStateFactory::getCurrentState($this);
         return $this->state;
     }
@@ -166,8 +162,6 @@ class RoomChangeRequest {
 
     public function getParticipants()
     {
-        PHPWS_Core::initModClass('hms', 'RoomChangeParticipantFactory.php');
-
         return RoomChangeParticipantFactory::getParticipantsByRequest($this);
     }
 

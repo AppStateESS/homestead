@@ -11,24 +11,24 @@ class RLCMenu extends CommandMenu {
         // Check permissions
         if(UserStatus::isAdmin()){
 
-            if(Current_User::allow('hms', 'learning_community_maintenance')){
+            if(\Current_User::allow('hms', 'learning_community_maintenance')){
                 $this->addCommandByName('Add/Edit Communities', 'ShowEditRlc');
             }
 
-            if(Current_User::allow('hms', 'view_rlc_applications')){
+            if(\Current_User::allow('hms', 'view_rlc_applications')){
                 $this->addCommandByName('Assign Applicants to RLCs', 'ShowAssignRlcApplicants');
                 $this->addCommandByName('View Denied Applications', 'ShowDeniedRlcApplicants');
             }
 
-            if(Current_User::allow('hms', 'learning_community_maintenance')){
+            if(\Current_User::allow('hms', 'learning_community_maintenance')){
                 $this->addCommandByName('Send RLC Email Invites', 'ShowSendRlcInvites');
             }
 
-            if(Current_User::allow('hms' ,'view_rlc_members')){
+            if(\Current_User::allow('hms' ,'view_rlc_members')){
                 $this->addCommandByName('View RLC Members by RLC', 'ShowSearchByRlc');
                 $this->addCommandByName('View RLC Assignments', 'ViewRlcAssignments');
             }
-            if(Current_User::allow('hms', 'email_rlc_rejections')){
+            if(\Current_User::allow('hms', 'email_rlc_rejections')){
                 // Using JSConfirm, ask user if the _really_ want to send the emails
                 $onConfirmCmd = CommandFactory::getCommand('SendRlcRejectionEmails');
                 $cmd = CommandFactory::getCommand('JSConfirm');

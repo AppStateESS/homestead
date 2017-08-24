@@ -21,6 +21,6 @@ class GenericReport extends Report {
     // Shouldn't ever be used
     public function execute()
     {
-        throw new InvalidArgumentException("Shouldn't be here...");
+        throw new \InvalidArgumentException("Shouldn't be here...");
     }
 }

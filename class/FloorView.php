@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\exception\PermissionException;
+
 class FloorView extends View{
 
     private $hall;
@@ -14,8 +16,7 @@ class FloorView extends View{
 
     public function show()
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'floor_view')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'floor_view')){
             throw new PermissionException('You are not allowed to edit or view floors.');
         }
 
@@ -78,7 +79,6 @@ class FloorView extends View{
         }
 
         // Get a list of the RLCs indexed by id
-        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         $learning_communities = RlcFactory::getRlcList($this->floor->getTerm());
         $learning_communities[0] = 'None';
 
@@ -110,9 +110,9 @@ class FloorView extends View{
 
         // if the user has permission to view the form but not edit it then
         // disable it
-        if( Current_User::allow('hms', 'floor_view')
-        && !Current_User::allow('hms', 'floor_attributes')
-        && !Current_User::allow('hms', 'floor_structure'))
+        if( \Current_User::allow('hms', 'floor_view')
+        && !\Current_User::allow('hms', 'floor_attributes')
+        && !\Current_User::allow('hms', 'floor_structure'))
         {
             $form_vars = get_object_vars($form);
             $elements = $form_vars['_elements'];
@@ -125,7 +125,7 @@ class FloorView extends View{
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        if(Current_User::allow('hms', 'edit_role_members')){
+        if(\Current_User::allow('hms', 'edit_role_members')){
             javascript('modules/hms/role_editor');
             $tpl['ROLE_EDITOR'] = \PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Floor'", 'ID'=>$this->floor->id), 'hms', 'admin/role_editor.tpl');
         }

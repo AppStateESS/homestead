@@ -18,9 +18,6 @@ class LotteryChooseFloorView extends View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
 
         $hall = new HMS_Residence_Hall($this->hallId);

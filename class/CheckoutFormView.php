@@ -95,7 +95,7 @@ class CheckoutFormView extends View
         $query = "select banner_id, damage_id from hms_room_damage_responsibility as t1 left join hms_room_damage as t2 on t1.damage_id=t2.id
 	where t2.room_persistent_id='$persistent_id'";
         $pdo = PdoFactory::getPdoInstance();
-        $result = $pdo->query($query, PDO::FETCH_ASSOC);
+        $result = $pdo->query($query, \PDO::FETCH_ASSOC);
         $rows = $result->fetchAll();
 
         $sdamage = array();

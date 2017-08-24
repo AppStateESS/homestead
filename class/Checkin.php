@@ -50,13 +50,13 @@ class Checkin {
 
         try {
             $result = $db->saveObject($this);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // rethrow any exceptions
             throw $e;
         }
 
         if (\PHPWS_Error::logIfError($result)) {
-            throw new Exception($result->toString());
+            throw new \Exception($result->toString());
         }
 
         return $this->id;

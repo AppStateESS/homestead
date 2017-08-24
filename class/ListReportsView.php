@@ -1,7 +1,8 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+
+use \Homestead\exception\PermissionException;
 
 /**
  * List Reports View
@@ -38,7 +39,6 @@ class ListReportsView extends View{
         $this->setTitle("Reports");
 
         if(!Current_User::allow('hms', 'reports')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to run reports.');
         }
 

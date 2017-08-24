@@ -22,8 +22,6 @@ class ReApplicationFormView extends View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-
         javascript('jquery');
         javascript('jquery_ui');
 

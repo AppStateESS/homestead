@@ -19,10 +19,6 @@ class RlcApplicationReView extends View {
     }
 
     public function show(){
-        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-
         Layout::addPageTitle("RLC Application Review");
 
         $tags = array();
@@ -72,11 +68,11 @@ class RlcApplicationReView extends View {
 
         // If this application is denied and the person logged in is an admin, show a warning
         if($this->application->isDenied() && UserStatus::isAdmin()){
-            NQ::simple('hms', hms\NotificationView::WARNING, 'This application has been denied.');
+            NQ::simple('hms', NotificationView::WARNING, 'This application has been denied.');
         }
 
         // Show options depending of status of application.
-        if(UserStatus::isAdmin() && Current_User::allow('hms', 'approve_rlc_applications')){
+        if(UserStatus::isAdmin() && \Current_User::allow('hms', 'approve_rlc_applications')){
             if(!$this->application->denied && !HMS_RLC_Assignment::checkForAssignment($this->student->getUsername(), Term::getSelectedTerm())){
                 // Approve application for the community selected from dropdown
                 $approvalForm = $this->getApprovalForm();

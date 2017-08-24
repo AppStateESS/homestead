@@ -1,11 +1,6 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'PdoFactory.php');
-PHPWS_Core::initModClass('hms', 'MealPlan.php');
-PHPWS_Core::initModClass('hms', 'MealPlanRestored.php');
-PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
 /**
  * Factory for loading and saving MealPlan objects
@@ -14,9 +9,6 @@ PHPWS_Core::initModClass('hms', 'HousingApplication.php');
  * @package Homestead
  */
 class MealPlanFactory {
-
-
-
 
     /**
      * Creates a meal plan given a Student, term, and (optionally) a Housing Application.

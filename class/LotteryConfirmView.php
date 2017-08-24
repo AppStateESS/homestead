@@ -19,9 +19,6 @@ class LotteryConfirmView extends View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $tpl = array();
 
         $submitCmd = CommandFactory::getCommand('LotteryConfirm');
@@ -39,7 +36,6 @@ class LotteryConfirmView extends View {
         }
 
         # List the student's room
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         $room = new HMS_Room($this->roomId);
         $tpl['ROOM'] = $room->where_am_i();
 

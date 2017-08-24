@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\exception\StudentNotFoundException;
+
 /**
  * @author jbooker
  * @package hms
@@ -112,7 +114,7 @@ class HallOverview extends View{
                             $student = StudentFactory::getStudentByBannerId($bed->_curr_assignment->getBannerId(), $this->hall->term);
                         }catch(StudentNotFoundException $e){
                             $student = null;
-                            NQ::simple('hms', hms\NotificationView::WARNING, "Could not find data for: $username");
+                            NQ::simple('hms', NotificationView::WARNING, "Could not find data for: $username");
                         }
 
                         $assign_rlc  = HMS_RLC_Assignment::checkForAssignment($username, $this->hall->term); //false or index

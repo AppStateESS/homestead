@@ -1,7 +1,6 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'CommandFactory.php');
 
 class LotteryEligibilityWaiverView extends View {
 

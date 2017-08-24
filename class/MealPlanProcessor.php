@@ -1,8 +1,6 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'MealPlanFactory.php');
-PHPWS_Core::initModClass('hms', 'SOAP.php');
 
 class MealPlanProcessor {
 

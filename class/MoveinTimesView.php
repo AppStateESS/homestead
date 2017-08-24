@@ -13,8 +13,6 @@ namespace Homestead;
 class MoveinTimesView extends View {
 
     public function show(){
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         $tpl = array();
 
         $tpl['TITLE'] = 'Edit Move-in Times';

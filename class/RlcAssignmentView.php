@@ -1,8 +1,6 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'RlcFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 
 /**
  * RlcAssignmentView - View class for assigning students to LearningCommunitites.

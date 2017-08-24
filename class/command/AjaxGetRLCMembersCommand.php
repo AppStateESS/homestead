@@ -100,7 +100,7 @@ class AjaxGetRLCMembersCommand {
                     $roommateName .= " (Pending)";
                 }
 
-                $roommate = new stdClass();
+                $roommate = new \stdClass();
                 $roommate->name = $roommateName;
                 $roommate->profileUri = $profileCmd->getUri();
                 $roommates[] = $roommate;

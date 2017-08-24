@@ -2,6 +2,7 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
 use \PHPWS_Error;
 use \PHPWS_DB;
 
@@ -9,9 +10,6 @@ use \PHPWS_DB;
 // I'd rather this be a private static or class const, but you can't
 // calculate the path dynamically that way.
 define('HMS_REPORT_PATH', PHPWS_SOURCE_DIR . 'files/hms_reports/');
-
-PHPWS_Core::initModClass('hms', 'ReportInterfaces.php');
-PHPWS_Core::initModClass('hms', 'Report.php');
 
 /**
  * ReportController - Central report controller. Provides much of the functionality
@@ -113,8 +111,6 @@ abstract class ReportController {
     public function getMenuItemView()
     {
         $this->loadLastExec();
-
-        PHPWS_Core::initModClass('hms', 'ReportMenuItemView.php');
         $view = new ReportMenuItemView($this->report, $this->getReportClassName());
 
         return $view;
@@ -164,8 +160,6 @@ abstract class ReportController {
      */
     public function getAsyncSetupView()
     {
-        PHPWS_Core::initModClass('hms', 'ReportSetupView.php');
-
         $view = new ReportSetupView($this->report);
         $view->setLinkText('Run in background');
         $view->setDialogId('reportBgDialog');
@@ -315,8 +309,6 @@ abstract class ReportController {
      */
     public function getHtmlView()
     {
-        PHPWS_Core::initModClass('hms', 'ReportHtmlView.php');
-
         $name = $this->getReportClassName();
         $className = $name . "HtmlView";
         PHPWS_Core::initModClass('hms', "report/$name/$className.php");
@@ -364,8 +356,6 @@ abstract class ReportController {
      */
     public function getPdfView()
     {
-        PHPWS_Core::initModClass('hms', 'ReportPdfViewFromHtml.php');
-
         //TODO Check to make sure a HtmlView actually exists
 
         $pdfView = new ReportPdfViewFromHtml($this->report, $this->htmlView);
@@ -411,8 +401,6 @@ abstract class ReportController {
      * @return ReportCsvView
      */
     public function getCsvView(){
-        PHPWS_Core::initModClass('hms', 'ReportCsvView.php');
-
         $csvView = new ReportCsvView($this->report);
 
         return $csvView;

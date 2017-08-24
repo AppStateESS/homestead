@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\exception\PermissionException;
+
 /**
  * Primary HMS class
  *
@@ -26,14 +28,14 @@ abstract class HMS {
     {
         // This hack is the most awful hack ever.  Fix phpWebSite so that
         // user logins are logged separately.
-        if(Current_User::isLogged() && !isset($_SESSION['HMS_LOGGED_THE_LOGIN'])) {
-            $username = strtolower(Current_User::getUsername());
+        if(\Current_User::isLogged() && !isset($_SESSION['HMS_LOGGED_THE_LOGIN'])) {
+            $username = strtolower(\Current_User::getUsername());
             HMS_Activity_Log::log_activity($username,ACTIVITY_LOGIN, $username, NULL);
             $_SESSION['HMS_LOGGED_THE_LOGIN'] = $username;
         }
 
-        if(!Current_User::isLogged() && $this->context->get('action') != 'ShowFrontPage'){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'You must be logged in to do that.');
+        if(!\Current_User::isLogged() && $this->context->get('action') != 'ShowFrontPage'){
+            NQ::simple('hms', NotificationView::ERROR, 'You must be logged in to do that.');
             $action = 'ShowFrontPage';
         }else{
             $action = $this->context->get('action');
@@ -53,13 +55,13 @@ abstract class HMS {
             try {
                 $cmd->execute($this->context);
             } catch(PermissionException $p) {
-                NQ::Simple('hms', hms\NotificationView::ERROR, 'You do not have permission to perform that action. If you believe this is an error, please contact University Housing.');
-                $nv = new hms\NotificationView();
+                NQ::Simple('hms', NotificationView::ERROR, 'You do not have permission to perform that action. If you believe this is an error, please contact University Housing.');
+                $nv = new NotificationView();
                 $nv->popNotifications();
                 Layout::add($nv->show());
-            } catch(Exception $e) {
+            } catch(\Exception $e) {
 
-                $user = Current_User::getUserObj();
+                $user = \Current_User::getUserObj();
                 $e->username = $user->getUsername();
 
                 if(isset($_SERVER['HTTP_REFERER'])){
@@ -76,12 +78,12 @@ abstract class HMS {
 
                 try {
                     $message = $this->formatException($e);
-                    NQ::Simple('hms', hms\NotificationView::ERROR, 'An internal error has occurred, and the authorities have been notified.  We apologize for the inconvenience.');
+                    NQ::Simple('hms', NotificationView::ERROR, 'An internal error has occurred, and the authorities have been notified.  We apologize for the inconvenience.');
                     $this->emailError($message);
-                    $nv = new hms\NotificationView();
+                    $nv = new NotificationView();
                     $nv->popNotifications();
                     Layout::add($nv->show());
-                } catch(Exception $e) {
+                } catch(\Exception $e) {
                     $message2 = $this->formatException($e);
                     echo "HMS has experienced a major internal error.  Attempting to email an admin and then exit.";
                     $message = "Something terrible has happened, and the exception catch-all threw an exception.\n\nThe first exception was:\n\n$message\n\nThe second exception was:\n\n$message2";
@@ -92,7 +94,7 @@ abstract class HMS {
         }
     }
 
-    protected function formatException(Exception $e)
+    protected function formatException(\Exception $e)
     {
         ob_start();
         echo "Ohes Noes!  HMS threw an exception that was not caught!\n\n";
@@ -105,7 +107,7 @@ abstract class HMS {
         }
         echo "Remote addr: {$_SERVER['REMOTE_ADDR']}\n\n";
 
-        $user = Current_User::getUserObj();
+        $user = \Current_User::getUserObj();
         if(isset($user) && !is_null($user)){
             echo "User name: {$user->getUsername()}\n\n";
         }else{
@@ -122,7 +124,7 @@ abstract class HMS {
         print_r($_REQUEST);
 
         echo "\n\nHere is CurrentUser:\n\n";
-        print_r(Current_User::getUserObj());
+        print_r(\Current_User::getUserObj());
 
         $message = ob_get_contents();
         ob_end_clean();
@@ -132,7 +134,6 @@ abstract class HMS {
 
     protected function emailError($message)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         //$to = HMSSettings::getUberAdminEmail();
         $to = HMS_Email::get_tech_contacts();
 

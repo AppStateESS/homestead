@@ -254,8 +254,6 @@ class HMS_Util{
 
     public static function formatMealOption($meal)
     {
-        PHPWS_Core::initModClass('hms', 'MealPlan.php');
-
         if(is_null($meal)){
             return 'Unknown';
         }

@@ -2,9 +2,6 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
-
 /**
  * View for showing/editing Learning Communities
  * (despite the poor name, it *can* edit an existing community too)
