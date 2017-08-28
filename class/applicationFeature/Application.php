@@ -24,7 +24,7 @@ class ApplicationRegistration extends ApplicationFeatureRegistration {
         }
 
         // for returning students (summer terms)
-        if($term > $student->getApplicationTerm() && $term != PHPWS_Settings::get('hms', 'lottery_term') && (Term::getTermSem($term) == TERM_SUMMER1 || Term::getTermSem($term) == TERM_SUMMER2)){
+        if($term > $student->getApplicationTerm() && $term != \PHPWS_Settings::get('hms', 'lottery_term') && (Term::getTermSem($term) == TERM_SUMMER1 || Term::getTermSem($term) == TERM_SUMMER2)){
             return true;
         }
 

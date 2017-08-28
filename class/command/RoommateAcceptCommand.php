@@ -32,13 +32,13 @@ class RoommateAcceptCommand extends Command
     {
         $id = $context->get('roommateId');
         if(is_null($id)) {
-            throw new InvalidArgumentException('Must set roommateId');
+            throw new \InvalidArgumentException('Must set roommateId');
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $roommate = new HMS_Roommate($id);
         if($roommate->id == 0) {
-            throw new InvalidArgumentException('Invalid roommateId ' . $id);
+            throw new \InvalidArgumentException('Invalid roommateId ' . $id);
         }
 
         $username = UserStatus::getUsername();
@@ -53,14 +53,14 @@ class RoommateAcceptCommand extends Command
         \PHPWS_Core::initCoreClass('Captcha.php');
         $verified = Captcha::verify(TRUE);
         if($verified === FALSE || is_null($verified)) {
-            NQ::Simple('hms', hms\NotificationView::ERROR, 'Sorry, please try again.');
+            \NQ::Simple('hms', NotificationView::ERROR, 'Sorry, please try again.');
             $err->redirect();
         }
 
         try {
             $roommate->confirm();
         } catch(RoommateCompatibilityException $rce) {
-            NQ::simple('hms', hms\NotificationView::WARNING, $rce->getMessage());
+            \NQ::simple('hms', NotificationView::WARNING, $rce->getMessage());
             $err->redirect();
         }
 
@@ -87,7 +87,7 @@ class RoommateAcceptCommand extends Command
 
         $requestor = StudentFactory::getStudentByUsername($roommate->requestor, $roommate->term);
         $name = $requestor->getFullName();
-        NQ::Simple('hms', hms\NotificationView::SUCCESS, "You and $name are confirmed as roommates.");
+        \NQ::Simple('hms', NotificationView::SUCCESS, "You and $name are confirmed as roommates.");
 
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();

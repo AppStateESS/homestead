@@ -19,7 +19,7 @@ class AddBedCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'bed_structure')){
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'bed_structure')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to add a bed.');
         }
@@ -43,22 +43,22 @@ class AddBedCommand extends Command {
         $phoneNumber	= $context->get('phone_number');
 
         if(!isset($bedLetter)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'You must enter a bed letter.');
+            \NQ::simple('hms', NotificationView::ERROR, 'You must enter a bed letter.');
             $errorCmd->redirect();
         }
 
         if(!isset($bedroomLabel)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'You must enter a bedroom label.');
+            \NQ::simple('hms', NotificationView::ERROR, 'You must enter a bedroom label.');
             $errorCmd->redirect();
         }
 
         if(!isset($bannerId)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'You must enter a banner ID.');
+            \NQ::simple('hms', NotificationView::ERROR, 'You must enter a banner ID.');
             $errorCmd->redirect();
         }
 
         if(!isset($roomId)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Missing room ID.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Missing room ID.');
             $errorCmd->redirect();
         }
 
@@ -69,7 +69,7 @@ class AddBedCommand extends Command {
         $room = new HMS_Room($roomId);
 
         if(is_null($room)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Could not create bed. Invalid room.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Could not create bed. Invalid room.');
             $errorCmd->redirect();
         }
 
@@ -80,12 +80,12 @@ class AddBedCommand extends Command {
         # Try to create the bed
         try{
             HMS_Bed::addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raRoommate, $intlReserved, $raBed, $persistentId);
-        }catch(Exception $e){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'There was an error creating the bed: ' . $e->getMessage());
+        }catch(\Exception $e){
+            \NQ::simple('hms', NotificationView::ERROR, 'There was an error creating the bed: ' . $e->getMessage());
             $errorCmd->redirect();
         }
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Bed added successfully.');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'Bed added successfully.');
         $viewCmd->redirect();
     }
 }

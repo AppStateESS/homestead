@@ -18,7 +18,7 @@ class RlcMembershipFactory {
                 'username' => $student->getUsername(),
                 'term'     => $term
         ));
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RlcMembershipRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'RlcMembershipRestored');
 
         return $stmt->fetch();
     }
@@ -41,6 +41,6 @@ class RlcMembershipFactory {
         $stmt = $db->prepare($query);
         $stmt->execute($params);
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

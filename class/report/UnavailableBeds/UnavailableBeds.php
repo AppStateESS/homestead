@@ -27,7 +27,7 @@ class UnavailableBeds extends Report {
     public function execute()
     {
         if(!isset($this->term) || is_null($this->term)){
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         /*****

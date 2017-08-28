@@ -76,7 +76,7 @@ class EmergencyContactFormView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Emergency Contact Form");
+        \Layout::addPageTitle("Emergency Contact Form");
 
         return \PHPWS_Template::process($tpl,'hms','student/emergency_contact_form.tpl');
     }

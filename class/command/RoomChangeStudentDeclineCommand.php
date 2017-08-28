@@ -46,7 +46,7 @@ class RoomChangeStudentDeclineCommand extends Command {
 
         // Check permissions. Must be the participant or an admin
         if(UserStatus::getUsername() != $student->getUsername()
-            && !Current_User::allow('hms', 'admin_approve_room_change')) {
+            && !\Current_User::allow('hms', 'admin_approve_room_change')) {
             throw new PermissionException('You do not have permission to decline this room change.');
         }
 
@@ -54,7 +54,7 @@ class RoomChangeStudentDeclineCommand extends Command {
         $captchaResult = Captcha::verify(true);
         if ($captchaResult === false) {
             // Failed the captcha
-            NQ::simple('hms', hms\NotificationView::ERROR, "You didn't type the magic words correctly. Please try again.");
+            \NQ::simple('hms', NotificationView::ERROR, "You didn't type the magic words correctly. Please try again.");
             $cmd = CommandFactory::getCommand('ShowRoomChangeRequestApproval');
             $cmd->redirect();
         }
@@ -75,7 +75,7 @@ class RoomChangeStudentDeclineCommand extends Command {
 
         // TODO Notify everyone that the request was cancelled
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'You have declined the room change request.');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'You have declined the room change request.');
         $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
         $menuCmd->redirect();
     }

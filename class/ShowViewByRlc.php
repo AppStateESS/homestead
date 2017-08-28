@@ -2,8 +2,6 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-
 class ShowViewByRlc extends View{
 
     private $rlc;
@@ -15,7 +13,7 @@ class ShowViewByRlc extends View{
 
     public function show()
     {
-        Layout::addPageTitle("View By RLC");
+        \Layout::addPageTitle("View By RLC");
 
         $tpl = array();
         $tpl['RLC_ID'] = $this->rlc->getId();

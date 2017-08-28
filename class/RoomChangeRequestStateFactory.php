@@ -13,7 +13,7 @@ class RoomChangeRequestStateFactory {
         $stmt = $db->prepare($query);
         $stmt->execute(array('requestId' => $request->getId()));
 
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $className = 'RoomChangeState' . $result['state_name'];
 

@@ -5,7 +5,7 @@ namespace Homestead;
 use \phpws2\Database;
 
 /**
- * Singleton Factory class for creating PDO objects based on
+ * Singleton Factory class for creating \PDO objects based on
  * PHPWS database configuration. Somewhat of a wrapper
  * class for our current situation.
  *
@@ -32,8 +32,8 @@ class PdoFactory {
     }
 
     /**
-     * Returns a PDO object which is connected to the current database
-     * @return $pdo A PDO instance, connected to the current DB
+     * Returns a \PDO object which is connected to the current database
+     * @return $pdo A \PDO instance, connected to the current DB
      */
     public static function getPdoInstance()
     {
@@ -52,10 +52,10 @@ class PdoFactory {
 
         $dsn = $this->createDsn($dsnArray['dbtype'], $dsnArray['dbhost'], $dsnArray['dbname']);
 
-        $this->pdo = new PDO($dsn, $dsnArray['dbuser'], $dsnArray['dbpass'], array(PDO::ATTR_PERSISTENT => true));
+        $this->pdo = new \PDO($dsn, $dsnArray['dbuser'], $dsnArray['dbpass'], array(\PDO::ATTR_PERSISTENT => true));
 
-        // Make sure PDO will throw exceptions on error
-        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        // Make sure \PDO will throw exceptions on error
+        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
 
     public function getPdo()

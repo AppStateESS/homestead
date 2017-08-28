@@ -16,7 +16,7 @@ class JSONAssignStudentCommand
 
     public function execute(CommandContext $context)
     {
-        if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'assign_by_floor')) {
+        if (!UserStatus::isAdmin() || !\Current_User::allow('hms', 'assign_by_floor')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to assign students by floor.');
         }

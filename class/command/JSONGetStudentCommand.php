@@ -15,7 +15,7 @@ class JSONGetStudentCommand
 
     public function execute(CommandContext $context)
     {
-        if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'search')) {
+        if (!UserStatus::isAdmin() || !\Current_User::allow('hms', 'search')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to lookup student names!');
         }

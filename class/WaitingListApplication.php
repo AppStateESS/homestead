@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
+use \Homestead\exception\StudentNotFoundException;
 use \PHPWS_Error;
 use \PHPWS_DB;
 
@@ -111,8 +113,6 @@ class WaitingListApplication extends HousingApplication {
     {
         //test($this,1);
 
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $tags = array();
 
         try{
@@ -140,8 +140,8 @@ class WaitingListApplication extends HousingApplication {
         $tags['APP_DATE']       = date("m/j/Y g:ia", $this->getCreatedOn());
 
         // TODO.. fix these - they should actually instanciate the command objects
-        $assign_link = PHPWS_Text::secureLink('[Assign]','hms', array('module'=>'hms', 'action'=>'ShowAssignStudent', 'username'=>$this->username));
-        $remove_link = PHPWS_Text::secureLink('[Remove]','hms', array('module'=>'hms', 'action'=>'OpenWaitingListRemove', 'username'=>$this->username));
+        $assign_link = \PHPWS_Text::secureLink('[Assign]','hms', array('module'=>'hms', 'action'=>'ShowAssignStudent', 'username'=>$this->username));
+        $remove_link = \PHPWS_Text::secureLink('[Remove]','hms', array('module'=>'hms', 'action'=>'OpenWaitingListRemove', 'username'=>$this->username));
         $tags['ACTION']     = "$assign_link $remove_link";
 
         return $tags;
@@ -149,8 +149,6 @@ class WaitingListApplication extends HousingApplication {
 
     public function waitingListCsvTags()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $tags = array();
 
         try{
@@ -190,7 +188,7 @@ class WaitingListApplication extends HousingApplication {
     {
         \PHPWS_Core::initCoreClass('DBPager.php');
 
-        $term = PHPWS_Settings::get('hms', 'lottery_term');
+        $term = \PHPWS_Settings::get('hms', 'lottery_term');
 
         $pager = new DBPager('hms_new_application', 'WaitingListApplication');
 

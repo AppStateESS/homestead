@@ -55,7 +55,7 @@ class RoomChangeListAvailableBedsCommand extends Command {
 
         $stmt->execute($params);
 
-        echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+        echo json_encode($stmt->fetchAll(\PDO::FETCH_ASSOC));
         exit;
     }
 }

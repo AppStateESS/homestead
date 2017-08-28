@@ -26,7 +26,7 @@ class DamageTypeFactory {
 
         $stmt->execute();
 
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $resultById = array();
 

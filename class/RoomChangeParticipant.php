@@ -147,7 +147,7 @@ class RoomChangeParticipant {
      * Returns an array of user names who have permission to approve room changes
      * for this participants destination hall and floor.
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function getFutureRdList()
     {

@@ -15,7 +15,7 @@ class ExportRlcAppsCommand extends Command {
     // TODO: rewrite this
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'view_rlc_applications') ){
+        if(!\Current_User::allow('hms', 'view_rlc_applications') ){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to view rlc applications');
         }

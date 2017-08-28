@@ -49,14 +49,14 @@ class SubmitRLCReapplicationPage2Command extends Command {
         // Double check the the student is eligible
         $housingApp = HousingApplication::getApplicationByUser($student->getUsername(), $term);
         if(!$housingApp instanceof LotteryApplication){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'You are not eligible to re-apply for a Learning Community.');
+            \NQ::simple('hms', NotificationView::ERROR, 'You are not eligible to re-apply for a Learning Community.');
             $menuCmd->redirect();
         }
 
         // Make sure the user doesn't already have an application on file for this term
         $app = HMS_RLC_Application::checkForApplication($student->getUsername(), $term);
         if($app !== FALSE){
-            NQ::simple('hms', hms\NotificationView::WARNING, 'You have already re-applied for a Learning Community for that term.');
+            \NQ::simple('hms', NotificationView::WARNING, 'You have already re-applied for a Learning Community for that term.');
             $menuCmd->redirect();
         }
 
@@ -78,29 +78,29 @@ class SubmitRLCReapplicationPage2Command extends Command {
         $rlcChoice2 = $reApp->rlc_third_choice_id;
 
         if(isset($rlcChoice1) && (!isset($question1) || empty($question1))){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Please respond to all of the short answer questions.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Please respond to all of the short answer questions.');
             $errorCmd->redirect();
         }
 
         if(isset($rlcChoice2) && (!isset($question2) || empty($question2))){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Please respond to all of the short answer questions.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Please respond to all of the short answer questions.');
             $errorCmd->redirect();
         }
 
         // Check response lengths
         $wordLimit = 500;
         if(str_word_count($question0) > $wordLimit){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Your answer to question number one is too long. Please limit your response to 500 words or less.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Your answer to question number one is too long. Please limit your response to 500 words or less.');
             $errorCmd->redirect();
         }
 
         if(isset($rlcChoice2) && str_word_count($question1) > $wordLimit){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Your answer to question number two is too long. Please limit your response to 500 words or less.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Your answer to question number two is too long. Please limit your response to 500 words or less.');
             $errorCmd->redirect();
         }
 
         if(isset($rlcChoice3) && str_word_count($question2) > $wordLimit){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Your answer to question number three is too long. Please limit your response to 500 words or less.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Your answer to question number three is too long. Please limit your response to 500 words or less.');
             $errorCmd->redirect();
         }
 
@@ -120,7 +120,7 @@ class SubmitRLCReapplicationPage2Command extends Command {
         unset($_SESSION['RLC_REAPP']);
 
         // Redirect back to the main menu
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Your Residential Learning Community Re-application was saved successfully.');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'Your Residential Learning Community Re-application was saved successfully.');
         $menuCmd->redirect();
     }
 }

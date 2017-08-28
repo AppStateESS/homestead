@@ -25,7 +25,7 @@ class AdminAddRlcMembersCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if (!Current_User::allow('hms', 'add_rlc_members')) {
+        if (!\Current_User::allow('hms', 'add_rlc_members')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to view RLC members.');
         }
@@ -43,7 +43,7 @@ class AdminAddRlcMembersCommand extends Command {
         $communityId = $context->get('communityId');
 
         if (!isset($communityId) || $communityId == '') {
-            throw new InvalidArgumentException('Missing community id.');
+            throw new \InvalidArgumentException('Missing community id.');
         }
 
         $community = new HMS_Learning_Community($communityId);
@@ -73,10 +73,10 @@ class AdminAddRlcMembersCommand extends Command {
             try {
                 $student = StudentFactory::getStudentByBannerId($banner, $term);
             } catch (StudentNotFoundException $e) {
-                NQ::simple('hms', hms\NotificationView::ERROR, "Couldn't find a student with ID: {$e->getRequestedId()}");
+                \NQ::simple('hms', NotificationView::ERROR, "Couldn't find a student with ID: {$e->getRequestedId()}");
                 continue;
-            } catch (InvalidArgumentException $e) {
-                NQ::simple('hms', hms\NotificationView::ERROR, "This doesn't look like a banner ID: $banner");
+            } catch (\InvalidArgumentException $e) {
+                \NQ::simple('hms', NotificationView::ERROR, "This doesn't look like a banner ID: $banner");
                 continue;
             }
 
@@ -85,7 +85,7 @@ class AdminAddRlcMembersCommand extends Command {
 
             // If no housing app, show a warning
             if (is_null($housingApp)) {
-                NQ::simple('hms', hms\NotificationView::WARNING, "No housing application found for: {$student->getName()}({$student->getBannerID()})");
+                \NQ::simple('hms', NotificationView::WARNING, "No housing application found for: {$student->getName()}({$student->getBannerID()})");
             }
 
             // Check for an existing learning community application
@@ -119,14 +119,14 @@ class AdminAddRlcMembersCommand extends Command {
                 $rlcApp->save();
 
                 // RLC application already exists
-                NQ::simple('hms', hms\NotificationView::WARNING, "RLC application already exists for {$student->getName()}({$student->getBannerID()})");
+                \NQ::simple('hms', NotificationView::WARNING, "RLC application already exists for {$student->getName()}({$student->getBannerID()})");
             }
 
             // Check for RLC membership
             $membership = RlcMembershipFactory::getMembership($student, $term);
 
             if($membership !== false){
-                NQ::simple('hms', hms\NotificationView::ERROR, "RLC membership already exists for {$student->getName()}({$student->getBannerID()})");
+                \NQ::simple('hms', NotificationView::ERROR, "RLC membership already exists for {$student->getName()}({$student->getBannerID()})");
                 continue;
             }
 
@@ -134,7 +134,7 @@ class AdminAddRlcMembersCommand extends Command {
             if($student->getType() == TYPE_CONTINUING) {
                 $eligibility = HMS_Lottery::determineEligibility($student->getUsername());
                 if($eligibility === false){
-                    NQ::simple('hms', hms\NotificationView::ERROR, "{$student->getName()} ({$student->getBannerID()}) is not currently eligible for housing");
+                    \NQ::simple('hms', NotificationView::ERROR, "{$student->getName()} ({$student->getBannerID()}) is not currently eligible for housing");
                     continue;
                 }
             }

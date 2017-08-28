@@ -27,13 +27,13 @@ class ShowManageRoomChangeCommand extends Command {
         $requestId = $context->get('requestId');
 
         if (!isset($requestId) || is_null($context)) {
-            throw new InvalidArgumentException('Missing request id');
+            throw new \InvalidArgumentException('Missing request id');
         }
 
         $request = RoomChangeRequestFactory::getRequestById($requestId);
 
         if (is_null($request) || $request === false) {
-           NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid room change request id.');
+           \NQ::simple('hms', NotificationView::ERROR, 'Invalid room change request id.');
            $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
            $cmd->redirect();
         }

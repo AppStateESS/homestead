@@ -62,7 +62,7 @@ class ShowAssignmentMoveConfirmationCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'assignment_maintenance')){
+        if(!\Current_User::allow('hms', 'assignment_maintenance')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to assign students.');
         }

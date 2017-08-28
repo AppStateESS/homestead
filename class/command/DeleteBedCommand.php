@@ -24,7 +24,7 @@ class DeleteBedCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'bed_structure')){
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'bed_structure')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to remove a bed.');
         }
@@ -38,24 +38,24 @@ class DeleteBedCommand extends Command {
         $roomId = $context->get('roomId');
 
         if(!isset($roomId)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Missing room ID.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Missing room ID.');
             $viewCmd->redirect();
         }
 
         if(!isset($bedId)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Missing bed ID.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Missing bed ID.');
             $viewCmd->redirect();
         }
 
         # Try to delete the bed
         try{
             HMS_Bed::deleteBed($bedId);
-        }catch(Exception $e){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'There was an error deleting the bed: ' . $e->getMessage());
+        }catch(\Exception $e){
+            \NQ::simple('hms', NotificationView::ERROR, 'There was an error deleting the bed: ' . $e->getMessage());
             $viewCmd->redirect();
         }
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Bed successfully deleted.');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'Bed successfully deleted.');
         $viewCmd->redirect();
     }
 }

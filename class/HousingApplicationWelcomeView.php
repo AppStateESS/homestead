@@ -69,7 +69,7 @@ class HousingApplicationWelcomeView extends View {
 
         $studentType = $this->student->getType();
 
-        Layout::addPageTitle("Welcome");
+        \Layout::addPageTitle("Welcome");
 
         if(count($appsOnFile) > 0) {
             // User is now past step one.  No longer just welcoming, we are now welcoming back.

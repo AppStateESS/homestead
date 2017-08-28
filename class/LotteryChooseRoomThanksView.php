@@ -22,7 +22,7 @@ class LotteryChooseRoomThanksView extends View {
 
         $tpl['LOGOUT'] = UserStatus::getLogoutLink();
 
-        Layout::addPageTitle("Thank you");
+        \Layout::addPageTitle("Thank you");
 
         return \PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_room_thanks.tpl');
     }

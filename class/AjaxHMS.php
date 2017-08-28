@@ -58,7 +58,7 @@ class AjaxHMS extends HMS
 
         echo $response;
 
-        // This sets NQ (notifications), which aren't valid for AJAX, so we aren't doing it. Just exit instead.
+        // This sets \NQ (notifications), which aren't valid for AJAX, so we aren't doing it. Just exit instead.
         //HMS::quit();
         exit;
     }

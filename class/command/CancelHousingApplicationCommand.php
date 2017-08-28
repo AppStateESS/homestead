@@ -21,7 +21,7 @@ class CancelHousingApplicationCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'cancel_housing_application')){
+        if(!\Current_User::allow('hms', 'cancel_housing_application')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to cancel housing applications.');
         }
@@ -30,13 +30,13 @@ class CancelHousingApplicationCommand extends Command {
         $applicationId = $context->get('applicationId');
 
         if(!isset($applicationId) || is_null($applicationId)){
-            throw new InvalidArgumentException('Missing housing application id.');
+            throw new \InvalidArgumentException('Missing housing application id.');
         }
 
         // Check for a cancellation reason
         $cancelReason = $context->get('cancel_reason');
         if(!isset($cancelReason) || is_null($cancelReason)){
-            throw new InvalidArgumentException('Missing cancellation reason.');
+            throw new \InvalidArgumentException('Missing cancellation reason.');
         }
 
         // Load the housing application

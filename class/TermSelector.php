@@ -12,27 +12,27 @@ class TermSelector extends View {
 
     public function show()
     {
-    	if(\UserStatus::isGuest()) {
+    	if(UserStatus::isGuest()) {
             return '';
         }
 
-        $terms = \Term::getTermsAssoc();
+        $terms = Term::getTermsAssoc();
 
-        $current = \Term::getCurrentTerm();
+        $current = Term::getCurrentTerm();
         if(isset($terms[$current])){
             $terms[$current] .= ' (Current)';
         }
 
         $form = new \PHPWS_Form('term_selector');
 
-        $cmd = \CommandFactory::getCommand('SelectTerm');
+        $cmd = CommandFactory::getCommand('SelectTerm');
         $cmd->initForm($form);
 
         $form->addDropBox('term', $terms);
 
         $tags = $form->getTemplate();
 
-        $currentTerm = \Term::getSelectedTerm();
+        $currentTerm = Term::getSelectedTerm();
         $tags['TERM_OPTIONS'] = array();
 
         foreach ($tags['TERM_VALUE'] as $key => $value) {

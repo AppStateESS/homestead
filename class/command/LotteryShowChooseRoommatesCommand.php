@@ -22,13 +22,13 @@ class LotteryShowChooseRoommatesCommand extends Command {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'LotteryChooseRoommatesView.php');
 
-        $term = PHPWS_Settings::get('hms', 'lottery_term');
+        $term = \PHPWS_Settings::get('hms', 'lottery_term');
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         $roomId = $context->get('roomId');
 
         if(!isset($roomId) || is_null($roomId) || empty($roomId)){
-            throw new InvalidArgumentException('Missing room id.');
+            throw new \InvalidArgumentException('Missing room id.');
         }
 
         $view = new LotteryChooseRoommatesView($student, $term, $roomId);

@@ -24,7 +24,6 @@ class SendRlcInvitesView extends View {
         $tpl['RESPOND_BY_DATE'] = javascript('datepicker', array('name'=>'respond_by_date', 'id'=>'respond_by_date'));
         $tpl['TERM'] = Term::toString(Term::getSelectedTerm());
 
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $form->addDropBox('time', HMS_Util::get_hours());
         $form->setMatch('time', '17');
         $form->setClass('time', 'form-control');

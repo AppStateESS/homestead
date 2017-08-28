@@ -21,7 +21,7 @@ class JSONGetFloorsCommand
 
         $prep = $pdo->prepare('select id, floor_number, gender_type from hms_floor where residence_hall_id=? and is_online=1 order by floor_number');
         $prep->execute(array($hall_id));
-        $rows = $prep->fetchAll(PDO::FETCH_ASSOC);
+        $rows = $prep->fetchAll(\PDO::FETCH_ASSOC);
         if (empty($rows)) {
             return null;
         }

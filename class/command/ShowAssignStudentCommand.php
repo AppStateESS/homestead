@@ -60,7 +60,7 @@ class ShowAssignStudentCommand extends Command {
      */
     public function execute(CommandContext $context)
     {
-        if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')) {
+        if (!UserStatus::isAdmin() || !\Current_User::allow('hms', 'assignment_maintenance')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to assign students.');
         }
@@ -85,12 +85,12 @@ class ShowAssignStudentCommand extends Command {
         if (isset($username)) {
             try {
                 $student = StudentFactory::getStudentByUsername($context->get('username'), $term);
-            } catch (InvalidArgumentException $e) {
-                NQ::simple('hms', hms\NotificationView::ERROR, $e->getMessage());
+            } catch (\InvalidArgumentException $e) {
+                \NQ::simple('hms', NotificationView::ERROR, $e->getMessage());
                 $cmd = CommandFactory::getCommand('ShowAssignStudent');
                 $cmd->redirect();
             } catch (StudentNotFoundException $e) {
-                NQ::simple('hms', hms\NotificationView::ERROR, $e->getMessage());
+                \NQ::simple('hms', NotificationView::ERROR, $e->getMessage());
                 $cmd = CommandFactory::getCommand('ShowAssignStudent');
                 $cmd->redirect();
             }

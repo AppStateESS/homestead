@@ -37,7 +37,7 @@ class AssignmentsByType extends Report {
         $stmt = $pdo->prepare($sql);
         $stmt->execute(array('term'=>$this->term));
 
-        $this->typeCounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $this->typeCounts = $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /****************************

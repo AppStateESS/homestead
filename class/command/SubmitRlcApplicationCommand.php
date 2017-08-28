@@ -33,7 +33,7 @@ class SubmitRlcApplicationCommand extends Command
         || ($choice2->id != -1 && !$choice2->allowStudentType($student->getType()))
         || ($choice3->id != -1 && !$choice3->allowStudentType($student->getType()))
         ){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Sorry, you cannot apply for the selected RLC. Please contact University Housing if you believe this to be in error.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Sorry, you cannot apply for the selected RLC. Please contact University Housing if you believe this to be in error.');
             $errorCmd->redirect();
         }
 
@@ -46,28 +46,28 @@ class SubmitRlcApplicationCommand extends Command
 
         if(str_word_count($whySpecific) > HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT)
         {
-        NQ::simple('hms', hms\NotificationView::ERROR, 'Your respose to the question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
+        \NQ::simple('hms', NotificationView::ERROR, 'Your respose to the question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
             $errorCmd->redirect();
         }
 
         if(str_word_count($strengthsWeaknesses) > HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT)
         {
-        NQ::simple('hms', hms\NotificationView::ERROR, 'Your respose to the question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
+        \NQ::simple('hms', NotificationView::ERROR, 'Your respose to the question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
             $errorCmd->redirect();
         }
 
         if(str_word_count($question0) > HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Your respose to the first question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Your respose to the first question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
             $errorCmd->redirect();
         }
 
         if(str_word_count($question1) > HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Your respose to the second question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Your respose to the second question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
             $errorCmd->redirect();
         }
 
         if(str_word_count($question2) > HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Your respose to the third question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Your respose to the third question is too long. Please limit your response to ' . HMS_RLC_Application::RLC_RESPONSE_WORD_LIMIT .  ' words.');
             $errorCmd->redirect();
         }
 
@@ -80,8 +80,8 @@ class SubmitRlcApplicationCommand extends Command
             // Delete the old application to make way for this one
             try {
                 $oldApp->delete();
-            } catch(Exception $e){
-                NQ::simple('hms', hms\NotificationView::ERROR, 'Sorry, an error occured while attempting to replace your existing Residential Learning Community Application.  If this problem persists please contact University Housing.');
+            } catch(\Exception $e){
+                \NQ::simple('hms', NotificationView::ERROR, 'Sorry, an error occured while attempting to replace your existing Residential Learning Community Application.  If this problem persists please contact University Housing.');
                 $errorCmd->redirect();
             }
         }
@@ -103,8 +103,8 @@ class SubmitRlcApplicationCommand extends Command
 
         try {
             $application->save();
-        }catch(Exception $e) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Sorry, an error occured while attempting to submit your application.  If this problem persists please contact University Housing.');
+        }catch(\Exception $e) {
+            \NQ::simple('hms', NotificationView::ERROR, 'Sorry, an error occured while attempting to submit your application.  If this problem persists please contact University Housing.');
             $errorCmd->redirect();
         }
 
@@ -117,7 +117,7 @@ class SubmitRlcApplicationCommand extends Command
         HMS_Email::send_rlc_application_confirmation($student);
 
         # Show a success message and redirect
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Your Residential Learning Community (RLC) application has been successfully submitted. You should receive a confirmation email (sent to your Appalachian State email account) soon. Notification of your acceptance into an RLC will also be sent to your Appalachian State email account.  Please continue to check your ASU email account regularly.  For more information on the RLC acceptance timeline or frequently asked questions, please visit <a href="http://housing.appstate.edu/rlc" target="_blank">housing.appstate.edu/rlc</a>.');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'Your Residential Learning Community (RLC) application has been successfully submitted. You should receive a confirmation email (sent to your Appalachian State email account) soon. Notification of your acceptance into an RLC will also be sent to your Appalachian State email account.  Please continue to check your ASU email account regularly.  For more information on the RLC acceptance timeline or frequently asked questions, please visit <a href="http://housing.appstate.edu/rlc" target="_blank">housing.appstate.edu/rlc</a>.');
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();
     }

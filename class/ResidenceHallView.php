@@ -139,7 +139,7 @@ class ResidenceHallView extends View {
         javascript('modules/hms/role_editor');
         $tpl['ROLE_EDITOR'] = \PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Residence_Hall'", 'ID'=>$this->hall->id), 'hms', 'admin/role_editor.tpl');
 
-        Layout::addPageTitle("Edit Residence Hall");
+        \Layout::addPageTitle("Edit Residence Hall");
 
         return \PHPWS_Template::process($tpl, 'hms', 'admin/edit_residence_hall.tpl');
     }

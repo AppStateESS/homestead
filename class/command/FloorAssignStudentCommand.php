@@ -16,7 +16,7 @@ class FloorAssignStudentCommand extends Command {
     }
 
     public function execute(CommandContext $context){
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')){
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'assignment_maintenance')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to assign students.');
         }
@@ -36,7 +36,7 @@ class FloorAssignStudentCommand extends Command {
         } catch(StudentNotFoundException $e){
             echo json_encode(array('success'=>false, 'message'=>$e->getMessage()));
             exit;
-        } catch(Exception $e){
+        } catch(\Exception $e){
             echo json_encode(array('success'=>false, 'message'=>$e->getMessage()));
             exit;
         }

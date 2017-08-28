@@ -54,7 +54,7 @@ class LotteryProcess {
         $this->inviteCounts = $inviteCounts;
 
         // One-time date/time calculations, setup for later on
-        $this->term = PHPWS_Settings::get('hms', 'lottery_term');
+        $this->term = \PHPWS_Settings::get('hms', 'lottery_term');
         $this->year = Term::getTermYear($this->term);
         $this->academicYear = Term::toString($this->term) . ' - ' . Term::toString(Term::getNextTerm($this->term));
         $this->now = time();
@@ -344,7 +344,7 @@ class LotteryProcess {
      */
     public static function getHardCap()
     {
-        $hardCap = PHPWS_Settings::get('hms', 'lottery_hard_cap');
+        $hardCap = \PHPWS_Settings::get('hms', 'lottery_hard_cap');
         if (!isset($hardCap) || empty($hardCap)) {
             throw new \InvalidArgumentException('Hard cap not set!');
         }
@@ -442,7 +442,7 @@ class LotteryProcess {
 
     public static function getJrSoftCap()
     {
-        $softCap = PHPWS_Settings::get('hms', 'lottery_jr_goal');
+        $softCap = \PHPWS_Settings::get('hms', 'lottery_jr_goal');
         if (!isset($softCap) || empty($softCap)) {
             throw new \InvalidArgumentException('Junior soft cap not set!');
         }
@@ -452,7 +452,7 @@ class LotteryProcess {
 
     public static function getSrSoftCap()
     {
-        $softCap = PHPWS_Settings::get('hms', 'lottery_sr_goal');
+        $softCap = \PHPWS_Settings::get('hms', 'lottery_sr_goal');
         if (!isset($softCap) || empty($softCap)) {
             throw new \InvalidArgumentException('Junior soft cap not set!');
         }

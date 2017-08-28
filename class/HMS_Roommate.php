@@ -147,7 +147,7 @@ class HMS_Roommate
         $query->bindParam(':userb', $b);
 
         $query->execute();
-        $results = $query->fetchAll(PDO::FETCH_CLASS, "HMS_Roommate");
+        $results = $query->fetchAll(\PDO::FETCH_CLASS, "HMS_Roommate");
 
         return $results[0];
     }
@@ -249,7 +249,7 @@ class HMS_Roommate
         $stmt->bindParam(':term', $term);
 
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         if (count($result) > 1) {
             // TODO: Log Weird Situation
@@ -294,7 +294,7 @@ class HMS_Roommate
         $stmt->bindParam(':ttl', $ttl);
 
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         if (count($result) > 1) {
             // TODO: Log Weird Situation
@@ -415,7 +415,7 @@ class HMS_Roommate
         $stmt->bindParam(':term', $term);
 
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_CLASS, "HMS_Roommate");
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, "HMS_Roommate");
     }
 
     /**
@@ -446,7 +446,7 @@ class HMS_Roommate
         $query->bindParam(':user', $asu_username);
 
         $query->execute();
-        $requests = $query->fetchAll(PDO::FETCH_CLASS, "HMS_Roommate");
+        $requests = $query->fetchAll(\PDO::FETCH_CLASS, "HMS_Roommate");
 
         if ($requests == null) {
             return true;

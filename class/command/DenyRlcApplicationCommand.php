@@ -18,7 +18,7 @@ class DenyRlcApplicationCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'approve_rlc_applications')){
+        if(!\Current_User::allow('hms', 'approve_rlc_applications')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to approve/deny RLC applications.');
         }
@@ -30,9 +30,9 @@ class DenyRlcApplicationCommand extends Command {
         $app->save();
 
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        HMS_Activity_Log::log_activity($app->username, 28, Current_User::getUsername(), 'Application Denied');
+        HMS_Activity_Log::log_activity($app->username, 28, \Current_User::getUsername(), 'Application Denied');
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Application denied.');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'Application denied.');
 
         $context->goBack();
     }

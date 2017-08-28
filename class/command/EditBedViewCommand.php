@@ -30,7 +30,7 @@ class EditBedViewCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!UserStatus::isAdmin() ||  !Current_User::allow('hms', 'bed_view') ){
+        if(!UserStatus::isAdmin() ||  !\Current_User::allow('hms', 'bed_view') ){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to view beds.');
         }
@@ -39,7 +39,7 @@ class EditBedViewCommand extends Command {
         $bedId = $context->get('bed');
 
         if(!isset($bedId)){
-            throw new InvalidArgumentException('Missing bed ID.');
+            throw new \InvalidArgumentException('Missing bed ID.');
         }
 
         $bed = new HMS_Bed($bedId);

@@ -32,7 +32,7 @@ class CheckinFormSubmitCommand extends Command {
     public function execute(CommandContext $context)
     {
         // Check permissions
-        if (!Current_User::allow('hms', 'checkin')) {
+        if (!\Current_User::allow('hms', 'checkin')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to checkin students.');
         }
@@ -44,7 +44,7 @@ class CheckinFormSubmitCommand extends Command {
         $keyCode = $context->get('key_code');
 
         if (!isset($keyCode) || $keyCode == '') {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Please enter a key code.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Please enter a key code.');
             $errorCmd = CommandFactory::getCommand('ShowCheckinForm');
             $errorCmd->setBannerId($bannerId);
             $errorCmd->setHallId($hallId);
@@ -61,7 +61,7 @@ class CheckinFormSubmitCommand extends Command {
         $bed = $assignment->get_parent();
 
         // Get the currently logged in user
-        $currUser = Current_User::getUsername();
+        $currUser = \Current_User::getUsername();
 
         // Check for an existing Check-in
         $checkin = CheckinFactory::getCheckinByBed($student, $bed);
@@ -97,7 +97,7 @@ class CheckinFormSubmitCommand extends Command {
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         HMS_Email::sendCheckinConfirmation($student, $infoCard, $infoCardView);
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Checkin successful.');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'Checkin successful.');
 
         // Redirect to success page with option to print check-in document.
         $cmd = CommandFactory::getCommand('ShowCheckinDocument');

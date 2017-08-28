@@ -26,13 +26,13 @@ class ReviewHallNotificationMessageCommand extends Command {
 
     public function execute(CommandContext $context){
         /*
-        if(!Current_User::allow('hms', 'email_hall') && !Current_User::allow('hms', 'email_all')){
+        if(!\Current_User::allow('hms', 'email_hall') && !\Current_User::allow('hms', 'email_all')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to send messages.');
         }
         */
         if(is_null($context->get('hall')) && is_null($context->get('floor'))){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'You must select a hall to continue!');
+            \NQ::simple('hms', NotificationView::ERROR, 'You must select a hall to continue!');
             $cmd = CommandFactory::getCommand('ShowHallNotificationSelect');
             $cmd->redirect();
         }
@@ -45,11 +45,11 @@ class ReviewHallNotificationMessageCommand extends Command {
 
         $cmd = CommandFactory::getCommand('ShowHallNotificationEdit');
         if(empty($subject)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'You must fill in the subject line of the email.');
+            \NQ::simple('hms', NotificationView::ERROR, 'You must fill in the subject line of the email.');
             $cmd->loadContext($context);
             $cmd->redirect();
         } else if(empty($body)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'You must fill in the message to be sent.');
+            \NQ::simple('hms', NotificationView::ERROR, 'You must fill in the message to be sent.');
             $cmd->loadContext($context);
             $cmd->redirect();
         }

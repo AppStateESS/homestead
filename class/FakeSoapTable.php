@@ -15,7 +15,7 @@ class TestSOAP extends SOAP
      * Main public function for getting student info.
      * Used by the rest of the "get" public functions
      * @return SOAP response object
-     * @throws InvalidArgumentException, SOAPException
+     * @throws \InvalidArgumentException, SOAPException
      */
     public function getStudentProfile($bannerId, $term)
     {
@@ -37,7 +37,7 @@ class TestSOAP extends SOAP
         $stmt = $db->prepare($query);
         $params = array('banner_id' => $bannerId);
         $stmt->execute($params);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if (empty($result)) {
             throw new StudentNotFoundException('User not found', 0, $bannerId);

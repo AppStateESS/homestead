@@ -58,7 +58,7 @@ class EmergencyContactConfirmCommand extends Command {
         } else {
             // TODO What if there is no application found? Should I cry?
             // Execution shouldn't be able to make it this far if an application doesn't exist.
-            throw new Exception('No application found.');
+            throw new \Exception('No application found.');
         }
 
         // Update the Emergency Contact and Missing Person information
@@ -90,7 +90,7 @@ class EmergencyContactConfirmCommand extends Command {
             try{
                 // report the application to banner;
                 $application->reportToBanner();
-            }catch(Exception $e){
+            }catch(\Exception $e){
                 // ignore any errors reporting this to banner, they'll be logged and admins notified.
                 // we've saved the student's application locally, so it's ok if this doesn't work.
             }
@@ -102,7 +102,7 @@ class EmergencyContactConfirmCommand extends Command {
 
         // Notify user of success
         //$friendly_term = Term::toString($application->getTerm());
-        //NQ::simple('hms', hms\NotificationView::SUCCESS, "Your Emergency Contact & Missing Person information for $friendly_term was successfully modified! You will receive an email confirmation in the next 24 hours.");
+        //\NQ::simple('hms', NotificationView::SUCCESS, "Your Emergency Contact & Missing Person information for $friendly_term was successfully modified! You will receive an email confirmation in the next 24 hours.");
 
         // Redirect to the student menu
         $successCmd = CommandFactory::getCommand('ShowStudentMenu');

@@ -22,7 +22,7 @@ class SelectFloorView extends View
         $tpl = array();
 
         if ($this->halls == NULL) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'There are no halls available for the selected term.');
+            \NQ::simple('hms', NotificationView::ERROR, 'There are no halls available for the selected term.');
             $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
             $cmd->redirect();
         }
@@ -52,7 +52,7 @@ class SelectFloorView extends View
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Select Floor");
+        \Layout::addPageTitle("Select Floor");
 
         return \PHPWS_Template::process($tpl, 'hms', 'admin/select_floor.tpl');
     }

@@ -61,7 +61,7 @@ class RlcRoster extends Report {
 
     $stmt->execute($params);
 
-    $queryResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $queryResult = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
     $results = array();
     $i = 0;

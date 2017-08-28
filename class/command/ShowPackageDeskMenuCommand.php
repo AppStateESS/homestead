@@ -27,7 +27,7 @@ class ShowPackageDeskMenuCommand extends Command {
     public function execute(CommandContext $context)
     {
         // Check permissions
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'package_desk')){
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'package_desk')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to access the Package Desk.');
         }

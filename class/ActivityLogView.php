@@ -38,7 +38,7 @@ class ActivityLogView extends View {
         $tags['CONTENT'] = $this->pager->show();
         $tags['FILTERS'] = ActivityLogView::showFilters($_REQUEST);
 
-        Layout::addPageTitle("Activity Log");
+        \Layout::addPageTitle("Activity Log");
 
         javascript('jquery_ui');
         javascript('modules/hms/note', array('LINK'=>'activity-log-note'));

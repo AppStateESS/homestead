@@ -34,7 +34,7 @@ class RetrieveRoomDamageCommand extends Command {
 
         $stmt->execute($params);
 
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         echo json_encode($results);
         exit;

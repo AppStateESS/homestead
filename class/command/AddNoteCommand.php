@@ -38,11 +38,11 @@ class AddNoteCommand extends Command {
         $note = $context->get('note');
 
         if(!isset($username) || empty($username)){
-            throw new InvalidArgumentException('Missing username');
+            throw new \InvalidArgumentException('Missing username');
         }
 
         if(!isset($note) || empty($note)){
-            throw new InvalidArgumentException('No text was provided for the note.');
+            throw new \InvalidArgumentException('No text was provided for the note.');
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');

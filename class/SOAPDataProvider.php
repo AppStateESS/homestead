@@ -1,7 +1,9 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'SOAP.php');
+
+use \Homestead\exception\StudentNotFoundException;
+use \Homestead\exception\SOAPException;
 
 class SOAPDataProvider extends StudentDataProvider {
 
@@ -14,7 +16,6 @@ class SOAPDataProvider extends StudentDataProvider {
         $id = $soap->getBannerId($username);
 
         if (!isset($id) || is_null($id) || empty($id)) {
-            PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
             throw new StudentNotFoundException('No matching student found.', 0, $id);
         }
 
@@ -27,11 +28,11 @@ class SOAPDataProvider extends StudentDataProvider {
         $id = trim($id);
 
         if (!isset($id) || empty($id) || $id == '') {
-            throw new InvalidArgumentException('Missing Banner id. Please enter a valid Banner ID (nine digits).');
+            throw new \InvalidArgumentException('Missing Banner id. Please enter a valid Banner ID (nine digits).');
         }
 
         if (strlen($id) > 9 || strlen($id) < 9 || !preg_match("/^[0-9]{9}$/", $id)) {
-            throw new InvalidArgumentException('That was not a valid Banner ID. Please enter a valid Banner ID (nine digits).');
+            throw new \InvalidArgumentException('That was not a valid Banner ID. Please enter a valid Banner ID (nine digits).');
         }
 
         $student = new Student();
@@ -40,7 +41,6 @@ class SOAPDataProvider extends StudentDataProvider {
         $soapData = $soap->getStudentProfile($id, $term);
 
         if ($soapData->error_num == 1101 && $soapData->error_desc == 'LookupStudentID') {
-            PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
             throw new StudentNotFoundException('No matching student found.');
         }elseif (isset($soapData->error_num) && $soapData->error_num > 0) {
             //test($soapData,1);

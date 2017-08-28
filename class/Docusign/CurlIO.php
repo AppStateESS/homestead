@@ -55,7 +55,7 @@ class CurlIO extends IO {
             }
             $jsonResult = json_decode($result);
             $response = (!is_null($jsonResult)) ? $jsonResult : $result;
-        } catch(Exception $e) {
+        } catch(\Exception $e) {
             throw new IOException($e);
         }
 

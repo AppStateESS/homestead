@@ -20,7 +20,7 @@ class JSONGetHallsCommand
         $pdo = PdoFactory::getPdoInstance();
         $prep = $pdo->prepare("select id, hall_name as title from hms_residence_hall where term=? and is_online=1 order by hall_name");
         $prep->execute(array($term));
-        $halls = $prep->fetchAll(PDO::FETCH_ASSOC);
+        $halls = $prep->fetchAll(\PDO::FETCH_ASSOC);
         $context->setContent(json_encode($halls));
     }
 

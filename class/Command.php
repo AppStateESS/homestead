@@ -35,7 +35,7 @@ abstract class Command
     public function initForm(\PHPWS_Form &$form)
     {
         $moduleElement = $form->get('module');
-        if(PEAR::isError($moduleElement)) {
+        if(\PEAR::isError($moduleElement)) {
             $form->addHidden('module', 'hms');
         }
 
@@ -102,7 +102,7 @@ abstract class Command
      * and sets what variables are available at call time.
      *
      * @param string $text		The text to format as a link
-     * @param string $target	The target of the link - See PHPWS_Text class.
+     * @param string $target	The target of the link - See \PHPWS_Text class.
      * @param string $cssClass	The "class" (css) of the link.
      * @param string $title		The alt-text for the link.
      * @return string The formatted link
@@ -111,11 +111,11 @@ abstract class Command
      * @see getURI
      * @see initForm
      * @see redirect
-     * @see PHPWS_Text
+     * @see \PHPWS_Text
      */
     public function getLink($text, $target = null, $cssClass = null, $title = null)
     {
-        return PHPWS_Text::moduleLink(dgettext('hms', $text), 'hms', $this->getRequestVars(), $target, $title, $cssClass);
+        return \PHPWS_Text::moduleLink(dgettext('hms', $text), 'hms', $this->getRequestVars(), $target, $title, $cssClass);
     }
 
     /**
@@ -141,7 +141,7 @@ abstract class Command
     public function redirect()
     {
         $path = $this->getURI();
-        NQ::close();
+        \NQ::close();
 
         header('HTTP/1.1 303 See Other');
         header("Location: $path");

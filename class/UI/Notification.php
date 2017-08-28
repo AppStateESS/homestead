@@ -2,6 +2,11 @@
 
 namespace Homestead\UI;
 
+use \Homestead\HMS_Residence_Hall;
+use \Homestead\HMS_Term;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\HMS_Email;
+
 /**
   * Interface for sending hall emails.
   *
@@ -35,15 +40,13 @@ class Notification {
     public function show_select_hall()
     {
         /*
-        if(!Current_User::allow('hms', 'email_hall')){
+        if(!\Current_User::allow('hms', 'email_hall')){
              return \PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
         */
 
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-
         $tpl=array();
-        if(Current_User::allow('hms', 'email_all')){
+        if(\Current_User::allow('hms', 'email_all')){
             $halls = HMS_Residence_Hall::get_halls(HMS_Term::get_selected_term());
             $form = new \PHPWS_Form('select_halls_to_email');
             foreach($halls as $hall){
@@ -97,7 +100,7 @@ class Notification {
         $tpl['HEADER'] = 'Email';
         $form = new \PHPWS_Form('email_content');
 
-        if(Current_User::allow('hms', 'anonymous_notifications')){
+        if(\Current_User::allow('hms', 'anonymous_notifications')){
             $form->addCheck('anonymous');
             $form->setMatch('anonymous', isset($_REQUEST['anonymous']) ? true : false);
             $form->setLabel('anonymous', 'Send Anonymously: ');
@@ -125,7 +128,6 @@ class Notification {
 
     public function show_review_email()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         $tpl = array();
         if(is_array($_REQUEST['hall'])){
             foreach($_REQUEST['hall'] as $hall){
@@ -142,7 +144,7 @@ class Notification {
         } else if(empty($_REQUEST['body'])){
             return Notification::show_edit_email('You must fill in the message to be sent.', $_REQUEST['subject'], '');
         }
-        $tpl['FROM']    = isset($_REQUEST['anonymous']) && Current_User::allow('hms', 'anonymous_notification') ? 'housing@appstate.edu' : Current_User::getEmail();
+        $tpl['FROM']    = isset($_REQUEST['anonymous']) && \Current_User::allow('hms', 'anonymous_notification') ? 'housing@appstate.edu' : \Current_User::getEmail();
         $tpl['SUBJECT'] = $_REQUEST['subject'];
         $tpl['BODY']    = $_REQUEST['body'];
 
@@ -176,20 +178,15 @@ class Notification {
         } else if(empty($_REQUEST['body'])){
             return Notification::show_edit_email('You must fill in the message to be sent.', $_REQUEST['subject'], '');
         }
-        $from       = isset($_REQUEST['anonymous']) && Current_User::allow('hms', 'anonymous_notification') ? FROM_ADDRESS : Current_User::getEmail();
+        $from       = isset($_REQUEST['anonymous']) && \Current_User::allow('hms', 'anonymous_notification') ? FROM_ADDRESS : \Current_User::getEmail();
         $subject    = $_REQUEST['subject'];
         $body       = $_REQUEST['body'];
 
-        //Consider using a batch process instead of doing this this inline
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-
         // Log that this is happening
         if($from == FROM_ADDRESS){
-            HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_ANON_NOTIFICATION_SENT, Current_User::getUsername());
+            HMS_Activity_Log::log_activity(\Current_User::getUsername(), ACTIVITY_ANON_NOTIFICATION_SENT, \Current_User::getUsername());
         }else{
-            HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_NOTIFICATION_SENT, Current_User::getUsername());
+            HMS_Activity_Log::log_activity(\Current_User::getUsername(), ACTIVITY_NOTIFICATION_SENT, \Current_User::getUsername());
         }
 
         if(is_array($_REQUEST['hall'])){
@@ -206,9 +203,9 @@ class Notification {
                     }
                 }
                 if($from == FROM_ADDRESS){
-                    HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, Current_User::getUsername(), $hall->hall_name);
+                    HMS_Activity_Log::log_activity(\Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, \Current_User::getUsername(), $hall->hall_name);
                 } else {
-                    HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, Current_User::getUsername(), $hall->hall_name);
+                    HMS_Activity_Log::log_activity(\Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, \Current_User::getUsername(), $hall->hall_name);
                 }
             }
         } else {
@@ -224,9 +221,9 @@ class Notification {
                 }
             }
             if($from == FROM_ADDRESS){
-                HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, Current_User::getUsername(), $hall->hall_name);
+                HMS_Activity_Log::log_activity(\Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, \Current_User::getUsername(), $hall->hall_name);
             } else {
-                HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, Current_User::getUsername(), $hall->hall_name);
+                HMS_Activity_Log::log_activity(\Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, \Current_User::getUsername(), $hall->hall_name);
             }
         }
 
@@ -235,6 +232,6 @@ class Notification {
 
     public function show_confirmation()
     {
-        return '<font color="green">Emails sent successfully</font><br /><br />Please click '. PHPWS_Text::secureLink(_('Here'), 'hms', array('type'=>'maintenance','op'=>'show_maintenance_options','tab'=>'maintenance_main')) . ' to return to the main menu.';
+        return '<font color="green">Emails sent successfully</font><br /><br />Please click '. \PHPWS_Text::secureLink(_('Here'), 'hms', array('type'=>'maintenance','op'=>'show_maintenance_options','tab'=>'maintenance_main')) . ' to return to the main menu.';
     }
 }

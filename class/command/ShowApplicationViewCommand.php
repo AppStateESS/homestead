@@ -35,8 +35,8 @@ class ShowApplicationViewCommand extends Command {
         try{
             $view = new HousingApplicationView($context->get('appId'));
             $context->setContent($view->show());
-        } catch(Exception $e){
-            NQ::simple('hms', hms\NotificationView::ERROR, $e);
+        } catch(\Exception $e){
+            \NQ::simple('hms', NotificationView::ERROR, $e);
         }
     }
 }

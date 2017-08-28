@@ -28,7 +28,7 @@ class ShowAddRoomCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'room_structure')){
+        if(!\Current_User::allow('hms', 'room_structure')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to add a room.');
         }
@@ -61,7 +61,7 @@ class ShowAddRoomCommand extends Command {
         }
 
         # Check Permissions
-        if(!Current_User::allow('hms','room_structure')) {
+        if(!\Current_User::allow('hms','room_structure')) {
             HMS_Floor::show_edit_floor($floor_id,NULL,'You do not have permission to add rooms.');
         }
 

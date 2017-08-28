@@ -33,7 +33,7 @@ class ListReportsCommand extends Command {
      */
     public function execute(CommandContext $context)
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms','reports')) {
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms','reports')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to run/view reports.');
         }

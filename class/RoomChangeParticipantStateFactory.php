@@ -15,7 +15,7 @@ class RoomChangeParticipantStateFactory {
                 'participantId' => $participant->getId()
         ));
 
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $className = 'ParticipantState' . $result['state_name'];
 
@@ -32,7 +32,7 @@ class RoomChangeParticipantStateFactory {
                 'participantId' => $participant->getId()
         ));
 
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         // If no results, just return here
         if (sizeof($results) <= 0) {

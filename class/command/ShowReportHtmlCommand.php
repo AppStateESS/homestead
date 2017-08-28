@@ -49,7 +49,7 @@ class ShowReportHtmlCommand extends Command {
      */
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'reports')){
+        if(!\Current_User::allow('hms', 'reports')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do no have permission to run reports.');
         }
@@ -64,7 +64,7 @@ class ShowReportHtmlCommand extends Command {
         PHPWS_Core::initModClass('hms', 'ReportFactory.php');
         $report = ReportFactory::getReportById($reportId);
 
-        Layout::addPageTitle($report->getFriendlyName());
+        \Layout::addPageTitle($report->getFriendlyName());
 
         $detailCmd = CommandFactory::getCommand('ShowReportDetail');
         $detailCmd->setReportClass($report->getClass());
@@ -73,7 +73,7 @@ class ShowReportHtmlCommand extends Command {
         $content .= file_get_contents($report->getHtmlOutputFilename());
 
         if($content === FALSE){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Could not open report file.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Could not open report file.');
             \PHPWS_Error::log('Could not open report file ' . $report->getCsvOutputFilename(), 'hms');
             $reportCmd = CommandFactory::getCommand('ShowReportDetail');
             $reportCmd->setReportClass($report->getClass());

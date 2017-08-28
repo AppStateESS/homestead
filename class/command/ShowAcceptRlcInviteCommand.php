@@ -24,7 +24,7 @@ class ShowAcceptRlcInviteCommand extends Command {
         $term = $context->get('term');
 
         if(!isset($term)){
-            throw new InvalidArgumentException('Missing term!');
+            throw new \InvalidArgumentException('Missing term!');
         }
 
         $rlcAssignment = HMS_RLC_Assignment::getAssignmentByUsername(UserStatus::getUsername(), $term);

@@ -125,7 +125,7 @@ class PhpSOAP extends SOAP
         // Sanity checking on the Banner Id
         /*
         if(empty($bannerId) || is_null($bannerId) || !isset($bannerId)){
-            throw new InvalidArgumentException('Missing Banner Id.');
+            throw new \InvalidArgumentException('Missing Banner Id.');
         }*/
 
         // Sanity checking on the term

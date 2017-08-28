@@ -47,13 +47,13 @@ class RlcSelfAssignStartCommand extends Command {
 
         // Double check that the student has an RLC application, and that it's in the 'invited' state
         if($rlcAssignment == null){
-            NQ::simple('hms', hms\NotificationView::ERROR, "You're not eligible for RLC self-selection because you have not been assigned to a Learning Community.");
+            \NQ::simple('hms', NotificationView::ERROR, "You're not eligible for RLC self-selection because you have not been assigned to a Learning Community.");
             $errorCmd->redirect();
         }
 
         if($rlcAssignment->getStateName() != 'selfselect-invite')
         {
-        	NQ::simple('hms', hms\NotificationView::ERROR, "You're not eligible for RLC self-selection because you have not been invited for self-selection.");
+        	\NQ::simple('hms', NotificationView::ERROR, "You're not eligible for RLC self-selection because you have not been invited for self-selection.");
             $errorCmd->redirect();
         }
 

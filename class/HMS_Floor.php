@@ -109,7 +109,7 @@ class HMS_Floor extends HMS_Item
             // Add each user to new floor
             foreach($membs as $m) {
                 // Lookup the username
-                $user = new PHPWS_User($m['user_id']);
+                $user = new \PHPWS_User($m['user_id']);
 
                 // Load role and add user to new instance
                 $role = new HMS_Role();

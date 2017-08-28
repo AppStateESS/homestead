@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\exception\PermissionException;
+
 /**
  * TermEditView - View class for editing terms
  *
@@ -18,8 +20,7 @@ class TermEditView extends View {
 
     public function show()
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'edit_terms')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'edit_terms')) {
             throw new PermissionException('You do not have permission to edit terms.');
         }
 
@@ -39,7 +40,7 @@ class TermEditView extends View {
             $tpl['CURRENT_TERM_TEXT'] = dgettext('hms',
                     'This term is <strong>not</strong> the active term.');
 
-            if(Current_User::allow('hms', 'activate_term')) {
+            if(\Current_User::allow('hms', 'activate_term')) {
                 $cmd = CommandFactory::getCommand('SetCurrentTerm');
                 $cmd->setTerm(Term::getSelectedTerm());
                 $tpl['SET_TERM_URI'] = $cmd->getURI();
@@ -89,16 +90,14 @@ class TermEditView extends View {
         }
 
         // Terms and Conditions
-        PHPWS_Core::initModClass('hms', 'TermsConditionsAdminView.php');
         $tcav = new TermsConditionsAdminView($this->term);
         $tpl['TERMS_CONDITIONS_CONTENT'] = $tcav->show();
 
         // Features and Deadlines
-        PHPWS_Core::initModClass('hms', 'ApplicationFeatureListView.php');
         $aflv = new ApplicationFeatureListView(Term::getSelectedTerm());
         $tpl['FEATURES_DEADLINES_CONTENT'] = $aflv->show();
 
-        Layout::addPageTitle("Term Settings");
+        \Layout::addPageTitle("Term Settings");
 
         return \PHPWS_Template::process($tpl, 'hms', 'admin/TermEditView.tpl');
     }

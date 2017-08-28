@@ -14,7 +14,7 @@ class AssignRlcApplicantsCommand extends Command {
     }
 
     public function execute(CommandContext $context){
-        if(!Current_User::allow('hms', 'approve_rlc_applications')){
+        if(!\Current_User::allow('hms', 'approve_rlc_applications')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to approve RLC applications.');
         }
@@ -52,7 +52,7 @@ class AssignRlcApplicantsCommand extends Command {
         }
 
         // Show a success message
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Successfully assigned RLC applicant(s).');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'Successfully assigned RLC applicant(s).');
 
         $context->goBack();
     }

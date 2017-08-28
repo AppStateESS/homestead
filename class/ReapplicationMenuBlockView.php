@@ -77,7 +77,7 @@ class ReapplicationMenuBlockView extends View {
         }
 
         if(!$hardCapReached && time() > $this->startDate){
-            if($this->roommateRequests != FALSE && !is_null($this->roommateRequests) && $this->assignment != TRUE && !PEAR::isError($this->assignment)){
+            if($this->roommateRequests != FALSE && !is_null($this->roommateRequests) && $this->assignment != TRUE && !\PEAR::isError($this->assignment)){
                 $tpl['roommates'] = array();
                 $tpl['ROOMMATE_REQUEST'] = ''; // dummy tag
                 foreach($this->roommateRequests as $invite){
@@ -85,7 +85,7 @@ class ReapplicationMenuBlockView extends View {
                     $cmd->setRequestId($invite['id']);
                     $roommie = StudentFactory::getStudentByUsername($invite['requestor'], $this->term);
                     $tpl['roommates'][]['ROOMMATE_LINK'] = $cmd->getLink($roommie->getName());
-                    //$tpl['roommates'][]['ROOMMATE_LINK'] = PHPWS_Text::secureLink(HMS_SOAP::get_name($invite['requestor']), 'hms', array('type'=>'student', 'op'=>'lottery_show_roommate_request', 'id'=>$invite['id']));
+                    //$tpl['roommates'][]['ROOMMATE_LINK'] = \PHPWS_Text::secureLink(HMS_SOAP::get_name($invite['requestor']), 'hms', array('type'=>'student', 'op'=>'lottery_show_roommate_request', 'id'=>$invite['id']));
                 }
             }
         }

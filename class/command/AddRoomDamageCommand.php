@@ -26,7 +26,7 @@ class AddRoomDamageCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::isLogged())
+        if(!\Current_User::isLogged())
         {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You must be logged in first.');

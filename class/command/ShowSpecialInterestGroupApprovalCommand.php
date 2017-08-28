@@ -26,7 +26,7 @@ class ShowSpecialInterestGroupApprovalCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'special_interest_approval')){
+        if(!\Current_User::allow('hms', 'special_interest_approval')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to approval special interest groups.');
         }

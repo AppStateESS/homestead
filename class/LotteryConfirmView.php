@@ -91,7 +91,7 @@ class LotteryConfirmView extends View {
         $form->addSubmit('submit_form', 'Confirm room & roommates');
         $form->mergeTemplate($tpl);
 
-        Layout::addPageTitle("Confirm Re-Application");
+        \Layout::addPageTitle("Confirm Re-Application");
 
         return \PHPWS_Template::process($form->getTemplate(), 'hms', 'student/lottery_confirm.tpl');
     }

@@ -493,7 +493,7 @@ class HMS_Room extends HMS_Item
         $text = $building->hall_name . ' Room ' . $this->room_number;
 
         if ($link) {
-            return PHPWS_Text::secureLink($text, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$this->id));
+            return \PHPWS_Text::secureLink($text, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$this->id));
         } else {
             return $text;
         }
@@ -576,7 +576,7 @@ class HMS_Room extends HMS_Item
         javascript('jquery');
         $tpl = array();
         $tpl['ID']           = $this->id;
-        $tpl['ROOM_NUMBER']  = PHPWS_Text::secureLink($this->room_number, 'hms', array('action'=>'EditRoomView', 'room'=>$this->id));
+        $tpl['ROOM_NUMBER']  = \PHPWS_Text::secureLink($this->room_number, 'hms', array('action'=>'EditRoomView', 'room'=>$this->id));
 
         if (\Current_User::allow('hms','room_structure') && $this->get_number_of_assignees() == 0) {
             $deleteRoomCmd = CommandFactory::getCommand('DeleteRoom');
@@ -587,7 +587,7 @@ class HMS_Room extends HMS_Item
             $confirm['QUESTION'] = 'Are you sure want to delete room ' .  $this->room_number . '?';
             $confirm['ADDRESS']  = $deleteRoomCmd->getURI();
             $confirm['LINK']     = 'Delete';
-            $tpl['DELETE']       = Layout::getJavascript('confirm', $confirm);
+            $tpl['DELETE']       = \Layout::getJavascript('confirm', $confirm);
         }
 
         $form = new \PHPWS_Form($this->id);

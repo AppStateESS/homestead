@@ -38,7 +38,7 @@ class FreshmenMainMenuView extends View {
             $tpl['TERMBLOCK'][] = array('TERMBLOCK_CONTENT'=>$termBlock->show());
         }
 
-        Layout::addPageTitle("Main Menu");
+        \Layout::addPageTitle("Main Menu");
 
         return \PHPWS_Template::process($tpl, 'hms', 'student/freshmenMenu.tpl');
     }

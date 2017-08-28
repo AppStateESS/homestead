@@ -13,7 +13,7 @@ class AjaxGetFullnameByUsernameCommand extends Command {
 
     public function execute(CommandContext $context){
         try {
-            if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'search')){
+            if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'search')){
                 PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
                 throw new PermissionException('You do not have permission to lookup student names!');
             }
@@ -27,7 +27,7 @@ class AjaxGetFullnameByUsernameCommand extends Command {
             $student = StudentFactory::getStudentByUsername($username, Term::getSelectedTerm());
 
             echo $student->getFullName();
-        } catch(Exception $e) { //For display issues we really do want to catch any exception
+        } catch(\Exception $e) { //For display issues we really do want to catch any exception
             echo '<div style="display: none;">'.$e->getMessage().'</div>';
         }
         exit;

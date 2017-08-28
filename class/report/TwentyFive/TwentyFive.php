@@ -26,7 +26,7 @@ class TwentyFive extends Report implements iCsvReport {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
         if (!isset($this->term) || is_null($this->term)) {
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         $db = new \PHPWS_DB('hms_new_application');
@@ -38,7 +38,7 @@ class TwentyFive extends Report implements iCsvReport {
         $results = $db->select();
         if (empty($results)) {
             return;
-        } elseif (PEAR::isError($results)) {
+        } elseif (\PEAR::isError($results)) {
             throw new DatabaseException($results->toString());
         }
 
@@ -54,7 +54,7 @@ class TwentyFive extends Report implements iCsvReport {
                 $student['dob'] = $dob;
                 $student['full_name'] = $sf->getFullName();
                 $this->all_rows[] = $student;
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $student['dob'] = $student['full_name'] = null;
                 $this->problems[] = $student['banner_id'];
             }

@@ -12,7 +12,7 @@ class ShowControlPanelCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        NQ::close();
+        \NQ::close();
 
         header('HTTP/1.1 303 See Other');
         header("Location: {$_SERVER['SCRIPT_NAME']}?module=controlpanel");

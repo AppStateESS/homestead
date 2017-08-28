@@ -59,7 +59,7 @@ ORDER BY
 EOF;
 
         $result = $db->select(null, $query);
-        if (PEAR::isError($result)) {
+        if (\PEAR::isError($result)) {
             throw new DatabaseException($result->toString());
         }
 

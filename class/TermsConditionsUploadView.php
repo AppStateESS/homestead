@@ -10,10 +10,10 @@ class TermsConditionsUploadView extends View{
     public function __construct($term, $type)
     {
         if(is_null($term)) {
-            throw new InvalidArgumentException('term cannot be null.');
+            throw new \InvalidArgumentException('term cannot be null.');
         }
         if($type != 'txt' && $type != 'pdf') {
-            throw new InvalidArgumentException('type must be either txt or pdf');
+            throw new \InvalidArgumentException('type must be either txt or pdf');
         }
 
         $this->term = $term;

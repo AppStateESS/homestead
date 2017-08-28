@@ -69,7 +69,7 @@ class HousingApplicationFactory {
      * @param string $term
      * @param string $applicationType
      * @throws DatabaseException
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @return Mixed<HousingApplication|null> A HousingApplication subclass object, or null of no applicaiton exists
      */
     public static function getAppByStudent(Student $student, $term, $applicationType = NULL)

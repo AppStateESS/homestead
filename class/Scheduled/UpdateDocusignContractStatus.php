@@ -2,8 +2,10 @@
 
 namespace Homestead\Scheduled;
 
-//use \Homestead\DocusignClientFactory;
-//use \Homestead\Docusign\Client;
+use \Homestead\DocusignClientFactory;
+use \Homestead\Term;
+use \Homestead\PdoFactory;
+use \Homestead\Docusign\Client;
 
 class UpdateDocusignContractStatus {
 
@@ -63,7 +65,7 @@ class UpdateDocusignContractStatus {
         $stmt = $db->prepare($query);
         $stmt->execute(array('term'=>$term));
 
-        $envelopeIdList = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        $envelopeIdList = $stmt->fetchAll(\PDO::FETCH_COLUMN);
 
         $envCount = sizeof($envelopeIdList);
 

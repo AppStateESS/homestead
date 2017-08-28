@@ -16,7 +16,7 @@ class ResidenceHallFactory {
      * Returns an array of HMS_Residence_Hall objects for the given term.
      *
      * @param integer $term
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @throws DatabaseException
      * @return multitype:HMS_Residence_Hall
      */
@@ -52,7 +52,7 @@ class ResidenceHallFactory {
      * Returns a list of hall names in an associative array, where the array key is the hall's database id.
      *
      * @param integer $term
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @return multitype:Array
      */
     public static function getHallNamesAssoc($term)

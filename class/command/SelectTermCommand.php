@@ -30,7 +30,7 @@ class SelectTermCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'select_term')){
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'select_term')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do no have permission to select other terms.');
         }

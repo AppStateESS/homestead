@@ -55,7 +55,7 @@ class AssignmentMoveConfirmationView extends View
             $tpl['BACK'] = 'index.php?module=hms&action=ShowAssignStudent';
         }
 
-        Layout::addPageTitle("Assignment Move Confirmation");
+        \Layout::addPageTitle("Assignment Move Confirmation");
 
         return \PHPWS_Template::process($tpl, 'hms', 'admin/assign_student_move_confirm.tpl');
     }

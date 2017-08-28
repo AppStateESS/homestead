@@ -211,7 +211,7 @@ class HMS_RLC_Application extends HMS_Item
         }catch(StudentNotFoundException $e){
             // Catch the StudentNotFound exception in the odd case that someone doesn't exist.
             // Show a warning message and skip the rest of the method
-            NQ::simple('hms', NotificationView::WARNING, "No student found with username: {$this->username}.");
+            \NQ::simple('hms', NotificationView::WARNING, "No student found with username: {$this->username}.");
             $row['username'] = $this->username;
             $row['name'] = 'UNKNOWN - INVALID';
             return $tags;
@@ -277,7 +277,7 @@ class HMS_RLC_Application extends HMS_Item
 
     /**
      * Check to see if an application already exists for the specified user. Returns false if no application exists.
-     * If an application does exist, an associative array containing that row is returned. In the case of a db error, a PEAR
+     * If an application does exist, an associative array containing that row is returned. In the case of a db error, a \PEAR
      * error object is returned.
      * @param include_denied Controls whether or not denied applications are returned
      * TODO: Deprecate this and/or move to RlcApplicationFactory

@@ -64,7 +64,7 @@ class MealPlanFactory {
      * @param integer $bannerId
      * @param string $term
      * @return MealPlanRestored Required meal plan object, null if none exists
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function getMealByBannerIdTerm($bannerId, $term)
     {
@@ -87,7 +87,7 @@ class MealPlanFactory {
                     'term' => $term
                 ));
 
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'MealPlanRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'MealPlanRestored');
 
         $result = $stmt->fetch();
 
@@ -123,7 +123,7 @@ class MealPlanFactory {
         $stmt->execute(array('term' => $term,
                             'status' => MealPlan::STATUS_NEW));
 
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'MealPlanRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'MealPlanRestored');
 
         return $stmt->fetchAll();
     }

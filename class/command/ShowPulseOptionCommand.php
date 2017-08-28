@@ -20,7 +20,7 @@ class ShowPulseOptionCommand extends Command
 
     public function execute(CommandContext $context)
     {
-        if (!Current_User::isDeity()) {
+        if (!\Current_User::isDeity()) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit terms.');
         }

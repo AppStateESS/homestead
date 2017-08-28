@@ -26,7 +26,7 @@ class MarkApplicationWithdrawnCommand extends Command {
     public function execute(CommandContext $context)
     {
 
-        if(!Current_User::allow('withdrawn_search')){
+        if(!\Current_User::allow('withdrawn_search')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to makr applications withdrawn.');
         }
@@ -44,7 +44,7 @@ class MarkApplicationWithdrawnCommand extends Command {
 
         $app->save();
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Application successfully marked as withdrawn.');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'Application successfully marked as withdrawn.');
         $context->goBack();
     }
 }

@@ -76,7 +76,7 @@ class HousingApplicationConfirmCommand extends Command {
                 $appType = 'summer';
                 break;
             default:
-                throw new Exception('Unknown application type');
+                throw new \Exception('Unknown application type');
         }
 
         $application = HousingApplicationFactory::getApplicationFromSession($_SESSION['application_data'], $term, $student, $appType);
@@ -106,7 +106,7 @@ class HousingApplicationConfirmCommand extends Command {
             try{
                 // report the application to banner;
                 $application->reportToBanner();
-            }catch(Exception $e){
+            }catch(\Exception $e){
                 // ignore any errors reporting this to banner, they'll be logged and admins notified
                 // we've saved the student's application locally, so it's ok if this doesn't work
             }
@@ -118,7 +118,7 @@ class HousingApplicationConfirmCommand extends Command {
         }
 
         $friendly_term = Term::toString($application->getTerm());
-        NQ::simple('hms', hms\NotificationView::SUCCESS, "Your application for $friendly_term was successfully processed!  You will receive an email confirmation in the next 24 hours.");
+        \NQ::simple('hms', NotificationView::SUCCESS, "Your application for $friendly_term was successfully processed!  You will receive an email confirmation in the next 24 hours.");
 
         PHPWS_Core::initModClass('hms', 'applicationFeature/RlcApplication.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');

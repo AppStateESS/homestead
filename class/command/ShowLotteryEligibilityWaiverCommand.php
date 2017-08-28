@@ -14,7 +14,7 @@ class ShowLotteryEligibilityWaiverCommand extends Command {
 
     public function execute(CommandContext $context){
 
-        if(!Current_User::allow('hms', 'lottery_admin')){
+        if(!\Current_User::allow('hms', 'lottery_admin')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to add lottery entries.');
         }

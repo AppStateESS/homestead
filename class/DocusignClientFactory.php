@@ -4,7 +4,6 @@ namespace Homestead;
 
 use \Homestead\exception\InvalidConfigurationException;
 use \Homestead\Docusign\Client;
-use \PHPWS_Settings;
 
 /**
  * Factory class for creating Docusign Clients.
@@ -22,22 +21,22 @@ class DocusignClientFactory {
      */
     public static function getClient()
     {
-        $docusignUsername = PHPWS_Settings::get('hms', 'docusign_username');
+        $docusignUsername = \PHPWS_Settings::get('hms', 'docusign_username');
         if ($docusignUsername === null || $docusignUsername == '') {
             throw new InvalidConfigurationException('Missing docusign username.');
         }
 
-        $docusignPassword = PHPWS_Settings::get('hms', 'docusign_password');
+        $docusignPassword = \PHPWS_Settings::get('hms', 'docusign_password');
         if ($docusignPassword === null || $docusignPassword == '') {
             throw new InvalidConfigurationException('Missing docusign password.');
         }
 
-        $docusignKey = PHPWS_Settings::get('hms', 'docusign_key');
+        $docusignKey = \PHPWS_Settings::get('hms', 'docusign_key');
         if ($docusignKey === null || $docusignKey == '') {
             throw new InvalidConfigurationException('Missing docusign key.');
         }
 
-        $docusignEnv = PHPWS_Settings::get('hms', 'docusign_env');
+        $docusignEnv = \PHPWS_Settings::get('hms', 'docusign_env');
         if ($docusignEnv === null || $docusignEnv == '') {
             throw new InvalidConfigurationException('Missing docusign key.');
         }

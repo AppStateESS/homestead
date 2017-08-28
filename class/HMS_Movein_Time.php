@@ -102,7 +102,7 @@ class HMS_Movein_Time
         $db->addOrder('begin_timestamp', 'ASC');
         $result = $db->getObjects('HMS_Movein_Time');
 
-        if(PEAR::isError($result)){
+        if(\PEAR::isError($result)){
             return false;
         }
 

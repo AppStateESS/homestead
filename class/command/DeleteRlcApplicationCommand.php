@@ -35,7 +35,7 @@ class DeleteRlcApplicationCommand extends Command
         // Application must exist
         $app = HMS_RLC_Application::getApplicationByUsername(UserStatus::getUsername(), $term);
         if(is_null($app)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'No RLC application exists.');
+            \NQ::simple('hms', NotificationView::ERROR, 'No RLC application exists.');
             $context->goBack();
 
         }
@@ -49,11 +49,11 @@ class DeleteRlcApplicationCommand extends Command
             HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_RLC_APPLICATION_DELETED, UserStatus::getUsername());
 
             // Show a notification and go back
-            NQ::simple('hms', hms\NotificationView::SUCCESS, 'RLC application deleted.');
+            \NQ::simple('hms', NotificationView::SUCCESS, 'RLC application deleted.');
             $context->goBack();
         }
         else {
-            NQ::simple('hms', hms\NotificationView::WARNING, 'You have already been assigned to an RLC.');
+            \NQ::simple('hms', NotificationView::WARNING, 'You have already been assigned to an RLC.');
             $context->goBack();
         }
 

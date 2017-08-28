@@ -35,7 +35,7 @@ abstract class HMS {
         }
 
         if(!\Current_User::isLogged() && $this->context->get('action') != 'ShowFrontPage'){
-            NQ::simple('hms', NotificationView::ERROR, 'You must be logged in to do that.');
+            \NQ::simple('hms', NotificationView::ERROR, 'You must be logged in to do that.');
             $action = 'ShowFrontPage';
         }else{
             $action = $this->context->get('action');
@@ -55,10 +55,10 @@ abstract class HMS {
             try {
                 $cmd->execute($this->context);
             } catch(PermissionException $p) {
-                NQ::Simple('hms', NotificationView::ERROR, 'You do not have permission to perform that action. If you believe this is an error, please contact University Housing.');
+                \NQ::Simple('hms', NotificationView::ERROR, 'You do not have permission to perform that action. If you believe this is an error, please contact University Housing.');
                 $nv = new NotificationView();
                 $nv->popNotifications();
-                Layout::add($nv->show());
+                \Layout::add($nv->show());
             } catch(\Exception $e) {
 
                 $user = \Current_User::getUserObj();
@@ -78,11 +78,11 @@ abstract class HMS {
 
                 try {
                     $message = $this->formatException($e);
-                    NQ::Simple('hms', NotificationView::ERROR, 'An internal error has occurred, and the authorities have been notified.  We apologize for the inconvenience.');
+                    \NQ::Simple('hms', NotificationView::ERROR, 'An internal error has occurred, and the authorities have been notified.  We apologize for the inconvenience.');
                     $this->emailError($message);
                     $nv = new NotificationView();
                     $nv->popNotifications();
-                    Layout::add($nv->show());
+                    \Layout::add($nv->show());
                 } catch(\Exception $e) {
                     $message2 = $this->formatException($e);
                     echo "HMS has experienced a major internal error.  Attempting to email an admin and then exit.";
@@ -154,7 +154,7 @@ abstract class HMS {
 
     public static function quit()
     {
-        NQ::close();
+        \NQ::close();
         exit();
     }
 }

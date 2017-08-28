@@ -42,7 +42,7 @@ class HMS_RLC_Assignment {
         }
 
         $result = $this->init();
-        if(PEAR::isError($result)){
+        if(\PEAR::isError($result)){
             PHPWS_Error::log($result,'hms','HMS_RLC_Assignment()','Caught error from init');
             return $result;
         }
@@ -56,7 +56,7 @@ class HMS_RLC_Assignment {
 
         $result = $db->select('row');
 
-        if(PEAR::isError($result)) {
+        if(\PEAR::isError($result)) {
             PHPWS_Error::log($result,'hms','init',"id:{$id}");
             return $result;
         }
@@ -160,7 +160,7 @@ class HMS_RLC_Assignment {
     /**
      * Check to see if an assignment already exists for the specified user.  Returns FALSE if no assignment
      * exists.  If an assignment does exist, a db object containing that row is returned.  In the case of a db
-     * error, a PEAR error object is returned.
+     * error, a \PEAR error object is returned.
      * TODO: Deprecate this and/or move to RlcMembershipFactory
      * @see RlcMembershipFactory
      *

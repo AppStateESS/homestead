@@ -30,13 +30,13 @@ class ShowReportDetailCommand extends Command {
     /**
      * Returns the array of request vars for this command.
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @return Array Array of request vars.
      */
     public function getRequestVars()
     {
         if(!isset($this->reportClass) || is_null($this->reportClass)){
-            throw new InvalidArgumentException('Missing report class.');
+            throw new \InvalidArgumentException('Missing report class.');
         }
 
         return array('action'=>'ShowReportDetail', 'reportClass'=>$this->reportClass);
@@ -46,11 +46,11 @@ class ShowReportDetailCommand extends Command {
      * Executes, shows the details for the requested report class.
      *
      * @param CommandContext $context
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'reports')){
+        if(!\Current_User::allow('hms', 'reports')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do no have permission to run reports.');
         }
@@ -58,7 +58,7 @@ class ShowReportDetailCommand extends Command {
         $class = $context->get('reportClass');
 
         if(!isset($class) || is_null($class)){
-            throw new InvalidArgumentException('Missing report class.');
+            throw new \InvalidArgumentException('Missing report class.');
         }
 
         PHPWS_Core::initModClass('hms', 'ReportFactory.php');

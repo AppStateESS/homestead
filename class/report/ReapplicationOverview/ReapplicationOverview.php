@@ -30,7 +30,7 @@ class ReapplicationOverview extends Report implements iCsvReport {
         PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         PHPWS_Core::initModClass('hms', 'LotteryProcess.php');
 
-        $lotteryTerm = PHPWS_Settings::get('hms', 'lottery_term');
+        $lotteryTerm = \PHPWS_Settings::get('hms', 'lottery_term');
 
         /*******************************
          * Gross number of application *

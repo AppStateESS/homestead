@@ -371,7 +371,7 @@ class HousingApplication {
 
         $result = $db->select('row');
 
-        if (PEAR::isError($result)) {
+        if (\PEAR::isError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -391,7 +391,7 @@ class HousingApplication {
     * @param unknown_type $term
     * @param unknown_type $applicationType
     * @throws DatabaseException
-    * @throws InvalidArgumentException
+    * @throws \InvalidArgumentException
     */
     public static function getApplicationByUser($username, $term, $applicationType = null)
     {
@@ -483,7 +483,7 @@ class HousingApplication {
      *
      * @param Student $student
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @throws DatabaseException
      * @return Array Array of HousingApplication objects for the given user.
      */
@@ -549,7 +549,7 @@ class HousingApplication {
             $result = $db->getObjects('SummerApplication');
         }
 
-        if (PEAR::isError($result)) {
+        if (\PEAR::isError($result)) {
             return false;
         }
 

@@ -40,7 +40,7 @@ class JSONGetRoomsCommand
 
         $prep = $pdo->prepare($query);
         $prep->execute(array(':floor_id' => $floor_id));
-        $rows = $prep->fetchAll(PDO::FETCH_ASSOC);
+        $rows = $prep->fetchAll(\PDO::FETCH_ASSOC);
         if (empty($rows)) {
             $context->setContent(json_encode(array()));
             return;

@@ -53,7 +53,7 @@ class MoveinTimesView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Move-in Times");
+        \Layout::addPageTitle("Move-in Times");
 
         return \PHPWS_Template::process($tpl, 'hms', 'admin/edit_movein_time.tpl');
     }

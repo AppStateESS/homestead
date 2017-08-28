@@ -73,7 +73,7 @@ class LotteryConfirmRoommateRequestView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Lottery Confirm Roommate");
+        \Layout::addPageTitle("Lottery Confirm Roommate");
 
         return \PHPWS_Template::process($tpl, 'hms', 'student/lottery_confirm_roommate_request.tpl');
     }

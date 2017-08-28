@@ -33,7 +33,7 @@ class RemoveDenyRlcAssignmentCommand extends Command
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'remove_rlc_members')){
+        if(!\Current_User::allow('hms', 'remove_rlc_members')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to approve/deny RLC applications.');
         }
@@ -54,13 +54,13 @@ class RemoveDenyRlcAssignmentCommand extends Command
             echo json_encode(array("message" => "Could not find an RLC assignment with that id.", "type" => "error"));
         }
 
-        HMS_Activity_Log::log_activity($rlcApp->getUsername(), ACTIVITY_RLC_UNASSIGN, Current_User::getUsername(), "Removed from $rlcName");
+        HMS_Activity_Log::log_activity($rlcApp->getUsername(), ACTIVITY_RLC_UNASSIGN, \Current_User::getUsername(), "Removed from $rlcName");
 
         // Deny application
         $rlcApp->denied = 1;
         $rlcApp->save();
 
-        HMS_Activity_Log::log_activity($rlcApp->getUsername(), ACTIVITY_DENIED_RLC_APPLICATION, Current_User::getUsername(), 'RLC Application Denied');
+        HMS_Activity_Log::log_activity($rlcApp->getUsername(), ACTIVITY_DENIED_RLC_APPLICATION, \Current_User::getUsername(), 'RLC Application Denied');
 
         echo json_encode(array("message" => "Removed from RLC, student's RLC application set to denied", "type" => "success"));
         exit;

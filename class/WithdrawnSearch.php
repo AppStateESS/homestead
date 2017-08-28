@@ -1,13 +1,6 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 
 class WithdrawnSearch {
 
@@ -42,7 +35,7 @@ class WithdrawnSearch {
         $result = \PHPWS_DB::getCol($query);
 
         if(\PHPWS_Error::logIfError($result)){
-            throw new Exception($result->toString());
+            throw new \Exception($result->toString());
         }
 
         foreach($result as $username){
@@ -50,10 +43,10 @@ class WithdrawnSearch {
 
             try{
                 $student = StudentFactory::getStudentByUsername($username, $term);
-            }catch(Exception $e){
+            }catch(\Exception $e){
                 $this->actions[$username][] = 'WARNING!! Unknown student!';
-                // Commenting out the NQ line, since this doesn't work when the search is run from cron/Pulse
-                //NQ::simple('hms', hms\NotificationView::WARNING, 'Unknown student: ' . $username);
+                // Commenting out the \NQ line, since this doesn't work when the search is run from cron/Pulse
+                //\NQ::simple('hms', NotificationView::WARNING, 'Unknown student: ' . $username);
                 continue;
             }
 
@@ -87,7 +80,7 @@ class WithdrawnSearch {
             $app->cancel(CANCEL_WITHDRAWN);
             try{
                 $app->save();
-            }catch(Exception $e){
+            }catch(\Exception $e){
                 // TODO
             }
 
@@ -111,7 +104,7 @@ class WithdrawnSearch {
             try{
                 //TODO Don't hard-code refund percentage
                 HMS_Assignment::unassignStudent($student, $this->term, 'Automatically removed by Withdrawn Search', UNASSIGN_CANCEL, 100);
-            }catch(Exception $e){
+            }catch(\Exception $e){
                 //TODO
             }
 
@@ -146,7 +139,7 @@ class WithdrawnSearch {
             foreach($roommates as $rm) {
                 try {
                     $rm->delete();
-                } catch(Exception $e) {
+                } catch(\Exception $e) {
                     //TODO
                 }
 

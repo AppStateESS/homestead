@@ -31,7 +31,7 @@ class SendNotificationEmailsCommand extends Command {
     public function execute(CommandContext $context)
     {
         /*
-        if(!Current_User::allow('hms', 'email_hall') && !Current_User::allow('hms', 'email_all')){
+        if(!\Current_User::allow('hms', 'email_hall') && !\Current_User::allow('hms', 'email_all')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to send messages.');
         }
@@ -45,7 +45,7 @@ class SendNotificationEmailsCommand extends Command {
 
         // Sanity checks
         if(is_null($context->get('hall')) && is_null($context->get('floor')) ){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'You must select a hall or floor to continue!');
+            \NQ::simple('hms', NotificationView::ERROR, 'You must select a hall or floor to continue!');
             $cmd = CommandFactory::getCommand('ShowHallNotificationSelect');
             $cmd->redirect();
         }
@@ -53,17 +53,17 @@ class SendNotificationEmailsCommand extends Command {
         $subject   = $context->get('subject');
         $body      = $context->get('body');
         $anonymous = (!is_null($context->get('anonymous')) && $context->get('anonymous')) ? true : false;
-        $from      = ($anonymous && Current_User::allow('hms', 'anonymous_notifications')) ? FROM_ADDRESS : Current_User::getUsername() . '@' . DOMAIN_NAME;
+        $from      = ($anonymous && \Current_User::allow('hms', 'anonymous_notifications')) ? FROM_ADDRESS : \Current_User::getUsername() . '@' . DOMAIN_NAME;
         $halls     = $context->get('hall');
         $floors    = $context->get('floor');
 
         if(empty($subject)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'You must fill in the subject line of the email.');
+            \NQ::simple('hms', NotificationView::ERROR, 'You must fill in the subject line of the email.');
             $cmd = CommandFactory::getCommand('ShowHallNotificationEdit');
             $cmd->loadContext($context);
             $cmd->redirect();
         } else if(empty($body)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'You must fill in the message to be sent.');
+            \NQ::simple('hms', NotificationView::ERROR, 'You must fill in the message to be sent.');
             $cmd = CommandFactory::getCommand('ShowHallNotificationEdit');
             $cmd->loadContext($context);
             $cmd->redirect();
@@ -74,9 +74,9 @@ class SendNotificationEmailsCommand extends Command {
 
         // Log that this is happening
         if($anonymous){
-            HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_ANON_NOTIFICATION_SENT, Current_User::getUsername());
+            HMS_Activity_Log::log_activity(\Current_User::getUsername(), ACTIVITY_ANON_NOTIFICATION_SENT, \Current_User::getUsername());
         }else{
-            HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_NOTIFICATION_SENT, Current_User::getUsername());
+            HMS_Activity_Log::log_activity(\Current_User::getUsername(), ACTIVITY_NOTIFICATION_SENT, \Current_User::getUsername());
         }
 
         //load the floors
@@ -85,8 +85,8 @@ class SendNotificationEmailsCommand extends Command {
         }
 
         // TODO accurate logging
-        //HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, Current_User::getUsername(), $hall->hall_name);
-        //HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, Current_User::getUsername(), $hall->hall_name);
+        //HMS_Activity_Log::log_activity(\Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, \Current_User::getUsername(), $hall->hall_name);
+        //HMS_Activity_Log::log_activity(\Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, \Current_User::getUsername(), $hall->hall_name);
 
         $floorObj = array();
         //load the halls and add floors that aren't already present, if they have js enabled should be zero
@@ -125,9 +125,9 @@ class SendNotificationEmailsCommand extends Command {
 
         $permission = new HMS_Permission();
         foreach($floorObj as $floor){
-            if(!$permission->verify(Current_User::getUsername(), $floor, 'email')
-               && !$permission->verify(Current_User::getUsername(), $floor->get_parent(), 'email')
-               && !Current_User::allow('hms', 'email_all')
+            if(!$permission->verify(\Current_User::getUsername(), $floor, 'email')
+               && !$permission->verify(\Current_User::getUsername(), $floor->get_parent(), 'email')
+               && !\Current_User::allow('hms', 'email_all')
                ){
                 continue;
             }
@@ -148,10 +148,10 @@ class SendNotificationEmailsCommand extends Command {
                 HMS_Email::send_email($student . '@' . DOMAIN_NAME, $from, $subject, $body);
             }
 
-            HMS_Activity_Log::log_activity(Current_User::getUsername(), ($anonymous ? ACTIVITY_FLOOR_NOTIFIED_ANONYMOUSLY : ACTIVITY_FLOOR_NOTIFIED), Current_User::getUsername(), $floor->where_am_i());
+            HMS_Activity_Log::log_activity(\Current_User::getUsername(), ($anonymous ? ACTIVITY_FLOOR_NOTIFIED_ANONYMOUSLY : ACTIVITY_FLOOR_NOTIFIED), \Current_User::getUsername(), $floor->where_am_i());
         }
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Emails sent successfully!');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'Emails sent successfully!');
         $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
         $cmd->redirect();
     }

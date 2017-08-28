@@ -44,17 +44,17 @@ class LotteryConfirmRoommateRequestCommand extends Command {
         \PHPWS_Core::initCoreClass('Captcha.php');
         $captcha = Captcha::verify(TRUE);
         if($captcha === FALSE){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'The words you entered were incorrect. Please try again.');
+            \NQ::simple('hms', NotificationView::ERROR, 'The words you entered were incorrect. Please try again.');
             $errorCmd->redirect();
         }
 
         // Check for a meal plan
         if(!isset($mealPlanCode) || $mealPlanCode == '') {
-        	NQ::simple('hms', hms\NotificationView::ERROR, 'Please choose a meal plan.');
+        	\NQ::simple('hms', NotificationView::ERROR, 'Please choose a meal plan.');
             $errorCmd->redirect();
         }
 
-        $term = PHPWS_Settings::get('hms', 'lottery_term');
+        $term = \PHPWS_Settings::get('hms', 'lottery_term');
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 

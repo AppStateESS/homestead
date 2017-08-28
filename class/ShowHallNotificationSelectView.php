@@ -16,12 +16,11 @@ class ShowHallNotificationSelectView extends View{
 
     public function show(){
         /*
-        if(!Current_User::allow('hms', 'email_hall')){
+        if(!\Current_User::allow('hms', 'email_hall')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to message halls.');
         }
         */
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
         $submitCmd = CommandFactory::getCommand('ShowHallNotificationEdit');
         $form = new \PHPWS_Form('select_halls_to_email');
@@ -36,8 +35,8 @@ class ShowHallNotificationSelectView extends View{
         $form->setExtra('submit', 'onclick="submitHallList();"');
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Hall Notification Select");
+        \Layout::addPageTitle("Hall Notification Select");
 
-        return \PHPWS_Template::process($tpl, 'hms', 'admin/messages.tpl').Layout::getJavascript("modules/hms/hall_expander", array("DIV"=>"hall_list", "FORM"=>"select_halls"));
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/messages.tpl').\Layout::getJavascript("modules/hms/hall_expander", array("DIV"=>"hall_list", "FORM"=>"select_halls"));
     }
 }

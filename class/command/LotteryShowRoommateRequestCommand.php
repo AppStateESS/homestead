@@ -29,7 +29,7 @@ class LotteryShowRoommateRequestCommand extends Command {
         PHPWS_Core::initModClass('hms', 'RlcMembershipFactory.php');
 
         $request = HMS_Lottery::get_lottery_roommate_invite_by_id($context->get('requestId'));
-        $term = PHPWS_Settings::get('hms', 'lottery_term');
+        $term = \PHPWS_Settings::get('hms', 'lottery_term');
         $housingApp = HousingApplication::getApplicationByUser(UserStatus::getUsername(), $term);
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);

@@ -41,7 +41,7 @@ class ShowWaitingListSignupCommand extends Command {
     {
         $term = $context->get('term');
         if (!isset($term)) {
-            throw new InvalidArgumentException('Missing term');
+            throw new \InvalidArgumentException('Missing term');
         }
 
         PHPWS_Core::initModClass('hms', 'WaitingListSignupView.php');

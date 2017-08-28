@@ -44,7 +44,7 @@ class SaveApplicationFeatureCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'deadlines')) {
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'deadlines')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit deadlines.');
         }
@@ -76,7 +76,7 @@ class SaveApplicationFeatureCommand extends Command {
             $feature = ApplicationFeature::getInstanceByName($name);
             $feature->setTerm($term);
         } else {
-            throw new InvalidArgumentException('You must either provide a featureId, or a name and a term.');
+            throw new \InvalidArgumentException('You must either provide a featureId, or a name and a term.');
         }
 
         // Checkboxes are weird.

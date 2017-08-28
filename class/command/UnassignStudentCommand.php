@@ -30,7 +30,7 @@ class UnassignStudentCommand extends Command {
      */
     public function execute(CommandContext $context)
     {
-        if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')) {
+        if (!UserStatus::isAdmin() || !\Current_User::allow('hms', 'assignment_maintenance')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to unassign students.');
         }
@@ -47,13 +47,13 @@ class UnassignStudentCommand extends Command {
         // $cmd->setUsername($username);
 
         if (!isset($username) || is_null($username)) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid or missing username.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Invalid or missing username.');
             $cmd->redirect();
         }
 
         // Make sure a valid reason was chosen
         if (!isset($unassignReason) || $unassignReason == -1) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Please choose a valid reason.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Please choose a valid reason.');
             $cmd->setUsername($username);
             $cmd->redirect();
         }
@@ -63,19 +63,19 @@ class UnassignStudentCommand extends Command {
 
         // Is a required field
         if(!isset($refund) || $refund == '') {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Please enter a refund percentage.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Please enter a refund percentage.');
             $cmd->redirect();
         }
 
         // Must be numeric
         if(!is_numeric($refund) || $refund < 0 || $refund > 100) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'The refund percentage must be between 0 and 100 percent.');
+            \NQ::simple('hms', NotificationView::ERROR, 'The refund percentage must be between 0 and 100 percent.');
             $cmd->redirect();
         }
 
         // Must be whole number
         if (is_float($refund)) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Only whole number refund percentages are supported, no decimal place is allowed.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Only whole number refund percentages are supported, no decimal place is allowed.');
             $cmd->redirect();
         }
 
@@ -86,13 +86,13 @@ class UnassignStudentCommand extends Command {
 
         try {
             HMS_Assignment::unassignStudent($student, $term, $notes, $unassignReason, $refund);
-        } catch (Exception $e) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Error: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            \NQ::simple('hms', NotificationView::ERROR, 'Error: ' . $e->getMessage());
             $cmd->setUsername($username);
             $cmd->redirect();
         }
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Successfully unassigned ' . $student->getFullName());
+        \NQ::simple('hms', NotificationView::SUCCESS, 'Successfully unassigned ' . $student->getFullName());
 
 
         // Check for a meal plan, and remove it if it hasn't been sent yet
@@ -103,7 +103,7 @@ class UnassignStudentCommand extends Command {
                 MealPlanFactory::removeMealPlan($mealPlan);
             } else {
                 // Show a warning that we couldn't remove this meal plan
-                NQ::simple('hms', hms\NotificationView::WARNING, 'This student has a meal plan which has already been sent to Banner, so we couldn\'t remove it.');
+                \NQ::simple('hms', NotificationView::WARNING, 'This student has a meal plan which has already been sent to Banner, so we couldn\'t remove it.');
             }
         }
 

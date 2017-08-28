@@ -91,7 +91,7 @@ class HMS_Permission extends HMS_Item {
                         );
         $stmt->execute($params);
 
-        $userIds = $stmt->fetchAll(PDO::FETCH_COLUMN, 'user_id');
+        $userIds = $stmt->fetchAll(\PDO::FETCH_COLUMN, 'user_id');
 
         if(sizeof($userIds) <= 0){
         	return null;
@@ -99,7 +99,7 @@ class HMS_Permission extends HMS_Item {
 
         $users = array();
         foreach ($userIds as $id) {
-        	$users[] = new PHPWS_User($id);
+        	$users[] = new \PHPWS_User($id);
         }
 
         return $users;

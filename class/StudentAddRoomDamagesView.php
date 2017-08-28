@@ -2,8 +2,6 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-
 class StudentAddRoomDamagesView extends View {
 
     private $student;

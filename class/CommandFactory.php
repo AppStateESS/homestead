@@ -43,7 +43,7 @@ class CommandFactory {
         $dir = self::$dir;
 
         if(preg_match('/\W/', $action)) {
-            throw new InvalidArgumentException("Illegal characters in command {$action}");
+            throw new \InvalidArgumentException("Illegal characters in command {$action}");
         }
 
         $class = $action.'Command';

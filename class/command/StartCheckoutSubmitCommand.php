@@ -16,7 +16,7 @@ class StartCheckoutSubmitCommand extends Command {
     public function execute(CommandContext $context)
     {
         // Check permissions
-        if (!Current_User::allow('hms', 'checkin')) {
+        if (!\Current_User::allow('hms', 'checkin')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to checkin students.');
         }
@@ -30,12 +30,12 @@ class StartCheckoutSubmitCommand extends Command {
         $errorCmd = CommandFactory::getCommand('ShowCheckoutStart'); // TODO
 
         if (!isset($bannerId) || is_null($bannerId) || $bannerId == '') {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Missing Banner ID.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Missing Banner ID.');
             $errorCmd->redirect();
         }
 
         if (!isset($hallId)) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Missing residence hall ID.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Missing residence hall ID.');
             $errorCmd->redirect();
         }
 

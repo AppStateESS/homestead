@@ -28,13 +28,13 @@ class EditResidenceHallViewCommand extends Command {
     }
 
     public function getSubLink($text, $parentVars){
-        return PHPWS_Text::moduleLink(dgettext('hms', $text), 'hms', $parentVars);
+        return \PHPWS_Text::moduleLink(dgettext('hms', $text), 'hms', $parentVars);
     }
 
     public function execute(CommandContext $context)
     {
 
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'hall_view') ){
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'hall_view') ){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit halls.');
         }
@@ -42,7 +42,7 @@ class EditResidenceHallViewCommand extends Command {
         // Check for a  hall ID
         $hallId = $context->get('hallId');
         if(!isset($hallId)){
-            throw new InvalidArgumentException('Missing hall ID.');
+            throw new \InvalidArgumentException('Missing hall ID.');
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');

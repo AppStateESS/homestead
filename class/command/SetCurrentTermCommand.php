@@ -22,7 +22,7 @@ class SetCurrentTermCommand extends Command {
     }
 
     public function execute(CommandContext $context) {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'activate_term')) {
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'activate_term')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to set the Current Term.');
         }
@@ -33,7 +33,7 @@ class SetCurrentTermCommand extends Command {
 
         Term::setCurrentTerm($this->term);
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS,
+        \NQ::simple('hms', NotificationView::SUCCESS,
         'The Current Term has been set to ' .
         Term::getPrintableCurrentTerm());
 

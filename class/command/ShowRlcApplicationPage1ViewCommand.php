@@ -24,7 +24,7 @@ class ShowRlcApplicationPage1ViewCommand extends Command {
         $term = $context->get('term');
 
         if(!isset($term) || is_null($term) || empty($term)){
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);

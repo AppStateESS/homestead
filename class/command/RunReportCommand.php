@@ -19,7 +19,7 @@ class RunReportCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'reports')){
+        if(!\Current_User::allow('hms', 'reports')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do no have permission to run reports.');
         }
@@ -29,11 +29,11 @@ class RunReportCommand extends Command {
         $reportName = $context->get('report');
 
         if(is_null($reportName)){
-            throw new InvalidArgumentException('Missing report name.');
+            throw new \InvalidArgumentException('Missing report name.');
         }
 
         //$context->setContent(HMS_Reports::runReport($reportName));
 
-        Layout::nakedDisplay(HMS_Reports::runReport($reportName), true);
+        \Layout::nakedDisplay(HMS_Reports::runReport($reportName), true);
     }
 }

@@ -92,7 +92,7 @@ class WKPDF {
             elseif (`grep -i intel /proc/cpuinfo` != '')
                 self::$cpu = 'i386';
             else
-                throw new Exception('WKPDF couldn\'t determine CPU ("' . `grep -i vendor_id /proc/cpuinfo` . '").');
+                throw new \Exception('WKPDF couldn\'t determine CPU ("' . `grep -i vendor_id /proc/cpuinfo` . '").');
         }
 
         return self::$cpu;
@@ -142,7 +142,7 @@ class WKPDF {
         }
 
         if (!file_exists($this->cmd))
-            throw new Exception('WKPDF static executable "' . htmlspecialchars($this->cmd,
+            throw new \Exception('WKPDF static executable "' . htmlspecialchars($this->cmd,
                     ENT_QUOTES) . '" was not found.');
         do {
             $this->tmp = $GLOBALS['WKPDF_TEMP_PATH'] . mt_rand() . '.html';
@@ -271,11 +271,11 @@ class WKPDF {
                 . ' "' . $web . '" -';
         $this->pdf = self::_pipeExec($execute);
         if (strpos(strtolower($this->pdf['stderr']), 'error') !== false)
-            throw new Exception('WKPDF system error: <pre>' . $this->pdf['stderr'] . '</pre>');
+            throw new \Exception('WKPDF system error: <pre>' . $this->pdf['stderr'] . '</pre>');
         if ($this->pdf['stdout'] == '')
-            throw new Exception('WKPDF didn\'t return any data. <pre>' . $this->pdf['stderr'] . '</pre>');
+            throw new \Exception('WKPDF didn\'t return any data. <pre>' . $this->pdf['stderr'] . '</pre>');
         if (((int) $this->pdf['return']) > 1)
-            throw new Exception('WKPDF shell error, return code ' . (int) $this->pdf['return'] . '.');
+            throw new \Exception('WKPDF shell error, return code ' . (int) $this->pdf['return'] . '.');
         $this->status = $this->pdf['stderr'];
         $this->pdf = $this->pdf['stdout'];
         unlink($this->tmp);
@@ -308,7 +308,7 @@ class WKPDF {
                     header('Content-Length: ' . strlen($this->pdf));
                     echo $this->pdf;
                 } else {
-                    throw new Exception('WKPDF download headers were already sent.');
+                    throw new \Exception('WKPDF download headers were already sent.');
                 }
                 break;
             case self::$PDF_ASSTRING:
@@ -325,14 +325,14 @@ class WKPDF {
                     header('Content-Disposition: inline; filename="' . basename($file) . '";');
                     echo $this->pdf;
                 } else {
-                    throw new Exception('WKPDF embed headers were already sent.');
+                    throw new \Exception('WKPDF embed headers were already sent.');
                 }
                 break;
             case self::$PDF_SAVEFILE:
                 return file_put_contents($file, $this->pdf);
                 break;
             default:
-                throw new Exception('WKPDF invalid mode "' . htmlspecialchars($mode,
+                throw new \Exception('WKPDF invalid mode "' . htmlspecialchars($mode,
                         ENT_QUOTES) . '".');
         }
         return false;

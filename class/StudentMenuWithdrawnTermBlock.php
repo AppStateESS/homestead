@@ -1,7 +1,6 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
 
 class StudentMenuWithdrawnTermBlock {
 

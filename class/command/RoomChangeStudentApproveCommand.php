@@ -53,7 +53,7 @@ class RoomChangeStudentApproveCommand extends Command {
         $student = StudentFactory::getStudentByBannerId($participant->getBannerId(), $request->getTerm());
 
         // Check permissions. Must be the participant or an admin
-        if(UserStatus::getUsername() != $student->getUsername() && !Current_User::allow('hms', 'admin_approve_room_change')) {
+        if(UserStatus::getUsername() != $student->getUsername() && !\Current_User::allow('hms', 'admin_approve_room_change')) {
             throw new PermissionException('You do not have permission to appove this room change.');
         }
 
@@ -62,7 +62,7 @@ class RoomChangeStudentApproveCommand extends Command {
             $captchaResult = Captcha::verify(true);
             if (UserStatus::getUsername() == $student->getUsername() && $captchaResult === false) {
                 // Failed the captcha
-                NQ::simple('hms', hms\NotificationView::ERROR, "You didn't type the magic words correctly. Please try again.");
+                \NQ::simple('hms', NotificationView::ERROR, "You didn't type the magic words correctly. Please try again.");
                 $cmd = CommandFactory::getCommand('ShowRoomChangeRequestApproval');
                 $cmd->redirect();
             }
@@ -86,7 +86,7 @@ class RoomChangeStudentApproveCommand extends Command {
 
         // If the student is logged in, redirect to the main menu, other wise go back to the room change management view
         if(UserStatus::getUsername() == $student->getUsername()) {
-            NQ::simple('hms', hms\NotificationView::SUCCESS, 'You have agreed to the room change request. You will be notified by email when the reqeust is approved or denied.');
+            \NQ::simple('hms', NotificationView::SUCCESS, 'You have agreed to the room change request. You will be notified by email when the reqeust is approved or denied.');
             $menuCmd = CommandFactory::getCommand('ShowStudentMenu');
             $menuCmd->redirect();
         }else{

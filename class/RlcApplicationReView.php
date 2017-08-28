@@ -19,7 +19,7 @@ class RlcApplicationReView extends View {
     }
 
     public function show(){
-        Layout::addPageTitle("RLC Application Review");
+        \Layout::addPageTitle("RLC Application Review");
 
         $tags = array();
 
@@ -68,7 +68,7 @@ class RlcApplicationReView extends View {
 
         // If this application is denied and the person logged in is an admin, show a warning
         if($this->application->isDenied() && UserStatus::isAdmin()){
-            NQ::simple('hms', NotificationView::WARNING, 'This application has been denied.');
+            \NQ::simple('hms', NotificationView::WARNING, 'This application has been denied.');
         }
 
         // Show options depending of status of application.

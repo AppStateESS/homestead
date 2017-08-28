@@ -73,7 +73,7 @@ class LotteryChooseFloorView extends View {
             $tpl['floor_list'][]    = $row;
         }
 
-        Layout::addPageTitle("Choose Floor");
+        \Layout::addPageTitle("Choose Floor");
 
         return \PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_floor.tpl');
     }

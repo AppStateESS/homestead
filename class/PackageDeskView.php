@@ -30,7 +30,7 @@ class PackageDeskView {
         javascriptMod('hms', 'jqueryCookie');
         //javascriptMod('packageDesk');
 
-        Layout::addPageTitle('Package Desk');
+        \Layout::addPageTitle('Package Desk');
 
         $form = new \PHPWS_Form('pd');
 

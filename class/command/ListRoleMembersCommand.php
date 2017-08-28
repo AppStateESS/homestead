@@ -14,7 +14,7 @@ class ListRoleMembersCommand extends Command {
     }
 
     public function execute(CommandContext $context){
-        if(!Current_User::allow('hms', 'view_role_members')){
+        if(!\Current_User::allow('hms', 'view_role_members')){
             //PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             //throw new PermissionException('You do not have permission to view role members.');
 

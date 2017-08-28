@@ -27,7 +27,7 @@ class RemoveSpecialInterestCommand extends Command
     public function execute(CommandContext $context)
     {
         // Check permissions
-        if(!Current_User::allow('hms', 'special_interest_approval')){
+        if(!\Current_User::allow('hms', 'special_interest_approval')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to approve special interest group requests.');
         }
@@ -35,7 +35,7 @@ class RemoveSpecialInterestCommand extends Command
         PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
 
         if(is_null($context->get('id'))){
-            throw new InvalidArgumentException('Missing application id.');
+            throw new \InvalidArgumentException('Missing application id.');
         }
 
         $app = new LotteryApplication($context->get('id'));
@@ -44,7 +44,7 @@ class RemoveSpecialInterestCommand extends Command
 
         $app->save();
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, "Removed {$app->getUsername()}");
+        \NQ::simple('hms', NotificationView::SUCCESS, "Removed {$app->getUsername()}");
 
         $cmd = CommandFactory::getCommand('ShowSpecialInterestGroupApproval');
         $cmd->setGroup($context->get('group'));

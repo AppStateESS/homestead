@@ -37,7 +37,7 @@ class HousingApplicationFormSubmitCommand extends Command {
         if (is_null($doNotCall)) {
             // do not call checkbox was not selected, so check the number
             if (empty($number)) {
-                NQ::simple('hms', hms\NotificationView::ERROR, 'Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
+                \NQ::simple('hms', NotificationView::ERROR, 'Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
                 $errorCmd->redirect();
             }
         }
@@ -49,7 +49,7 @@ class HousingApplicationFormSubmitCommand extends Command {
         $emergencyEmail = $context->get('emergency_contact_email');
 
         if (empty($emergencyName) || empty($emergencyRelationship) || empty($emergencyPhone) || empty($emergencyEmail)) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Please complete all of the emergency contact person information.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Please complete all of the emergency contact person information.');
             $errorCmd->redirect();
         }
 
@@ -61,7 +61,7 @@ class HousingApplicationFormSubmitCommand extends Command {
         $missingPersonEmail = $context->get('missing_person_email');
 
         if (empty($missingPersonName) || empty($missingPersonRelationship) || empty($missingPersonPhone) || empty($missingPersonEmail)) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Please complete all of the missing persons contact information.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Please complete all of the missing persons contact information.');
             $errorCmd->redirect();
         }
 
@@ -76,7 +76,7 @@ class HousingApplicationFormSubmitCommand extends Command {
             $roomCondition = $context->get('room_condition');
 
             if (!is_numeric($mealOption) || !is_numeric($lifestyleOption) || !is_numeric($preferredBedtime) || !is_numeric($roomCondition)) {
-                NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid values entered. Please try again.');
+                \NQ::simple('hms', NotificationView::ERROR, 'Invalid values entered. Please try again.');
                 $errorCmd->redirect();
             }
         } else if ($sem == 20 || $sem == 30) {
@@ -84,7 +84,7 @@ class HousingApplicationFormSubmitCommand extends Command {
             $roomType = $context->get('room_type');
 
             if (!is_numeric($roomType)) {
-                NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid values entered.  Please try again.');
+                \NQ::simple('hms', NotificationView::ERROR, 'Invalid values entered.  Please try again.');
                 $errorCmd->redirect();
             }
         }

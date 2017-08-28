@@ -23,12 +23,12 @@ class HallOverviewNakedDisplayCommand extends Command {
     }
 
     public function getSubLink($text, $parentVars){
-        return PHPWS_Text::moduleLink(dgettext('hms', $text), 'hms', $parentVars);
+        return \PHPWS_Text::moduleLink(dgettext('hms', $text), 'hms', $parentVars);
     }
 
     public function execute(CommandContext $context)
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms','run_hall_overview')) {
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms','run_hall_overview')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to see the Hall Overview.');
         }
@@ -39,7 +39,7 @@ class HallOverviewNakedDisplayCommand extends Command {
         $hallId = $context->get('hallId');
 
         if(!isset($hallId)){
-            throw new InvalidArgumentException('Missing hall ID.');
+            throw new \InvalidArgumentException('Missing hall ID.');
         }
 
         $hall = new HMS_Residence_Hall($hallId);

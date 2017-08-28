@@ -32,7 +32,7 @@ class RoomChangeDenyCommand extends Command {
 
         // Make sure user gave a reason
         if(!isset($publicReason) or $publicReason == ''){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Please enter a denial reason.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Please enter a denial reason.');
             $cmd->redirect();
         }
 

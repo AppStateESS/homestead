@@ -32,13 +32,13 @@ class ShowRoommateConfirmationCommand extends Command
     {
         $id = $context->get('roommateId');
         if(is_null($id)) {
-            throw new InvalidArgumentException('Must set roommateId');
+            throw new \InvalidArgumentException('Must set roommateId');
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $roommate = new HMS_Roommate($id);
         if($roommate->id == 0) {
-            throw new InvalidArgumentException('Invalid roommateId ' . $id);
+            throw new \InvalidArgumentException('Invalid roommateId ' . $id);
         }
 
         $username = UserStatus::getUsername();
@@ -63,6 +63,6 @@ class ShowRoommateConfirmationCommand extends Command
         $requestor = StudentFactory::getStudentByUsername($roommate->requestor, $roommate->term);
         $tpl['REQUESTOR_NAME'] = $requestor->getFullName();
 
-        $context->setContent(PHPWS_Template::process($tpl, 'hms', 'student/roommate_accept_reject_screen.tpl'));
+        $context->setContent(\PHPWS_Template::process($tpl, 'hms', 'student/roommate_accept_reject_screen.tpl'));
     }
 }

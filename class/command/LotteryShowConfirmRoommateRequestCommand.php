@@ -31,7 +31,7 @@ class LotteryShowConfirmRoommateRequestCommand extends Command {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         PHPWS_Core::initModClass('hms', 'ContractFactory.php');
 
-        $term = PHPWS_Settings::get('hms', 'lottery_term');
+        $term = \PHPWS_Settings::get('hms', 'lottery_term');
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         $contract = ContractFactory::getContractByStudentTerm($student, $term);

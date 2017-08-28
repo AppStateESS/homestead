@@ -32,7 +32,7 @@ class EditBedCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!UserStatus::isAdmin() ||  !Current_User::allow('hms', 'bed_attributes') ){
+        if(!UserStatus::isAdmin() ||  !\Current_User::allow('hms', 'bed_attributes') ){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit beds.');
         }
@@ -47,14 +47,14 @@ class EditBedCommand extends Command {
         // Check that the Banner bed ID is valid (five digits)
         $bannerBedId = trim($context->get('banner_id'));
         if(!is_numeric($bannerBedId) || !preg_match("/\d{5}/",$bannerBedId)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid Banner bed ID. No changes were saved.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Invalid Banner bed ID. No changes were saved.');
             $viewCmd->redirect();
         }
 
         # Create the bed object given the bed_id
         $bed = new HMS_Bed($bedId);
         if(!$bed){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid bed.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Invalid bed.');
             $viewCmd->redirect();
         }
 
@@ -69,11 +69,11 @@ class EditBedCommand extends Command {
         $result = $bed->save();
 
         if(!$result || \PHPWS_Error::logIfError($result)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Error: There was a problem while saving the bed. No changes were made');
+            \NQ::simple('hms', NotificationView::ERROR, 'Error: There was a problem while saving the bed. No changes were made');
             $viewCmd->redirect();
         }
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'The room was updated successfully.');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'The room was updated successfully.');
         $viewCmd->redirect();
     }
 }

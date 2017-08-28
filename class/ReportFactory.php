@@ -92,7 +92,7 @@ class ReportFactory {
      * @param integer $reportId
      * @return Report
      * @throws DatabaseException
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function getReportById($reportId)
     {
@@ -107,7 +107,7 @@ class ReportFactory {
         }
 
         if(is_null($result)){
-            throw new InvalidArgumentException('The given report ID does not exist.');
+            throw new \InvalidArgumentException('The given report ID does not exist.');
         }
 
         self::loadReportClass($result);

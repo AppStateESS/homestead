@@ -29,7 +29,7 @@ class EditFloorViewCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!UserStatus::isAdmin() ||  !Current_User::allow('hms', 'floor_view') ){
+        if(!UserStatus::isAdmin() ||  !\Current_User::allow('hms', 'floor_view') ){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit floors.');
         }
@@ -37,7 +37,7 @@ class EditFloorViewCommand extends Command {
         // Check for a hall ID
         $floorId = $context->get('floor');
         if(!isset($floorId)){
-            throw new InvalidArgumentException('Missing floor ID.');
+            throw new \InvalidArgumentException('Missing floor ID.');
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');

@@ -189,7 +189,7 @@ class RoommateProfileFormView extends View {
         $profile_form->mergeTemplate($template);
         $template = $profile_form->getTemplate();
 
-        Layout::addPageTitle("Roommate Profile Form");
+        \Layout::addPageTitle("Roommate Profile Form");
         javascript('jquery');
         return \PHPWS_Template::process($template,'hms','student/profile_form.tpl');
     }

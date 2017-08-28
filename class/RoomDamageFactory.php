@@ -25,7 +25,7 @@ class RoomDamageFactory {
 
         $stmt->execute($params);
 
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RoomDamageDb');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'RoomDamageDb');
         $result = $stmt->fetch();
 
         return $result;
@@ -61,7 +61,7 @@ class RoomDamageFactory {
      * @param HMS_Room $room
      * @param unknown $timestamp
      * @throws DatabaseException
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @return Array<RoomDamage> null
      */
     public static function getDamagesBefore(HMS_Room $room, $timestamp)
@@ -116,7 +116,7 @@ class RoomDamageFactory {
 
         $stmt->execute($params);
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomDamageDb');
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, 'RoomDamageDb');
     }
 
     public static function save(RoomDamage $dmg)
@@ -168,6 +168,6 @@ class RoomDamageFactory {
         $stmt = $db->prepare($query);
         $stmt->execute($params);
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

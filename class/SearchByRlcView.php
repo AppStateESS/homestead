@@ -2,8 +2,6 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-
 class SearchByRlcView extends View {
 
     public function show(){

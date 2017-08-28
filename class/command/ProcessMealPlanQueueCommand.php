@@ -16,7 +16,7 @@ class ProcessMealPlanQueueCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'banner_queue')){
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'banner_queue')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to enable/disable the Banner queue.');
         }
@@ -24,7 +24,7 @@ class ProcessMealPlanQueueCommand extends Command {
         $term = new Term(Term::getSelectedTerm());
 
         if(is_null($term) || $term === ''){
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         $cmd = CommandFactory::getCommand('ShowEditTerm');
@@ -33,7 +33,7 @@ class ProcessMealPlanQueueCommand extends Command {
 
         // Sanity check the queue status. If it's not enabled, then we can't do anything
         if($queueStatus != 1){
-            NQ::Simple('hms', hms\NotificationView::ERROR, 'The Meal Plan Queue is not enabled, so we can\'t process it.');
+            \NQ::Simple('hms', NotificationView::ERROR, 'The Meal Plan Queue is not enabled, so we can\'t process it.');
             $cmd->redirect();
         }
 
@@ -45,7 +45,7 @@ class ProcessMealPlanQueueCommand extends Command {
             $term->setMealPlanQueue(0);
             $term->save();
 
-            NQ::Simple('hms', hms\NotificationView::SUCCESS, 'The Meal Plan Queue has been disabled.');
+            \NQ::Simple('hms', NotificationView::SUCCESS, 'The Meal Plan Queue has been disabled.');
             $cmd->redirect();
             return;
         }
@@ -78,10 +78,10 @@ class ProcessMealPlanQueueCommand extends Command {
             $term->setMealPlanQueue(0);
             $term->save();
 
-            NQ::Simple('hms', hms\NotificationView::SUCCESS, 'Meal Plans were sent to Banner and the Meal Plan Queue has been disabled.');
+            \NQ::Simple('hms', NotificationView::SUCCESS, 'Meal Plans were sent to Banner and the Meal Plan Queue has been disabled.');
         } else {
-            NQ::Simple('hms', hms\NotificationView::ERROR, 'There were some errors while processing the meal plans. The queue could not be disabled.');
-            NQ::Simple('hms', hms\NotificationView::ERROR, '<br />' . implode('<br />', $failures));
+            \NQ::Simple('hms', NotificationView::ERROR, 'There were some errors while processing the meal plans. The queue could not be disabled.');
+            \NQ::Simple('hms', NotificationView::ERROR, '<br />' . implode('<br />', $failures));
         }
 
         $cmd->redirect();

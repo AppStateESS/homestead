@@ -213,7 +213,7 @@ class RoomView extends View {
 
         $tpl['RESERVED_NOTES'] = $this->room->getReservedNotes();
 
-        Layout::addPageTitle("Edit Room");
+        \Layout::addPageTitle("Edit Room");
 
         $tpl['ROOM_DAMAGE_LIST'] = $this->roomDamagePager();
 

@@ -23,7 +23,7 @@ class SendRlcRejectionEmailsCommand extends Command
 
     public function execute(CommandContext $context)
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'email_rlc_rejections')){
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'email_rlc_rejections')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to send RLC rejections.');
         }
@@ -46,7 +46,7 @@ class SendRlcRejectionEmailsCommand extends Command
             $application->save();
         }
 
-        NQ::Simple('hms', hms\NotificationView::SUCCESS, 'RLC rejection emails sent.');
+        \NQ::Simple('hms', NotificationView::SUCCESS, 'RLC rejection emails sent.');
         $context->goBack();
     }
 

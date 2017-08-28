@@ -16,11 +16,10 @@ class UserHMS extends HMS
         $this->context->setDefault('action', 'ShowStudentMenu');
         parent::process();
 
-        PHPWS_Core::initModClass('hms', 'UserView.php');
-        $view = new hms\UserView();
+        $view = new UserView();
         $view->setMain($this->context->getContent());
 
-        $nv = new hms\NotificationView();
+        $nv = new NotificationView();
         $nv->popNotifications();
         $view->addNotifications($nv->show());
 

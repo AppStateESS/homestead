@@ -23,7 +23,7 @@ class EnableBannerQueueCommand extends Command {
 
     public function execute(CommandContext $context) {
 
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'banner_queue')){
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'banner_queue')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to enable/disable the Banner queue.');
         }
@@ -36,14 +36,14 @@ class EnableBannerQueueCommand extends Command {
         $term = $this->term;
 
         if(is_null($term)) {
-            throw new InvalidArgumentException('No term was specified to DisableBannerQueue');
+            throw new \InvalidArgumentException('No term was specified to DisableBannerQueue');
         }
 
         $term = new Term($term);
 
         $term->setBannerQueue(TRUE);
         $term->save();
-        NQ::Simple('hms', hms\NotificationView::SUCCESS, 'Banner Queue has been enabled for ' . Term::toString($term->term) . '.');
+        \NQ::Simple('hms', NotificationView::SUCCESS, 'Banner Queue has been enabled for ' . Term::toString($term->term) . '.');
 
         CommandContext::goBack();
     }

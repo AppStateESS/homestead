@@ -13,7 +13,7 @@ class LotteryAdminSetWinnerCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'lottery_admin')){
+        if(!\Current_User::allow('hms', 'lottery_admin')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to administer re-application features.');
         }
@@ -41,12 +41,12 @@ class LotteryAdminSetWinnerCommand extends Command {
             try{
                 $application = HousingApplicationFactory::getAppByStudent($student, $term);
             }catch(StudentNotFoundException $e){
-                NQ::simple('hms', hms\NotificationView::ERROR, "No matching student was found for: {$bannerId}");
+                \NQ::simple('hms', NotificationView::ERROR, "No matching student was found for: {$bannerId}");
                 continue;
             }
 
             if(is_null($application)){
-                NQ::simple('hms', hms\NotificationView::ERROR, "No housing application for: {$bannerId}");
+                \NQ::simple('hms', NotificationView::ERROR, "No housing application for: {$bannerId}");
                 continue;
             }
 
@@ -54,12 +54,12 @@ class LotteryAdminSetWinnerCommand extends Command {
 
             try{
                 $application->save();
-            }catch(Exception $e){
-                NQ::simple('hms', hms\NotificationView::ERROR, "Error setting flag for: {$bannerId}");
+            }catch(\Exception $e){
+                \NQ::simple('hms', NotificationView::ERROR, "Error setting flag for: {$bannerId}");
                 continue;
             }
 
-            NQ::simple('hms', hms\NotificationView::SUCCESS, "Magic flag set for: {$bannerId}");
+            \NQ::simple('hms', NotificationView::SUCCESS, "Magic flag set for: {$bannerId}");
         }
 
         $viewCmd = CommandFactory::getCommand('ShowLotteryAutoWinners');

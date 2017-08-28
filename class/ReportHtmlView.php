@@ -61,7 +61,7 @@ abstract class ReportHtmlView extends ReportView {
     }
 
     /**
-     * Uses show() to get the HTML snippit for this report, then uses PHPWS_Layout to
+     * Uses show() to get the HTML snippit for this report, then uses \PHPWS_Layout to
      * wrap that snippit in a fully-formed HTML document, suitable for independent viewing.
      *
      * @see show()
@@ -69,6 +69,6 @@ abstract class ReportHtmlView extends ReportView {
      */
     public function getWrappedHtml()
     {
-        return Layout::wrap($this->show());
+        return \Layout::wrap($this->show());
     }
 }

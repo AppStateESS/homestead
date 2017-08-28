@@ -34,7 +34,7 @@ class ShowStudentProfileCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'search')){
+        if(!\Current_User::allow('hms', 'search')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to search for students.');
         }
@@ -52,8 +52,8 @@ class ShowStudentProfileCommand extends Command {
             } else {
                 $student = StudentFactory::getStudentByUsername($username, $term);
             }
-        }catch (InvalidArgumentException $e){
-            NQ::simple('hms', hms\NotificationView::ERROR, $e->getMessage());
+        }catch (\InvalidArgumentException $e){
+            \NQ::simple('hms', NotificationView::ERROR, $e->getMessage());
             /*
              $cmd = CommandFactory::getCommand('ShowStudentSearch');
             $cmd->setUsername($userid);
@@ -61,7 +61,7 @@ class ShowStudentProfileCommand extends Command {
             */
             $context->goBack();
         }catch (StudentNotFoundException $e){
-            NQ::simple('hms', hms\NotificationView::ERROR, $e->getMessage());
+            \NQ::simple('hms', NotificationView::ERROR, $e->getMessage());
             /*
              $cmd = CommandFactory::getCommand('ShowStudentSearch');
             $cmd->setUsername($userid);

@@ -24,7 +24,7 @@ class AssessRoomDamageCommand extends Command {
     public function execute(CommandContext $context)
     {
         // Check permissions
-        if (!Current_User::allow('hms', 'damage_assessment')) {
+        if (!\Current_User::allow('hms', 'damage_assessment')) {
             throw new PermissionException('You do not have permission to perform room damage assessment.');
         }
 

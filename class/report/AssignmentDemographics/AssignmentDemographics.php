@@ -158,7 +158,7 @@ class AssignmentDemographics extends Report {
             //TODO use banner IDs
             try{
                 $student = StudentFactory::getStudentByBannerId($assign['banner_id'], $this->term);
-            }catch(Exception $e){
+            }catch(\Exception $e){
                 $this->problems[] = $assign['banner_id'] . ': Unknown student';
                 $summary['OTHER']++;
                 continue;

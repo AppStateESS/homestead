@@ -32,13 +32,13 @@ class RoommateBreakCommand extends Command
     {
         $id = $context->get('roommateId');
         if(is_null($id)) {
-            throw new InvalidArgumentException('Must set roommateId');
+            throw new \InvalidArgumentException('Must set roommateId');
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $roommate = new HMS_Roommate($id);
         if($roommate->id == 0) {
-            throw new InvalidArgumentException('Invalid roommateId ' . $id);
+            throw new \InvalidArgumentException('Invalid roommateId ' . $id);
         }
 
         $username = UserStatus::getUsername();
@@ -53,7 +53,7 @@ class RoommateBreakCommand extends Command
         \PHPWS_Core::initCoreClass('Captcha.php');
         $verified = Captcha::verify(TRUE);
         if($verified === FALSE || is_null($verified)) {
-            NQ::Simple('hms', hms\NotificationView::ERROR, 'Sorry, please try again.');
+            \NQ::Simple('hms', NotificationView::ERROR, 'Sorry, please try again.');
             $err->redirect();
         }
 
@@ -75,7 +75,7 @@ class RoommateBreakCommand extends Command
         HMS_Email::send_break_emails($roommate, $username);
 
         $name = $other->getFullName();
-        NQ::Simple('hms', hms\NotificationView::SUCCESS, "You have removed your roommate request for $name.");
+        \NQ::Simple('hms', NotificationView::SUCCESS, "You have removed your roommate request for $name.");
 
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();

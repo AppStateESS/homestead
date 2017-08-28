@@ -43,7 +43,7 @@ class TwentyOne extends Report implements iCsvReport {
     public function execute()
     {
         if (!isset($this->term) || is_null($this->term)) {
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         // Calculate the timestamp from 21 years ago
@@ -66,7 +66,7 @@ class TwentyOne extends Report implements iCsvReport {
 
             if(empty($results)){
                 continue;
-            }elseif(PEAR::isError($results)){
+            }elseif(\PEAR::isError($results)){
                 throw new DatabaseException($results->toString());
             }
 

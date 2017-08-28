@@ -21,7 +21,7 @@ class CheckinStartView extends View {
         javascriptMod('hms', 'jqueryCookie');
         javascriptMod('hms', 'checkinStart');
 
-        Layout::addPageTitle('Check-in');
+        \Layout::addPageTitle('Check-in');
 
         $tpl = array();
 

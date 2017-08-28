@@ -24,13 +24,6 @@ class StudentProfile {
      */
     public function getProfileView()
     {
-        PHPWS_Core::initModClass('hms', 'StudentProfileView.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-
         $studentUsername = $this->student->getUsername();
         $assignment = HMS_Assignment::getAssignmentByBannerId($this->student->getBannerId(), $this->term);
 

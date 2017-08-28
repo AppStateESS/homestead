@@ -98,10 +98,10 @@ abstract class HMS_Item {
         $tpl['UPDATED_ON']   = strftime('%c', $this->updated_on);
 
 
-        $adder = new PHPWS_User($this->added_by);
+        $adder = new \PHPWS_User($this->added_by);
         $tpl['ADDED_BY']     = $adder->username;
 
-        $updater = new PHPWS_User($this->updated_by);
+        $updater = new \PHPWS_User($this->updated_by);
         $tpl['UPDATED_BY']     = $updater->username;
 
         $tpl['TERM']         = Term::toString($this->term, true);

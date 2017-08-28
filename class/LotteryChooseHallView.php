@@ -60,7 +60,7 @@ class LotteryChooseHallView extends View {
             $tpl['NOTHING_LEFT'] = '';
         }
 
-        Layout::addPageTitle("Choose Hall");
+        \Layout::addPageTitle("Choose Hall");
 
         return \PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_hall.tpl');
     }

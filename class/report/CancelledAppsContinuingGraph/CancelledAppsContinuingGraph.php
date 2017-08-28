@@ -81,7 +81,7 @@ class CancelledAppsContinuingGraph extends Report {
         $stmt = $db->prepare($query);
         $stmt->bindParam(':term', $term);
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         return $result;
     }

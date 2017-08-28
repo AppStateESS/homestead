@@ -53,13 +53,13 @@ class ShowRDRoomChangeListCommand extends Command {
                 $floors[] = $f;
 
             } else {
-                throw new Exception('Unknown object type.');
+                throw new \Exception('Unknown object type.');
             }
         }
 
         if(empty($floors)){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
-            NQ::simple('hms', hms\NotificationView::ERROR, "You do not have the 'RD' role on any residence halls or floors.");
+            \NQ::simple('hms', NotificationView::ERROR, "You do not have the 'RD' role on any residence halls or floors.");
             $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
             $cmd->redirect();
         }

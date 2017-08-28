@@ -20,13 +20,10 @@ class ScheduledLottery
 
     public static function execute()
     {
-        PHPWS_Core::initModClass('hms', 'HMS.php');
-
         // Copied and pasted from index.php
         require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
 
         // Copied and pasted from ExecuteLotteryCommand.php
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         HMS_Lottery::runLottery();
 
         $now = time();

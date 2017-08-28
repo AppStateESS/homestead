@@ -23,7 +23,7 @@ class ShowResidenceVerificationCommand extends Command {
 
         // If not assigned, then redirect to the main menu with an error
         if(is_null($assignment)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'You do not have a room assignment for the current semester.');
+            \NQ::simple('hms', NotificationView::ERROR, 'You do not have a room assignment for the current semester.');
             $cmd = CommandFactory::getCommand('ShowStudentMenu');
             $cmd->redirect();
         }

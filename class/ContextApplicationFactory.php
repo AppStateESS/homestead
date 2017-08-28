@@ -65,7 +65,7 @@ abstract class ContextApplicationFactory {
             //test('ohh hai',1);
             // do not call checkbox was not selected, so check the number
             if(is_null($areaCode) || is_null($exchange) || is_null($number)){
-                throw new InvalidArgumentException('Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
+                throw new \InvalidArgumentException('Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
             }
         }
         */
@@ -80,7 +80,7 @@ abstract class ContextApplicationFactory {
         $mealOption = $this->context->get('meal_option');
         if(!isset($mealOption))
         {
-            //throw new InvalidArgumentException('Missing meal option from context.');
+            //throw new \InvalidArgumentException('Missing meal option from context.');
         }
 
         $this->app->setMealPlan($mealOption);
@@ -118,7 +118,7 @@ class FallContextApplicationFactory extends ContextApplicationFactory {
         $smokingPreference  = $this->context->get('smoking_preference');
 
         if(!is_numeric($lifestyleOption) || !is_numeric($preferredBedtime) || !is_numeric($roomCondition)){
-            //throw new InvalidArgumentException('Invalid option from context. Please try again.');
+            //throw new \InvalidArgumentException('Invalid option from context. Please try again.');
         }
 
         // Load the fall-specific fields

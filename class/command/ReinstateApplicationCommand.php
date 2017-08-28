@@ -21,7 +21,7 @@ class ReinstateApplicationCommand extends Command {
 
   public function execute(CommandContext $context)
   {
-      if(!Current_User::allow('hms', 'cancel_housing_application'))
+      if(!\Current_User::allow('hms', 'cancel_housing_application'))
       {
           PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
           throw new PermissionException('You do not have permission to cancel housing applications.');
@@ -32,7 +32,7 @@ class ReinstateApplicationCommand extends Command {
 
       if(!isset($this->applicationId) || is_null($this->applicationId))
       {
-          throw new InvalidArgumentException('Missing housing application id.');
+          throw new \InvalidArgumentException('Missing housing application id.');
       }
 
       $application = HousingApplicationFactory::getApplicationById($this->applicationId);

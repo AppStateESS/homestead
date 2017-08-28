@@ -16,7 +16,7 @@ class ListAllowedHallsCommand extends Command {
     public function execute(CommandContext $context){
         $term = Term::getSelectedTerm();
 
-        $messageAll = Current_User::allow('hms', 'email_all');
+        $messageAll = \Current_User::allow('hms', 'email_all');
 
         $db = new \PHPWS_DB('hms_residence_hall');
         $db->addWhere('term', $term);
@@ -66,7 +66,7 @@ class ListAllowedHallsCommand extends Command {
                     $floor_obj = new \stdClass();
                     $floor_obj->name    = "Floor: ".$floor->getFloorNumber();
                     $floor_obj->id      = $floor->getId();
-                    $floor_obj->enabled = $permission->verify(Current_User::getUsername(), $floor, 'email');
+                    $floor_obj->enabled = $permission->verify(\Current_User::getUsername(), $floor, 'email');
                     $obj->floors[]      = $floor_obj;
 
                     if($floor_obj->enabled)

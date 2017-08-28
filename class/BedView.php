@@ -100,7 +100,7 @@ class BedView extends View
         }
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
-        Layout::addPageTitle("Edit Bed");
+        \Layout::addPageTitle("Edit Bed");
         $tpl['HISTORY'] = $this->getBedHistoryContent();
         return \PHPWS_Template::process($tpl, 'hms', 'admin/edit_bed.tpl');
     }

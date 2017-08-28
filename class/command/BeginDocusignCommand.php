@@ -65,25 +65,25 @@ class BeginDocusignCommand extends Command
 
     public function execute(CommandContext $context)
     {
-        $docusignUsername = PHPWS_Settings::get('hms', 'docusign_username');
+        $docusignUsername = \PHPWS_Settings::get('hms', 'docusign_username');
         if ($docusignUsername === null || $docusignUsername == '') {
             PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('Missing docusign username.');
         }
 
-        $docusignPassword = PHPWS_Settings::get('hms', 'docusign_password');
+        $docusignPassword = \PHPWS_Settings::get('hms', 'docusign_password');
         if ($docusignPassword === null || $docusignPassword == '') {
             PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('Missing docusign password.');
         }
 
-        $docusignKey = PHPWS_Settings::get('hms', 'docusign_key');
+        $docusignKey = \PHPWS_Settings::get('hms', 'docusign_key');
         if ($docusignKey === null || $docusignKey == '') {
             PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('Missing docusign key.');
         }
 
-        $docusignEnv = PHPWS_Settings::get('hms', 'docusign_env');
+        $docusignEnv = \PHPWS_Settings::get('hms', 'docusign_env');
         if ($docusignEnv === null || $docusignEnv == '') {
             PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('Missing docusign key.');

@@ -15,7 +15,7 @@ class LotteryAutoWinnersView extends View {
 
         $form->addSubmit('Submit');
 
-        Layout::addPageTitle("Automatic Lottery Winners");
+        \Layout::addPageTitle("Automatic Lottery Winners");
 
         return \PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/lotteryAutoWinnersView.tpl');
     }

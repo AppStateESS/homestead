@@ -121,7 +121,7 @@ class LotteryChooseRoommatesView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Lottery Choose Roommate");
+        \Layout::addPageTitle("Lottery Choose Roommate");
 
         return \PHPWS_Template::process($tpl, 'hms', 'student/lottery_select_roommate.tpl');
     }

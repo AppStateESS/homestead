@@ -26,7 +26,7 @@ class GetRoomDamagesToAssessCommand extends Command {
         $term = $context->get('term');
 
         if (!isset($term)) {
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         // Get the list of floors which the current user has permission to assess
@@ -57,7 +57,7 @@ class GetRoomDamagesToAssessCommand extends Command {
             } else if ($member['class'] == 'hms_floor') {
                 $floors[] = new HMS_Floor($member['instance']);
             } else {
-                throw new Exception('Unknown object type.');
+                throw new \Exception('Unknown object type.');
             }
         }
 

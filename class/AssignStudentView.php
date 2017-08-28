@@ -174,7 +174,7 @@ class AssignStudentView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Assign Student");
+        \Layout::addPageTitle("Assign Student");
 
         return \PHPWS_Template::process($tpl, 'hms', 'admin/assignStudent.tpl');
     }

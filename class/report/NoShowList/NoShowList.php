@@ -53,7 +53,7 @@ class NoShowList extends Report implements iCsvReport {
 
         $stmt = $db->prepare($query);
         $stmt->execute(array('term'=>$this->term));
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $rows = array();
         $i = 0;
 

@@ -2,14 +2,13 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
+
 /**
  * StudentAssignmentHistory.php
  *
  * @author Adam D. Dixon
  */
-
-PHPWS_Core::initModClass('hms', 'AssignmentHistory.php');
-PHPWS_Core::initModClass('hms', 'Term.php');
 
 class StudentAssignmentHistory extends ArrayObject{
 
@@ -20,7 +19,7 @@ class StudentAssignmentHistory extends ArrayObject{
     public function __construct($bannerId) {
 
         if(is_null($bannerId)){
-            throw InvalidArgumentException('Missing id.');
+            throw \InvalidArgumentException('Missing id.');
         }else{
             $this->bannerId = $bannerId;
         }

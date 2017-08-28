@@ -30,7 +30,7 @@ class LotteryDenyRoommateRequestCommand extends Command {
         \PHPWS_Core::initCoreClass('Captcha.php');
         $captcha = Captcha::verify(TRUE);
         if($captcha === FALSE){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'The words you entered were incorrect. Please try again.');
+            \NQ::simple('hms', NotificationView::ERROR, 'The words you entered were incorrect. Please try again.');
             $errorCmd->redirect();
         }
 
@@ -39,15 +39,15 @@ class LotteryDenyRoommateRequestCommand extends Command {
 
         # Make sure that the logged in user is the same as the confirming the request
         if(UserStatus::getUsername() != $request['asu_username']){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid roommate request. You can not confirm that roommate request.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Invalid roommate request. You can not confirm that roommate request.');
             $errorCmd->redirect();
         }
 
         # Deny the roommate requst
         try{
             HMS_Lottery::denyRoommateRequest($requestId);
-        }catch(Exception $e){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'There was an error denying the roommate request. Please contact University Housing.');
+        }catch(\Exception $e){
+            \NQ::simple('hms', NotificationView::ERROR, 'There was an error denying the roommate request. Please contact University Housing.');
             $errorCmd->redirect();
         }
 
@@ -56,7 +56,7 @@ class LotteryDenyRoommateRequestCommand extends Command {
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_LOTTERY_ROOMMATE_DENIED, UserStatus::getUsername(), 'Captcha words: ' . $captcha);
 
         # Success
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'The roommate request was successfully declined.');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'The roommate request was successfully declined.');
         $successCmd = CommandFactory::getCommand('ShowStudentMenu');
         $successCmd->redirect();
     }

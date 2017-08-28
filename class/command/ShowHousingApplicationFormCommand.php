@@ -44,7 +44,7 @@ class ShowHousingApplicationFormCommand extends Command {
         $term = $context->get('term');
 
         if(is_null($term) || !isset($term)){
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         // Determine the application type, based on the term
@@ -93,7 +93,7 @@ class ShowHousingApplicationFormCommand extends Command {
         try {
             //TODO check to see if it looks like there might be something on the context before trying this
             $existingApplication = HousingApplicationFactory::getApplicationFromContext($context, $term, $student, $appType);
-        }catch(Exception $e){
+        }catch(\Exception $e){
             // ignored
             $contextApplication = NULL;
         }

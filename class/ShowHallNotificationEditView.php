@@ -29,7 +29,7 @@ class ShowHallNotificationEditView extends View{
     }
 
     public function show(){
-        Layout::addPageTitle("Hall Notification Edit");
+        \Layout::addPageTitle("Hall Notification Edit");
 
         $tpl = array();
 
@@ -37,7 +37,7 @@ class ShowHallNotificationEditView extends View{
         $form = new \PHPWS_Form('email_content');
         $submitCmd->initForm($form);
 
-        if(Current_User::allow('hms', 'anonymous_notifications')){
+        if(\Current_User::allow('hms', 'anonymous_notifications')){
             $form->addCheck('anonymous');
             $form->setMatch('anonymous', $this->anonymous);
             $form->setLabel('anonymous', 'Send Anonymously');

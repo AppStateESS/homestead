@@ -22,7 +22,7 @@ class SelectRoomView extends View{
         $tpl = array();
 
         if($this->halls == NULL){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'There are no halls available for the selected term.');
+            \NQ::simple('hms', NotificationView::ERROR, 'There are no halls available for the selected term.');
             $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
             $cmd->redirect();
         }
@@ -56,7 +56,7 @@ class SelectRoomView extends View{
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Select Room");
+        \Layout::addPageTitle("Select Room");
 
         return \PHPWS_Template::process($tpl, 'hms', 'admin/select_room.tpl');
     }

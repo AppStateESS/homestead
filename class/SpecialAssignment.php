@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\exception\DatabaseException;
+
 class SpecialAssignment
 {
     var $id;

@@ -34,17 +34,17 @@ class DenySpecialInterestCommand extends Command
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
         // Check permissions
-        if(!Current_User::allow('hms', 'special_interest_approval')){
+        if(!\Current_User::allow('hms', 'special_interest_approval')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to approve special interest group requests.');
         }
 
         // Must have ID and group name set.
         if(is_null($context->get('id'))){
-            throw new InvalidArgumentException('Missing application id.');
+            throw new \InvalidArgumentException('Missing application id.');
         }
         if(is_null($context->get('group'))){
-            throw new InvalidArgumentException('Missing interest group name.');
+            throw new \InvalidArgumentException('Missing interest group name.');
         }
 
         // Load up application.
@@ -69,7 +69,7 @@ class DenySpecialInterestCommand extends Command
         // Save, notify, and buh-bye
         $app->save();
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, "Denied {$app->getUsername()}");
+        \NQ::simple('hms', NotificationView::SUCCESS, "Denied {$app->getUsername()}");
 
         $cmd = CommandFactory::getCommand('ShowSpecialInterestGroupApproval');
         $cmd->setGroup($context->get('group'));

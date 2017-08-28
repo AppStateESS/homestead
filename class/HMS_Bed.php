@@ -81,7 +81,7 @@ class HMS_Bed extends HMS_Item {
                         $student = StudentFactory::getStudentByUsername($this->_curr_assignment->asu_username, Term::getCurrentTerm());
                         //$app = HousingApplication::getApplicationByUser($this->_curr_assignment->asu_username, Term::getCurrentTerm());
                     } catch (StudentNotFoundException $e) {
-                        NQ::simple('hms', NotificationView::ERROR, 'Could not copy assignment for ' . $this->_curr_assignment->asu_username);
+                        \NQ::simple('hms', NotificationView::ERROR, 'Could not copy assignment for ' . $this->_curr_assignment->asu_username);
                         return;
                     }
 
@@ -319,7 +319,7 @@ class HMS_Bed extends HMS_Item {
             $confirm['QUESTION'] = 'Are you sure want to delete bed ' . $this->bed_letter . '?';
             $confirm['ADDRESS'] = $deleteBedCmd->getURI();
             $confirm['LINK'] = '<i class="fa fa-trash close"></i>';
-            $tags['DELETE'] = Layout::getJavascript('confirm', $confirm);
+            $tags['DELETE'] = \Layout::getJavascript('confirm', $confirm);
         }
 
         return $tags;
@@ -627,7 +627,7 @@ class HMS_Bed extends HMS_Item {
         $beds = HMS_Bed::get_all_free_beds($term, $gender);
 
         // Check for db errors
-        if (PEAR::isError($beds)) {
+        if (\PEAR::isError($beds)) {
             return $beds;
         }
 

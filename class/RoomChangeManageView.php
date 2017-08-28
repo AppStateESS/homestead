@@ -129,7 +129,7 @@ class RoomChangeManageView extends View {
             $tpl['CANCELLED_REASON_PUBLIC'] = $this->request->getDeniedReasonPublic();
 
             // Show the private reason for admins / RDs
-            if (Current_User::allow('hms', 'admin_approve_room_change') || in_array(UserStatus::getUsername(), $potentialApprovers)) {
+            if (\Current_User::allow('hms', 'admin_approve_room_change') || in_array(UserStatus::getUsername(), $potentialApprovers)) {
                 $tpl['CANCELLED_REASON_PRIVATE'] = $this->request->getDeniedReasonPrivate();
             }
 
@@ -138,7 +138,7 @@ class RoomChangeManageView extends View {
             $tpl['DENIED_REASON_PUBLIC']  = $this->request->getDeniedReasonPublic();
 
             // Show the private reason for admins / RDs
-            if (Current_User::allow('hms', 'admin_approve_room_change') || in_array(UserStatus::getUsername(), $potentialApprovers)) {
+            if (\Current_User::allow('hms', 'admin_approve_room_change') || in_array(UserStatus::getUsername(), $potentialApprovers)) {
                 $tpl['DENIED_REASON_PRIVATE'] = $this->request->getDeniedReasonPrivate();
             }
         }

@@ -20,7 +20,7 @@ class RemoveMaskCommand extends Command
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'login_as_student')){
+        if(!\Current_User::allow('hms', 'login_as_student')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to login as a student.');
         }

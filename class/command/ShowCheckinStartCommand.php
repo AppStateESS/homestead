@@ -22,7 +22,7 @@ class ShowCheckinStartCommand extends Command {
     public function execute(CommandContext $context)
     {
         // Check permissions
-        if (!Current_User::allow('hms', 'checkin')) {
+        if (!\Current_User::allow('hms', 'checkin')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to checkin students.');
         }
@@ -36,7 +36,7 @@ class ShowCheckinStartCommand extends Command {
         $halls = ResidenceHallFactory::getHallNamesAssoc($term);
 
         if (!isset($halls) || count($halls) < 1) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'No residence halls are setup for this term, so the check-in cannot be accessed.');
+            \NQ::simple('hms', NotificationView::ERROR, 'No residence halls are setup for this term, so the check-in cannot be accessed.');
             $context->goBack();
         }
 

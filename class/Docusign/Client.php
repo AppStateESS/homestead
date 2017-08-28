@@ -20,15 +20,15 @@ require_once PHPWS_SOURCE_DIR . 'mod/hms/vendor/autoload.php';
  */
 
 if (! function_exists('json_decode')) {
-  throw new Exception('DocuSign PHP API Client requires the JSON PHP extension');
+  throw new \Exception('DocuSign PHP API Client requires the JSON PHP extension');
 }
 
 if (! function_exists('curl_version')) {
-  throw new Exception('DocuSign PHP API Client requires the PHP Client URL Library');
+  throw new \Exception('DocuSign PHP API Client requires the PHP Client URL Library');
 }
 
 if (! function_exists('http_build_query')) {
-  throw new Exception('DocuSign PHP API Client requires http_build_query()');
+  throw new \Exception('DocuSign PHP API Client requires http_build_query()');
 }
 
 if (! ini_get('date.timezone') && function_exists('date_default_timezone_set')) {
@@ -147,5 +147,5 @@ class Client {
 
 // Exceptions that the DocuSign PHP API Library can throw
 class Exception extends \Exception {}
-class AuthException extends Exception {}
-class IOException extends Exception {}
+class AuthException extends \Exception {}
+class IOException extends \Exception {}

@@ -22,7 +22,7 @@ class LotteryConfirmedRoommateThanksView extends View {
         $mainMenuCmd = CommandFactory::getCommand('ShowStudentMenu');
         $tpl['MAIN_MENU'] = $mainMenuCmd->getLink('Return to the main menu');
 
-        Layout::addPageTitle("Thank you");
+        \Layout::addPageTitle("Thank you");
 
         return \PHPWS_Template::process($tpl, 'hms', 'student/lottery_confirm_roommate_thanks.tpl');
     }

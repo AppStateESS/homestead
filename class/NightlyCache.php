@@ -45,7 +45,7 @@ class NightlyCache
         $count = 0;
         $error_count = 0;
 
-        $_SESSION['User'] = new PHPWS_User;
+        $_SESSION['User'] = new \PHPWS_User;
         $_SESSION['User']->username= 'nightlycache';
         $_SESSION['User']->display_name = 'Nightly Cache';
 

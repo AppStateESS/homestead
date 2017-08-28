@@ -25,7 +25,7 @@ class ShowAdminAddRlcMemberCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'add_rlc_members')){
+        if(!\Current_User::allow('hms', 'add_rlc_members')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to view RLC members.');
         }
@@ -33,7 +33,7 @@ class ShowAdminAddRlcMemberCommand extends Command {
         $communityId = $context->get('communityId');
 
         if(!isset($communityId) || $communityId == ''){
-            throw new InvalidArgumentException('Missing community id.');
+            throw new \InvalidArgumentException('Missing community id.');
         }
 
         $community = new HMS_Learning_Community($communityId);

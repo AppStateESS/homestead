@@ -1,8 +1,6 @@
 <?php
 
 namespace Homestead;
-PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
-
 
 class ServiceDeskMenu extends CommandMenu {
 
@@ -11,22 +9,22 @@ class ServiceDeskMenu extends CommandMenu {
         parent::__construct();
 
         // Check-in
-        if (Current_User::allow('hms', 'checkin')) {
+        if (\Current_User::allow('hms', 'checkin')) {
             $this->addCommandByName('Check-in', 'ShowCheckinStart');
         }
 
         // Check-out
-        if (Current_User::allow('hms', 'checkin')) {
+        if (\Current_User::allow('hms', 'checkin')) {
             $this->addCommandByName('Check-out', 'ShowCheckoutStart');
         }
 
         // Room Damage Assessment
-        if (Current_User::allow('hms', 'damage_assessment')) {
+        if (\Current_User::allow('hms', 'damage_assessment')) {
             $this->addCommandByName('Damage Assessment', 'ShowRoomDamageAssessment');
         }
 
         // Room Damage Notifications
-        if (Current_User::allow('hms', 'damage_notification')) {
+        if (\Current_User::allow('hms', 'damage_notification')) {
             $this->addCommandByName('Send Room Damage Notices', 'SendRoomDamageNotifications');
 
             $cmd = CommandFactory::getCommand('JSConfirm');
@@ -42,7 +40,7 @@ class ServiceDeskMenu extends CommandMenu {
         /*
         if (UserStatus::isAdmin()) {
 
-            if(Current_User::allow('hms', 'package_desk')){
+            if(\Current_User::allow('hms', 'package_desk')){
                 $this->addCommandByName('Package Desk', 'ShowPackageDeskMenu');
             }
         }

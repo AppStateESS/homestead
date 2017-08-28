@@ -27,10 +27,10 @@ class LotteryShowChooseFloorCommand extends Command {
         $hallId = $context->get('hallId');
 
         if(!isset($hallId) || is_null($hallId) || empty($hallId)){
-            throw new InvalidArgumentException('Missing hall id.');
+            throw new \InvalidArgumentException('Missing hall id.');
         }
 
-        $term = PHPWS_Settings::get('hms', 'lottery_term');
+        $term = \PHPWS_Settings::get('hms', 'lottery_term');
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 

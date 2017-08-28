@@ -14,7 +14,7 @@ class ShowReturningStudentMenuCommand extends Command {
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
-        $lotteryTerm = PHPWS_Settings::get('hms', 'lottery_term');
+        $lotteryTerm = \PHPWS_Settings::get('hms', 'lottery_term');
 
         if(is_null($lotteryTerm)){
             PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');

@@ -40,7 +40,7 @@ class CheckoutList extends Report implements iCsvReport {
         $stmt = $db->prepare($query);
         $stmt->execute(array('term' => $this->term));
 
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         // Post-processing, cleanup, making it pretty
         foreach($results as $row){

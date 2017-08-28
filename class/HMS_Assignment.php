@@ -334,7 +334,7 @@ class HMS_Assignment extends HMS_Item {
      * @param String $notes
      * @param boolean $lottery
      * @param string $reason
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @throws AssignmentException
      * @throws DatabaseException
      * @throws Exception
@@ -346,7 +346,7 @@ class HMS_Assignment extends HMS_Item {
          * Can't check permissions here because there are some student-facing commands that needs to make assignments (e.g.
          * the lottery/re-application code)
          *
-         * if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')) {
+         * if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'assignment_maintenance')) {
          * throw new PermissionException('You are not allowed to edit student assignments.');
          * }
          */
@@ -484,7 +484,7 @@ class HMS_Assignment extends HMS_Item {
                 throw new DatabaseException($result->toString());
             }
 
-            NQ::simple('hms', NotificationView::WARNING, 'Temporary assignment was removed.');
+            \NQ::simple('hms', NotificationView::WARNING, 'Temporary assignment was removed.');
         }
 
         // Send this off to the queue for assignment in banner
@@ -564,13 +564,13 @@ class HMS_Assignment extends HMS_Item {
      * @param String $reason Reason string, defined in defines.php
      * @param Integer $refund Percentage of original charges student should be refunded
      * @throws PermissionException
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @throws AssignmentException
      * @throws DatabaseException
      */
     public static function unassignStudent(Student $student, $term, $notes = "", $reason, $refund)
     {
-        if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')) {
+        if (!UserStatus::isAdmin() || !\Current_User::allow('hms', 'assignment_maintenance')) {
             throw new PermissionException('You do not have permission to unassign students.');
         }
 
@@ -733,7 +733,7 @@ class HMS_Assignment extends HMS_Item {
         }
 
         $db = new \PHPWS_DB();
-        $db->query('BEGIN'); //TODO: convert to PDO::beginTransaction()
+        $db->query('BEGIN'); //TODO: convert to \PDO::beginTransaction()
 
         // Remove each student from their beds
         foreach($students as $student){

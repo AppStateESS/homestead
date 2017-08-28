@@ -32,7 +32,7 @@ class ReApplicationFormSubmitCommand extends Command {
         $depositAgreed = $context->get('deposit_check');
 
         if(is_null($depositAgreed)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'You must check the box indicating you understand the License Contract deposit fees.');
+            \NQ::simple('hms', NotificationView::ERROR, 'You must check the box indicating you understand the License Contract deposit fees.');
             $errorCmd->redirect();
         }
 
@@ -44,7 +44,7 @@ class ReApplicationFormSubmitCommand extends Command {
             // do not call checkbox was not selected, so check the number
 
             if(is_null($number)){
-                NQ::simple('hms', hms\NotificationView::ERROR, 'Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
+                \NQ::simple('hms', NotificationView::ERROR, 'Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
                 $errorCmd->redirect();
             }
         }
@@ -58,7 +58,7 @@ class ReApplicationFormSubmitCommand extends Command {
         $emergencyEmail = $context->get('emergency_contact_email');
 
         if (empty($emergencyName) || empty($emergencyRelationship) || empty($emergencyPhone) || empty($emergencyEmail)) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Please complete all of the emergency contact person information.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Please complete all of the emergency contact person information.');
             $errorCmd->redirect();
         }
 
@@ -70,7 +70,7 @@ class ReApplicationFormSubmitCommand extends Command {
         $missingPersonEmail = $context->get('missing_person_email');
 
         if (empty($missingPersonName) || empty($missingPersonRelationship) || empty($missingPersonPhone) || empty($missingPersonEmail)) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Please complete all of the missing persons contact information.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Please complete all of the missing persons contact information.');
             $errorCmd->redirect();
         }
 

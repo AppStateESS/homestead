@@ -66,7 +66,7 @@ class HMS_Email{
 
         # Create a Mail object and set it up
         \PHPWS_Core::initCoreClass('Mail.php');
-        $message = new PHPWS_Mail();
+        $message = new \PHPWS_Mail();
 
         $message->addSendTo($to);
         $message->setFrom($from);
@@ -89,7 +89,7 @@ class HMS_Email{
             $result = $message->send();
         }
 
-        if(PEAR::isError($result)){
+        if(\PEAR::isError($result)){
             \PHPWS_Error::log($result);
             return false;
         }
@@ -98,7 +98,7 @@ class HMS_Email{
     }
 
     /**
-     * Logs a PHPWS_Mail object to a text file
+     * Logs a \PHPWS_Mail object to a text file
      */
     public static function log_email($message)
     {
@@ -681,7 +681,7 @@ class HMS_Email{
      * @see HMS_Email::makeSwiftmailMessageFromSystemToStudent()
      *
      * @param $message \Swift_Message The message to send
-     * @return mixed Whatever comes back from Swift_Mailer::send()
+     * @return mixed Whatever comes back from \Swift_Mailer::send()
      */
     public static function sendSwiftmailMessage(\Swift_Message $message)
     {

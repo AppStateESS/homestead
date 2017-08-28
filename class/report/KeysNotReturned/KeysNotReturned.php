@@ -35,7 +35,7 @@ class KeysNotReturned extends Report implements iCsvReport {
 
         $stmt = $db->prepare($query);
         $stmt->execute(array('term'=>$this->term));
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         foreach($results as $row)
         {

@@ -29,7 +29,7 @@ class EditFloorCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'floor_attributes') ){
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'floor_attributes') ){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit floors.');
         }
@@ -44,7 +44,7 @@ class EditFloorCommand extends Command {
         // Create the floor object gien the floor id
         $floor = new HMS_Floor($floorId);
         if(!$floor){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid floor.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Invalid floor.');
             $viewCmd->redirect();
         }
 
@@ -53,7 +53,7 @@ class EditFloorCommand extends Command {
             // If they're not equal, call 'can_change_gender' public function
             if($floor->gender_type != $context->get('gender_type')){
                 if(!$floor->can_change_gender($context->get('gender_type'))){
-                    NQ::simple('hms', hms\NotificationView::ERROR, 'Incompatible gender detected. No changes were made.');
+                    \NQ::simple('hms', NotificationView::ERROR, 'Incompatible gender detected. No changes were made.');
                     $viewCmd->redirect();
                 }
             }
@@ -95,11 +95,11 @@ class EditFloorCommand extends Command {
         try{
             $floor->save();
         }catch(DatabaseException $e){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'There was a problem saving the floor data. No changes were made.');
+            \NQ::simple('hms', NotificationView::ERROR, 'There was a problem saving the floor data. No changes were made.');
             $viewCmd->redirect();
         }
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'The floor was updated successfully.');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'The floor was updated successfully.');
         $viewCmd->redirect();
     }
 }

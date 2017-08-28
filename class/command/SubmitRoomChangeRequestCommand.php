@@ -37,7 +37,7 @@ class SubmitRoomChangeRequestCommand extends Command {
         $assignment = HMS_Assignment::getAssignmentByBannerId($student->getBannerId(), $term);
 
         if (is_null($assignment)) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'You are not currently assigned to a room, so you cannot request a room change.');
+            \NQ::simple('hms', NotificationView::ERROR, 'You are not currently assigned to a room, so you cannot request a room change.');
             $menuCmd->redirect();
         }
 
@@ -48,13 +48,13 @@ class SubmitRoomChangeRequestCommand extends Command {
         // Check for an existing room change request
         $changeReq = RoomChangeRequestFactory::getPendingByStudent($student, $term);
         if(!is_null($changeReq)){ // has pending request
-            NQ::simple('hms', hms\NotificationView::ERROR, 'You already have a pending room change request. You cannot submit another request until your pending request is processed.');
+            \NQ::simple('hms', NotificationView::ERROR, 'You already have a pending room change request. You cannot submit another request until your pending request is processed.');
             $menuCmd->redirect();
         }
 
         // Check that a cell phone number was provided, or that the opt-out box was checked.
         if((!isset($cellNum) || empty($cellNum)) && !isset($optOut)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Please provide a cell phone number or check the box indicating you do not wish to provide it.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Please provide a cell phone number or check the box indicating you do not wish to provide it.');
             $formCmd->redirect();
         }
 
@@ -68,7 +68,7 @@ class SubmitRoomChangeRequestCommand extends Command {
 
         // Make sure a 'reason' was provided.
         if(!isset($reason) || empty($reason)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Please provide a brief explaniation of why you are requesting a room change.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Please provide a brief explaniation of why you are requesting a room change.');
             $formCmd->redirect();
         }
 
@@ -81,7 +81,7 @@ class SubmitRoomChangeRequestCommand extends Command {
 
             // Can't switch with yourself
             if($student->getUsername() == $switchUsername) {
-                NQ::simple('hms', hms\NotificationView::ERROR, "You can't swtich rooms with yourself. Please choose someone other than yourself.");
+                \NQ::simple('hms', NotificationView::ERROR, "You can't swtich rooms with yourself. Please choose someone other than yourself.");
                 $formCmd->redirect();
             }
 
@@ -89,14 +89,14 @@ class SubmitRoomChangeRequestCommand extends Command {
             try {
                 $swapStudent = StudentFactory::getStudentByUsername($switchUsername, $term);
             } catch(StudentNotFoundException $e) {
-                NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, we could not find a student with the user name '$switchUsername'. Please double-check the user name of the student you would like to switch places with.");
+                \NQ::simple('hms', NotificationView::ERROR, "Sorry, we could not find a student with the user name '$switchUsername'. Please double-check the user name of the student you would like to switch places with.");
                 $formCmd->redirect();
             }
 
             // Make sure the student is assigned
             $swapAssignment = HMS_Assignment::getAssignmentByBannerId($swapStudent->getBannerId(), $term);
             if (is_null($swapAssignment)) {
-                NQ::simple('hms', hms\NotificationView::ERROR, "{$swapStudent->getName()} is not currently assigned. Please choose another student to switch rooms with.");
+                \NQ::simple('hms', NotificationView::ERROR, "{$swapStudent->getName()} is not currently assigned. Please choose another student to switch rooms with.");
                 $formCmd->redirect();
             }
 
@@ -105,14 +105,14 @@ class SubmitRoomChangeRequestCommand extends Command {
             $swapRoom = $swapBed->get_parent();
 
             if ($swapRoom->getGender() != $room->getGender()) {
-                NQ::simple('hms', hms\NotificationView::ERROR, "{$swapStudent->getName()} is assigned to a room of a different gender than you. Please choose student of the same gender as yourself to switch rooms with.");
+                \NQ::simple('hms', NotificationView::ERROR, "{$swapStudent->getName()} is assigned to a room of a different gender than you. Please choose student of the same gender as yourself to switch rooms with.");
                 $formCmd->redirect();
             }
 
             // Check to see if the other student is already involved in a room change request
             $swapStudentReq = RoomChangeRequestFactory::getPendingByStudent($swapStudent, $term);
             if(!is_null($swapStudentReq)){ // has pending request
-                NQ::simple('hms', hms\NotificationView::ERROR, 'The student you are requesting to swap with already has a pending room change request. You cannot request to swap with him/her until the pending request is processed.');
+                \NQ::simple('hms', NotificationView::ERROR, 'The student you are requesting to swap with already has a pending room change request. You cannot request to swap with him/her until the pending request is processed.');
                 $menuCmd->redirect();
             }
         }
@@ -184,9 +184,9 @@ class SubmitRoomChangeRequestCommand extends Command {
         HMS_Email::sendRoomChangeRequestReceivedConfirmation($student);
 
         if ($type == 'switch') {
-            NQ::simple('hms', hms\NotificationView::SUCCESS, 'Your room change request has been received and is pending approval. You will be contacted by your Residence Director (RD) in the next 24-48 hours regarding your request.');
+            \NQ::simple('hms', NotificationView::SUCCESS, 'Your room change request has been received and is pending approval. You will be contacted by your Residence Director (RD) in the next 24-48 hours regarding your request.');
         } else {
-            NQ::simple('hms', hms\NotificationView::SUCCESS, 'Your room change request has been received. The student(s) you selected to swap with must sign-in and agree to the request. It will then be forwarded to your Residence Director and the Housing Assignments Office for approval.');
+            \NQ::simple('hms', NotificationView::SUCCESS, 'Your room change request has been received. The student(s) you selected to swap with must sign-in and agree to the request. It will then be forwarded to your Residence Director and the Housing Assignments Office for approval.');
         }
         $menuCmd->redirect();
     }

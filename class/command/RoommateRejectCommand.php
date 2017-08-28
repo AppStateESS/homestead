@@ -32,13 +32,13 @@ class RoommateRejectCommand extends Command
     {
         $id = $context->get('roommateId');
         if(is_null($id)) {
-            throw new InvalidArgumentException('Must set roommateId');
+            throw new \InvalidArgumentException('Must set roommateId');
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $roommate = new HMS_Roommate($id);
         if($roommate->id == 0) {
-            throw new InvalidArgumentException('Invalid roommateId ' . $id);
+            throw new \InvalidArgumentException('Invalid roommateId ' . $id);
         }
 
         if(UserStatus::getUsername() != $roommate->requestee) {
@@ -65,7 +65,7 @@ class RoommateRejectCommand extends Command
         PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         HMS_Email::send_reject_emails($roommate);
 
-        NQ::Simple('hms', hms\NotificationView::SUCCESS, "<b>You rejected the roommate request from $name.</b>  If this was an error, you may re-request using their username, <b>$username</b>.");
+        \NQ::Simple('hms', NotificationView::SUCCESS, "<b>You rejected the roommate request from $name.</b>  If this was an error, you may re-request using their username, <b>$username</b>.");
 
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();

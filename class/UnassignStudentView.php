@@ -58,7 +58,7 @@ class UnassignStudentView extends View{
 
         $tpl['TERM'] = Term::getPrintableSelectedTerm();
 
-        Layout::addPageTitle("Unassign Student");
+        \Layout::addPageTitle("Unassign Student");
 
         return \PHPWS_Template::process($tpl, 'hms', 'admin/unassignStudent.tpl');
     }

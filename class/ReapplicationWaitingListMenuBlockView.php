@@ -53,7 +53,7 @@ class ReapplicationWaitingListMenuBlockView extends View {
 
         }
 
-        Layout::addPageTitle("Re-Application Waiting List");
+        \Layout::addPageTitle("Re-Application Waiting List");
 
         return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/reApplicationWaitingListMenuBlock.tpl');
     }

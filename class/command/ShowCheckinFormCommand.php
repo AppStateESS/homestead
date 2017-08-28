@@ -32,7 +32,7 @@ class ShowCheckinFormCommand extends Command {
     public function execute(CommandContext $context)
     {
         // Check permissions
-        if (!Current_User::allow('hms', 'checkin')) {
+        if (!\Current_User::allow('hms', 'checkin')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to checkin students.');
         }
@@ -45,18 +45,18 @@ class ShowCheckinFormCommand extends Command {
         $errorCmd = CommandFactory::getCommand('ShowCheckinStart');
 
         if (!isset($bannerId) || is_null($bannerId) || $bannerId == '') {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Missing Banner ID.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Missing Banner ID.');
             $errorCmd->redirect();
         }
 
         if (!isset($hallId)) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Missing residence hall ID.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Missing residence hall ID.');
             $errorCmd->redirect();
         }
 
         // Check the Banner ID
         if (preg_match("/[\d]{9}/", $bannerId) == false) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Imporperly formatted Banner ID.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Imporperly formatted Banner ID.');
             $errorCmd->redirect();
         }
 
@@ -64,14 +64,14 @@ class ShowCheckinFormCommand extends Command {
         try {
             $student = StudentFactory::getStudentByBannerId($bannerId, $term);
         } catch (StudentNotFoundException $e) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Could not locate a student with that Banner ID.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Could not locate a student with that Banner ID.');
             $errorCmd->redirect();
         }
 
         // Make sure the student is assigned in the current term
         $assignment = HMS_Assignment::getAssignmentByBannerId($bannerId, $term);
         if (!isset($assignment) || is_null($assignment)) {
-            NQ::simple('hms', hms\NotificationView::ERROR, $student->getName() . ' is not assigned for ' . Term::toString($term) . '. Please contact the University Housing Assignments Office at 828-262-6111.');
+            \NQ::simple('hms', NotificationView::ERROR, $student->getName() . ' is not assigned for ' . Term::toString($term) . '. Please contact the University Housing Assignments Office at 828-262-6111.');
             $errorCmd->redirect();
         }
 
@@ -82,7 +82,7 @@ class ShowCheckinFormCommand extends Command {
         $hall = $floor->get_parent();
 
         if ($hallId != $hall->getId()) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Wrong hall! ' . $student->getName() . ' is assigned to ' . $assignment->where_am_i());
+            \NQ::simple('hms', NotificationView::ERROR, 'Wrong hall! ' . $student->getName() . ' is assigned to ' . $assignment->where_am_i());
             $errorCmd->redirect();
         }
 
@@ -95,7 +95,7 @@ class ShowCheckinFormCommand extends Command {
             $checkoutDate = $checkin->getCheckoutDate();
 
             if ($checkin->getBedId() == $bed->getId() && !isset($checkoutDate) && (time() - $checkin->getCheckinDate()) > Checkin::CHECKIN_TIMEOUT ) {
-                  NQ::simple('hms', hms\NotificationView::ERROR, $student->getName() . ' has already checked in to ' . $assignment->where_am_i());
+                  \NQ::simple('hms', NotificationView::ERROR, $student->getName() . ' has already checked in to ' . $assignment->where_am_i());
                   $errorCmd->redirect();
             }
         }

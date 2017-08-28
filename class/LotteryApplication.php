@@ -298,8 +298,8 @@ class LotteryApplication extends HousingApplication {
         $tags['GENDER']     = $student->getPrintableGender();
         $tags['APP_DATE'] = date("n/j/Y h:ia", $this->getWaitingListDate());
 
-        $assign_link = PHPWS_Text::secureLink('[Assign]','hms', array('module'=>'hms', 'action'=>'ShowAssignStudent', 'username'=>$this->username));
-        $remove_link = PHPWS_Text::secureLink('[Remove]','hms', array('module'=>'hms', 'action'=>'WaitingListRemove', 'username'=>$this->username));
+        $assign_link = \PHPWS_Text::secureLink('[Assign]','hms', array('module'=>'hms', 'action'=>'ShowAssignStudent', 'username'=>$this->username));
+        $remove_link = \PHPWS_Text::secureLink('[Remove]','hms', array('module'=>'hms', 'action'=>'WaitingListRemove', 'username'=>$this->username));
         $tags['ACTION']     = "$assign_link $remove_link";
 
         return $tags;
@@ -397,7 +397,7 @@ class LotteryApplication extends HousingApplication {
      *
      * @param unknown $group
      * @param unknown $term
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function specialInterestPager($group, $term)
     {
@@ -446,7 +446,7 @@ class LotteryApplication extends HousingApplication {
     {
         \PHPWS_Core::initCoreClass('DBPager.php');
 
-        $term = PHPWS_Settings::get('hms', 'lottery_term');
+        $term = \PHPWS_Settings::get('hms', 'lottery_term');
 
         $pager = new DBPager('hms_new_application', 'LotteryApplication');
         $pager->db->addColumn('hms_new_application.*');

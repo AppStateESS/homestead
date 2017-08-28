@@ -22,7 +22,7 @@ class StartAutoassignCommand extends Command {
         try {
             $assigner = new Autoassigner(Term::getSelectedTerm());
             $assigner->autoassign();
-        } catch(Exception $e) {
+        } catch(\Exception $e) {
             echo "EXCEPTION CAUGHT: " . $e->getMessage() . "<br /><br />\n\n";
             var_dump($e->getTrace());
         }

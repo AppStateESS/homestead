@@ -34,7 +34,7 @@ class WaitingListSignupCommand extends Command {
         $term = $context->get('term');
 
         if (!isset($term)) {
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         $user = UserStatus::getUsername();
@@ -45,13 +45,13 @@ class WaitingListSignupCommand extends Command {
 
         // If there isn't a valid application in the DB, then we have a problem.
         if (!isset($application) || !$application instanceof LotteryApplication) {
-            throw new InvalidArgumentException('Null application object.');
+            throw new \InvalidArgumentException('Null application object.');
         }
 
         // Check to make sure the date isn't already set
         $time = $application->getWaitingListDate();
         if (isset($time)) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'You have already applied for the waiting list.');
+            \NQ::simple('hms', NotificationView::ERROR, 'You have already applied for the waiting list.');
             $cmd = CommandFactory::getCommand('ShowStudentMenu');
             $cmd->redirect();
         }

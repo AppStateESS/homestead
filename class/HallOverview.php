@@ -114,7 +114,7 @@ class HallOverview extends View{
                             $student = StudentFactory::getStudentByBannerId($bed->_curr_assignment->getBannerId(), $this->hall->term);
                         }catch(StudentNotFoundException $e){
                             $student = null;
-                            NQ::simple('hms', NotificationView::WARNING, "Could not find data for: $username");
+                            \NQ::simple('hms', NotificationView::WARNING, "Could not find data for: $username");
                         }
 
                         $assign_rlc  = HMS_RLC_Assignment::checkForAssignment($username, $this->hall->term); //false or index
@@ -154,10 +154,10 @@ class HallOverview extends View{
         }
 
         if($this->nakedDisplay) {
-            Layout::nakedDisplay($tpl->get(), 'Building overview for ' . $this->hall->hall_name, TRUE);
+            \Layout::nakedDisplay($tpl->get(), 'Building overview for ' . $this->hall->hall_name, TRUE);
         }
 
-        Layout::addPageTitle("Hall Overview");
+        \Layout::addPageTitle("Hall Overview");
 
         return $tpl->get();
     }

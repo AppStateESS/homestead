@@ -17,7 +17,7 @@ class ClearCacheCommand extends Command {
         $provider = StudentDataProvider::getInstance();
         $provider->clearCache();
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Cache cleared.');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'Cache cleared.');
     }
 
 }

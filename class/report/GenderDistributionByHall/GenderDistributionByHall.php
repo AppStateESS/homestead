@@ -50,7 +50,7 @@ class GenderDistributionByHall extends Report implements iCsvReport {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
         if (!isset($this->term) || is_null($this->term)) {
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         // Get all of the residence halls for this term
@@ -85,7 +85,7 @@ class GenderDistributionByHall extends Report implements iCsvReport {
 
             if(empty($results)){
                 continue;
-            }elseif(PEAR::isError($results)){
+            }elseif(\PEAR::isError($results)){
                 throw new DatabaseException($results->toString());
             }
 

@@ -38,7 +38,7 @@ class ListReportsView extends View{
     {
         $this->setTitle("Reports");
 
-        if(!Current_User::allow('hms', 'reports')){
+        if(!\Current_User::allow('hms', 'reports')){
             throw new PermissionException('You do not have permission to run reports.');
         }
 

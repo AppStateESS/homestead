@@ -55,7 +55,7 @@ class EarlyRelease extends Report implements iCSVReport
 
         $stmt->execute(array('term' => $this->term));
 
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         foreach($results as $row)
         {

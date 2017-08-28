@@ -12,7 +12,7 @@ class StudentSearchCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'search')){
+        if(!\Current_User::allow('hms', 'search')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to search for students.');
         }

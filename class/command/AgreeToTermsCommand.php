@@ -55,7 +55,7 @@ class AgreeToTermsCommand extends Command {
             $cmd->setTerm($context->get('term'));
             $cmd->redirect();
         }else{
-            throw new InvalidArgumentException('No action set.');
+            throw new \InvalidArgumentException('No action set.');
         }
     }
 

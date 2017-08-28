@@ -17,11 +17,11 @@ class LotteryShowChooseHalLCommand extends Command {
         PHPWS_Core::initModClass('hms', 'LotteryProcess.php');
         PHPWS_Core::initModClass('hms', 'RlcMembershipFactory.php');
 
-        $term = PHPWS_Settings::get('hms', 'lottery_term');
+        $term = \PHPWS_Settings::get('hms', 'lottery_term');
 
         // Check the hard cap!
         if(LotteryProcess::hardCapReached($term)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Sorry, re-application is now closed.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Sorry, re-application is now closed.');
             $errorCmd = CommandFactory::getCommand('ShowStudentMenu');
             $errorCmd->redirect();
         }

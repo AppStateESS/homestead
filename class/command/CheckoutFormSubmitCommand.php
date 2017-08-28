@@ -26,7 +26,7 @@ class CheckoutFormSubmitCommand extends Command {
     public function execute(CommandContext $context)
     {
         // Check permissions
-        if (!Current_User::allow('hms', 'checkin')) {
+        if (!\Current_User::allow('hms', 'checkin')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to checkin students.');
         }
@@ -36,11 +36,11 @@ class CheckoutFormSubmitCommand extends Command {
         $checkinId = filter_input(INPUT_POST, 'checkinId', FILTER_VALIDATE_INT);
 
         if (empty($bannerId)) {
-            throw new InvalidArgumentException('Missing banner id.');
+            throw new \InvalidArgumentException('Missing banner id.');
         }
 
         if (empty($checkinId)) {
-            throw new InvalidArgumentException('Missing checkin id.');
+            throw new \InvalidArgumentException('Missing checkin id.');
         }
 
         // Check for key code
@@ -49,11 +49,11 @@ class CheckoutFormSubmitCommand extends Command {
         $keyReturned = filter_input(INPUT_POST, 'keyReturned', FILTER_VALIDATE_BOOLEAN);
 
         if (!isset($keyReturned) || !isset($keyCode)) {
-            throw new InvalidArgumentException('Missing key return information.');
+            throw new \InvalidArgumentException('Missing key return information.');
         }
 
         if ($keyReturned == "1" && empty($keyCode)) {
-            throw new InvalidArgumentException('Missing key code.');
+            throw new \InvalidArgumentException('Missing key code.');
         }
 
         $properCheckout = filter_input(INPUT_POST, 'properCheckout', FILTER_VALIDATE_BOOLEAN);
@@ -70,14 +70,14 @@ class CheckoutFormSubmitCommand extends Command {
         // Make sure we found a check-in
         if (is_null($checkin)) {
             /*
-            NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, we couldn't find a corresponding check-in for this check-out.");
+            \NQ::simple('hms', NotificationView::ERROR, "Sorry, we couldn't find a corresponding check-in for this check-out.");
             $errorCmd = CommandFactory::getCommand('ShowCheckoutForm');
             $errorCmd->setBannerId($bannerId);
             $errorCmd->setHallId($hallId);
             $errorCmd->redirect();
             */
 
-            throw new Exception('Could not find a corresponding checkin.');
+            throw new \Exception('Could not find a corresponding checkin.');
         }
 
         // Create the bed
@@ -104,7 +104,7 @@ class CheckoutFormSubmitCommand extends Command {
 
         // Set checkout date and user
         $checkin->setCheckoutDate(time());
-        $checkin->setCheckoutBy(Current_User::getUsername());
+        $checkin->setCheckoutBy(\Current_User::getUsername());
 
         // Set the checkout code code, if any
         $checkin->setCheckoutKeyCode($keyCode);
@@ -178,8 +178,8 @@ class CheckoutFormSubmitCommand extends Command {
         }
 
         // Cleanup and redirect
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Checkout successful.');
-        NQ::close();
+        \NQ::simple('hms', NotificationView::SUCCESS, 'Checkout successful.');
+        \NQ::close();
         exit;
     }
 

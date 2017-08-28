@@ -47,18 +47,18 @@ class ShowCheckoutFormCommand extends Command {
         $errorCmd = CommandFactory::getCommand('ShowCheckoutStart');
 
         if (!isset($bannerId) || is_null($bannerId) || $bannerId == '') {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Missing student ID.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Missing student ID.');
             $errorCmd->redirect();
         }
 
         if (!isset($hallId)) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Missing residence hall ID.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Missing residence hall ID.');
             $errorCmd->redirect();
         }
 
         // If search string is all numeric, make sure it looks like a valid Banner ID
         if (is_numeric($bannerId) && preg_match("/[\d]{9}/", $bannerId) == false) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Imporperly formatted Banner ID.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Imporperly formatted Banner ID.');
             $errorCmd->redirect();
         }
         // Try to lookup the student in Banner
@@ -70,7 +70,7 @@ class ShowCheckoutFormCommand extends Command {
                 $student = StudentFactory::getStudentByUsername($bannerId, $term);
             }
         } catch (StudentNotFoundException $e) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Could not locate a student with that Banner ID.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Could not locate a student with that Banner ID.');
             $errorCmd->redirect();
         }
 
@@ -79,7 +79,7 @@ class ShowCheckoutFormCommand extends Command {
         $checkin = CheckinFactory::getPendingCheckoutForStudentByHall($student, $selectedHall);
 
         if(!isset($checkin)){
-            NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, we couldn't find a matching check-in at {$selectedHall->getHallName()} for this student to check-out of.");
+            \NQ::simple('hms', NotificationView::ERROR, "Sorry, we couldn't find a matching check-in at {$selectedHall->getHallName()} for this student to check-out of.");
             $errorCmd->redirect();
         }
 
@@ -93,7 +93,7 @@ class ShowCheckoutFormCommand extends Command {
 
         // Check to make sure the hall ID for this bed in the current term matches the hall id that the user told us to use
         if($checkinHall->getId() != $hallId){
-            NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, we couldn't find a matching check-in at {$selectedHall->getHallName()} for this student to check-out of. They may have a pending check-out in {$checkinHall->getHallName()}");
+            \NQ::simple('hms', NotificationView::ERROR, "Sorry, we couldn't find a matching check-in at {$selectedHall->getHallName()} for this student to check-out of. They may have a pending check-out in {$checkinHall->getHallName()}");
             $errorCmd->redirect();
         }
 

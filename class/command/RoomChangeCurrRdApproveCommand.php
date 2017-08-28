@@ -58,7 +58,7 @@ class RoomChangeCurrRdApproveCommand extends Command {
 
         // Check permissions. Must be an RD for current bed, or an admin
         $rds = $participant->getCurrentRdList();
-        if (!in_array(UserStatus::getUsername(), $rds) && !Current_User::allow('hms', 'admin_approve_room_change')) {
+        if (!in_array(UserStatus::getUsername(), $rds) && !\Current_User::allow('hms', 'admin_approve_room_change')) {
             throw new PermissionException('You do not have permission to approve this room change.');
         }
 
@@ -67,7 +67,7 @@ class RoomChangeCurrRdApproveCommand extends Command {
         $toBedId = $participant->getToBed();
 
         if (is_null($toBedId) && $toBedSelected == '-1') {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Please select a destination bed.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Please select a destination bed.');
             $cmd->redirect();
         }
 
@@ -77,7 +77,7 @@ class RoomChangeCurrRdApproveCommand extends Command {
 
             // Check that the bed isn't already reserved for a room change
             if($bed->isRoomChangeReserved()){
-                NQ::simple('hms', hms\NotificationView::ERROR, 'The bed you selected is already reserved for a room change. Please choose a different bed.');
+                \NQ::simple('hms', NotificationView::ERROR, 'The bed you selected is already reserved for a room change. Please choose a different bed.');
                 $cmd->redirect();
             }
 

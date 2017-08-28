@@ -13,9 +13,6 @@ class SpecialInterestGroupView extends View{
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
-
         $this->setTitle('Special Interest Group');
         javascript('jquery');
 
@@ -25,7 +22,7 @@ class SpecialInterestGroupView extends View{
 
         // If a group was selected
         if(!is_null($this->group) && $this->group != 'none'){
-            $tpl['GROUP_PAGER'] = LotteryApplication::specialInterestPager($this->group, PHPWS_Settings::get('hms', 'lottery_term'));
+            $tpl['GROUP_PAGER'] = LotteryApplication::specialInterestPager($this->group, \PHPWS_Settings::get('hms', 'lottery_term'));
             $tpl['GROUP'] = $groups[$this->group];
         }
 

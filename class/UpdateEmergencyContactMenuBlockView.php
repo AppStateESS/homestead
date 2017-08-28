@@ -21,7 +21,6 @@ class UpdateEmergencyContactMenuBlockView extends View {
     {
         $tpl = array();
 
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
 
         if (is_null($this->application)) {      // No application

@@ -281,7 +281,7 @@ class HMS_Autoassigner
         $content .= '<h2>Notices ('.count($notices).')</h2>';
         $content .= implode("<br />\n", $notices);
 
-        Layout::nakedDisplay($content, NULL, TRUE);
+        \Layout::nakedDisplay($content, NULL, TRUE);
     }
 
     public function record_success($type, $a, $b, $room)

@@ -35,7 +35,7 @@ class EditRoomCommand extends Command {
     {
         PHPWS_Core::initModClass('hms', 'HMS_Room.php');
 
-        if( !Current_User::allow('hms', 'room_attributes') ){
+        if( !\Current_User::allow('hms', 'room_attributes') ){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit rooms.');
         }
@@ -48,15 +48,15 @@ class EditRoomCommand extends Command {
         // Create the room object given the room_id
         $room = new HMS_Room($roomId);
         if(!$room){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid room.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Invalid room.');
             $viewCmd->redirect();
         }
 
         // Check if the user is trying to change a room's gender to co-ed.
         // If so, make sure the user has the permission to do so.
         if($room->getGender() != $context->get('gender_type') && $context->get('gender_type') == COED){
-            if(!Current_User::allow('hms', 'coed_rooms')){
-                NQ::simple('hms', hms\NotificationView::ERROR, 'Error: You do not have permission to change the room gender to co-ed. No changes were made.');
+            if(!\Current_User::allow('hms', 'coed_rooms')){
+                \NQ::simple('hms', NotificationView::ERROR, 'Error: You do not have permission to change the room gender to co-ed. No changes were made.');
                 $viewCmd->redirect();
             }
         }
@@ -65,7 +65,7 @@ class EditRoomCommand extends Command {
         // If they're not equal, call 'can_change_gender' public function
         if($room->gender_type != $context->get('gender_type')){
             if(!$room->can_change_gender($context->get('gender_type'))){
-                NQ::simple('hms', hms\NotificationView::ERROR, 'Error: Incompatible genders detected. No changes were made.');
+                \NQ::simple('hms', NotificationView::ERROR, 'Error: Incompatible genders detected. No changes were made.');
                 $viewCmd->redirect();
             }
         }
@@ -73,13 +73,13 @@ class EditRoomCommand extends Command {
         // Check the default gender in the same way
         if($room->default_gender != $context->get('default_gender')){
             if(!$room->can_change_gender($context->get('default_gender'))){
-                NQ::simple('hms', hms\NotificationView::ERROR, 'Error: Default gender incompatable. No changes were made.');
+                \NQ::simple('hms', NotificationView::ERROR, 'Error: Default gender incompatable. No changes were made.');
                 $viewCmd->redirect();
             }
         }
 
         if($room->get_number_of_assignees() > 0 && $context->get('offline') == 1){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Error: Cannot take room offline while students are assigned to the room.  No changes were made.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Error: Cannot take room offline while students are assigned to the room.  No changes were made.');
             $viewCmd->redirect();
         }
 
@@ -122,11 +122,11 @@ class EditRoomCommand extends Command {
         $result = $room->save();
 
         if(!$result || \PHPWS_Error::logIfError($result)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'There was a problem saving the room data. No changes were made.');
+            \NQ::simple('hms', NotificationView::ERROR, 'There was a problem saving the room data. No changes were made.');
             $viewCmd->redirect();
         }
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'The room was updated successfully.');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'The room was updated successfully.');
         $viewCmd->redirect();
     }
 }

@@ -66,7 +66,7 @@ class MismatchedRoommates extends Report
 
       $stmt = $db->prepare($query);
       $stmt->execute(array('term'=>$this->term));
-      $queryResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      $queryResult = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
       $result = array();
       $i = 0;

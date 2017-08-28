@@ -43,7 +43,7 @@ class ShowEmergencyContactFormCommand extends Command {
         $term = $context->get('term');
 
         if(is_null($term) || !isset($term)){
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);

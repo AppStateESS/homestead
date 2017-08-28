@@ -41,7 +41,7 @@ class SingleGenderVsCoedPref extends Report{
         $semester = Term::getTermSem(Term::getSelectedTerm());
 
         if($semester != TERM_FALL && $semester != TERM_SPRING){
-            throw new InvalidArgumentException('Term must be Fall or Spring.');
+            throw new \InvalidArgumentException('Term must be Fall or Spring.');
         }
 
         PHPWS_Core::initModClass('hms', 'FallApplication.php');

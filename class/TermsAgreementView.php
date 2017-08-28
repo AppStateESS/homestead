@@ -31,7 +31,7 @@ class TermsAgreementView extends View {
         }
 
         javascript('jquery');
-        Layout::addPageTitle("License Agreement");
+        \Layout::addPageTitle("License Agreement");
 
         return \PHPWS_Template::process($tpl, 'hms', 'student/contract.tpl');
     }

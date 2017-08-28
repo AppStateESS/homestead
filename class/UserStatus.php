@@ -27,20 +27,20 @@ class UserStatus
     public static function isAdmin()
     {
         return !self::isMasquerading() &&
-        Current_User::isLogged() &&
-        Current_User::isUnrestricted('hms');
+        \Current_User::isLogged() &&
+        \Current_User::isUnrestricted('hms');
     }
 
     public static function isUser()
     {
         return self::isMasquerading() ||
-        (Current_User::isLogged() &&
-        !Current_User::isUnrestricted('hms'));
+        (\Current_User::isLogged() &&
+        !\Current_User::isUnrestricted('hms'));
     }
 
     public static function isGuest()
     {
-        return !Current_User::isLogged();
+        return !\Current_User::isLogged();
     }
 
     public static function isMasquerading()
@@ -54,7 +54,7 @@ class UserStatus
             return $_SESSION['hms_masquerade_username'];
         }
 
-        return Current_User::getUsername();
+        return \Current_User::getUsername();
     }
 
     public static function getDisplayName($respectMask = true)
@@ -71,7 +71,7 @@ class UserStatus
             return $result['display_name'];
         }
 
-        return Current_User::getDisplayName();
+        return \Current_User::getDisplayName();
     }
 
     public static function wearMask($username)
@@ -106,12 +106,12 @@ class UserStatus
 
     public static function getLogoutLink()
     {
-        $auth = Current_User::getAuthorization();
+        $auth = \Current_User::getAuthorization();
         return '<a href="'.$auth->logout_link.'">Logout</a>';
     }
 
     public static function getLogoutURI()
     {
-    	return Current_User::getAuthorization()->logout_link;
+    	return \Current_User::getAuthorization()->logout_link;
     }
 }

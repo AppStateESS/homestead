@@ -81,7 +81,7 @@ class UnassignedStudents extends Report implements iCsvReport {
                 break;
             default:
                 // error
-                throw new InvalidArgumentException('Invalid term specified.');
+                throw new \InvalidArgumentException('Invalid term specified.');
         }
 
         // Limit to the given term

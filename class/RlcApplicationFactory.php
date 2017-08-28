@@ -15,7 +15,7 @@ class RlcApplicationFactory {
                 'username' => $student->getUsername(),
                 'term'     => $term
         ));
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RlcApplicationRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'RlcApplicationRestored');
 
         return $stmt->fetch();
     }

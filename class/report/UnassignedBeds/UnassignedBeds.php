@@ -44,7 +44,7 @@ class UnassignedBeds extends Report implements iCsvReport {
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
         if (!isset($this->term) || is_null($this->term)) {
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         // Get all of the residence halls for this term
@@ -95,7 +95,7 @@ class UnassignedBeds extends Report implements iCsvReport {
                     $this->coed += $room['c'];
                     $this->totalBeds += $room['c'];
                 }else{
-                    throw new InvalidArgumentException('Bad room gender. Room id: ' . $room['id']);
+                    throw new \InvalidArgumentException('Bad room gender. Room id: ' . $room['id']);
                 }
             }
 

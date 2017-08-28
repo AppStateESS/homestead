@@ -14,7 +14,7 @@ class LotteryAdminCreateAppCommand extends Command {
     public function execute(CommandContext $context)
     {
 
-        if(!Current_User::allow('hms', 'lottery_admin')){
+        if(!\Current_User::allow('hms', 'lottery_admin')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to administer re-application features.');
         }
@@ -30,14 +30,14 @@ class LotteryAdminCreateAppCommand extends Command {
 
         $username = $context->get('asu_username');
         if(!isset($username) || empty($username)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'You must enter a valid user name.');
+            \NQ::simple('hms', NotificationView::ERROR, 'You must enter a valid user name.');
             $viewCmd->redirect();
         }
 
         try{
             $student = StudentFactory::getStudentByUsername($context->get('asu_username'), $term);
         }catch(StudentNotFoundException $e){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Inavlid user name. No student with that user name could be found.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Inavlid user name. No student with that user name could be found.');
             $viewCmd->redirect();
         }
 
@@ -45,12 +45,12 @@ class LotteryAdminCreateAppCommand extends Command {
 
         try{
             $application->save();
-        }catch(Exception $e){
-            NQ::simple('hms', hms\NotificationView::ERROR,'There was a problem saving the application.');
+        }catch(\Exception $e){
+            \NQ::simple('hms', NotificationView::ERROR,'There was a problem saving the application.');
             $viewCmd->redirect();
         }
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'The lottery application was created successfully.');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'The lottery application was created successfully.');
         $viewCmd->redirect();
     }
 }

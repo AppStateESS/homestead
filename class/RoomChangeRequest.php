@@ -250,7 +250,7 @@ class RoomChangeRequest {
         $stmt->execute(array(
                 'requestId' => $this->getId()
         ));
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->setFetchMode(\PDO::FETCH_ASSOC);
 
         $value = $stmt->fetch();
 

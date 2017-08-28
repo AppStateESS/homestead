@@ -41,7 +41,7 @@ class EditResidenceHallCommand extends Command {
      */
      public function execute(CommandContext $context)
     {
-        if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'hall_attributes') ) {
+        if (!UserStatus::isAdmin() || !\Current_User::allow('hms', 'hall_attributes') ) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit halls.');
         }
@@ -49,7 +49,7 @@ class EditResidenceHallCommand extends Command {
         // Make sure a hall ID was set
         $hallId = $context->get('hallId');
         if (is_null($hallId)) {
-            throw new InvalidArgumentException('Missing hall ID.');
+            throw new \InvalidArgumentException('Missing hall ID.');
         }
 
         $viewCmd = CommandFactory::getCommand('EditResidenceHallView');
@@ -60,7 +60,7 @@ class EditResidenceHallCommand extends Command {
         // Create the hall object given the hall id
         $hall = new HMS_Residence_Hall($hallId);
         if(!$hall){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid hall.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Invalid hall.');
             $viewCmd->redirect();
         }
 
@@ -69,7 +69,7 @@ class EditResidenceHallCommand extends Command {
             // If they're not equal, call 'can_change_gender' public function
             if ($hall->gender_type != $_REQUEST['gender_type']) {
                 if (!$hall->can_change_gender($_REQUEST['gender_type'])) {
-                    NQ::simple('hms', hms\NotificationView::ERROR, 'Incompatible gender detected. No changes were made.');
+                    \NQ::simple('hms', NotificationView::ERROR, 'Incompatible gender detected. No changes were made.');
                     $viewCmd->redirect();
                 }
             }
@@ -108,11 +108,11 @@ class EditResidenceHallCommand extends Command {
         $result = $hall->save();
 
         if (!$result || \PHPWS_Error::logIfError($result)) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'There was a problem saving the Residence Hall. No changes were made.');
+            \NQ::simple('hms', NotificationView::ERROR, 'There was a problem saving the Residence Hall. No changes were made.');
             $viewCmd->redirect();
         }
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'The Residence hall was updated successfully.');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'The Residence hall was updated successfully.');
         $viewCmd->redirect();
     }
 }

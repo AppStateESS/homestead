@@ -19,7 +19,7 @@ class DeleteRoommateGroupCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'roommate_maintenance')){
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'roommate_maintenance')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to create/edit roommate groups.');
         }
@@ -29,7 +29,7 @@ class DeleteRoommateGroupCommand extends Command {
         $id = $context->get('id');
 
         if(is_null($id)){
-            throw new InvalidArgumentException('Missing roommate group id.');
+            throw new \InvalidArgumentException('Missing roommate group id.');
         }
 
         $viewCmd = CommandFactory::getCommand('EditRoommateGroupsView');
@@ -37,8 +37,8 @@ class DeleteRoommateGroupCommand extends Command {
         try{
             $roommate = new HMS_Roommate($id);
             $roommate->delete();
-        }catch(Exception $e){
-            NQ::simple('hms', hms\NotificationView::SUCCESS, 'Error deleting roommate group: ' . $e->getMessage());
+        }catch(\Exception $e){
+            \NQ::simple('hms', NotificationView::SUCCESS, 'Error deleting roommate group: ' . $e->getMessage());
             $viewCmd->redirect();
         }
 
@@ -47,7 +47,7 @@ class DeleteRoommateGroupCommand extends Command {
         HMS_Activity_Log::log_activity($roommate->getRequestor(), ACTIVITY_ADMIN_REMOVED_ROOMMATE, UserStatus::getUsername(), $notes);
         HMS_Activity_Log::log_activity($roommate->getRequestee(), ACTIVITY_ADMIN_REMOVED_ROOMMATE, UserStatus::getUsername(), $notes);
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Roommate group successfully deleted.');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'Roommate group successfully deleted.');
         $viewCmd->redirect();
     }
 }

@@ -29,7 +29,7 @@ class SelectHallView extends View{
         $tpl['TERM']    = Term::getPrintableSelectedTerm();
 
         if($this->halls == NULL){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'There are no halls available for the selected term.');
+            \NQ::simple('hms', NotificationView::ERROR, 'There are no halls available for the selected term.');
             $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
             $cmd->redirect();
         }
@@ -47,7 +47,7 @@ class SelectHallView extends View{
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Select Hall");
+        \Layout::addPageTitle("Select Hall");
 
         return \PHPWS_Template::process($tpl, 'hms', 'admin/select_residence_hall.tpl');
     }

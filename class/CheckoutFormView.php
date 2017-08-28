@@ -42,21 +42,21 @@ class CheckoutFormView extends View
          * Uncomment below for DEVELOPMENT
          * Comment out for PRODUCTION
          */
-        //Layout::addJSHeader("<script src='{$home_http}mod/hms/javascript/react/build/react.js'></script>");
-        //Layout::addJSHeader("<script src='{$home_http}mod/hms/javascript/react/build/JSXTransformer.js'></script>");
-        //Layout::addJSHeader("<script type='text/jsx' src='{$home_http}mod/hms/javascript/CheckOut/src/CheckOut.jsx'></script>");
+        //\Layout::addJSHeader("<script src='{$home_http}mod/hms/javascript/react/build/react.js'></script>");
+        //\Layout::addJSHeader("<script src='{$home_http}mod/hms/javascript/react/build/JSXTransformer.js'></script>");
+        //\Layout::addJSHeader("<script type='text/jsx' src='{$home_http}mod/hms/javascript/CheckOut/src/CheckOut.jsx'></script>");
 
         /**
          * Uncomment below for PRODUCTION
          * Comment out for DEVELOPMENT
          */
-        Layout::addJSHeader("<script src='{$home_http}mod/hms/javascript/react/build/react.min.js'></script>");
-        Layout::addJSHeader("<script src='{$home_http}mod/hms/javascript/CheckOut/build/CheckOut.js'></script>");
+        \Layout::addJSHeader("<script src='{$home_http}mod/hms/javascript/react/build/react.min.js'></script>");
+        \Layout::addJSHeader("<script src='{$home_http}mod/hms/javascript/CheckOut/build/CheckOut.js'></script>");
 
         /**
          * Remainder of code is untouched regardless of development status
          */
-        Layout::addJSHeader("<script type='text/javascript'>var sourceHttp = '{$home_http}';</script>");
+        \Layout::addJSHeader("<script type='text/javascript'>var sourceHttp = '{$home_http}';</script>");
         $vars['student'] = $this->student->getFullName();
         $vars['banner_id'] = $this->student->getBannerId();
         $vars['hall_name'] = $this->hall->getHallName();

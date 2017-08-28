@@ -31,7 +31,7 @@ class SaveRlcCommand extends Command {
 
     public function execute(CommandContext $context){
 
-        if(!Current_User::allow('hms', 'learning_community_maintenance')) {
+        if(!\Current_User::allow('hms', 'learning_community_maintenance')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit learning communities.');
         }
@@ -52,7 +52,7 @@ class SaveRlcCommand extends Command {
         $capacity = $context->get('capacity');
         if(!isset($capacity) || empty($capacity)){
             $capacity = 0;
-            NQ::simple('hms', hms\NotificationView::WARNING, "The community's capacity was set to 0.");
+            \NQ::simple('hms', NotificationView::WARNING, "The community's capacity was set to 0.");
         }
         $community->set_capacity($capacity);
 
@@ -108,7 +108,7 @@ class SaveRlcCommand extends Command {
         $viewCommand->setId($community->getId());
 
         // Show a success message and redirect
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'The RLC was saved successfully.');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'The RLC was saved successfully.');
         $viewCommand->redirect();
     }
 }

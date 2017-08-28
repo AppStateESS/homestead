@@ -18,7 +18,7 @@ class ShowAddRoomDamageCommand extends Command{
         $persistentId = $this->room->getPersistentId();
 
         if(!isset($persistentId)){
-            throw new Exception('Missing room persistent Id.');
+            throw new \Exception('Missing room persistent Id.');
         }
 
         return array('action'=>'ShowAddRoomDamage', 'roomId'=>$this->room->getPersistentId(), 'term'=>$this->room->getTerm());
@@ -38,13 +38,13 @@ class ShowAddRoomDamageCommand extends Command{
         $roomId = $context->get('roomId');
 
         if (!isset($roomId)) {
-            throw new InvalidArgumentException('Missing room id.');
+            throw new \InvalidArgumentException('Missing room id.');
         }
 
         $term = $context->get('term');
 
         if (!isset($term)) {
-            throw new InvalidArgumentException('Missing room term.');
+            throw new \InvalidArgumentException('Missing room term.');
         }
 
         $room = RoomFactory::getRoomByPersistentId($roomId, $term);

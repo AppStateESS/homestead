@@ -26,7 +26,7 @@ class DeleteMoveinTimeCommand extends Command {
         $cmd = CommandFactory::getCommand('ShowMoveinTimesView');
         $id = $context->get('id');
         if(is_null($id) || !is_numeric($id)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid id selected for deletion.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Invalid id selected for deletion.');
             $cmd->redirect();
         }
 
@@ -35,9 +35,9 @@ class DeleteMoveinTimeCommand extends Command {
         $result = $movein_time->delete();
 
         if(!$result || \PHPWS_Error::logIfError($result)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Database error while attempting to delete movein time.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Database error while attempting to delete movein time.');
         } else {
-            NQ::simple('hms', hms\NotificationView::SUCCESS, 'Movein time deleted successfully.');
+            \NQ::simple('hms', NotificationView::SUCCESS, 'Movein time deleted successfully.');
         }
 
         $cmd->redirect();

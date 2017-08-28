@@ -12,7 +12,7 @@ class ShowAdminMaintenanceMenuCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!UserStatus::isAdmin() || !Current_User::isUnrestricted('hms')){
+        if(!UserStatus::isAdmin() || !\Current_User::isUnrestricted('hms')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to view the admin maintenance menu.');
         }

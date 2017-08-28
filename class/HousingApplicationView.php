@@ -48,7 +48,7 @@ class HousingApplicationView extends View {
         // isWithdrawn() has been depricated, but I'm leaving it here just for historical sake
         // on the off-chance that it catches an older application that's withdrawn but not cancelled.
         if($application->isCancelled() || $application->isWithdrawn()){
-            NQ::simple('hms', NotificationView::WARNING, 'This application has been cancelled.');
+            \NQ::simple('hms', NotificationView::WARNING, 'This application has been cancelled.');
         }
 
         $tpl['STUDENT_NAME']                = $student->getFullName();
@@ -119,10 +119,10 @@ class HousingApplicationView extends View {
         }
 
         if(\Current_User::getUsername() == "hms_student"){
-            $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Back to main menu', 'hms', array('type'=>'student', 'op'=>'show_main_menu'));
+            $tpl['MENU_LINK'] = \PHPWS_Text::secureLink('Back to main menu', 'hms', array('type'=>'student', 'op'=>'show_main_menu'));
         }
 
-        Layout::addPageTitle("Housing Application");
+        \Layout::addPageTitle("Housing Application");
 
         return \PHPWS_Template::process($tpl, 'hms', 'admin/student_application.tpl');
     }

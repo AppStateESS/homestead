@@ -23,7 +23,7 @@ class ScheduleReportCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'reports')){
+        if(!\Current_User::allow('hms', 'reports')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do no have permission to run reports.');
         }
@@ -33,7 +33,7 @@ class ScheduleReportCommand extends Command {
         $reportClass = $context->get('reportClass');
 
         if(!isset($reportClass) || is_null($reportClass)){
-            throw new InvalidArgumentException('Missing report class name.');
+            throw new \InvalidArgumentException('Missing report class name.');
         }
 
         $reportCtrl = ReportFactory::getcontrollerInstance($reportClass);

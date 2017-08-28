@@ -2,8 +2,7 @@
 
 namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-PHPWS_Core::initModClass('hms', 'ActivityLogView.php');
+use \Homestead\exception\InvalidTermException;
 
 class StudentProfileView extends View {
 
@@ -29,7 +28,7 @@ class StudentProfileView extends View {
 
         $tpl['USERNAME'] = $this->student->getUsername();
 
-        if( Current_User::allow('hms', 'login_as_student') ) {
+        if(\Current_User::allow('hms', 'login_as_student') ) {
             $loginAsStudent = CommandFactory::getCommand('LoginAsStudent');
             $loginAsStudent->setUsername($this->student->getUsername());
 
@@ -46,7 +45,7 @@ class StudentProfileView extends View {
         $tpl['DOB'] = $this->student->getDOB();
 
         if(strtotime($this->student->getDOB()) < strtotime("-25 years")){
-            NQ::simple('hms', hms\NotificationView::WARNING, 'Student is 25 years old or older!');
+            \NQ::simple('hms', NotificationView::WARNING, 'Student is 25 years old or older!');
         }
 
         $tpl['CLASS'] = $this->student->getPrintableClass();
@@ -66,13 +65,13 @@ class StudentProfileView extends View {
         $tpl['WATAUGA'] = $this->student->isWataugaMember() ? 'Yes' : 'No';
 
         if($this->student->pinDisabled()){
-            NQ::simple('hms', hms\NotificationView::WARNING, "This student's PIN is disabled.");
+            \NQ::simple('hms', NotificationView::WARNING, "This student's PIN is disabled.");
         }
 
         try {
             $tpl['APPLICATION_TERM'] = Term::toString($this->student->getApplicationTerm());
         } catch(InvalidTermException $e) {
-            NQ::simple('hms', hms\NotificationView::WARNING, 'Application term is bad or missing.');
+            \NQ::simple('hms', NotificationView::WARNING, 'Application term is bad or missing.');
             $tpl['APPLICATION_TERM'] = 'WARNING: Application Term is bad or missing: "'.$this->student->getApplicationTerm().'"';
         }
 
@@ -222,7 +221,7 @@ class StudentProfileView extends View {
        	$tpl['HOUSING_WAIVER'] = $this->student->housingApplicationWaived() ? 'Yes' : 'No';
 
        	if($this->student->housingApplicationWaived()){
-       	    NQ::simple('hms', hms\NotificationView::WARNING, "This student's housing application has been waived for this term.");
+       	    \NQ::simple('hms', NotificationView::WARNING, "This student's housing application has been waived for this term.");
        	}
 
         /****************
@@ -266,8 +265,7 @@ class StudentProfileView extends View {
         $everything_but_notes = HMS_Activity_Log::get_activity_list();
         unset($everything_but_notes[array_search(ACTIVITY_ADD_NOTE, $everything_but_notes)]);
 
-        if( Current_User::allow('hms', 'view_activity_log') && Current_User::allow('hms', 'view_student_log') ){
-            PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
+        if(\Current_User::allow('hms', 'view_activity_log') && \Current_User::allow('hms', 'view_student_log') ){
             $activityLogPager = new ActivityLogPager($this->student->getUsername(), null, null, true, null, null, $everything_but_notes, true, 10);
             $activityNotePager = new ActivityLogPager($this->student->getUsername(), null, null, true, null, null, array(0 => ACTIVITY_ADD_NOTE), true, 10);
 
@@ -290,7 +288,7 @@ class StudentProfileView extends View {
 
         // TODO tabs
 
-        Layout::addPageTitle("Student Profile");
+        \Layout::addPageTitle("Student Profile");
         return \PHPWS_Template::process($tpl, 'hms', 'admin/StudentProfile.tpl');
     }
 }

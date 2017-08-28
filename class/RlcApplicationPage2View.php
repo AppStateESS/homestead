@@ -59,7 +59,7 @@ class RlcApplicationPage2View extends View{
             // If we're missing a question... send them back. We might could throw an exception here.
             $question = $rlc->getFreshmenQuestion();
             if(!isset($question)) {
-              NQ::simple('hms', NotificationView::ERROR, "There was an error looking up the community questions.");
+              \NQ::simple('hms', NotificationView::ERROR, "There was an error looking up the community questions.");
               $cmd = CommandFactory::getCommand('ShowRlcApplicationPage1View');
               $cmd->setTerm($context->get('term'));
               $cmd->redirect();
@@ -73,7 +73,7 @@ class RlcApplicationPage2View extends View{
         $rlc_form2->mergeTemplate($template);
         $template = $rlc_form2->getTemplate();
 
-        Layout::addPageTitle("RLC Application");
+        \Layout::addPageTitle("RLC Application");
 		javascript('jquery');
         return \PHPWS_Template::process($template, 'hms', 'student/rlc_signup_form_page2.tpl');
     }

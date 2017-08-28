@@ -27,7 +27,7 @@ class ExecReportSyncCommand extends Command {
     public function getRequestVars()
     {
         if(!isset($this->reportClass) || is_null($this->reportClass)){
-            throw new InvalidArgumentException('Missing report class.');
+            throw new \InvalidArgumentException('Missing report class.');
         }
 
         return array('action'=>'ExecReportSync', 'reportClass'=>$this->reportClass);
@@ -35,7 +35,7 @@ class ExecReportSyncCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'reports')){
+        if(!\Current_User::allow('hms', 'reports')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do no have permission to run reports.');
         }
@@ -46,7 +46,7 @@ class ExecReportSyncCommand extends Command {
         $reportClass = $context->get('reportClass');
 
         if(!isset($reportClass) || is_null($reportClass)){
-            throw new InvalidArgumentException('Missing report class.');
+            throw new \InvalidArgumentException('Missing report class.');
         }
 
         // Get the proper report controller

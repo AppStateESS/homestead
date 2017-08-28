@@ -44,7 +44,7 @@ class ShowActivityLogCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'view_activity_log')){
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'view_activity_log')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to view the activity log.');
         }
@@ -69,7 +69,7 @@ class ShowActivityLogCommand extends Command {
             $begin = null;
             $end = null;
 
-            NQ::simple('hms', hms\NotificationView::WARNING, 'Invalid date range. The search results will not be filtered by date.');
+            \NQ::simple('hms', NotificationView::WARNING, 'Invalid date range. The search results will not be filtered by date.');
         }
 
         $activityMap = HMS_Activity_Log::getActivityMapping();

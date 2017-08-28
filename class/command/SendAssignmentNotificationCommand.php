@@ -20,7 +20,7 @@ class SendAssignmentNotificationCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'assignment_notify')){
+        if(!\Current_User::allow('hms', 'assignment_notify')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to send assignment notifications.');
         }
@@ -38,7 +38,7 @@ class SendAssignmentNotificationCommand extends Command {
         // If the array of move-in times ONLY has the zero-th element ['None'] then it's no good
         // Or, of course, if the array is null or emtpy it is no good
         if(count($moveinTimes) <= 1 || is_null($moveinTimes) || empty($moveinTimes)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'There are no move-in times set for '.Term::getPrintableSelectedTerm());
+            \NQ::simple('hms', NotificationView::ERROR, 'There are no move-in times set for '.Term::getPrintableSelectedTerm());
             $context->goBack();
         }
 
@@ -177,14 +177,14 @@ class SendAssignmentNotificationCommand extends Command {
         // Check for floors with missing move-in times.
         if(empty($missingMovein) || is_null($missingMovein)){
             // Ther are none, so show a success message
-            NQ::simple('hms', hms\NotificationView::SUCCESS, "Assignment notifications sent.");
+            \NQ::simple('hms', NotificationView::SUCCESS, "Assignment notifications sent.");
         }
         else {
             // Show a warning for each floor that was missing a move-in time
             foreach($missingMovein as $floor){
                 $hall = $floor->get_parent();
                 $text = $floor->getLink($hall->getHallName()." floor ") . " move-in times not set.";
-                NQ::simple('hms', hms\NotificationView::WARNING, $text);
+                \NQ::simple('hms', NotificationView::WARNING, $text);
             }
         }
 

@@ -84,7 +84,7 @@ class RoomChangeParticipantView extends View {
             */
             $checkin = CheckinFactory::getCheckinByBed($this->student, $fromBed);
             if($checkin == null || ($checkin != null && $checkin->getCheckoutDate() != null)) {
-                NQ::simple('hms', NotificationView::ERROR, "{$this->student->getName()} is not checked-in at his/her current assignment. This must be fixed before this room change can be given final approval.");
+                \NQ::simple('hms', NotificationView::ERROR, "{$this->student->getName()} is not checked-in at his/her current assignment. This must be fixed before this room change can be given final approval.");
             }
         }
 

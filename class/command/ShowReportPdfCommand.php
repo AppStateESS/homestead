@@ -49,7 +49,7 @@ class ShowReportPdfCommand extends Command{
      */
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'reports')){
+        if(!\Current_User::allow('hms', 'reports')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do no have permission to run reports.');
         }
@@ -67,7 +67,7 @@ class ShowReportPdfCommand extends Command{
 
         // Check to make sure the file actually exsists
         if(!file_exists($report->getPdfOutputFilename())){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Could not open report file.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Could not open report file.');
             \PHPWS_Error::log('Could not open report file ' . $report->getCsvOutputFilename(), 'hms');
             $reportCmd = CommandFactory::getCommand('ShowReportDetail');
             $reportCmd->setReportClass($report->getClass());

@@ -38,7 +38,7 @@ class HallOccupancy extends Report {
     public function execute()
     {
         if (!isset($this->term) || is_null($this->term)) {
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');

@@ -17,7 +17,7 @@ class CreateMoveinTimeCommand extends Command {
         $end   = mktime($context->get('end_hour'), 0, 0, $context->get('end_month'), $context->get('end_day'), $context->get('end_year'));
 
         if(is_null($begin) || is_null($end) || !is_numeric($begin) || !is_numeric($end) || $end < $begin){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Invalid range specified for new movein time.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Invalid range specified for new movein time.');
             $cmd->redirect();
         }
 
@@ -29,9 +29,9 @@ class CreateMoveinTimeCommand extends Command {
         $result = $movein_time->save();
 
         if(!$result || \PHPWS_Error::logIfError($result)){
-            NQ::simple('hms', hms\NotificationView::ERROR, 'There was an error saving the move-in time.');
+            \NQ::simple('hms', NotificationView::ERROR, 'There was an error saving the move-in time.');
         } else {
-            NQ::simple('hms', hms\NotificationView::SUCCESS, 'Move-in time saved successfully.');
+            \NQ::simple('hms', NotificationView::SUCCESS, 'Move-in time saved successfully.');
         }
 
         $cmd->redirect();

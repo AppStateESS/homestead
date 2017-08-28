@@ -25,7 +25,7 @@ class RoomChangeRequestFactory {
         $stmt->execute(array(
                 'requestId' => $id
         ));
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
 
         return $stmt->fetch();
     }
@@ -36,7 +36,7 @@ class RoomChangeRequestFactory {
      * get the last room change request for the given bed
      * @param HMS_Bed $bed The HMS_Bed object that you want the room change request for
      * @return RoomChangeRequestRestored Room change request object that corresponds to this bed
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function getCurrentRequestByBed(HMS_Bed $bed)
     {
@@ -56,7 +56,7 @@ class RoomChangeRequestFactory {
         $stmt->execute(array(
                 'bedId' => $bed->getId()
         ));
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
 
         return $stmt->fetch();
     }
@@ -90,7 +90,7 @@ class RoomChangeRequestFactory {
                 'bannerId' => $student->getBannerId()
         ));
 
-        $results = $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        $results = $stmt->fetchAll(\PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
 
         // If more than one pending request is found, throw an exception
         if (sizeof($results) > 1) {
@@ -121,7 +121,7 @@ class RoomChangeRequestFactory {
         foreach ($floorList as $floor) {
             $placeholder = "floor_id_" . $floor->getId(); // piece together a placeholder name
 
-            $floorPlaceholders[] = ':' . $placeholder; // Add it to the list of placeholders for PDO
+            $floorPlaceholders[] = ':' . $placeholder; // Add it to the list of placeholders for \PDO
             $floorParams[$placeholder] = $floor->getId(); // Add the value for this placeholder, to be passed to execute()
         }
 
@@ -175,7 +175,7 @@ class RoomChangeRequestFactory {
 
         $stmt->execute($params);
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
     }
 
     /**
@@ -195,7 +195,7 @@ class RoomChangeRequestFactory {
         foreach ($floorList as $floor) {
             $placeholder = "floor_id_" . $floor->getId(); // piece together a placeholder name
 
-            $floorPlaceholders[] = ':' . $placeholder; // Add it to the list of placeholders for PDO
+            $floorPlaceholders[] = ':' . $placeholder; // Add it to the list of placeholders for \PDO
             $floorParams[$placeholder] = $floor->getId(); // Add the value for this placeholder, to be passed to execute()
         }
 
@@ -240,7 +240,7 @@ class RoomChangeRequestFactory {
 
         $stmt->execute($params);
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
     }
 
     /**
@@ -268,7 +268,7 @@ class RoomChangeRequestFactory {
         $stmt = $db->prepare($query);
         $params = array('term' => $term);
         $stmt->execute($params);
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
     }
 
     /**
@@ -306,7 +306,7 @@ class RoomChangeRequestFactory {
 
         $stmt->execute($params);
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
     }
 
     public static function getRequestPendingCheckout(Student $student, $term)
@@ -327,7 +327,7 @@ class RoomChangeRequestFactory {
                 'bannerId' => $student->getBannerId()
         ));
 
-        $results = $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        $results = $stmt->fetchAll(\PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
 
         // If more than one pending request is found, throw an exception
         if (sizeof($results) > 1) {

@@ -8,18 +8,18 @@ class TestSOAP extends SOAP{
      * Main public function for getting student info.
      * Used by the rest of the "get" public functions
      * @return SOAP response object
-     * @throws InvalidArgumentException, SOAPException
+     * @throws \InvalidArgumentException, SOAPException
      */
     public function getStudentProfile($bannerId, $term)
     {
         // Sanity checking on the username
         if(empty($bannerId) || is_null($bannerId) || !isset($bannerId)){
-            throw new InvalidArgumentException('Bad BannerId.');
+            throw new \InvalidArgumentException('Bad BannerId.');
         }
 
         // Sanity checking on the term
         if(empty($term) || is_null($term) || !isset($term)) {
-            throw new InvalidArgumentException('Bad term');
+            throw new \InvalidArgumentException('Bad term');
         }
 
         $response = new \stdClass();

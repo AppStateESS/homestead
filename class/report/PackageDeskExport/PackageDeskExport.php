@@ -26,7 +26,7 @@ class PackageDeskExport extends Report implements iCsvReport{
         foreach($results as $result){
             try{
                 $student = StudentFactory::getStudentByBannerId($result['banner_id'], $this->term);
-            }catch(Exception $e){
+            }catch(\Exception $e){
                 $this->data[] = array($result['hall_name'],
                                         $result['floor_number'],
                                         $result['room_number'],

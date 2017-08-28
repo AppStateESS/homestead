@@ -26,7 +26,7 @@ class AdminMaintenanceMenuView extends View {
         $serviceDesk = new ServiceDeskMenu();
         $tpl['SERVICE_DESK'] = $serviceDesk->show();
 
-        Layout::addPageTitle("Main Menu");
+        \Layout::addPageTitle("Main Menu");
 
         return \PHPWS_Template::process($tpl, 'hms', 'AdminMaintenanceMenu.tpl');
     }

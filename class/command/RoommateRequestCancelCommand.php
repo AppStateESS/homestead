@@ -32,13 +32,13 @@ class RoommateRequestCancelCommand extends Command
     {
         $id = $context->get('roommateId');
         if(is_null($id)) {
-            throw new InvalidArgumentException('Must set roommateId');
+            throw new \InvalidArgumentException('Must set roommateId');
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $roommate = new HMS_Roommate($id);
         if($roommate->id == 0) {
-            throw new InvalidArgumentException('Invalid roommateId ' . $id);
+            throw new \InvalidArgumentException('Invalid roommateId ' . $id);
         }
 
         $username = UserStatus::getUsername();
@@ -65,7 +65,7 @@ class RoommateRequestCancelCommand extends Command
         HMS_Email::send_cancel_emails($roommate);
 
         $name = $other->getFullName();
-        NQ::Simple('hms', hms\NotificationView::SUCCESS, "You have cancelled your roommate request for $name.");
+        \NQ::Simple('hms', NotificationView::SUCCESS, "You have cancelled your roommate request for $name.");
 
         $cmd = CommandFactory::getCommand('ShowStudentMenu');
         $cmd->redirect();

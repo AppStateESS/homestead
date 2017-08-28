@@ -40,7 +40,7 @@ class InternationalReservedBeds extends Report
         $stmt = $db->prepare($query);
 
         $stmt->execute($params);
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $halls = array();
         $rows = array();

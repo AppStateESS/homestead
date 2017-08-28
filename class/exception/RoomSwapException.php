@@ -2,8 +2,6 @@
 
 namespace Homestead\exception;
 
-use \PHPWS_Core;
-
 class RoomSwapException extends HMSException {
 
     public function __construct($message, $code = 0){

@@ -28,7 +28,7 @@ class RlcApplicationPage1View extends View{
 
     public function show()
     {
-        Layout::addPageTitle("RLC Application");
+        \Layout::addPageTitle("RLC Application");
 		javascript('jquery');
 
         $jsVars = array('ELEMENTS_TO_BIND'=>'"#phpws_form_rlc_first_choice","#phpws_form_rlc_second_choice","#phpws_form_rlc_third_choice"', 'ACTION'=>'AjaxGetRLCExtraInfo');

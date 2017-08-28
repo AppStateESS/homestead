@@ -32,13 +32,13 @@ class ShowRoommateConfirmAcceptCommand extends Command
     {
         $id = $context->get('roommateId');
         if(is_null($id)) {
-            throw new InvalidArgumentException('Must set roommateId');
+            throw new \InvalidArgumentException('Must set roommateId');
         }
 
         PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $roommate = new HMS_Roommate($id);
         if($roommate->id == 0) {
-            throw new InvalidArgumentException('Invalid roommateId ' . $id);
+            throw new \InvalidArgumentException('Invalid roommateId ' . $id);
         }
 
         $username = UserStatus::getUsername();
@@ -63,6 +63,6 @@ class ShowRoommateConfirmAcceptCommand extends Command
         $form->addSubmit('Confirm Request');
         $form->addCssClass('submit', 'btn btn-success btn-lg');
 
-        $context->setContent(PHPWS_Template::process($form->getTemplate(), 'hms', 'student/roommate_accept_confirm.tpl'));
+        $context->setContent(\PHPWS_Template::process($form->getTemplate(), 'hms', 'student/roommate_accept_confirm.tpl'));
     }
 }

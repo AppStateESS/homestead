@@ -19,7 +19,7 @@ class DeniedRlcApplicantView extends View{
             $tpl['ERROR_MSG'] = $error_msg;
         }
 
-        Layout::addPageTitle("Denied RLC Applications");
+        \Layout::addPageTitle("Denied RLC Applications");
 
         return \PHPWS_Template::process($tpl, 'hms', 'admin/view_denied_rlc_applications.tpl');
     }

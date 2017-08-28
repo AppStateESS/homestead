@@ -23,7 +23,7 @@ class UpdateRoomFieldCommand extends Command {
     public function execute(CommandContext $context){
 
         // Make sure the user has permission to change room attributes
-        if(!Current_User::allow('hms', 'room_attributes')){
+        if(!\Current_User::allow('hms', 'room_attributes')){
             echo json_encode(false);
             die();
         }
@@ -42,7 +42,7 @@ class UpdateRoomFieldCommand extends Command {
         // Instantiate the room object
         try{
             $room = new HMS_Room($id);
-        }catch(Exception $e){
+        }catch(\Exception $e){
             echo json_encode(false);
             die();
         }
@@ -62,7 +62,7 @@ class UpdateRoomFieldCommand extends Command {
         // Check if the user is trying to change a room's gender to co-ed.
         // If so, make sure the user has the permission to do so.
         if($element == 'gender_type' && $room->getGender() != $value && $value == COED){
-            if(!Current_User::allow('hms', 'coed_rooms')){
+            if(!\Current_User::allow('hms', 'coed_rooms')){
                 echo json_encode(false);
                 die();
             }
@@ -127,7 +127,7 @@ class UpdateRoomFieldCommand extends Command {
 
         try{
             $room->save();
-        }catch(Exception $e){
+        }catch(\Exception $e){
             echo json_encode(false);
             die();
         }

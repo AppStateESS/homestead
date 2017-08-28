@@ -34,7 +34,7 @@ class AuditAssignmentList extends Report implements iCsvReport {
 
         $stmt = $db->prepare($query);
         $stmt->execute(array('term'=>$this->term));
-        $this->rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $this->rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function getCsvColumnsArray()

@@ -19,7 +19,7 @@ class CreateWaiverCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'lottery_admin')){
+        if(!\Current_User::allow('hms', 'lottery_admin')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to administer re-application features.');
         }
@@ -28,7 +28,7 @@ class CreateWaiverCommand extends Command {
         PHPWS_Core::initModClass('hms', 'SOAP.php');
 
         $usernames = explode("\n", $context->get('usernames'));
-        $term = PHPWS_Settings::get('hms', 'lottery_term');
+        $term = \PHPWS_Settings::get('hms', 'lottery_term');
         $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
 
         $error = false;
@@ -50,20 +50,20 @@ class CreateWaiverCommand extends Command {
             }
 
             if(!$soap->isValidStudent($user, $term)){
-                NQ::simple('hms', hms\NotificationView::ERROR, "Invalid username: $user"  );
+                \NQ::simple('hms', NotificationView::ERROR, "Invalid username: $user"  );
                 $error = true;
             }else{
                 $waiver = new HMS_Eligibility_Waiver($user,$term);
                 $result = $waiver->save();
                 if(!$result){
-                    NQ::simple('hms', hms\NotificationView::ERROR, 'Error creating waiver for: ' . $user );
+                    \NQ::simple('hms', NotificationView::ERROR, 'Error creating waiver for: ' . $user );
                     $error = true;
                 }
             }
         }
 
         if(!$error){
-            NQ::simple('hms', hms\NotificationView::SUCCESS, 'Waivers created successfully.');
+            \NQ::simple('hms', NotificationView::SUCCESS, 'Waivers created successfully.');
         }
 
         $cmd = CommandFactory::getCommand('ShowLotteryEligibilityWaiver');

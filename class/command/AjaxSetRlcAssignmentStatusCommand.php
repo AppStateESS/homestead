@@ -14,7 +14,7 @@ class AjaxSetRlcAssignmentStatusCommand extends Command{
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'add_rlc_members')){
+        if(!\Current_User::allow('hms', 'add_rlc_members')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to change Rlc Assignments.');
         }

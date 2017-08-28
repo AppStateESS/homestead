@@ -23,7 +23,7 @@ class CancelReportCommand extends Command {
     public function getRequestVars()
     {
         if(!isset($this->reportId)){
-            throw new InvalidArgumentException('Missing report id.');
+            throw new \InvalidArgumentException('Missing report id.');
         }
 
         return array('action'=>'CancelReport', 'reportId'=>$this->reportId);
@@ -35,7 +35,7 @@ class CancelReportCommand extends Command {
         $reportId = $context->get('reportId');
 
         if(!isset($reportId) || is_null($reportId)){
-            throw new InvalidArgumentException('Missing report id.');
+            throw new \InvalidArgumentException('Missing report id.');
         }
 
         PHPWS_Core::initModClass('hms', 'ReportFactory.php');
@@ -43,8 +43,8 @@ class CancelReportCommand extends Command {
         // Load the report to get its class
         try{
             $report = ReportFactory::getReportById($reportId);
-        } catch(InvalidArgumentException $e){
-            NQ::simple('hms', hms\NotificationView::SUCCESS, 'Report canceled.');
+        } catch(\InvalidArgumentException $e){
+            \NQ::simple('hms', NotificationView::SUCCESS, 'Report canceled.');
             $context->goBack();
         }
 
@@ -56,7 +56,7 @@ class CancelReportCommand extends Command {
             throw new DatabaseException($result->toString());
         }
 
-        NQ::simple('hms', hms\NotificationView::SUCCESS, 'Report canceled.');
+        \NQ::simple('hms', NotificationView::SUCCESS, 'Report canceled.');
 
         $cmd = CommandFactory::getCommand('ShowReportDetail');
         $cmd->setReportClass($report->getClass());

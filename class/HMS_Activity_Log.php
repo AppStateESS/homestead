@@ -52,7 +52,7 @@ class HMS_Activity_Log{
 
     /**
      * Saves the current activity log object to the db.
-     * Returns TRUE upon succes or a PEAR error object otherwise.
+     * Returns TRUE upon succes or a \PEAR error object otherwise.
      */
     public function save()
     {
@@ -99,7 +99,7 @@ class HMS_Activity_Log{
         try {
             $student = StudentFactory::getStudentByUsername($this->get_user_id(), Term::getSelectedTerm());
         }catch(StudentNotFoundException $e){
-            NQ::simple('hms', NotificationView::WARNING, "Could not find data for student: {$this->get_user_id()}");
+            \NQ::simple('hms', NotificationView::WARNING, "Could not find data for student: {$this->get_user_id()}");
             $student = null;
         }
 

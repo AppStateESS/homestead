@@ -28,7 +28,7 @@ class ShowCancelHousingApplicationCommand extends Command {
         $applicationId = $context->get('applicationId');
 
         if(!isset($applicationId)){
-            throw new InvalidArgumentException('Missing application id.');
+            throw new \InvalidArgumentException('Missing application id.');
         }
 
         PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');

@@ -16,7 +16,7 @@ class StartCheckinSubmitCommand extends Command {
     public function execute(CommandContext $context)
     {
         // Check permissions
-        if (!Current_User::allow('hms', 'checkin')) {
+        if (!\Current_User::allow('hms', 'checkin')) {
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to checkin students.');
         }
@@ -32,17 +32,17 @@ class StartCheckinSubmitCommand extends Command {
         $errorCmd = CommandFactory::getCommand('ShowCheckinStart');
 
         if (!isset($bannerId) || is_null($bannerId) || $bannerId == '') {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Missing Banner ID.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Missing Banner ID.');
             $errorCmd->redirect();
         }
 
         if (!isset($hallId)) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Missing residence hall ID.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Missing residence hall ID.');
             $errorCmd->redirect();
         }
 
         if (preg_match("/^[\d]{9}$/", $bannerId) == false) {
-            NQ::simple('hms', hms\NotificationView::ERROR, "Sorry, that didn't look like a valid ID number. Please try again.");
+            \NQ::simple('hms', NotificationView::ERROR, "Sorry, that didn't look like a valid ID number. Please try again.");
             $errorCmd->redirect();
         }
 
@@ -50,7 +50,7 @@ class StartCheckinSubmitCommand extends Command {
         try {
             StudentFactory::getStudentByBannerId($bannerId, $term);
         } catch (StudentNotFoundException $e) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'Could not locate a student with that Banner ID.');
+            \NQ::simple('hms', NotificationView::ERROR, 'Could not locate a student with that Banner ID.');
             $errorCmd->redirect();
         }
 

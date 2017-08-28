@@ -31,7 +31,7 @@ class ShowViewByRlcCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if(!Current_User::allow('hms', 'view_rlc_members')){
+        if(!\Current_User::allow('hms', 'view_rlc_members')){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to view RLC members.');
         }
@@ -39,7 +39,7 @@ class ShowViewByRlcCommand extends Command {
         $rlcId = $context->get('rlc');
 
         if(!isset($rlcId)){
-            throw new InvalidArgumentException('Missing RLC id.');
+            throw new \InvalidArgumentException('Missing RLC id.');
         }
 
         $rlc = new HMS_Learning_Community($rlcId);

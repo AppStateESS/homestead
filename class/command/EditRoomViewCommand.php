@@ -30,7 +30,7 @@ class EditRoomViewCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        if( !Current_User::allow('hms', 'room_view') ){
+        if( !\Current_User::allow('hms', 'room_view') ){
             PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to view rooms.');
         }
@@ -39,7 +39,7 @@ class EditRoomViewCommand extends Command {
         $roomId = $context->get('room');
 
         if(!isset($roomId)){
-            throw new InvalidArgumentException('Missing room ID.');
+            throw new \InvalidArgumentException('Missing room ID.');
         }
 
         // Load the room
