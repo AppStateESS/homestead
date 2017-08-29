@@ -2,10 +2,10 @@
 
 namespace Homestead;
 
-use \Homestead\exception\SOAPException;
-use \Homestead\exception\BannerException;
-use \Homestead\exception\StudentNotFoundException;
-use \Homestead\exception\MealPlanExistsException;
+use \Homestead\Exception\SOAPException;
+use \Homestead\Exception\BannerException;
+use \Homestead\Exception\StudentNotFoundException;
+use \Homestead\Exception\MealPlanExistsException;
 
 /**
  * PhpSOAP Class - Singleton implementation of SOAP class.

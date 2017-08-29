@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\Command\Command;
+
 class SelectRoomView extends View{
 
     private $title;

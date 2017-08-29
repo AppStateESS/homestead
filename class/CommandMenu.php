@@ -2,6 +2,9 @@
 
 namespace Homestead;
 
+use \Homestead\Command\Command;
+use \Homestead\Command\CommandContext;
+
 /**
  * HMS Command Menu
  *

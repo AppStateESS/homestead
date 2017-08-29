@@ -2,7 +2,7 @@
 
 namespace Homestead;
 
-use \Homestead\exception\DatabaseException;
+use \Homestead\Exception\DatabaseException;
 
 class HMS_Permission extends HMS_Item {
     public $id;

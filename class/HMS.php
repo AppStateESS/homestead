@@ -2,7 +2,8 @@
 
 namespace Homestead;
 
-use \Homestead\exception\PermissionException;
+use \Homestead\Exception\PermissionException;
+use \Homestead\Command\CommandContext;
 
 /**
  * Primary HMS class

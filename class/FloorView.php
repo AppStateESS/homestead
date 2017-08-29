@@ -2,7 +2,7 @@
 
 namespace Homestead;
 
-use \Homestead\exception\PermissionException;
+use \Homestead\Exception\PermissionException;
 
 class FloorView extends View{
 

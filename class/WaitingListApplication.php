@@ -2,8 +2,8 @@
 
 namespace Homestead;
 
-use \Homestead\exception\DatabaseException;
-use \Homestead\exception\StudentNotFoundException;
+use \Homestead\Exception\DatabaseException;
+use \Homestead\Exception\StudentNotFoundException;
 use \PHPWS_Error;
 use \PHPWS_DB;
 

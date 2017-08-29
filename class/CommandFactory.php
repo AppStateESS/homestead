@@ -2,7 +2,7 @@
 
 namespace Homestead;
 
-use \Homestead\exception\CommandNotFoundException;
+use \Homestead\Exception\CommandNotFoundException;
 
 /**
  * Description

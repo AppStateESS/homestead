@@ -2,7 +2,7 @@
 
 namespace Homestead;
 
-use \Homestead\exception\InvalidConfigurationException;
+use \Homestead\Exception\InvalidConfigurationException;
 use \Homestead\Docusign\EnvelopeFactory;
 use \Homestead\Docusign\Client;
 

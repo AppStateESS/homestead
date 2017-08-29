@@ -2,8 +2,8 @@
 
 namespace Homestead;
 
-use \Homestead\exception\StudentNotFoundException;
-use \Homestead\exception\SOAPException;
+use \Homestead\Exception\StudentNotFoundException;
+use \Homestead\Exception\SOAPException;
 
 class SOAPDataProvider extends StudentDataProvider {
 

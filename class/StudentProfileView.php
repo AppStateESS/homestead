@@ -2,7 +2,7 @@
 
 namespace Homestead;
 
-use \Homestead\exception\InvalidTermException;
+use \Homestead\Exception\InvalidTermException;
 
 class StudentProfileView extends View {
 

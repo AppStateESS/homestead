@@ -2,7 +2,7 @@
 
 namespace Homestead;
 
-use \Homestead\exception\HMSException;
+use \Homestead\Exception\HMSException;
 
 class PreferencesRoommatePairingStrategy extends RoommatePairingStrategy {
 

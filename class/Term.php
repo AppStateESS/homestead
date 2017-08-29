@@ -2,9 +2,9 @@
 
 namespace Homestead;
 
-use \Homestead\exception\DatabaseException;
-use \Homestead\exception\InvalidConfigurationException;
-use \Homestead\exception\InvalidTermException;
+use \Homestead\Exception\DatabaseException;
+use \Homestead\Exception\InvalidConfigurationException;
+use \Homestead\Exception\InvalidTermException;
 use \PHPWS_Error;
 use \PHPWS_DB;
 

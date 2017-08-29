@@ -17,7 +17,6 @@ class ShowHallNotificationSelectView extends View{
     public function show(){
         /*
         if(!\Current_User::allow('hms', 'email_hall')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to message halls.');
         }
         */

@@ -2,9 +2,9 @@
 
 namespace Homestead;
 
-use \Homestead\exception\DatabaseException;
-use \Homestead\exception\AssignmentException;
-use \Homestean\exception\PermissionException;
+use \Homestead\Exception\DatabaseException;
+use \Homestead\Exception\AssignmentException;
+use \Homestead\Exception\PermissionException;
 use \PHPWS_Error;
 use \PHPWS_DB;
 

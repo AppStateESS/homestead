@@ -2,10 +2,10 @@
 
 namespace Homestead;
 
-use \Homestead\exception\RoommateException;
-use \Homestead\exception\RoommateCompatibilityException;
-use \Homestead\exception\DatabaseException;
-use \Homestead\exception\StudentNotFoundException;
+use \Homestead\Exception\RoommateException;
+use \Homestead\Exception\RoommateCompatibilityException;
+use \Homestead\Exception\DatabaseException;
+use \Homestead\Exception\StudentNotFoundException;
 use \phpws2\Database;
 use \PHPWS_Error;
 use \PHPWS_DB;

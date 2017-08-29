@@ -144,8 +144,3 @@ class Client {
         return $authJson;
     }
 }
-
-// Exceptions that the DocuSign PHP API Library can throw
-class Exception extends \Exception {}
-class AuthException extends \Exception {}
-class IOException extends \Exception {}

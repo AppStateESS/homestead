@@ -2,7 +2,7 @@
 
 namespace Homestead;
 
-use \Homestead\exception\PermissionException;
+use \Homestead\Exception\PermissionException;
 
 /**
  * View for showing the Assign Student interface.

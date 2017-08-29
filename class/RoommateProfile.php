@@ -2,7 +2,7 @@
 
 namespace Homestead;
 
-use \Homestead\exception\DatabaseException;
+use \Homestead\Exception\DatabaseException;
 
 /**
  * The RoommateProfile class

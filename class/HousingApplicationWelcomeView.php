@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\Command\Command;
+
 class HousingApplicationWelcomeView extends View {
 
     private $student;

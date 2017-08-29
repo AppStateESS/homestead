@@ -2,8 +2,8 @@
 
 namespace Homestead;
 
-use \Homestead\exception\AssignmentException;
-use \Homestead\exception\DatabaseException;
+use \Homestead\Exception\AssignmentException;
+use \Homestead\Exception\DatabaseException;
 
 abstract class AssignmentStrategy {
 

@@ -2,7 +2,7 @@
 
 namespace Homestead;
 
-use \Homestead\exception\PermissionException;
+use \Homestead\Exception\PermissionException;
 use \phpws2\Database;
 
 class BedView extends View
@@ -23,7 +23,6 @@ class BedView extends View
     public function show()
     {
         if (!UserStatus::isAdmin() || !\Current_User::allow('hms', 'bed_view')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You are not allowed to edit or view beds.');
         }
 

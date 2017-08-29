@@ -2,7 +2,7 @@
 
 namespace Homestead;
 
-use \Homestead\exception\StudentNotFoundException;
+use \Homestead\Exception\StudentNotFoundException;
 use \phpws2\Database;
 
 // Seconds of delay you want to replicate for each query.

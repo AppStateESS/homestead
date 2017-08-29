@@ -2,7 +2,7 @@
 
 namespace Homestead;
 
-use \Homestead\exception\DatabaseException;
+use \Homestead\Exception\DatabaseException;
 use \PHPWS_Error;
 use \PHPWS_DB;
 

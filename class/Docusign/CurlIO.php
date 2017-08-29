@@ -1,6 +1,8 @@
 <?php
 namespace Homestead\Docusign;
 
+use \Homestead\Docusign\DocusignException\IOException;
+
 /*
  * Copyright 2013 DocuSign Inc.
  *

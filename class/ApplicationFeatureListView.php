@@ -4,7 +4,7 @@ namespace Homestead;
 
 class ApplicationFeatureListView extends View{
 
-    public static $dir = 'applicationFeature';
+    public static $dir = 'ApplicationFeature';
     private $features;
     private $term;
 

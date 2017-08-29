@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\Command\CommandContext;
+
 /*
  * ShowRlcApplicationPage2View
  *

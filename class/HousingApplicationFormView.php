@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use \Homestead\ApplicationFeature\RLCApplicationRegistration;
+
 class HousingApplicationFormView extends View
 {
     private $student;
@@ -222,7 +224,6 @@ class HousingApplicationFormView extends View
         /*******
          * RLC *
          *******/
-        PHPWS_Core::initModClass('hms', 'applicationFeature/RlcApplication.php');
         $rlcReg = new RLCApplicationRegistration();
         if (HMS_RLC_Application::checkForApplication($this->student->getUsername(), $this->term) == TRUE) {
             // Student has an RLC application on file already

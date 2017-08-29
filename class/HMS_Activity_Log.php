@@ -2,8 +2,8 @@
 
 namespace Homestead;
 
-use \Homestead\exception\DatabaseException;
-use \Homestead\exception\StudentNotFoundException;
+use \Homestead\Exception\DatabaseException;
+use \Homestead\Exception\StudentNotFoundException;
 
 /**
  * The HMS_Acivity_Log class

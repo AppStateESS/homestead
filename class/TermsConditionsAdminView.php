@@ -2,7 +2,7 @@
 
 namespace Homestead;
 
-use \Homestead\exception\InvalidConfigurationException;
+use \Homestead\Exception\InvalidConfigurationException;
 
 class TermsConditionsAdminView extends View{
 

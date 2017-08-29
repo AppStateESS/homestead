@@ -2,7 +2,7 @@
 
 namespace Homestead;
 
-use \Homestead\exception\StudentNotFoundException;
+use \Homestead\Exception\StudentNotFoundException;
 
 abstract class StudentDataProvider {
 
