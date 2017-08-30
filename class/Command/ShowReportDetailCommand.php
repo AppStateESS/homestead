@@ -2,7 +2,9 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\ReportFactory;
+use \Homestead\ReportDetailView;
+use \Homestead\Exception\PermissionException;
 
 /**
  * ShowReportDetailCommand
@@ -51,7 +53,6 @@ class ShowReportDetailCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!\Current_User::allow('hms', 'reports')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do no have permission to run reports.');
         }
 
@@ -60,9 +61,6 @@ class ShowReportDetailCommand extends Command {
         if(!isset($class) || is_null($class)){
             throw new \InvalidArgumentException('Missing report class.');
         }
-
-        PHPWS_Core::initModClass('hms', 'ReportFactory.php');
-        PHPWS_Core::initModClass('hms', 'ReportDetailView.php');
 
         $reportCtl = ReportFactory::getControllerInstance($class);
         $view = new ReportDetailView($reportCtl);

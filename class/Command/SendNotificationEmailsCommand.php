@@ -2,7 +2,13 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\CommandFactory;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\HMS_Floor;
+use \Homestead\HMS_Residence_Hall;
+use \Homestead\HMS_Permission;
+use \Homestead\HMS_Email;
+use \Homestead\NotificationView;
 
 /**
  * SendNotificationEmailsCommand
@@ -12,7 +18,6 @@ namespace Homestead\Command;
  * @author Daniel West <lw77517 at appstate dot edu>
  * @package HMS
  */
-//PHPWS_Core::initModClass('hms', 'SendNotificationEmailsView.php');
 
 class SendNotificationEmailsCommand extends Command {
 
@@ -32,16 +37,9 @@ class SendNotificationEmailsCommand extends Command {
     {
         /*
         if(!\Current_User::allow('hms', 'email_hall') && !\Current_User::allow('hms', 'email_all')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to send messages.');
         }
         */
-
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
 
         // Sanity checks
         if(is_null($context->get('hall')) && is_null($context->get('floor')) ){
@@ -132,7 +130,7 @@ class SendNotificationEmailsCommand extends Command {
                 continue;
             }
 
-            /**
+            /*
             $rooms = $floor->get_rooms();
             foreach($rooms as $room){
                 $students = $room->get_assignees();

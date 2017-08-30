@@ -2,7 +2,13 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\Term;
+use \Homestead\StudentFactory;
+use \Homestead\CommandFactory;
+use \Homestead\HousingApplicationFactory;
+use \Homestead\Exception\PermissionException;
+use \Homestead\NotificationView;
+use \Homestead\Exception\StudentNotFoundException;
 
 class LotteryAdminSetWinnerCommand extends Command {
 
@@ -14,12 +20,8 @@ class LotteryAdminSetWinnerCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!\Current_User::allow('hms', 'lottery_admin')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to administer re-application features.');
         }
-
-        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
         $bannerIds = $context->get('banner_ids');
         $term = Term::getSelectedTerm();

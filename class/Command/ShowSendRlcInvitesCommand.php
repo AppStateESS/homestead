@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\SendRlcInvitesView;
 
 class ShowSendRlcInvitesCommand extends Command {
 
@@ -13,8 +13,6 @@ class ShowSendRlcInvitesCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'SendRlcInvitesView.php');
-
         $view = new SendRlcInvitesView();
         $context->setContent($view->show());
     }

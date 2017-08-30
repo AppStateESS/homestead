@@ -2,7 +2,10 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\Term;
+use \Homestead\RoomChangeRequestFactory;
+use \Homestead\RoomChangeApprovalView;
+use \Homestead\Exception\PermissionException;
 
 class ShowAdminRoomChangeListCommand extends Command {
 
@@ -13,12 +16,8 @@ class ShowAdminRoomChangeListCommand extends Command {
     public function execute(CommandContext $context)
     {
         if (!\Current_User::allow('hms', 'admin_approve_room_change')) {
-            PHPWS_Core::initModClasS('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to approve room changes.');
         }
-
-        PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
-        PHPWS_Core::initModClass('hms', 'RoomChangeApprovalView.php');
 
         $term = Term::getSelectedTerm();
 

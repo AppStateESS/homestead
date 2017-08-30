@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\WaitingListSignupView;
 
 /**
  * Command for showing the waiting list signup interface
@@ -43,8 +43,6 @@ class ShowWaitingListSignupCommand extends Command {
         if (!isset($term)) {
             throw new \InvalidArgumentException('Missing term');
         }
-
-        PHPWS_Core::initModClass('hms', 'WaitingListSignupView.php');
 
         $view = new WaitingListSignupView($term);
         $context->setContent($view->show());

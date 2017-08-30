@@ -2,7 +2,11 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\UserStatus;
+use \Homestead\ApplicationFeature;
+use \Homestead\HMS;
+use \Homestead\Exception\PermissionException;
+use \Homestead\Exception\MissingDataException;
 
 class SaveApplicationFeatureCommand extends Command {
 
@@ -45,12 +49,8 @@ class SaveApplicationFeatureCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'deadlines')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit deadlines.');
         }
-
-
-        PHPWS_Core::initModClass('hms', 'exception/MissingDataException.php');
 
         if(!isset($this->featureId)) {
             $this->featureId = $context->get('featureId');
@@ -67,9 +67,6 @@ class SaveApplicationFeatureCommand extends Command {
         }
         $name = $this->name;
 
-
-
-        PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
         if(!is_null($featureId)) {
             $feature = ApplicationFeature::getInstanceById($featureId);
         } else if(!is_null($name) && !is_null($term)) {

@@ -2,7 +2,16 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\StudentFactory;
+use \Homestead\HousingApplication;
+use \Homestead\UserStatus;
+use \Homestead\MealPlanFactory;
+use \Homestead\HMS_Lottery;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\RlcMembershipFactory;
+use \Homestead\RlcAssignmentSelfAssignedState;
 
 class LotteryConfirmRoommateRequestCommand extends Command {
 
@@ -28,11 +37,6 @@ class LotteryConfirmRoommateRequestCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'RlcMembershipFactory.php');
-        PHPWS_Core::initModClass('hms', 'RlcAssignmentSelfAssignedState.php');
-
         $requestId = $context->get('requestId');
         $mealPlanCode = $context->get('meal_plan');
 
@@ -69,7 +73,6 @@ class LotteryConfirmRoommateRequestCommand extends Command {
         MealPlanFactory::saveMealPlan($mealPlan); // Just put it in the queue, don't send to Banner right away
 
         // Try to actually make the assignment
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
         HMS_Lottery::confirm_roommate_request(UserStatus::getUsername(), $requestId);
 
         // Log the fact that the roommate was accepted and successfully assigned

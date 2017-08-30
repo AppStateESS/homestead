@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\PdoFactory;
 
 class RetrieveRoomDamageCommand extends Command {
 

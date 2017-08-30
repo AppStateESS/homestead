@@ -2,7 +2,8 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\PulseEditView;
+use \Homestead\Exception\PermissionException;
 
 /**
  * @license http://opensource.org/licenses/lgpl-3.0.html
@@ -21,11 +22,8 @@ class ShowPulseOptionCommand extends Command
     public function execute(CommandContext $context)
     {
         if (!\Current_User::isDeity()) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit terms.');
         }
-
-        PHPWS_Core::initModClass('hms', 'PulseEditView.php');
 
         $pulse = new PulseEditView();
         $context->setContent($pulse->show());

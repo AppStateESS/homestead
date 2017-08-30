@@ -2,7 +2,9 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HMS_Room;
+use \Homestead\RoomFactory;
+use \Homestead\AddRoomDamageView;
 
 class ShowAddRoomDamageCommand extends Command{
 
@@ -32,9 +34,6 @@ class ShowAddRoomDamageCommand extends Command{
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'AddRoomDamageView.php');
-        PHPWS_Core::initModClass('hms', 'RoomFactory.php');
-
         $roomId = $context->get('roomId');
 
         if (!isset($roomId)) {

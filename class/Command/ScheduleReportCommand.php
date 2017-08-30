@@ -2,7 +2,9 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\ReportFactory;
+use \Homestead\HMS;
+use \Homestead\Exception\PermissionException;
 
 /**
  * ScheduleReportCommand
@@ -24,11 +26,8 @@ class ScheduleReportCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!\Current_User::allow('hms', 'reports')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do no have permission to run reports.');
         }
-
-        PHPWS_Core::initModClass('hms', 'ReportFactory.php');
 
         $reportClass = $context->get('reportClass');
 

@@ -2,7 +2,10 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\StudentFactory;
+use \Homestead\UserStatus;
+use \Homestead\RlcMembershipFactory;
+use \Homestead\LotteryChooseRoomView;
 
 class LotteryShowChooseRoomCommand extends Command {
 
@@ -20,10 +23,6 @@ class LotteryShowChooseRoomCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'LotteryChooseRoomView.php');
-        PHPWS_Core::initModClass('hms', 'RlcMembershipFactory.php');
-
         $floorId = $context->get('floorId');
 
         if(!isset($floorId) || is_null($floorId) || empty($floorId)){

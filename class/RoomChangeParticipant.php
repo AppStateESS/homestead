@@ -265,7 +265,3 @@ class RoomChangeParticipant {
         $this->cell_phone = $cell;
     }
 }
-
-class RoomChangeParticipantRestored extends RoomChangeParticipant {
-    public function __construct(){}
-}

@@ -2,9 +2,9 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'RlcApplicationPage1View.php');
+use \Homestead\StudentFactory;
+use \Homestead\UserStatus;
+use \Homestead\RlcApplicationPage1View;
 
 class ShowRlcApplicationPage1ViewCommand extends Command {
 

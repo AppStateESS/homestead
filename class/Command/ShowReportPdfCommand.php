@@ -2,7 +2,10 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\ReportFactory;
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\Exception\PermissionException;
 
 /**
  * ShowReportPdfCommand
@@ -29,13 +32,13 @@ class ShowReportPdfCommand extends Command{
     /**
      * Sets the request variables
      *
-     * @throws InvalidArgumentExection
+     * @throws InvalidArgumentException
      * @return Array array of request variables
      */
     public function getRequestVars()
     {
         if(!isset($this->reportId) || is_null($this->reportId)){
-            throw new InvalidArgumentExection('Missing report id.');
+            throw new \InvalidArgumentException('Missing report id.');
         }
 
         return array('action'=>'ShowReportPdf', 'reportId'=>$this->reportId);
@@ -45,12 +48,11 @@ class ShowReportPdfCommand extends Command{
      * Exec
      *
      * @param CommandContext $context
-     * @throws InvalidArgumentExection
+     * @throws InvalidArgumentException
      */
     public function execute(CommandContext $context)
     {
         if(!\Current_User::allow('hms', 'reports')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do no have permission to run reports.');
         }
 
@@ -58,11 +60,10 @@ class ShowReportPdfCommand extends Command{
 
         // Check to make sure a report ID was given
         if(!isset($reportId) || is_null($reportId)){
-            throw new InvalidArgumentExection('Missing report id.');
+            throw new \InvalidArgumentException('Missing report id.');
         }
 
         // Instantiate the report controller with the requested report id
-        PHPWS_Core::initModClass('hms', 'ReportFactory.php');
         $report = ReportFactory::getReportById($reportId);
 
         // Check to make sure the file actually exsists

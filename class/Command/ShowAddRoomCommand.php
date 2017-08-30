@@ -2,7 +2,9 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HMS_Floor;
+use \Homestead\AddRoomView;
+use \Homestead\Exception\PermissionException;
 
 //TODO finish this class, make a view
 
@@ -29,16 +31,8 @@ class ShowAddRoomCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!\Current_User::allow('hms', 'room_structure')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to add a room.');
         }
-
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-        PHPWS_Core::initModClass('hms', 'AddRoomView.php');
 
         $floor_id = $context->get('floor');
 

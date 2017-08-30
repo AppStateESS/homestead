@@ -2,8 +2,10 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
+use \Homestead\HMS_Learning_Community;
+use \Homestead\NotificationView;
+use \Homestead\CommandFactory;
+use \Homestead\Exception\PermissionException;
 
 /**
  * SaveRlcCommand - Handles saving a new RLC or updating fields on an existing Learning Community
@@ -32,7 +34,6 @@ class SaveRlcCommand extends Command {
     public function execute(CommandContext $context){
 
         if(!\Current_User::allow('hms', 'learning_community_maintenance')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit learning communities.');
         }
 

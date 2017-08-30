@@ -2,7 +2,13 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\UserStatus;
+use \Homestead\CommandFactory;
+use \Homestead\StudentFactory;
+use \Homestead\HousingApplication;
+use \Homestead\LotteryApplication;
+use \Homestead\HMS_RLC_Application;
+use \Homestead\NotificationView;
 
 class SubmitRLCReapplicationPage2Command extends Command {
 
@@ -25,10 +31,6 @@ class SubmitRLCReapplicationPage2Command extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-
         session_write_close();
         session_start();
 

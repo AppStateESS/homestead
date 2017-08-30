@@ -2,7 +2,9 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\StudentFactory;
+use \Homestead\UserStatus;
+use \Homestead\LotteryChooseRoommatesView;
 
 class LotteryShowChooseRoommatesCommand extends Command {
 
@@ -19,9 +21,6 @@ class LotteryShowChooseRoommatesCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'LotteryChooseRoommatesView.php');
-
         $term = \PHPWS_Settings::get('hms', 'lottery_term');
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 

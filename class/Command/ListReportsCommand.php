@@ -2,7 +2,10 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\UserStatus;
+use \Homestead\ReportFactory;
+use \Homestead\ListReportsView;
+use \Homestead\Exception\PermissionException;
 
 /**
  * ListReportsCommand
@@ -34,12 +37,8 @@ class ListReportsCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!UserStatus::isAdmin() || !\Current_User::allow('hms','reports')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to run/view reports.');
         }
-
-        PHPWS_Core::initModClass('hms', 'ReportFactory.php');
-        PHPWS_Core::initModClass('hms', 'ListReportsView.php');
 
         $reports = ReportFactory::getAllReportControllers();
         $reportsList = new ListReportsView($reports);

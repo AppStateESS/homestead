@@ -2,7 +2,14 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HMS_Roommate;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\HMS_Email;
+use \Homestead\UserStatus;
+use \Homestead\CommandFactory;
+use \Homestead\StudentFactory;
+use \Homestead\NotificationView;
+use \Homestead\Exception\PermissionException;
 
 /**
  * Description
@@ -35,7 +42,6 @@ class RoommateBreakCommand extends Command
             throw new \InvalidArgumentException('Must set roommateId');
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $roommate = new HMS_Roommate($id);
         if($roommate->id == 0) {
             throw new \InvalidArgumentException('Invalid roommateId ' . $id);
@@ -43,7 +49,6 @@ class RoommateBreakCommand extends Command
 
         $username = UserStatus::getUsername();
         if($username != $roommate->requestor && $username != $roommate->requestee) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException("$username tried to break roommate pairing {$roommate->id}");
         }
 
@@ -71,7 +76,6 @@ class RoommateBreakCommand extends Command
                                        "$username broke pairing, CAPTCHA: $verified");
 
         // Email both parties
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         HMS_Email::send_break_emails($roommate, $username);
 
         $name = $other->getFullName();

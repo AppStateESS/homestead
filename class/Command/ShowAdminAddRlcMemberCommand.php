@@ -2,9 +2,9 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-PHPWS_Core::initModClass('hms', 'AdminAddRlcMemberView.php');
+use \Homestead\HMS_Learning_Community;
+use \Homestead\AdminAddRlcMemberView;
+use \Homestead\Exception\PermissionException;
 
 class ShowAdminAddRlcMemberCommand extends Command {
 
@@ -26,7 +26,6 @@ class ShowAdminAddRlcMemberCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!\Current_User::allow('hms', 'add_rlc_members')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to view RLC members.');
         }
 

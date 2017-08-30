@@ -2,7 +2,8 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\CommandFactory;
+use \Homestead\Exception\PermissionException;
 
 class StudentSearchCommand extends Command {
 
@@ -13,12 +14,8 @@ class StudentSearchCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!\Current_User::allow('hms', 'search')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to search for students.');
         }
-
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'StudentProfile.php');
 
         $userid = $context->get('banner_id');
         $userid = strtolower(trim($userid));

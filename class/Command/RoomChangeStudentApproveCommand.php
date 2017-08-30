@@ -2,12 +2,16 @@
 
 namespace Homestead\Command;
 
- 
-
-PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
-PHPWS_Core::initModClass('hms', 'RoomChangeParticipantFactory.php');
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+use \Homestead\CommandFactory;
+use \Homestead\RoomChangeRequestFactory;
+use \Homestead\RoomChangeParticipantFactory;
+use \Homestead\StudentFactory;
+use \Homestead\UserStatus;
+use \Homestead\NotificationView;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\HMS_Email;
+use \Homestead\ParticipantStateStudentApproved;
+use \Homestead\Exception\PermissionException;
 
 \PHPWS_Core::initCoreClass('Captcha.php');
 

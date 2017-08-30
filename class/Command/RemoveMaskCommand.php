@@ -2,7 +2,9 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\UserStatus;
+use \Homestead\CommandFactory;
+use \Homestead\Exception\PermissionException;
 
 /**
  * Description
@@ -21,12 +23,10 @@ class RemoveMaskCommand extends Command
     public function execute(CommandContext $context)
     {
         if(!\Current_User::allow('hms', 'login_as_student')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to login as a student.');
         }
 
         if(!UserStatus::isMasquerading()) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You are not currently masquerading as another user.');
         }
 

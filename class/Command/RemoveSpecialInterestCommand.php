@@ -2,7 +2,10 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\LotteryApplication;
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\Exception\PermissionException;
 
   /**
    * RemoveSpecialInterest
@@ -28,11 +31,8 @@ class RemoveSpecialInterestCommand extends Command
     {
         // Check permissions
         if(!\Current_User::allow('hms', 'special_interest_approval')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to approve special interest group requests.');
         }
-
-        PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
 
         if(is_null($context->get('id'))){
             throw new \InvalidArgumentException('Missing application id.');

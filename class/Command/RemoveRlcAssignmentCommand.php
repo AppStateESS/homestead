@@ -2,7 +2,9 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HMS_Activity_Log;
+use \Homestead\HMS_RLC_Assignment;
+use \Homestead\Exception\PermissionException;
 
 class RemoveRlcAssignmentCommand extends Command{
 
@@ -19,11 +21,8 @@ class RemoveRlcAssignmentCommand extends Command{
     public function execute(CommandContext $context)
     {
         if(!\Current_User::allow('hms', 'remove_rlc_members')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to approve/deny RLC applications.');
         }
-
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 
         $assignment = HMS_RLC_Assignment::getAssignmentById($context->get('assignmentId'));
 

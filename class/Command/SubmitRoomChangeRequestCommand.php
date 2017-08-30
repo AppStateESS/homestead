@@ -2,11 +2,21 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
-PHPWS_Core::initModClass('hms', 'RoomChangeParticipant.php');
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+use \Homestead\Term;
+use \Homestead\CommandFactory;
+use \Homestead\StudentFactory;
+use \Homestead\HMS_Assignment;
+use \Homestead\HMS_Residence_Hall;
+use \Homestead\HMS_Email;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\RoomChangeParticipant;
+use \Homestead\RoomChangeRequest;
+use \Homestead\RoomChangeRequestFactory;
+use \Homestead\ParticipantStateStudentApproved;
+use \Homestead\UserStatus;
+use \Homestead\NotificationView;
+use \Homestead\Exception\StudentNotFoundException;
+
 
 class SubmitRoomChangeRequestCommand extends Command {
 

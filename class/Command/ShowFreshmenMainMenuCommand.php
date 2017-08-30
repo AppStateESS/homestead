@@ -2,7 +2,10 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\StudentFactory;
+use \Homestead\UserStatus;
+use \Homestead\Term;
+use \Homestead\FreshmenMainMenuView;
 
 class ShowFreshmenMainMenuCommand extends Command {
 
@@ -15,9 +18,6 @@ class ShowFreshmenMainMenuCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'FreshmenMainMenuView.php');
-
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), Term::getCurrentTerm());
 
         $view = new FreshmenMainMenuView($student);

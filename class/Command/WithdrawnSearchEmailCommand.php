@@ -2,7 +2,11 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\UserStatus;
+use \Homestead\Term;
+use \Homestead\WithdrawnSearch;
+use \Homestead\HMS_Email;
+use \Homestead\HMS;
 
 /**
  * Handles running the Withdrawn search process and emailing the results.
@@ -24,7 +28,7 @@ class WithdrawnSearchEmailCommand extends ScheduledPulse
     public function __construct($id = null)
     {
         $this->module = 'hms';
-        $this->class_file = 'command/WithdrawnSearchEmailCommand.php';
+        $this->class_file = 'Command/WithdrawnSearchEmailCommand.php';
         $this->class = 'WithdrawnSearchEmailCommand';
 
         parent::__construct($id);
@@ -39,12 +43,6 @@ class WithdrawnSearchEmailCommand extends ScheduledPulse
         $sp = $this->makeClone();
         $sp->execute_at = strtotime("tomorrow");
         $sp->save();
-
-        // Load some classes
-        PHPWS_Core::initModClass('hms', 'HMS.php');
-        PHPWS_Core::initModClass('hms', 'WithdrawnSearch.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        PHPWS_Core::initModClass('hms', 'UserStatus.php');
 
         UserStatus::wearMask('HMS System');
 

@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\RoommateProfileSearchView;
 
 class RoommateProfileSearchCommand extends Command {
 
@@ -21,8 +21,6 @@ class RoommateProfileSearchCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'RoommateProfile.php');
-
         $term = $context->get('term');
 
         $tags = array();

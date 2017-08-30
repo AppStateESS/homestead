@@ -2,10 +2,9 @@
 
 namespace Homestead\Command;
 
- 
-
-PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-PHPWS_Core::initModClass('hms', 'ShowViewByRlc.php');
+use \Homestead\HMS_Learning_Community;
+use \Homestead\ShowViewByRlc;
+use \Homestead\Exception\PermissionException;
 
 class ShowViewByRlcCommand extends Command {
     private $rlcId;
@@ -32,7 +31,6 @@ class ShowViewByRlcCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!\Current_User::allow('hms', 'view_rlc_members')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to view RLC members.');
         }
 

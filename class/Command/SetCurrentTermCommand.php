@@ -2,7 +2,10 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\Term;
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\Exception\PermissionException;
 
 class SetCurrentTermCommand extends Command {
     private $term;
@@ -23,11 +26,8 @@ class SetCurrentTermCommand extends Command {
 
     public function execute(CommandContext $context) {
         if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'activate_term')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to set the Current Term.');
         }
-
-        PHPWS_Core::initModClass('hms', 'TermEditView.php');
 
         $this->term = $context->get('term');
 

@@ -164,8 +164,3 @@ class SpringApplication extends HousingApplication{
         $this->smoking_preference = $preference;
     }
 }
-
-class RestoredSpringApplication extends SpringApplication {
-    public function __construct(){
-    } // Empty constructor
-}

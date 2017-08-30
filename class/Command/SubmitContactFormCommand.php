@@ -2,9 +2,8 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-PHPWS_Core::initModClass('hms', 'ContactFormThankYouView.php');
+use \Homestead\HMS_Email;
+use \Homestead\ContactFormThankYouView;
 
 class SubmitContactFormCommand extends Command {
     private $asu_username;

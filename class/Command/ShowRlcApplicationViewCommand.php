@@ -2,11 +2,12 @@
 
 namespace Homestead\Command;
 
- 
-
-PHPWS_Core::initModClass('hms', 'RlcApplicationPage1View.php');
-PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+use \Homestead\UserStatus;
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\RlcApplicationPage1View;
+use \Homestead\ApplicationFeature;
+use \Homestead\StudentFactory;
 
 class ShowRlcApplicationViewCommand extends Command {
 

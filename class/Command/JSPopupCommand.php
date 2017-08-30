@@ -2,8 +2,6 @@
 
 namespace Homestead\Command;
 
- 
-
 class JSPopupCommand extends Command {
 
     private $viewCommand;

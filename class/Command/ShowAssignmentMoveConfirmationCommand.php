@@ -2,7 +2,11 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\StudentFactory;
+use \Homestead\Term;
+use \Homestead\HMS_Assignment;
+use \Homestead\AssignmentMoveConfirmationView;
+use \Homestead\Exception\PermissionException;
 
 class ShowAssignmentMoveConfirmationCommand extends Command {
 
@@ -63,13 +67,8 @@ class ShowAssignmentMoveConfirmationCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!\Current_User::allow('hms', 'assignment_maintenance')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to assign students.');
         }
-
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'AssignmentMoveConfirmationView.php');
 
         $student = StudentFactory::getStudentByUsername($context->get('username'), Term::getSelectedTerm());
         $assignment = HMS_Assignment::getAssignment($student->getUsername(), Term::getSelectedTerm());

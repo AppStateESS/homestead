@@ -2,7 +2,13 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\StudentFactory;
+use \Homestead\UserStatus;
+use \Homestead\HousingApplicationFactory;
+use \Homestead\HMS_RLC_Assignment;
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\RlcSelfAssignStartView;
 
 class RlcSelfAssignStartCommand extends Command {
 
@@ -32,11 +38,6 @@ class RlcSelfAssignStartCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'RlcSelfAssignStartView.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $term = $context->get('term');
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);

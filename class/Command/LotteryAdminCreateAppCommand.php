@@ -2,7 +2,14 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\CommandFactory;
+use \Homestead\Term;
+use \Homestead\NotificationView;
+use \Homestead\LotteryApplication;
+use \Homestead\StudentFactory;
+use \Homestead\MealPlan;
+use \Homestead\Exception\StudentNotFoundException;
+use \Homestead\Exception\PermissionException;
 
 class LotteryAdminCreateAppCommand extends Command {
 
@@ -15,13 +22,8 @@ class LotteryAdminCreateAppCommand extends Command {
     {
 
         if(!\Current_User::allow('hms', 'lottery_admin')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to administer re-application features.');
         }
-
-        PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'MealPlan.php');
 
         $viewCmd = CommandFactory::getCommand('ShowLotteryAdminEntry');
 

@@ -2,10 +2,13 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+use \Homestead\Term;
+use \Homestead\UserStatus;
+use \Homestead\CommandFactory;
+use \Homestead\StudentFactory;
+use \Homestead\HMS_Assignment;
+use \Homestead\WelcomeScreenViewInvalidTerm;
+use \Homestead\HousingApplication;
 
 class ShowStudentMenuCommand extends Command {
 
@@ -108,7 +111,6 @@ class ShowStudentMenuCommand extends Command {
             # Make sure the user's application term exists in hms_term,
             # otherwise give a "too early" message
             if(!Term::isValidTerm($applicationTerm)){
-                PHPWS_Core::initModClass('hms', 'WelcomeScreenViewInvalidTerm.php');
                 $view = new WelcomeScreenViewInvalidTerm($applicationTerm, $contactCmd);
                 $context->setContent($view->show());
                 return;

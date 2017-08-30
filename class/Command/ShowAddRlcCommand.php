@@ -2,9 +2,10 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-PHPWS_Core::initModClass('hms', 'AddCommunityView.php');
+use \Homestead\HMS_Learning_Community;
+use \Homestead\AddCommunityView;
+use \Homestead\UserStatus;
+use \Homestead\Exception\PermissionException;
 
 class ShowAddRlcCommand extends Command {
     protected $id;
@@ -31,7 +32,6 @@ class ShowAddRlcCommand extends Command {
 
     public function execute(CommandContext $context){
         if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'learning_community_maintenance')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit learning communities.');
         }
 

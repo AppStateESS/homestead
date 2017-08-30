@@ -2,7 +2,12 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\UserStatus;
+use \Homestead\Term;
+use \Homestead\NotificationView;
+use \Homestead\BannerQueue;
+use \Homestead\CommandFactory;
+use \Homestead\Exception\PermissionException;
 
 class ProcessBannerQueueCommand extends Command {
     private $term;
@@ -23,7 +28,6 @@ class ProcessBannerQueueCommand extends Command {
 
     public function execute(CommandContext $context) {
         if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'banner_queue')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to enable/disable the Banner queue.');
         }
 
@@ -48,7 +52,6 @@ class ProcessBannerQueueCommand extends Command {
                 $term->save();
                 \NQ::Simple('hms', NotificationView::SUCCESS, 'Banner Queue has been disabled for ' . Term::toString($term->term) . '.');
             } else {
-                PHPWS_Core::initModClass('hms', 'BannerQueue.php');
                 $result = BannerQueue::processAll($term->term);
                 if($result === TRUE) {
                     \NQ::Simple('hms', NotificationView::SUCCESS, 'Banner Queue has been processed for ' . Term::toString($term->term) . '.');

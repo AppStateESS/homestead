@@ -2,7 +2,9 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\Exception\PermissionException;
 
 class StartCheckoutSubmitCommand extends Command {
 
@@ -17,12 +19,8 @@ class StartCheckoutSubmitCommand extends Command {
     {
         // Check permissions
         if (!\Current_User::allow('hms', 'checkin')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to checkin students.');
         }
-
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 
         $bannerId = $context->get('banner_id');
         $hallId = $context->get('residence_hall_hidden');

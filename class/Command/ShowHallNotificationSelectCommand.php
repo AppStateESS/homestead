@@ -1,7 +1,7 @@
 <?php
 namespace Homestead\Command;
 
- 
+use \Homestead\ShowHallNotificationSelectView;
 
 /**
  * ShowHallNotificationSelectCommand
@@ -12,8 +12,6 @@ namespace Homestead\Command;
  * @package mod
  * @subpackage hms
  */
-
-PHPWS_Core::initModClass('hms', 'ShowHallNotificationSelectView.php');
 
 class ShowHallNotificationSelectCommand extends Command {
 

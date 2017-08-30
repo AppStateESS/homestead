@@ -2,7 +2,9 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HousingApplicationFactory;
+use \Homestead\NotificationView;
+use \Homestead\Exception\PermissionException;
 
 /**
  * MarkApplicationWithdrawnCommand -- Marks a housing application as withdrawn. Depricated. Use 'CancelHousingAppCommand' instead.
@@ -27,17 +29,14 @@ class MarkApplicationWithdrawnCommand extends Command {
     {
 
         if(!\Current_User::allow('withdrawn_search')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to makr applications withdrawn.');
         }
 
         $id = $context->get('appId');
 
         if(!isset($id) || is_null($id)){
-            throw new InvalidArugumentException('Missing application id.');
+            throw new \InvalidArgumentException('Missing application id.');
         }
-
-        PHPWS_Core::initModclass('hms', 'HousingApplicationFactory.php');
 
         $app = HousingApplicationFactory::getApplicationById($context->get('appId'));
         $app->setWithdrawn(1);

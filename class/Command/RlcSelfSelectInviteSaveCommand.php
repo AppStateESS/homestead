@@ -2,13 +2,16 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
-PHPWS_Core::initModClass('hms', 'MealPlan.php');
-
+use \Homestead\StudentFactory;
+use \Homestead\UserStatus;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\HMS_RLC_Assignment;
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\RlcAssignmentDeclinedState;
+use \Homestead\HousingApplicationFactory;
+use \Homestead\LotteryApplication;
+use \Homestead\MealPlan;
 
 class RlcSelfSelectInviteSaveCommand extends Command {
 

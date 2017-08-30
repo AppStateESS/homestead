@@ -2,8 +2,8 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'SpecialInterestGroupView.php');
+use \Homestead\SpecialInterestGroupView;
+use \Homestead\Exception\PermissionException;
 
 class ShowSpecialInterestGroupApprovalCommand extends Command {
 
@@ -27,7 +27,6 @@ class ShowSpecialInterestGroupApprovalCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!\Current_User::allow('hms', 'special_interest_approval')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to approval special interest groups.');
         }
 

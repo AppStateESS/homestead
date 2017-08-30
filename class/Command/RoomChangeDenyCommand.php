@@ -2,9 +2,13 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+use \Homestead\RoomChangeRequestFactory;
+use \Homestead\RoomChangeStateDenied;
+use \Homestead\ParticipantStateDenied;
+use \Homestead\HMS_Email;
+use \Homestead\HMS_Bed;
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
 
 class RoomChangeDenyCommand extends Command {
 
@@ -63,7 +67,6 @@ class RoomChangeDenyCommand extends Command {
         }
 
         // Notify everyone involved
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         HMS_Email::sendRoomChangeDeniedNotice($request);
 
         $cmd->redirect();

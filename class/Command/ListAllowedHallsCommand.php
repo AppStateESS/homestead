@@ -2,10 +2,9 @@
 
 namespace Homestead\Command;
 
- 
-
-PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
-PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+use \Homestead\HMS_Permission;
+use \Homestead\Term;
+use \Homestead\UserStatus;
 
 class ListAllowedHallsCommand extends Command {
 

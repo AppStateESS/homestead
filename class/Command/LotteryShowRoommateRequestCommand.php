@@ -2,7 +2,11 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HMS_Lottery;
+use \Homestead\HousingApplication;
+use \Homestead\UserStatus;
+use \Homestead\RlcMembershipFactory;
+use \Homestead\LotteryRoommateRequestView;
 
 class LotteryShowRoommateRequestCommand extends Command {
 
@@ -22,12 +26,6 @@ class LotteryShowRoommateRequestCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        PHPWS_Core::initModClass('hms', 'LotteryRoommateRequestView.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'RlcMembershipFactory.php');
-
         $request = HMS_Lottery::get_lottery_roommate_invite_by_id($context->get('requestId'));
         $term = \PHPWS_Settings::get('hms', 'lottery_term');
         $housingApp = HousingApplication::getApplicationByUser(UserStatus::getUsername(), $term);

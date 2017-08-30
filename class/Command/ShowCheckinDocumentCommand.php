@@ -2,8 +2,10 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
+use \Homestead\CheckinFactory;
+use \Homestead\CheckinDocumentView;
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
 
 /**
  * Controller for showing the Check-in successful page
@@ -43,7 +45,6 @@ class ShowCheckinDocumentCommand extends Command {
             $errCmd->redirect();
         }
 
-        PHPWS_Core::initModClass('hms', 'CheckinDocumentView.php');
         $view = new CheckinDocumentView($checkin);
 
         $context->setContent($view->show());

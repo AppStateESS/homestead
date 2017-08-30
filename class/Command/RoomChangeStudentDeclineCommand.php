@@ -2,10 +2,16 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
-PHPWS_Core::initModClass('hms', 'RoomChangeParticipantFactory.php');
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+use \Homestead\RoomChangeRequestFactory;
+use \Homestead\RoomChangeParticipantFactory;
+use \Homestead\RoomChangeStateCancelled;
+use \Homestead\ParticipantStateCancelled;
+use \Homestead\StudentFactory;
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\UserStatus;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\Exception\PermissionException;
 
 class RoomChangeStudentDeclineCommand extends Command {
 

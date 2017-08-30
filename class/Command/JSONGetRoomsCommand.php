@@ -2,6 +2,11 @@
 
 namespace Homestead\Command;
 
+use \Homestead\PdoFactory;
+use \Homestead\HMS_Util;
+use \Homestead\StudentFactory;
+use \Homestead\Term;
+
 /**
  * @license http://opensource.org/licenses/lgpl-3.0.html
  * @author Matthew McNaney <mcnaney at gmail dot com>

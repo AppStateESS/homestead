@@ -2,7 +2,15 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HMS_Roommate;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\HMS_Email;
+use \Homestead\UserStatus;
+use \Homestead\StudentFactory;
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\Exception\RoommateCompatibilityException;
+use \Homestead\Exception\PermissionException;
 
 /**
  * Description
@@ -35,7 +43,6 @@ class RoommateAcceptCommand extends Command
             throw new \InvalidArgumentException('Must set roommateId');
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $roommate = new HMS_Roommate($id);
         if($roommate->id == 0) {
             throw new \InvalidArgumentException('Invalid roommateId ' . $id);
@@ -43,7 +50,6 @@ class RoommateAcceptCommand extends Command
 
         $username = UserStatus::getUsername();
         if($username != $roommate->requestee) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException("$username tried to confirm roommate pairing {$roommate->id}");
         }
 
@@ -76,7 +82,6 @@ class RoommateAcceptCommand extends Command
                                        "$roommate->requestee accepted request, CAPTCHA: $verified");
 
         // Email both parties
-        PHPWS_Core::initModClass('hms' ,'HMS_Email.php');
         HMS_Email::send_confirm_emails($roommate);
 
         // Remove any other requests for the requestor

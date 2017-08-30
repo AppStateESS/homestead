@@ -601,7 +601,3 @@ class HMS_RLC_Application extends HMS_Item
     }
 
 }
-
-class RlcApplicationRestored extends HMS_RLC_Application {
-    public function __construct(){}
-}

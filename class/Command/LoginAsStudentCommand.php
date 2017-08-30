@@ -2,7 +2,9 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\UserStatus;
+use \Homestead\CommandFactory;
+use \Homestead\Exception\PermissionException;
 
 class LoginAsStudentCommand extends Command {
 
@@ -20,7 +22,6 @@ class LoginAsStudentCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!\Current_User::allow('hms','login_as_student')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to login as a student.');
         }
 

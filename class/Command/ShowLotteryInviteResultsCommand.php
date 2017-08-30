@@ -2,8 +2,6 @@
 
 namespace Homestead\Command;
 
- 
-
 class ShowLotteryInviteResultsCommand extends Command {
 
     public function getRequestVars()

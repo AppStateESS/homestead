@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HMS;
 
 class ShowControlPanelCommand extends Command {
 

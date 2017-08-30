@@ -2,7 +2,11 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\HMS_Lottery;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\UserStatus;
 
 class LotteryDenyRoommateRequestCommand extends Command {
 
@@ -19,8 +23,6 @@ class LotteryDenyRoommateRequestCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-
         $requestId = $context->get('requestId');
 
         $errorCmd = CommandFactory::getCommand('LotteryShowDenyRoommateRequest');
@@ -52,7 +54,6 @@ class LotteryDenyRoommateRequestCommand extends Command {
         }
 
         # Log that it happened
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_LOTTERY_ROOMMATE_DENIED, UserStatus::getUsername(), 'Captcha words: ' . $captcha);
 
         # Success

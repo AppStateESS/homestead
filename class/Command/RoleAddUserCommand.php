@@ -2,9 +2,8 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'CommandContext.php');
-PHPWS_Core::initModClass('hms', 'HMS_Role.php');
+use \Homestead\HMS_Role;
+use \Homestead\Exception\PermissionException;
 
 class RoleAddUserCommand extends Command {
 
@@ -14,7 +13,6 @@ class RoleAddUserCommand extends Command {
 
     public function execute(CommandContext $context){
         if(!\Current_User::allow('hms', 'edit_role_members')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit role members.');
         }
 

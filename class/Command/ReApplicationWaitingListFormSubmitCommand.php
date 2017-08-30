@@ -2,7 +2,8 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
 
 class ReApplicationWaitingListFormSubmitCommand extends Command {
 
@@ -19,8 +20,6 @@ class ReApplicationWaitingListFormSubmitCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $term = $context->get('term');
 
 

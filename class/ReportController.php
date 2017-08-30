@@ -311,7 +311,7 @@ abstract class ReportController {
     {
         $name = $this->getReportClassName();
         $className = $name . "HtmlView";
-        PHPWS_Core::initModClass('hms', "report/$name/$className.php");
+        PHPWS_Core::initModClass('hms', "Report/$name/$className.php");
 
         return new $className($this->report);
     }

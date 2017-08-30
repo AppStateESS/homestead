@@ -2,7 +2,10 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HMS_Room;
+use \Homestead\AddBedView;
+use \Homestead\UserStatus;
+use \Homestead\Exception\PermissionException;
 
 class ShowAddBedCommand extends Command {
 
@@ -59,12 +62,8 @@ class ShowAddBedCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'bed_structure')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to create a bed.');
         }
-
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        PHPWS_Core::initModClass('hms', 'AddBedView.php');
 
         $roomId = $context->get('roomId');
 

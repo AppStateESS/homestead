@@ -2,7 +2,13 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\Term;
+use \Homestead\StudentFactory;
+use \Homestead\CommandFactory;
+use \Homestead\UserStatus;
+use \Homestead\HMS_Assignment;
+use \Homestead\NotificationView;
+use \Homestead\Exception\PermissionException;
 
 class ShowResidenceVerificationCommand extends Command {
 

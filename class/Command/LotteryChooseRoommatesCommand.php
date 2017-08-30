@@ -2,7 +2,16 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\UserStatus;
+use \Homestead\StudentFactory;
+use \Homestead\RlcMembershipFactory;
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\Term;
+use \Homestead\HousingApplication;
+use \Homestead\HMS_Assignment;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\Exception\StudentNotFoundException;
 
 class LotteryChooseRoommatesCommand extends Command {
 
@@ -26,11 +35,6 @@ class LotteryChooseRoommatesCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'RlcMembershipFactory.php');
-
         $roommates = $context->get('roommates');
         $mealPlan = $context->get('meal_plan');
         $term = \PHPWS_Settings::get('hms', 'lottery_term');

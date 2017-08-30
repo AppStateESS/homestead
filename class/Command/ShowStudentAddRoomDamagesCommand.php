@@ -2,12 +2,9 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'RoomChangeRequest.php');
-PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'RoomChangeRequestForm.php');
-
+use \Homestead\UserStatus;
+use \Homestead\StudentFactory;
+use \Homestead\StudentAddRoomDamagesView;
 
 class ShowStudentAddRoomDamagesCommand extends Command {
 

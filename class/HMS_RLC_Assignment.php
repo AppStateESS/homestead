@@ -437,7 +437,3 @@ class HMS_RLC_Assignment {
         $this->state = $newState;
     }
 }
-
-class RlcMembershipRestored extends HMS_RLC_Assignment {
-    public function __construct(){}
-}

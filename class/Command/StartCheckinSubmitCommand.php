@@ -2,7 +2,12 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\CommandFactory;
+use \Homestead\StudentFactory;
+use \Homestead\Term;
+use \Homestead\NotificationView;
+use \Homestead\Exception\PermissionException;
+use \Homestead\Exception\StudentNotFoundException;
 
 class StartCheckinSubmitCommand extends Command {
 
@@ -17,12 +22,8 @@ class StartCheckinSubmitCommand extends Command {
     {
         // Check permissions
         if (!\Current_User::allow('hms', 'checkin')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to checkin students.');
         }
-
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
 
         $term = Term::getCurrentTerm();
 

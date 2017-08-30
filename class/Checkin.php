@@ -209,11 +209,3 @@ class Checkin {
         $this->key_not_returned = $key;
     }
 }
-
-
-class RestoredCheckin extends Checkin {
-
-    public function __construct()
-    { // Empty constructor for resotring state
-    }
-}

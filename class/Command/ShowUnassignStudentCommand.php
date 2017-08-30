@@ -2,7 +2,11 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\UserStatus;
+use \Homestead\StudentFactory;
+use \Homestead\UnassignStudentView;
+use \Homestead\Term;
+use \Homestead\Exception\PermissionException;
 
 class ShowUnassignStudentCommand extends Command {
 
@@ -27,12 +31,8 @@ class ShowUnassignStudentCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'assignment_maintenance')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to unassign students.');
         }
-
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'UnassignStudentView.php');
 
         $username = $context->get('username');
 

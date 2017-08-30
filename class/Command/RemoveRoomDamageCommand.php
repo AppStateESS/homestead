@@ -2,8 +2,7 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'RoomDamage.php');
+use \Homestead\PdoFactory;
 
 class RemoveRoomDamageCommand extends Command {
 

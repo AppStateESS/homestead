@@ -2,7 +2,13 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\StudentFactory;
+use \Homestead\UserStatus;
+use \Homestead\ContractFactory;
+use \Homestead\CommandFactory;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\HMS_Lottery;
+use \Homestead\LotteryConfirmRoommateRequestView;
 
 class LotteryShowConfirmRoommateRequestCommand extends Command {
 
@@ -28,9 +34,6 @@ class LotteryShowConfirmRoommateRequestCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'ContractFactory.php');
-
         $term = \PHPWS_Settings::get('hms', 'lottery_term');
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
@@ -58,10 +61,6 @@ class LotteryShowConfirmRoommateRequestCommand extends Command {
                 HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CONTRACT_STUDENT_SIGN_EMBEDDED, UserStatus::getUsername(), "Student signed contract for $term through the embedded signing process");
             }
         }
-
-
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        PHPWS_Core::initModClass('hms', 'LotteryConfirmRoommateRequestView.php');
 
         $request = HMS_Lottery::get_lottery_roommate_invite_by_id($context->get('roommateRequestId'));
         $mealPlan = $context->get('meal_plan');

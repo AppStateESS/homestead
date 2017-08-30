@@ -2,7 +2,9 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HMS_Lottery;
+use \Homestead\HMS_Bed;
+use \Homestead\LotteryConfirmedRoommateThanksView;
 
 class LotteryShowConfirmedRoommateThanksCommand extends Command {
 
@@ -17,10 +19,6 @@ class LotteryShowConfirmedRoommateThanksCommand extends Command {
     }
 
     public function execute(CommandContext $context){
-
-        PHPWS_Core::initModClass('hms', 'LotteryConfirmedRoommateThanksView.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
         $invite = HMS_Lottery::get_lottery_roommate_invite_by_id($context->get('requestId'));
         $bed = new HMS_Bed($invite['bed_id']);

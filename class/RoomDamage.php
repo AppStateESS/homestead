@@ -138,7 +138,3 @@ class RoomDamage {
         return $this->reported_on;
     }
 }
-
-class RoomDamageDb extends RoomDamage {
-    public function __construct(){}
-}

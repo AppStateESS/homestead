@@ -2,7 +2,8 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\Term;
+use \Homestead\CommandFactory;
 
 class SaveTermSettingsCommand extends Command {
 

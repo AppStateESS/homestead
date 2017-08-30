@@ -2,7 +2,24 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\StudentFactory;
+use \Homestead\UserStatus;
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\HMS_Room;
+use \Homestead\HMS_Bed;
+use \Homestead\HMS_Lottery;
+use \Homestead\HMS_Assignment;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\HMS_Util;
+use \Homestead\HMS_Email;
+use \Homestead\RlcMembershipFactory;
+use \Homestead\RlcAssignmentSelfAssignedState;
+use \Homestead\HousingApplication;
+use \Homestead\MealPlanFactory;
+use \Homestead\Term;
+use \Homestead\Exception\StudentNotFoundException;
+
 
 class LotteryConfirmCommand extends Command {
 
@@ -32,8 +49,6 @@ class LotteryConfirmCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $roomId = $context->get('roomId');
         $roommates = $context->get('roommates');
         $mealPlanCode = $context->get('mealPlan');
@@ -57,19 +72,6 @@ class LotteryConfirmCommand extends Command {
             \NQ::simple('hms', NotificationView::ERROR, 'Sorry, the words you eneted were incorrect. Please try again.');
             $errorCmd->redirect();
         }
-
-
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-        PHPWS_Core::initModClass('hms', 'RlcMembershipFactory.php');
-        PHPWS_Core::initModClass('hms', 'RlcAssignmentSelfAssignedState.php');
 
         $room = new HMS_Room($roomId);
 

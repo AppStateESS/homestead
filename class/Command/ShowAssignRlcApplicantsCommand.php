@@ -2,9 +2,11 @@
 
 namespace Homestead\Command;
 
- 
-
-PHPWS_Core::initModClass('hms', 'RlcAssignmentView.php');
+use \Homestead\RlcAssignmentView;
+use \Homestead\RlcFactory;
+use \Homestead\UserStatus;
+use \Homestead\Term;
+use \Homestead\Exception\PermissionException;
 
 /**
  * Command/controller for showing the view where an admin can assign students to RLCs.
@@ -30,7 +32,6 @@ class ShowAssignRlcApplicantsCommand extends Command {
     public function execute(CommandContext $context)
     {
         if (!UserStatus::isAdmin() || !\Current_User::allow('hms', 'view_rlc_applications')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to view RLC applications.');
         }
 
@@ -40,7 +41,6 @@ class ShowAssignRlcApplicantsCommand extends Command {
 
         // If an id was passed in, then try to load that community
         if (isset($id) && $id != 0) {
-            PHPWS_Core::initModClass('hms', 'RlcFactory.php');
             $community = RlcFactory::getRlcById($id);
         }
 

@@ -2,7 +2,14 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\UserStatus;
+use \Homestead\StudentFactory;
+use \Homestead\CommandFactory;
+use \Homestead\HMS_Learning_Community;
+use \Homestead\HMS_RLC_Assignment;
+use \Homestead\HMS_RLC_Application;
+use \Homestead\Term;
+use \Homestead\NotificationView;
 
 class SubmitRLCReapplicationPageOneCommand extends Command {
 
@@ -12,12 +19,6 @@ class SubmitRLCReapplicationPageOneCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-
         $term = $context->get('term');
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 

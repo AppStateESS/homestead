@@ -2,7 +2,11 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HMS_Roommate;
+use \Homestead\UserStatus;
+use \Homestead\StudentFactory;
+use \Homestead\CommandFactory;
+use \Homestead\Exception\PermissionException;
 
 /**
  * Description
@@ -35,7 +39,6 @@ class ShowRoommateConfirmationCommand extends Command
             throw new \InvalidArgumentException('Must set roommateId');
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $roommate = new HMS_Roommate($id);
         if($roommate->id == 0) {
             throw new \InvalidArgumentException('Invalid roommateId ' . $id);
@@ -43,7 +46,6 @@ class ShowRoommateConfirmationCommand extends Command
 
         $username = UserStatus::getUsername();
         if($username != $roommate->requestee) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException("$username tried to display confirmation screen for pairing {$roommate->id}");
         }
 

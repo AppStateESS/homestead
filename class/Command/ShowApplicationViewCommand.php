@@ -2,8 +2,8 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'HousingApplicationView.php');
+use \Homestead\HousingApplicationView;
+use \Homestead\NotificationView;
 
 class ShowApplicationViewCommand extends Command {
     protected $appId;

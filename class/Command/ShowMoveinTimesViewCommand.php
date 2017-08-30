@@ -2,8 +2,8 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'MoveinTimesView.php');
+use \Homestead\MoveinTimesView;
+
   /*
    * ShowMoveinTimesViewCommand
    *

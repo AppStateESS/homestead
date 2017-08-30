@@ -2,13 +2,18 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
+use \Homestead\Term;
+use \Homestead\RoomChangeRequestFactory;
+use \Homestead\CommandFactory;
+use \Homestead\StudentFactory;
+use \Homestead\Student;
+use \Homestead\HMS_Assignment;
+use \Homestead\HMS_Bed;
+use \Homestead\HMS_Email;
+use \Homestead\BannerRoomChangeStudent;
+use \Homestead\RoomChangeStateApproved;
+use \Homestead\UserStatus;
+use \Homestead\ParticipantStateInProcess;
 
 /**
  * Controller for approving a room change requests.

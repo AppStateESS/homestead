@@ -2,7 +2,14 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\CommandFactory;
+use \Homestead\StudentFactory;
+use \Homestead\UserStatus;
+use \Homestead\NotificationView;
+use \Homestead\WaitingListApplication;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\HMS_Email;
+use \Homestead\Term;
 
 class OffCampusWaitingListFormSaveCommand extends Command {
 
@@ -25,12 +32,6 @@ class OffCampusWaitingListFormSaveCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'WaitingListApplication.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-
         $term = $context->get('term');
 
         $errorCmd = CommandFactory::getCommand('ShowOffCampusWaitListApplication');

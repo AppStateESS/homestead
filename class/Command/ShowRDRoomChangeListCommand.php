@@ -2,14 +2,15 @@
 
 namespace Homestead\Command;
 
- 
-
-PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
-PHPWS_Core::initModClass('hms', 'RoomChangeApprovalView.php');
-PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
-
-PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
+use \Homestead\Term;
+use \Homestead\HMS_Permission;
+use \Homestead\HMS_Residence_Hall;
+use \Homestead\HMS_Floor;
+use \Homestead\UserStatus;
+use \Homestead\CommandFactory;
+use \Homestead\RoomChangeRequestFactory;
+use \Homestead\RoomChangeApprovalView;
+use \Homestead\NotificationView;
 
 class ShowRDRoomChangeListCommand extends Command {
 
@@ -58,7 +59,6 @@ class ShowRDRoomChangeListCommand extends Command {
         }
 
         if(empty($floors)){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             \NQ::simple('hms', NotificationView::ERROR, "You do not have the 'RD' role on any residence halls or floors.");
             $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
             $cmd->redirect();

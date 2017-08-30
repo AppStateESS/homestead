@@ -2,7 +2,8 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\Term;
+use \Homestead\Autoassigner;
 
 class StartAutoassignCommand extends Command {
 
@@ -12,8 +13,6 @@ class StartAutoassignCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'Autoassigner.php');
-
         // TODO: PULSE!
 
         echo "<html><head><title>AUTOASSIGNER TEST MODE</title></head><body><pre>\n\n";

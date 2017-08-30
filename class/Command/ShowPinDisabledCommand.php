@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\PinDisabledView;
 
 /**
  * ShowPinDisabledCommand
@@ -22,8 +22,6 @@ class ShowPinDisabledCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'PinDisabledView.php');
-
         $view = new PinDisabledView();
         $context->setContent($view->show());
     }

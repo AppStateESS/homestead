@@ -2,8 +2,7 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+use \Homestead\HMS_Room;
 
 /**
  * UpdateRoomFieldCommand

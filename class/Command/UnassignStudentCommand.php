@@ -2,7 +2,14 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\CommandFactory;
+use \Homestead\StudentFactory;
+use \Homestead\Term;
+use \Homestead\HMS_Assignment;
+use \Homestead\MealPlanFactory;
+use \Homestead\MealPlan;
+use \Homestead\NotificationView;
+use \Homestead\Exception\PermissionException;
 
 /**
  * Controller class for removing/un-assigning a student.
@@ -31,14 +38,8 @@ class UnassignStudentCommand extends Command {
     public function execute(CommandContext $context)
     {
         if (!UserStatus::isAdmin() || !\Current_User::allow('hms', 'assignment_maintenance')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to unassign students.');
         }
-
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'MealPlanFactory.php');
-        PHPWS_Core::initModClass('hms', 'MealPlan.php');
 
         $username = $context->get('username');
         $unassignReason = $context->get('unassignment_type');

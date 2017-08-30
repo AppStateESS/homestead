@@ -100,7 +100,6 @@ class ExportRlcAppsCommand extends Command {
 
             //Application Date
             if(isset($user['date_submitted'])){
-                PHPWS_Core::initModClass('hms', 'HMS_Util.php');
                 $buffer .= '"' . HMS_Util::get_long_date($user['date_submitted']) . '",';
             } else {
                 $buffer .= '"Error with the submission Date",';

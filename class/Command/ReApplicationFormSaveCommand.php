@@ -2,7 +2,15 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HMS_Lottery;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\HMS_Email;
+use \Homestead\Term;
+use \Homestead\CommandFactory;
+use \Homestead\UserStatus;
+use \Homestead\NotificationView;
+use \Homestead\StudentFactory;
+use \Homestead\LotteryApplication;
 
 class ReApplicationFormSaveCommand extends Command {
 
@@ -25,11 +33,6 @@ class ReApplicationFormSaveCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-
         // TODO Use the HousingApplicationFactory class to get all this data
 
         $term = $context->get('term');
@@ -133,7 +136,6 @@ class ReApplicationFormSaveCommand extends Command {
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_LOTTERY_ENTRY, UserStatus::getUsername());
 
         // Send email confirmation
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         $year = Term::toString($term) . ' - ' . Term::toString(Term::getNextTerm($term));
         HMS_Email::send_lottery_application_confirmation($student, $year);
 

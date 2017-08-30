@@ -2,9 +2,9 @@
 
 namespace Homestead\Command;
 
- 
-
-PHPWS_Core::initModClass('hms', 'DeniedRlcApplicantView.php');
+use \Homestead\DeniedRlcApplicantView;
+use \Homestead\UserStatus;
+use \Homestead\Exception\PermissionException;
 
 class ShowDeniedRlcApplicantsCommand extends Command {
 
@@ -18,7 +18,6 @@ class ShowDeniedRlcApplicantsCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'view_rlc_applications')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to view RLC applications.');
         }
 

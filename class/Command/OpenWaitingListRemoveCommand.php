@@ -2,10 +2,10 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-PHPWS_Core::initModClass('hms', 'WaitingListApplication.php');
+use \Homestead\CommandFactory;
+use \Homestead\HousingApplication;
+use \Homestead\NotificationView;
+use \Homestead\Exception\PermissionException;
 
 class OpenWaitingListRemoveCommand extends Command {
 
@@ -16,7 +16,6 @@ class OpenWaitingListRemoveCommand extends Command {
     public function execute(CommandContext $context){
 
         if(!\Current_User::allow('hms', 'lottery_admin')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have remove students from the waiting list.');
         }
 

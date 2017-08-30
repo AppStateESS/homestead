@@ -2,7 +2,12 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\StudentFactory;
+use \Homestead\CommandFactory;
+use \Homestead\UserStatus;
+use \Homestead\RoommateProfile;
+use \Homestead\RoommateProfileFactory;
+use \Homestead\NotificationView;
 
 class SubmitRoommateProfileCommand extends Command {
 
@@ -19,8 +24,6 @@ class SubmitRoommateProfileCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'RoommateProfile.php');
-
         $term = $context->get('term');
 
         # Check to see if a student already has a profile on file.

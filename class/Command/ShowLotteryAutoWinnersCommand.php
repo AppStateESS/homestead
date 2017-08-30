@@ -2,7 +2,8 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\LotteryAutoWinnersView;
+use \Homestead\Exception\PermissionException;
 
 class ShowLotteryAutoWinnersCommand extends Command{
 
@@ -14,11 +15,8 @@ class ShowLotteryAutoWinnersCommand extends Command{
     public function execute(CommandContext $context)
     {
         if(!\Current_User::allow('hms', 'lottery_admin')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to add lottery entries.');
         }
-
-        PHPWS_Core::initModClass('hms', 'LotteryAutoWinnersView.php');
 
         $view = new LotteryAutoWinnersView();
         $context->setContent($view->show());

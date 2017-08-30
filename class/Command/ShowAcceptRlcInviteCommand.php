@@ -2,7 +2,9 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HMS_RLC_Assignment;
+use \Homestead\UserStatus;
+use \Homestead\AcceptRlcInviteView;
 
 class ShowAcceptRlcInviteCommand extends Command {
 
@@ -19,8 +21,6 @@ class ShowAcceptRlcInviteCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-
         $term = $context->get('term');
 
         if(!isset($term)){
@@ -30,7 +30,6 @@ class ShowAcceptRlcInviteCommand extends Command {
         $rlcAssignment = HMS_RLC_Assignment::getAssignmentByUsername(UserStatus::getUsername(), $term);
         $rlcApplication = $rlcAssignment->getApplication();
 
-        PHPWS_Core::initModClass('hms', 'AcceptRlcInviteView.php');
         $view = new AcceptRlcInviteView($rlcApplication, $rlcAssignment, $term);
 
         $context->setContent($view->show());

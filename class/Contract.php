@@ -117,7 +117,3 @@ class Contract {
         $this->envelope_status_time = $time;
     }
 }
-
-class ContractRestored extends Contract {
-	public function __construct(){} // Empty constructor for loading from DB
-}

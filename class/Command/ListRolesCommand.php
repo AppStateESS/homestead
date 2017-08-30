@@ -2,11 +2,6 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
-
 class ListRolesCommand extends Command {
 
     public function getRequestVars(){

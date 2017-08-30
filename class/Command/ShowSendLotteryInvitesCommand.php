@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\SendLotteryInvitesView;
 
 class ShowSendLotteryInvitesCommand extends Command {
 
@@ -13,7 +13,6 @@ class ShowSendLotteryInvitesCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'SendLotteryInvitesView.php');
         $view = new SendLotteryInvitesView();
 
         $context->setContent($view->show());

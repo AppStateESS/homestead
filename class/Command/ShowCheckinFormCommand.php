@@ -2,7 +2,16 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\Term;
+use \Homestead\CommandFactory;
+use \Homestead\StudentFactory;
+use \Homestead\CheckinFactory;
+use \Homestead\Checkin;
+use \Homestead\CheckinFormView;
+use \Homestead\NotificationView;
+use \Homestead\HMS_Assignment;
+use \Homestead\Exception\PermissionException;
+use \Homestead\Exception\StudentNotFoundException;
 
 class ShowCheckinFormCommand extends Command {
 
@@ -33,7 +42,6 @@ class ShowCheckinFormCommand extends Command {
     {
         // Check permissions
         if (!\Current_User::allow('hms', 'checkin')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to checkin students.');
         }
 

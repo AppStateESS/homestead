@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\LotteryConfirmView;
 
 class LotteryShowConfirmCommand extends Command {
 
@@ -40,7 +40,6 @@ class LotteryShowConfirmCommand extends Command {
 
         $term = \PHPWS_Settings::get('hms', 'lottery_term');
 
-        PHPWS_Core::initModClass('hms', 'LotteryConfirmView.php');
         $view = new LotteryConfirmView($roomId, $mealPlan, $roommates, $term);
 
         $context->setContent($view->show());

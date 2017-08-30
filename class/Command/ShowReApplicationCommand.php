@@ -2,7 +2,13 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HMS_Lottery;
+use \Homestead\UserStatus;
+use \Homestead\NotificationView;
+use \Homestead\HousingApplication;
+use \Homestead\CommandFactory;
+use \Homestead\StudentFactory;
+use \Homestead\ReApplicationFormView;
 
 class ShowReApplicationCommand extends Command {
 
@@ -23,10 +29,6 @@ class ShowReApplicationCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-
         $term = $context->get('term');
 
         // Double check that the student is eligible
@@ -47,7 +49,6 @@ class ShowReApplicationCommand extends Command {
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
-        PHPWS_Core::initModClass('hms', 'ReApplicationFormView.php');
         $view = new ReApplicationFormView($student, $term);
 
         $context->setContent($view->show());

@@ -2,7 +2,16 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\Term;
+use \Homestead\CommandFactory;
+use \Homestead\StudentFactory;
+use \Homestead\CheckinFactory;
+use \Homestead\BedFactory;
+use \Homestead\RoomDamageFactory;
+use \Homestead\CheckoutFormView;
+use \Homestead\HMS_Residence_Hall;
+use \Homestead\NotificationView;
+use \Homestead\Exception\StudentNotFoundException;
 
 class ShowCheckoutFormCommand extends Command {
 
@@ -31,15 +40,7 @@ class ShowCheckoutFormCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
-        PHPWS_Core::initModClass('hms', 'RoomDamageFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-        PHPWS_Core::initModClass('hms', 'BedFactory.php');
-
-        $term = Term::getSelectedTerm();
+        $term = Term::getCurrentTerm();
 
         $bannerId = $context->get('bannerId');
         $hallId = $context->get('hallId');
@@ -100,7 +101,6 @@ class ShowCheckoutFormCommand extends Command {
         // Get the damages for this student's room
         $damages = RoomDamageFactory::getDamagesByRoom($room);
 
-        PHPWS_Core::initModClass('hms', 'CheckoutFormView.php');
         $view = new CheckoutFormView($student, $selectedHall, $room, $bed, $damages, $checkin);
 
         $context->setContent($view->show());

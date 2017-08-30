@@ -175,9 +175,3 @@ class FallApplication extends HousingApplication{
         $this->rlc_interest = $interest;
     }
 }
-
-class RestoredFallApplication extends FallApplication {
-    public function __construct(){
-    } // Empty constructor
-
-}

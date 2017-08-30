@@ -2,7 +2,15 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\UserStatus;
+use \Homestead\CommandFactory;
+use \Homestead\StudentFactory;
+use \Homestead\NotificationView;
+use \Homestead\HMS_Roommate;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\HMS_Email;
+use \Homestead\Exception\PermissionException;
+use \Homestead\Exception\RoommateCompatibilityException;
 
 /**
  * Description
@@ -32,7 +40,6 @@ class RequestRoommateCommand extends Command
     public function execute(CommandContext $context)
     {
         if(!UserStatus::isUser()) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to request a roommate.');
         }
 
@@ -58,7 +65,6 @@ class RequestRoommateCommand extends Command
         }
 
         // Attempt to Create Roommate Request
-        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $request = new HMS_Roommate();
         try {
             $request->request($requestor, $requestee, $term);
@@ -77,11 +83,9 @@ class RequestRoommateCommand extends Command
         HMS_Activity_Log::log_activity($requestor, ACTIVITY_REQUESTED_AS_ROOMMATE, $requestee, "$requestor requested $requestee" . $expirationMsg);
 
         // Email both parties
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         HMS_Email::send_request_emails($request);
 
         // Notify
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $student = StudentFactory::getStudentByUsername($requestee, $term);
         $name = $student->getName();
         $fname = $student->getFirstName();

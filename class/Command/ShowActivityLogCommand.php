@@ -2,7 +2,10 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HMS_Activity_Log;
+use \Homestead\ActivityLogView;
+use \Homestead\NotificationView;
+use \Homestead\Exception\PermissionException;
 
 class ShowActivityLogCommand extends Command {
 
@@ -45,12 +48,8 @@ class ShowActivityLogCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'view_activity_log')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to view the activity log.');
         }
-
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        PHPWS_Core::initModClass('hms', 'ActivityLogView.php');
 
         $actee = $context->get('actee');
         $actor = $context->get('actor');

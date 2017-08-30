@@ -2,7 +2,13 @@
 
 namespace Homestead\Command;
 
- 
+ use \Homestead\HMS_RLC_Application;
+ use \Homestead\UserStatus;
+ use \Homestead\NotificationView;
+ use \Homestead\StudentFactory;
+ use \Homestead\RlcApplicationReView;
+ use \Homestead\Exception\PermissionException;
+ use \Homestead\Exception\StudentNotFoundException;
 
 /**
  * Command to show the view for an existing RLC application.
@@ -27,11 +33,6 @@ class ShowRlcApplicationReViewCommand extends Command {
     }
 
     public function execute(CommandContext $context){
-
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-        PHPWS_Core::initModClass('hms', 'RlcApplicationReView.php');
-
         $application = new HMS_RLC_Application($context->get('appId'));
 
         if(is_null($application->username)){
@@ -41,7 +42,6 @@ class ShowRlcApplicationReViewCommand extends Command {
 
         // This is used both on the admin side and on the student side, so the permission check is a bit more complex
         if((UserStatus::isAdmin() && !\Current_User::allow('view_rlc_applications')) || (UserStatus::isUser() && $application->getUsername() != UserStatus::getUsername())){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to view this RLC application.');
         }
 

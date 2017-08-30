@@ -2,6 +2,16 @@
 
 namespace Homestead\Command;
 
+use \Homestead\UserStatus;
+use \Homestead\Term;
+use \Homestead\StudentFactory;
+use \Homestead\HMS_Assignment;
+use \Homestead\HousingApplicationFactory;
+use \Homestead\MealPlanFactory;
+use \Homestead\Exception\PermissionException;
+use \Homestead\Exception\AssignmentException;
+use \Homestead\Exception\StudentNotFoundException;
+
 /**
  * @license http://opensource.org/licenses/lgpl-3.0.html
  * @author Matthew McNaney <mcnaney at gmail dot com>
@@ -17,7 +27,6 @@ class JSONAssignStudentCommand
     public function execute(CommandContext $context)
     {
         if (!UserStatus::isAdmin() || !\Current_User::allow('hms', 'assign_by_floor')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to assign students by floor.');
         }
 

@@ -2,7 +2,14 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\Term;
+use \Homestead\RoomDamageFactory;
+use \Homestead\StudentFactory;
+use \Homestead\CheckinFactory;
+use \Homestead\HMS_Bed;
+use \Homestead\HMS_Email;
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
 
 /**
  * SendRoomDamageNotificationsCommand.php
@@ -23,12 +30,6 @@ class SendRoomDamageNotificationsCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'RoomDamageFactory.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-
         $term = Term::getSelectedTerm();
 
         // Get the total damages assessed for each student

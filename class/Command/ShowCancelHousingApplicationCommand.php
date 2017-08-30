@@ -2,7 +2,10 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HousingApplicationFactory;
+use \Homestead\HousingApplicationCancelView;
+use \Homestead\HMS_Assignment;
+use \Homestead\Term;
 
 class ShowCancelHousingApplicationCommand extends Command {
 
@@ -31,13 +34,10 @@ class ShowCancelHousingApplicationCommand extends Command {
             throw new \InvalidArgumentException('Missing application id.');
         }
 
-        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
         $application = HousingApplicationFactory::getApplicationById($applicationId);
 
         $student = $application->getStudent();
 
-
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
         // Decide which term to use - If this application is in a past fall term, then use the current term
         $term = $application->getTerm();
         if($term < Term::getCurrentTerm() && Term::getTermSem($term) == TERM_FALL){
@@ -48,7 +48,6 @@ class ShowCancelHousingApplicationCommand extends Command {
 
         $assignment = HMS_Assignment::getAssignmentByBannerId($student->getBannerId(), $assignmentTerm);
 
-        PHPWS_Core::initModClass('hms', 'HousingApplicationCancelView.php');
         $view = new HousingApplicationCancelView($student, $application, $assignment);
 
         echo $view->show();

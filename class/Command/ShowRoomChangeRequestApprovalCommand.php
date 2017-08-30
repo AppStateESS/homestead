@@ -2,7 +2,15 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\Term;
+use \Homestead\CommandFactory;
+use \Homestead\StudentFactory;
+use \Homestead\RoomChangeRequestFactory;
+use \Homestead\RoomChangeParticipantFactory;
+use \Homestead\RoomChangeRequestStudentApprovalView;
+use \Homestead\UserStatus;
+use \Homestead\ParticipantStateNew;
+use \Homestead\NotificationView;
 
 /**
  * Controller class for showing the interface where a student
@@ -20,11 +28,6 @@ class ShowRoomChangeRequestApprovalCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
-        PHPWS_Core::initModClass('hms', 'RoomChangeParticipantFactory.php');
-        PHPWS_Core::initModClass('hms', 'RoomChangeRequestStudentApprovalView.php');
-
         $term = Term::getCurrentTerm();
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);

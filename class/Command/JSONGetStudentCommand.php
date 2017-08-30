@@ -2,6 +2,14 @@
 
 namespace Homestead\Command;
 
+use \Homestead\UserStatus;
+use \Homestead\JsonError;
+use \Homestead\StudentFactory;
+use \Homestead\Term;
+use \Homestead\HMS_Util;
+use \Homestead\Exception\PermissionException;
+use \Homestead\Exception\StudentNotFoundException;
+
 /**
  * @license http://opensource.org/licenses/lgpl-3.0.html
  * @author Matthew McNaney <mcnaney at gmail dot com>
@@ -16,7 +24,6 @@ class JSONGetStudentCommand
     public function execute(CommandContext $context)
     {
         if (!UserStatus::isAdmin() || !\Current_User::allow('hms', 'search')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to lookup student names!');
         }
         $student = null;

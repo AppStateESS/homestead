@@ -2,7 +2,10 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\Term;
+use \Homestead\HMS_Residence_Hall;
+use \Homestead\CommandFactory;
+use \Homestead\SelectHallView;
 
 /**
  * @author Jeremy Booker <jbooker AT tux DOT appstate DOT edu>
@@ -50,9 +53,6 @@ class SelectResidenceHallCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'SelectHallView.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-
         $term = Term::getSelectedTerm();
         $halls = HMS_Residence_Hall::get_halls_array($term);
 

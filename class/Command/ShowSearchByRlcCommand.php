@@ -2,8 +2,10 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'SearchByRlcView.php');
+use \Homestead\SearchByRlcView;
+use \Homestead\UserStatus;
+use \Homestead\CommandFactory;
+use \Homestead\Exception\PermissionException;
 
 class ShowSearchByRlcCommand extends Command {
 
@@ -17,7 +19,6 @@ class ShowSearchByRlcCommand extends Command {
     public function execute(CommandContext $context){
 
         if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'view_rlc_members')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to view RLC members.');
         }
 

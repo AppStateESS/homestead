@@ -2,10 +2,7 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
+use \Homestead\HMS_Permission;
 
 class ListRoleMembersCommand extends Command {
 
@@ -15,7 +12,6 @@ class ListRoleMembersCommand extends Command {
 
     public function execute(CommandContext $context){
         if(!\Current_User::allow('hms', 'view_role_members')){
-            //PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             //throw new PermissionException('You do not have permission to view role members.');
 
             // Can't throw an exception here, since there's nothing to catch it and this is called

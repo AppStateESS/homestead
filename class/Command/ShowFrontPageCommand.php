@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\FrontPageView;
 
 class ShowFrontPageCommand extends Command {
 
@@ -12,9 +12,6 @@ class ShowFrontPageCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-
-        PHPWS_Core::initModClass('hms', 'FrontPageView.php');
-
         $view = new FrontPageView();
 
         $context->setContent($view->show());

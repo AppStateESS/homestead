@@ -2,7 +2,8 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\WithdrawnSearch;
+use \Homestead\Term;
 
 //TODO make this better
 
@@ -14,8 +15,6 @@ class WithdrawnSearchCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'WithdrawnSearch.php');
-
         $term = Term::getSelectedTerm();
 
         $search = new WithdrawnSearch($term);

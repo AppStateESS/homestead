@@ -2,7 +2,13 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HMS_Roommate;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\HMS_Email;
+use \Homestead\StudentFactory;
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\Exception\PermissionException;
 
 /**
  * Description
@@ -35,14 +41,12 @@ class RoommateRejectCommand extends Command
             throw new \InvalidArgumentException('Must set roommateId');
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $roommate = new HMS_Roommate($id);
         if($roommate->id == 0) {
             throw new \InvalidArgumentException('Invalid roommateId ' . $id);
         }
 
         if(UserStatus::getUsername() != $roommate->requestee) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException("$username tried to reject roommate pairing {$roommate->id}");
         }
 
@@ -62,7 +66,6 @@ class RoommateRejectCommand extends Command
                                        "$roommate->requestee rejected $roommate->requestor's request");
 
         // Email both parties
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         HMS_Email::send_reject_emails($roommate);
 
         \NQ::Simple('hms', NotificationView::SUCCESS, "<b>You rejected the roommate request from $name.</b>  If this was an error, you may re-request using their username, <b>$username</b>.");

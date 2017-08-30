@@ -2,12 +2,11 @@
 
 namespace Homestead\Command;
 
- 
-
-PHPWS_Core::initModClass('hms', 'RoomChangeRequest.php');
-PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'RoomChangeRequestForm.php');
+use \Homestead\Term;
+use \Homestead\UserStatus;
+use \Homestead\RoomChangeRequestFactory;
+use \Homestead\StudentFactory;
+use \Homestead\RoomChangeRequestForm;
 
 
 class ShowRoomChangeRequestFormCommand extends Command {

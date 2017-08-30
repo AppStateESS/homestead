@@ -2,7 +2,15 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\Term;
+use \Homestead\HMS_Movein_Time;
+use \Homestead\HMS_Bed;
+use \Homestead\HMS_RLC_Assignment;
+use \Homestead\HMS_Email;
+use \Homestead\StudentFactory;
+use \Homestead\NotificationView;
+use \Homestead\Exception\PermissionException;
+use \Homestead\Exception\DatabaseException;
 use \PHPWS_Error;
 
 /**
@@ -21,16 +29,8 @@ class SendAssignmentNotificationCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!\Current_User::allow('hms', 'assignment_notify')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to send assignment notifications.');
         }
-
-        PHPWS_Core::initModClass('hms', 'Term.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 
         // Check if any move-in times are set for the selected term
         $moveinTimes = HMS_Movein_Time::get_movein_times_array(Term::getSelectedTerm());
@@ -62,7 +62,6 @@ class SendAssignmentNotificationCommand extends Command {
             $student = StudentFactory::getStudentByUsername($assignment->getUsername(), $term);
 
             //get the location of their assignment
-            PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
             $bed = new HMS_Bed($assignment->getBedId());
             $room = $bed->get_parent();
             $location = $bed->where_am_i() . ' - Bedroom ' . $bed->bedroom_label;

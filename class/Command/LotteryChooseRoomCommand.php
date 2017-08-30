@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\CommandFactory;
 
 class LotteryChooseRoomCommand extends Command {
 

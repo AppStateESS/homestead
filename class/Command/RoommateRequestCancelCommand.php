@@ -2,7 +2,13 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HMS_Roommate;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\HMS_Email;
+use \Homestead\StudentFactory;
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\Exception\PermissionException;
 
 /**
  * Description
@@ -35,7 +41,6 @@ class RoommateRequestCancelCommand extends Command
             throw new \InvalidArgumentException('Must set roommateId');
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $roommate = new HMS_Roommate($id);
         if($roommate->id == 0) {
             throw new \InvalidArgumentException('Invalid roommateId ' . $id);
@@ -43,7 +48,6 @@ class RoommateRequestCancelCommand extends Command
 
         $username = UserStatus::getUsername();
         if($username != $roommate->requestor) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException("$username tried to break roommate pairing {$roommate->id}");
         }
 
@@ -61,7 +65,6 @@ class RoommateRequestCancelCommand extends Command
                                        "$username cancelled roommate request");
 
         // Email both parties
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         HMS_Email::send_cancel_emails($roommate);
 
         $name = $other->getFullName();

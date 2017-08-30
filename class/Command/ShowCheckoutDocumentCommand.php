@@ -2,8 +2,9 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
+use \Homestead\CheckinFactory;
+use \Homestead\CheckoutDocumentView;
+use \Homestead\CommandFactory;
 
 /**
  * Controller for showing the "Check-out successful page"
@@ -40,7 +41,6 @@ class ShowCheckoutDocumentCommand extends Command {
             $errCmd->redirect();
         }
 
-        PHPWS_Core::initModClass('hms', 'CheckoutDocumentView.php');
         $view = new CheckoutDocumentView($checkin);
 
         $context->setContent($view->show());

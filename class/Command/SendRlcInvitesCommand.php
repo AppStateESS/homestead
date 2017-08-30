@@ -2,7 +2,11 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\Term;
+use \Homestead\CommandFactory;
+use \Homestead\RlcAssignmentFactory;
+use \Homestead\RlcAssignmentInvitedState;
+use \Homestead\NotificationView;
 
 /**
  * SendRlcInvitesComands
@@ -42,9 +46,6 @@ class SendRlcInvitesCommand extends Command {
             \NQ::simple('hms', NotificationView::ERROR, 'Please choose a student type.');
             $resultCmd->redirect();
         }
-
-        PHPWS_Core::initModClass('hms', 'RlcAssignmentFactory.php');
-        PHPWS_Core::initModClass('hms', 'RlcAssignmentInvitedState.php');
 
         $assignments = RlcAssignmentFactory::getAssignmentsByTermStateType($term, 'new', $studentType);
 

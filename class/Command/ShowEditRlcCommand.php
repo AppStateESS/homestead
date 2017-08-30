@@ -2,9 +2,9 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-PHPWS_Core::initModClass('hms', 'EditRlcView.php');
+use \Homestead\EditRlcView;
+use \Homestead\UserStatus;
+use \Homestead\Exception\PermissionException;
 
 class ShowEditRlcCommand extends Command {
     private $id;
@@ -32,7 +32,6 @@ class ShowEditRlcCommand extends Command {
     public function execute(CommandContext $context){
 
         if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'learning_community_maintenance')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit RLCs.');
         }
 

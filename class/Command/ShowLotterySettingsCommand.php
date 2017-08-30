@@ -2,7 +2,8 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\LotterySettingsFormView;
+use \Homestead\Exception\PermissionException;
 
 class ShowLotterySettingsCommand extends Command {
 
@@ -15,11 +16,8 @@ class ShowLotterySettingsCommand extends Command {
     {
 
         if(!\Current_User::allow('hms', 'lottery_admin')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to change lottery settings.');
         }
-
-        PHPWS_Core::initModClass('hms', 'LotterySettingsFormView.php');
 
         $view = new LotterySettingsFormView();
         $context->setContent($view->show());

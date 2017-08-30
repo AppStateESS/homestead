@@ -2,7 +2,14 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\Term;
+use \Homestead\UserStatus;
+use \Homestead\StudentFactory;
+use \Homestead\CommandFactory;
+use \Homestead\MealPlanFactory;
+use \Homestead\HousingApplicationFactory;
+use \Homestead\HousingApplication;
+use \Homestead\HousingApplicationFormView;
 
 class ShowHousingApplicationFormCommand extends Command {
 
@@ -35,11 +42,6 @@ class ShowHousingApplicationFormCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplicationFormView.php');
-
         // Make sure we have a valid term
         $term = $context->get('term');
 

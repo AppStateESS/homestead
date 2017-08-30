@@ -2,7 +2,9 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\UserStatus;
+use \Homestead\AdminMaintenanceMenuView;
+use \Homestead\Exception\PermissionException;
 
 class ShowAdminMaintenanceMenuCommand extends Command {
 
@@ -13,11 +15,8 @@ class ShowAdminMaintenanceMenuCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!UserStatus::isAdmin() || !\Current_User::isUnrestricted('hms')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to view the admin maintenance menu.');
         }
-
-        PHPWS_Core::initModClass('hms', 'AdminMaintenanceMenuView.php');
 
         $adminMenu = new AdminMaintenanceMenuView();
 

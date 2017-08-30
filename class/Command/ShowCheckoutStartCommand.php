@@ -2,7 +2,11 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\Term;
+use \Homestead\ResidenceHallFactory;
+use \Homestead\CheckoutStartView;
+use \Homestead\NotificationView;
+use \Homestead\Exception\PermissionException;
 
 class ShowCheckoutStartCommand extends Command {
 
@@ -17,7 +21,6 @@ class ShowCheckoutStartCommand extends Command {
     {
         // Check permissions
         if (!\Current_User::allow('hms', 'checkin')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to checkin students.');
         }
 
@@ -26,7 +29,6 @@ class ShowCheckoutStartCommand extends Command {
         // Check role-based permissions for list of hall or all halls
         // TODO (for now just listing all halls)
 
-        PHPWS_Core::initModClass('hms', 'ResidenceHallFactory.php');
         $halls = ResidenceHallFactory::getHallNamesAssoc($term);
 
         if (!isset($halls) || count($halls) < 1) {
@@ -34,7 +36,6 @@ class ShowCheckoutStartCommand extends Command {
             $context->goBack();
         }
 
-        PHPWS_Core::initModClass('hms', 'CheckOutStartView.php');
         $view = new CheckoutStartView($halls, $term);
 
         $context->setContent($view->show());

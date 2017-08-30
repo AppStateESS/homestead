@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\RoommateProfileSearchForm;
 
 class ShowRoommateProfileSearchCommand extends Command {
 
@@ -21,7 +21,6 @@ class ShowRoommateProfileSearchCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'RoommateProfileSearchForm.php');
         $term = $context->get('term');
         $view = new RoommateProfileSearchForm($term);
 

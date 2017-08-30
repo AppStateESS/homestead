@@ -2,7 +2,11 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\UserStatus;
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\HMS_Roommate;
+use \Homestead\Exception\PermissionException;
 
 /**
  * Compatibility layer for old Roommate code.
@@ -32,7 +36,6 @@ class ShowRequestRoommateCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!UserStatus::isUser()) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to request a roommate.');
         }
 
@@ -41,7 +44,6 @@ class ShowRequestRoommateCommand extends Command {
             throw new \InvalidArgumentException('Must specify a term.');
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
         $username = UserStatus::getUsername();
 
         $err = CommandFactory::getCommand('ShowStudentMenu');

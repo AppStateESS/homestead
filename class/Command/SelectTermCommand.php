@@ -2,7 +2,9 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\Term;
+use \Homestead\UserStatus;
+use \Homestead\Exception\PermissionException;
 
 /**
  * Marks a term as 'selected' in the user's session.
@@ -31,7 +33,6 @@ class SelectTermCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'select_term')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do no have permission to select other terms.');
         }
 

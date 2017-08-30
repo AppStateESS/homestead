@@ -2,10 +2,8 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'CommandContext.php');
-PHPWS_Core::initModClass('hms', 'HMS_Role.php');
-PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
+use \Homestead\HMS_Role;
+use \Homestead\HMS_Permission;
 
 class RoleAddPermissionCommand extends Command {
 

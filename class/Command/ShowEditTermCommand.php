@@ -2,7 +2,10 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\UserStatus;
+use \Homestead\Term;
+use \Homestead\TermEditView;
+use \Homestead\Exception\PermissionException;
 
 class ShowEditTermCommand extends Command {
 
@@ -15,11 +18,8 @@ class ShowEditTermCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'edit_terms')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to edit terms.');
         }
-
-        PHPWS_Core::initModClass('hms', 'TermEditView.php');
 
         $term = new Term(Term::getSelectedTerm());
 

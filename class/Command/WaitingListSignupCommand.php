@@ -2,7 +2,13 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\UserStatus;
+use \Homestead\StudentFactory;
+use \Homestead\HousingApplicationFactory;
+use \Homestead\LotteryApplication;
+use \Homestead\NotificationView;
+use \Homestead\CommandFactory;
+use \Homestead\HMS_Activity_Log;
 
 /**
  * Controller class to handle signing the current user up to the on-campus waiting list.
@@ -28,9 +34,6 @@ class WaitingListSignupCommand extends Command {
      */
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
-
         $term = $context->get('term');
 
         if (!isset($term)) {

@@ -2,7 +2,11 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\HousingApplicationFactory;
+use \Homestead\CommandFactory;
+use \Homestead\UserStatus;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\Exception\PermissionException;
 
 class ReinstateApplicationCommand extends Command {
 
@@ -23,7 +27,6 @@ class ReinstateApplicationCommand extends Command {
   {
       if(!\Current_User::allow('hms', 'cancel_housing_application'))
       {
-          PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
           throw new PermissionException('You do not have permission to cancel housing applications.');
       }
 

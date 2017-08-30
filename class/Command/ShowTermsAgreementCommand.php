@@ -2,9 +2,12 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
+use \Homestead\StudentFactory;
+use \Homestead\CommandFactory;
+use \Homestead\HousingApplicationFactory;
+use \Homestead\Term;
+use \Homestead\TermsAgreementView;
+use \Homestead\UserStatus;
 
 class ShowTermsAgreementCommand extends Command {
 
@@ -88,8 +91,6 @@ class ShowTermsAgreementCommand extends Command {
         $docusignCmd->setParentName($application->getEmergencyContactName());
         $docusignCmd->setParentEmail($application->getEmergencyContactEmail());
 
-
-        PHPWS_Core::initModClass('hms', 'TermsAgreementView.php');
         $agreementView = new TermsAgreementView($term, $docusignCmd, $student);
 
         $context->setContent($agreementView->show());

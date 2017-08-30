@@ -2,7 +2,10 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\StudentFactory;
+use \Homestead\CommandFactory;
+use \Homestead\UserStatus;
+use \Homestead\NotificationView;
 
 class ReApplicationFormSubmitCommand extends Command {
 
@@ -19,9 +22,6 @@ class ReApplicationFormSubmitCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-
         $term = $context->get('term');
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);

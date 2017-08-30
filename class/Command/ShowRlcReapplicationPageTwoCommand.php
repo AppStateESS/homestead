@@ -2,7 +2,9 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\CommandFactory;
+use \Homestead\HMS_Learning_Community;
+use \Homestead\RlcReapplicationPageTwoView;
 
 class ShowRlcReapplicationPageTwoCommand extends Command {
 
@@ -24,10 +26,6 @@ class ShowRlcReapplicationPageTwoCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-        PHPWS_Core::initModClass('hms', 'RlcReapplicationPageTwoView.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-
         session_write_close();
         session_start();
 

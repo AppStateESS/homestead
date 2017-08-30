@@ -2,8 +2,16 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
+use \Homestead\RoomChangeRequestFactory;
+use \Homestead\RoomChangeStateCancelled;
+use \Homestead\ParticipantStateCancelled;
+use \Homestead\UserStatus;
+use \Homestead\StudentFactory;
+use \Homestead\HMS_Bed;
+use \Homestead\HMS_Email;
+use \Homestead\NotificationView;
+use \Homestead\CommandFactory;
+use \Homestead\Exception\StudentNotFoundException;
 
 class RoomChangeCancelCommand extends Command {
 
@@ -59,12 +67,10 @@ class RoomChangeCancelCommand extends Command {
 
         // Notify everyone involved
         try {
-            PHPWS_Core::initModClass('hms', 'StudentFactory.php');
             $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $request->getTerm());
         } catch(StudentNotFoundException $e) {
             $student = null;
         }
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         HMS_Email::sendRoomChangeCancelledNotice($request, $student);
 
         $cmd->redirect();

@@ -2,10 +2,13 @@
 
 namespace Homestead\Command;
 
- 
-
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
+use \Homestead\UserStatus;
+use \Homestead\CommandFactory;
+use \Homestead\StudentFactory;
+use \Homestead\Term;
+use \Homestead\HousingApplicationFactory;
+use \Homestead\EmergencyContactReview;
+use \Homestead\NotificationView;
 
 class ShowEmergencyContactReviewCommand extends Command {
 
@@ -76,7 +79,6 @@ class ShowEmergencyContactReviewCommand extends Command {
             $errorCmd->redirect();
         }
 
-        PHPWS_Core::initModClass('hms', 'EmergencyContactReview.php');
         $view = new EmergencyContactReview($student, $term, $application);
         $context->setContent($view->show());
     }

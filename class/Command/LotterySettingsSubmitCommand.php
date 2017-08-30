@@ -2,7 +2,9 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\NotificationView;
+use \Homestead\CommandFactory;
+use \Homestead\Exception\PermissionException;
 
 class LotterySettingsSubmitCommand extends Command {
 
@@ -14,7 +16,6 @@ class LotterySettingsSubmitCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!\Current_User::allow('hms', 'lottery_admin')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to administer re-application features.');
         }
 

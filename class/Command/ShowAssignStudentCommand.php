@@ -2,7 +2,15 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\StudentFactory;
+use \Homestead\CommandFactory;
+use \Homestead\Term;
+use \Homestead\HMS_Bed;
+use \Homestead\NotificationView;
+use \Homestead\HousingApplicationFactory;
+use \Homestead\AssignStudentView;
+use \Homestead\Exception\PermissionException;
+use \Homestead\Exception\StudentNotFoundException;
 
 /**
  * Controller for showing the Assign Student view.
@@ -61,15 +69,8 @@ class ShowAssignStudentCommand extends Command {
     public function execute(CommandContext $context)
     {
         if (!UserStatus::isAdmin() || !\Current_User::allow('hms', 'assignment_maintenance')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to assign students.');
         }
-
-
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'AssignStudentView.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
 
         $username = $context->get('username');
         $bedId = $context->get('bedId');

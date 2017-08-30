@@ -2,7 +2,18 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\CommandFactory;
+use \Homestead\StudentFactory;
+use \Homestead\UserStatus;
+use \Homestead\ApplicationFeature;
+use \Homestead\HousingApplication;
+use \Homestead\LotteryApplication;
+use \Homestead\HMS_RLC_Application;
+use \Homestead\HMS_RLC_Assignment;
+use \Homestead\HMS_Learning_Community;
+use \Homestead\Term;
+use \Homestead\RlcReapplicationView;
+use \Homestead\NotificationView;
 
 class ShowRlcReapplicationCommand extends Command {
 
@@ -17,21 +28,12 @@ class ShowRlcReapplicationCommand extends Command {
     }
 
     public function execute(CommandContext $context){
-
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'RlcReapplicationView.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-
         $errorCmd = CommandFactory::getCommand('ShowStudentMenu');
 
         $term = $context->get('term');
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         // Check deadlines
-        PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
         $feature = ApplicationFeature::getInstanceByNameAndTerm('RlcReapplication', $term);
         if(is_null($feature) || !$feature->isEnabled()){
             \NQ::simple('hms', NotificationView::ERROR, "Sorry, RLC re-applications are not avaialable for this term.");

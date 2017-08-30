@@ -2,7 +2,12 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\UserStatus;
+use \Homestead\HousingApplication;
+use \Homestead\NotificationView;
+use \Homestead\CommandFactory;
+use \Homestead\StudentFactory;
+use \Homestead\ReApplicationOffCampusFormView;
 
 /**
  * Command class to show the off-campus (open) waiting list housing application.
@@ -38,10 +43,6 @@ class ShowOffCampusWaitListApplicationCommand extends Command {
      * @see Command::execute()
      */
     public function execute(CommandContext $context){
-
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $term = $context->get('term');
 
         // Check if the student has already applied. If so, redirect to the student menu
@@ -55,7 +56,6 @@ class ShowOffCampusWaitListApplicationCommand extends Command {
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
-        PHPWS_Core::initModClass('hms', 'ReApplicationOffCampusFormView.php');
         $view = new ReApplicationOffCampusFormView($student, $term);
 
         $context->setContent($view->show());

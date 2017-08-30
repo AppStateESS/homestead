@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\VerifyAssignmentView;
 
 class ShowVerifyAssignmentCommand extends Command
 {
@@ -17,7 +17,6 @@ class ShowVerifyAssignmentCommand extends Command
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'VerifyAssignmentView.php');
         $view = new VerifyAssignmentView($context->get('username'));
         $context->setContent($view->show());
     }

@@ -2,11 +2,16 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
-PHPWS_Core::initModClass('hms', 'RoomChangeParticipantFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-PHPWS_Core::initModClass('hms', 'HMS_Email.php');
+use \Homestead\CommandFactory;
+use \Homestead\RoomChangeRequestFactory;
+use \Homestead\RoomChangeParticipantFactory;
+use \Homestead\UserStatus;
+use \Homestead\NotificationView;
+use \Homestead\Student;
+use \Homestead\HMS_Bed;
+use \Homestead\HMS_Email;
+use \Homestead\ParticipantStateCurrRdApproved;
+use \Homestead\Exception\PermissionException;
 
 /**
  * Command for currnet RD Approval of a room change participant.

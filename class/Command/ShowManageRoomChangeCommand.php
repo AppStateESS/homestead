@@ -2,7 +2,10 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\RoomChangeManageView;
+use \Homestead\RoomChangeRequestFactory;
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
 
 class ShowManageRoomChangeCommand extends Command {
 
@@ -21,9 +24,6 @@ class ShowManageRoomChangeCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
-        PHPWS_Core::initModClass('hms', 'RoomChangeManageView.php');
-
         $requestId = $context->get('requestId');
 
         if (!isset($requestId) || is_null($context)) {

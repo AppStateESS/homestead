@@ -2,7 +2,9 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\StudentFactory;
+use \Homestead\RoommateProfileFactory;
+use \Homestead\RoommateProfileView;
 
 class ShowRoommateProfileCommand extends Command {
 
@@ -28,10 +30,6 @@ class ShowRoommateProfileCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'RoommateProfile.php');
-        PHPWS_Core::initModClass('hms', 'RoommateProfileView.php');
-
         $student = StudentFactory::getStudentByBannerID($context->get('banner_id'), $context->get('term'));
         $profile = RoommateProfileFactory::getProfile($context->get('banner_id'), $context->get('term'));
 

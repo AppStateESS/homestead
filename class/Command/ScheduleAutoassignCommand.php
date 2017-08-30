@@ -2,8 +2,6 @@
 
 namespace Homestead\Command;
 
- 
-
 class ScheduleAutoassignCommand extends Command
 {
 
@@ -19,7 +17,6 @@ class ScheduleAutoassignCommand extends Command
             $began = strftime('on %d %h %Y at %I:%M %P', $pulse->getStartTime());
             $message = "<h2>The autoassigner is already running.</h2><p>It started at $began and was scheduled by $user.</p>";
         } else {
-            PHPWS_Core::initModClass('hms', 'command/SavePulseOptionCommand.php');
             SavePulseOptionCommand::addAutoAssignSchedule();
             $message = '<h2>The autoassigner is now running.</h2><p>You will receive an email when it is finished.</p>';
         }

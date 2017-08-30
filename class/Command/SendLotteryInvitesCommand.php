@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\CommandFactory;
 
 class SendLotteryInvitesCommand extends Command {
 
@@ -28,8 +28,6 @@ class SendLotteryInvitesCommand extends Command {
 
         $sophMale   = $context->get('soph_male');
         $sophFemale = $context->get('soph_female');
-
-        PHPWS_Core::initModClass('hms', 'LotteryProcess.php');
 
         $inviteCounts = array();
 

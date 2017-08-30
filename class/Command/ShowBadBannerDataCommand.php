@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\BadBannerDataView;
 
 class ShowBadBannerDataCommand extends Command {
 
@@ -13,7 +13,6 @@ class ShowBadBannerDataCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'BadBannerDataView.php');
         $view = new BadBannerDataView();
         $context->setContent($view->show());
     }

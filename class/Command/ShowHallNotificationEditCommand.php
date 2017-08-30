@@ -2,7 +2,9 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\ShowHallNotificationEditView;
 
 /**
  * ShowHallNotificationEditCommand
@@ -13,8 +15,6 @@ namespace Homestead\Command;
  * @package mod
  * @subpackage hms
  */
-
-PHPWS_Core::initModClass('hms', 'ShowHallNotificationEditView.php');
 
 class ShowHallNotificationEditCommand extends Command {
 
@@ -33,7 +33,6 @@ class ShowHallNotificationEditCommand extends Command {
     public function execute(CommandContext $context){
         /*
         if(!\Current_User::allow('hms', 'email_hall') && !\Current_User::allow('hms', 'email_all')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to send messages.');
         }
         */

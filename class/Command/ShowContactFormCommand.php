@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\ContactFormView;
 
 class ShowContactFormCommand extends Command {
 
@@ -13,8 +13,6 @@ class ShowContactFormCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'ContactFormView.php');
-
         $view = new ContactFormView();
         $context->setContent($view->show());
     }

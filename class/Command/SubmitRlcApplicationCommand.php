@@ -2,11 +2,14 @@
 
 namespace Homestead\Command;
 
- 
-PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'CommandFactory.php');
+use \Homestead\HMS_RLC_Application;
+use \Homestead\HMS_Learning_Community;
+use \Homestead\HMS_Email;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\StudentFactory;
+use \Homestead\CommandFactory;
+use \Homestead\UserStatus;
+use \Homestead\NotificationView;
 
 class SubmitRlcApplicationCommand extends Command
 {
@@ -109,11 +112,9 @@ class SubmitRlcApplicationCommand extends Command
         }
 
         # Log that this happened
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_SUBMITTED_RLC_APPLICATION, $student->getUsername());
 
         # Send the notification email
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         HMS_Email::send_rlc_application_confirmation($student);
 
         # Show a success message and redirect

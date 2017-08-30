@@ -2,7 +2,12 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\Term;
+use \Homestead\HMS_RLC_Application;
+use \Homestead\HMS_Email;
+use \Homestead\NotificationView;
+use \Homestead\StudentFactory;
+use \Homestead\Exception\PermissionException;
 
   /**
    * This command will notify all rejected students that their
@@ -24,17 +29,12 @@ class SendRlcRejectionEmailsCommand extends Command
     public function execute(CommandContext $context)
     {
         if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'email_rlc_rejections')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to send RLC rejections.');
         }
-
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-        PHPWS_Core::initModClass('hms', 'Term.php');
 
         $term = Term::getSelectedTerm();
         $deniedApps = HMS_RLC_Application::getNonNotifiedDeniedApplicantsByTerm($term);
 
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
         $email = new HMS_Email();
 
         foreach($deniedApps as $app)

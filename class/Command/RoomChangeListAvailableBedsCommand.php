@@ -2,7 +2,8 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\Term;
+use \Homestead\PdoFactory;
 
 /**
  * Returns a JSON-encoded list of empty beds.

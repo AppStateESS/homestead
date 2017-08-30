@@ -2,7 +2,8 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\LotteryChooseRoomThanksView;
+use \Homestead\HMS_Room;
 
 class LotteryShowConfirmedCommand extends Command {
 
@@ -22,9 +23,6 @@ class LotteryShowConfirmedCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-        PHPWS_Core::initModClass('hms', 'LotteryChooseRoomThanksView.php');
-
         $roomId = $context->get('roomId');
 
         $room = new HMS_Room($roomId);

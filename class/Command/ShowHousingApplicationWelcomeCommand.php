@@ -2,7 +2,12 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\StudentFactory;
+use \Homestead\CommandFactory;
+use \Homestead\UserStatus;
+use \Homestead\ApplicationFeature;
+use \Homestead\HousingApplicationWelcomeView;
+use \Homestead\HousingApplicationNotAvailableView;
 
 class ShowHousingApplicationWelcomeCommand extends Command {
 
@@ -18,11 +23,6 @@ class ShowHousingApplicationWelcomeCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplicationWelcomeView.php');
-
         $term = $context->get('term');
 
         $student   = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
@@ -34,7 +34,6 @@ class ShowHousingApplicationWelcomeCommand extends Command {
 
         // If there is no feature, or if we're not inside the feature's deadlines...
         if(is_null($feature) || $feature->getStartDate() > time() || $feature->getEndDate() < time() || !$feature->isEnabled()){
-            PHPWS_Core::initModClass('hms', 'HousingApplicationNotAvailableView.php');
             $view = new HousingApplicationNotAvailableView($student, $feature, $term);
         }else{
             $requiredTerms = HousingApplication::getAvailableApplicationTermsForStudent($student);

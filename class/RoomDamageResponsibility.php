@@ -109,7 +109,3 @@ class RoomDamageResponsibility {
         $this->assessed_by = $username;
     }
 }
-
-class RoomDamageResponsibilityRestored extends RoomDamageResponsibility {
-    public function __construct(){}
-}

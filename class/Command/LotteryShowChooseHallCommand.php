@@ -2,7 +2,12 @@
 
 namespace Homestead\Command;
 
- 
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\UserStatus;
+use \Homestead\StudentFactory;
+use \Homestead\RlcMembershipFactory;
+use \Homestead\LotteryChooseHallView;
 
 class LotteryShowChooseHalLCommand extends Command {
 
@@ -12,11 +17,6 @@ class LotteryShowChooseHalLCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        PHPWS_Core::initModClass('hms', 'LotteryChooseHallView.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'LotteryProcess.php');
-        PHPWS_Core::initModClass('hms', 'RlcMembershipFactory.php');
-
         $term = \PHPWS_Settings::get('hms', 'lottery_term');
 
         // Check the hard cap!

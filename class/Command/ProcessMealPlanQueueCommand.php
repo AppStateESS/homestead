@@ -2,10 +2,20 @@
 
 namespace Homestead\Command;
 
- 
-
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+use \Homestead\UserStatus;
+use \Homestead\CommandFactory;
+use \Homestead\NotificationView;
+use \Homestead\Term;
+use \Homestead\MealPlan;
+use \Homestead\MealPlanFactory;
+use \Homestead\MealPlanProcessor;
+use \Homestead\SOAP;
+use \Homestead\StudentFactory;
+use \Homestead\HMS_Activity_Log;
+use \Homestead\HMS_Util;
+use \Homestead\Exception\PermissionException;
+use \Homestead\Exception\MealPlanExistsException;
+use \Homestead\Exception\BannerException;
 
 class ProcessMealPlanQueueCommand extends Command {
 
@@ -17,7 +27,6 @@ class ProcessMealPlanQueueCommand extends Command {
     public function execute(CommandContext $context)
     {
         if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'banner_queue')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You do not have permission to enable/disable the Banner queue.');
         }
 

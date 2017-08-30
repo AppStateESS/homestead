@@ -152,7 +152,3 @@ class SummerApplication extends HousingApplication{
         $this->smoking_preference = $preference;
     }
 }
-
-class RestoredSummerApplication extends SummerApplication {
-    public function __construct(){}
-}
