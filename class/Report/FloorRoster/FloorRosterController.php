@@ -2,12 +2,18 @@
 
 namespace Homestead\Report\FloorRoster;
 
+use \Homestead\ReportController;
+use \Homestead\iSyncReport;
+use \Homestead\iAsyncReport;
+use \Homestead\iSchedReport;
+use \Homestead\iPdfReportView;
+use \Homestead\FloorRosterPdfView;
+
 /**
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
  * @license http://opensource.org/licenses/gpl-3.0.html
  */
-PHPWS_Core::initModClass('hms', 'WKPDF.php');
 
 class FloorRosterController extends ReportController implements iSyncReport, iAsyncReport, iSchedReport, iPdfReportView {
 

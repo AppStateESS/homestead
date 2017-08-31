@@ -19,8 +19,8 @@ class NightlyCache
     public static function execute()
     {
         session_start();
-        PHPWS_Core::initModClass('users', 'Users.php');
-        PHPWS_Core::initModClass('users', 'Current_User.php');
+        \PHPWS_Core::initModClass('users', 'Users.php');
+        \PHPWS_Core::initModClass('users', 'Current_User.php');
 
         $errors = null;
         $term = Term::getSelectedTerm();

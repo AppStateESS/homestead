@@ -2,6 +2,11 @@
 
 namespace Homestead\Report\CheckinList;
 
+use \Homestead\Report;
+use \Homestead\iCsvReport;
+use \Homestead\HMS_Util;
+use \Homestead\Exception\DatabaseException;
+
 /**
  * Checkin List Report
  * Lists all of the currently checked-in students, ordered by hall and room number
@@ -32,9 +37,7 @@ class CheckinList extends Report implements iCsvReport {
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $term = $this->term;
-
 
         $db = new \PHPWS_DB('hms_checkin');
 

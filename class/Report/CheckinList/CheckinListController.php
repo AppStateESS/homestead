@@ -2,6 +2,14 @@
 
 namespace Homestead\Report\CheckinList;
 
+use \Homestead\ReportController;
+use \Homestead\iSyncReport;
+use \Homestead\iAsyncReport;
+use \Homestead\iSchedReport;
+use \Homestead\iHtmlReportView;
+use \Homestead\iPdfReportView;
+use \Homestead\iCsvReportView;
+
 /**
  * Controller for the CheckinList report.
  *

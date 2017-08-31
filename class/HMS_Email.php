@@ -184,10 +184,10 @@ class HMS_Email{
         $replyto = $message->getReplyTo()   != null ? ('reply-to:' . implode(',', array_keys($message->getReplyTo()))) : '';
 
         $subject = 'subject:'  . $message->getSubject();
-        $module  = 'module:'   . PHPWS_Core::getCurrentModule();
+        $module  = 'module:'   . \PHPWS_Core::getCurrentModule();
         $user    = 'user:'     . (\Current_User::isLogged() ? \Current_User::getUsername() : '');
 
-        PHPWS_Core::log("$id $module $user $subject $from $to $cc $bcc $replyto", 'phpws-mail.log', 'mail');
+        \PHPWS_Core::log("$id $module $user $subject $from $to $cc $bcc $replyto", 'phpws-mail.log', 'mail');
     }
 
     /**********************

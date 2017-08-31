@@ -2,6 +2,10 @@
 
 namespace Homestead\Report\MoveInTimes;
 
+use \Homestead\Report;
+use \Homestead\ResidenceHallFactory;
+use \Homestead\HMS_Movein_Time;
+
 /*
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>

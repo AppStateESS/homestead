@@ -292,7 +292,7 @@ class Term
     {
         $db = new PHPWS_DB('hms_term');
         $db->addOrder('term desc');
-        $result = $db->getObjects('Term');
+        $result = $db->getObjects('\Homestead\Term');
 
         if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());

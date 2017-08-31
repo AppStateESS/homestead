@@ -26,8 +26,8 @@ class LotteryChooseRoomView extends View {
         $tpl['HALL_FLOOR'] = $floor->where_am_i();
 
         if(isset($floor->floor_plan_image_id) && $floor->floor_plan_image_id != 0){
-            PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
-            $file = Cabinet::getFile($floor->floor_plan_image_id);
+            \PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
+            $file = \Cabinet::getFile($floor->floor_plan_image_id);
 
             //if the image loaded properly
             if($file->id == $floor->floor_plan_image_id)

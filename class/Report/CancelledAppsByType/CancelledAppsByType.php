@@ -2,6 +2,8 @@
 
 namespace Homestead\Report\CancelledAppsByType;
 
+use \Homestead\Report;
+
 /**
  * Report fo listing the number of cancelled housing application by student type.
  *

@@ -2,6 +2,11 @@
 
 namespace Homestead\Report\TwentyOne;
 
+use \Homestead\Report;
+use \Homestead\iCsvReport;
+use \Homestead\ResidenceHallFactory;
+use \Homestead\Exception\DatabaseException;
+
 /**
  * TwentyOne - Report that calculates % of students 21 or older.
  *

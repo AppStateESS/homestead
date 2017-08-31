@@ -2,8 +2,6 @@
 
 namespace Homestead;
 
-\PHPWS_Core::initCoreClass('DBPager.php');
-
 class ConfirmedRoommatePager extends View {
 
     public function __construct(){
@@ -11,7 +9,7 @@ class ConfirmedRoommatePager extends View {
 
     public function show()
     {
-        $pager = new DBPager('hms_roommate', 'HMS_Roommate');
+        $pager = new \DBPager('hms_roommate', 'HMS_Roommate');
 
         $pager->db->addWhere('confirmed', 1);
         $pager->db->addWhere('term', Term::getSelectedTerm());

@@ -18,7 +18,7 @@ class RlcMembershipFactory {
                 'username' => $student->getUsername(),
                 'term'     => $term
         ));
-        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'RlcMembershipRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\RlcMembershipRestored');
 
         return $stmt->fetch();
     }

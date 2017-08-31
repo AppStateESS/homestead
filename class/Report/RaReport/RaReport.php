@@ -2,6 +2,12 @@
 
 namespace Homestead\Report\RaReport;
 
+use \Homestead\Report;
+use \Homestead\iCsvReport;
+use \Homestead\PdoFactory;
+use \Homestead\StudentFactory;
+use \Homestead\Exception\StudentNotFoundException;
+
 /**
  * RaReport Report.
  *
@@ -26,9 +32,6 @@ class RaReport extends Report implements iCsvReport
 
     public function execute()
     {
-    	PHPWS_Core::initModClass('hms', 'PdoFactory.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $db = PdoFactory::getInstance()->getPdo();
 
         $query = " select hms_assignment.banner_id, hall_name, floor_number, room_number from hms_assignment join hms_bed on hms_assignment.bed_id = hms_bed.id join hms_room on hms_bed.room_id = hms_room.id join hms_floor on hms_room.floor_id = hms_floor.id join hms_residence_hall on hms_floor.residence_hall_id = hms_residence_hall.id where hms_bed.ra = 1 and hms_assignment.term = :term";

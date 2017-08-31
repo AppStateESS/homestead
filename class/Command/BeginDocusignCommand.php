@@ -164,7 +164,7 @@ class BeginDocusignCommand extends Command
 
         $url = $recipientView->getRecipientViewUrl($returnUrl);
 
-        PHPWS_Core::reroute($url);
+        \PHPWS_Core::reroute($url);
         //$context->setContent('beginning signing process');
     }
 

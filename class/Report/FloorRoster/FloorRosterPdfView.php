@@ -2,13 +2,16 @@
 
 namespace Homestead\Report\FloorRoster;
 
+use \Homestead\ReportPdfView;
+use \Homestead\Report;
+use \Homestead\WKPDF;
+
 /*
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
  * @license http://opensource.org/licenses/gpl-3.0.html
  */
 
-PHPWS_Core::initModClass('hms', 'ReportPdfView.php');
 if (!defined('WKPDF_PATH')) {
     define('WKPDF_PATH', PHPWS_SOURCE_DIR . 'mod/hms/vendor/ioki/wkhtmltopdf-amd64-centos6/bin/wkhtmltopdf-amd64-centos6');
 }
@@ -23,7 +26,7 @@ class FloorRosterPdfView extends ReportPdfView
     public function __construct(Report $report)
     {
         parent::__construct($report);
-        $this->pdf = new \WKPDF(WKPDF_PATH);
+        $this->pdf = new WKPDF(WKPDF_PATH);
         if (USE_XVFB) {
             $this->pdf->setXVFB(XVFB_PATH);
         }

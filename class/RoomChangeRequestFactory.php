@@ -25,7 +25,7 @@ class RoomChangeRequestFactory {
         $stmt->execute(array(
                 'requestId' => $id
         ));
-        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\RoomChangeRequestRestored');
 
         return $stmt->fetch();
     }
@@ -56,7 +56,7 @@ class RoomChangeRequestFactory {
         $stmt->execute(array(
                 'bedId' => $bed->getId()
         ));
-        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\RoomChangeRequestRestored');
 
         return $stmt->fetch();
     }
@@ -90,7 +90,7 @@ class RoomChangeRequestFactory {
                 'bannerId' => $student->getBannerId()
         ));
 
-        $results = $stmt->fetchAll(\PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        $results = $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomChangeRequestRestored');
 
         // If more than one pending request is found, throw an exception
         if (sizeof($results) > 1) {
@@ -175,7 +175,7 @@ class RoomChangeRequestFactory {
 
         $stmt->execute($params);
 
-        return $stmt->fetchAll(\PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomChangeRequestRestored');
     }
 
     /**
@@ -240,7 +240,7 @@ class RoomChangeRequestFactory {
 
         $stmt->execute($params);
 
-        return $stmt->fetchAll(\PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomChangeRequestRestored');
     }
 
     /**
@@ -268,7 +268,7 @@ class RoomChangeRequestFactory {
         $stmt = $db->prepare($query);
         $params = array('term' => $term);
         $stmt->execute($params);
-        return $stmt->fetchAll(\PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomChangeRequestRestored');
     }
 
     /**
@@ -306,7 +306,7 @@ class RoomChangeRequestFactory {
 
         $stmt->execute($params);
 
-        return $stmt->fetchAll(\PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomChangeRequestRestored');
     }
 
     public static function getRequestPendingCheckout(Student $student, $term)
@@ -327,7 +327,7 @@ class RoomChangeRequestFactory {
                 'bannerId' => $student->getBannerId()
         ));
 
-        $results = $stmt->fetchAll(\PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        $results = $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomChangeRequestRestored');
 
         // If more than one pending request is found, throw an exception
         if (sizeof($results) > 1) {

@@ -2,6 +2,11 @@
 
 namespace Homestead\Report\NoShowList;
 
+use \Homestead\Report;
+use \Homestead\iCsvReport;
+use \Homestead\PdoFactory;
+use \Homestead\StudentFactory;
+
 /**
  * No-show List report
  * Lists all of the students who are currently assigned, but have never checked in
@@ -33,8 +38,6 @@ class NoShowList extends Report implements iCsvReport {
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
-
         $db = PdoFactory::getInstance()->getPdo();
 
         $query = 'SELECT hms_assignment.banner_id, hms_assignment.reason,

@@ -19,7 +19,7 @@ class ListAllowedHallsCommand extends Command {
 
         $db = new \PHPWS_DB('hms_residence_hall');
         $db->addWhere('term', $term);
-        $results = $db->getObjects('HMS_Residence_Hall');
+        $results = $db->getObjects('\Homestead\HMS_Residence_Hall');
 
         if(\PHPWS_Error::logIfError($results) || is_null($results)){
             $errorMsg = array();

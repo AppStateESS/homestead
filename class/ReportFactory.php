@@ -10,11 +10,9 @@ namespace Homestead;
  * @package hms
  */
 
-PHPWS_Core::initModClass('hms', 'ReportController.php');
-
 class ReportFactory {
 
-    public static $dir = 'report';
+    public static $dir = 'Report';
 
     /**
      * Returns the class name for the controller based on the report's class name.
@@ -31,17 +29,6 @@ class ReportFactory {
     }
 
     /**
-     * Loads the controller class for a given report.
-     *
-     * @param String $reportName
-     * @param String $controllerName
-     */
-    private static function loadControllerClass($reportName, $controllerName)
-    {
-        PHPWS_Core::initModClass('hms', self::$dir . "/$reportName/$controllerName.php");
-    }
-
-    /**
      * Returns an instance of the corresponding ReportController given a report class name.
      *
      * @param String $reportName Report class name.
@@ -50,8 +37,6 @@ class ReportFactory {
     public static function getControllerInstance($reportName)
     {
         $ctrlClassName = self::getControllerClassName($reportName);
-        self::loadControllerClass($reportName, $ctrlClassName);
-
         return new $ctrlClassName;
     }
 
@@ -65,8 +50,7 @@ class ReportFactory {
     public static function getControllerInstanceByReport(Report $report)
     {
         $ctrlClassName = self::getControllerClassName($report->getClass());
-        self::loadControllerClass($report->getClass(), $ctrlClassName);
-
+        $ctrlClassName = '\\Homestead\\Report\\' . $report->getClass() . '\\' . $ctrlClassName;
         return new $ctrlClassName($report);
     }
 
@@ -110,22 +94,10 @@ class ReportFactory {
             throw new \InvalidArgumentException('The given report ID does not exist.');
         }
 
-        self::loadReportClass($result);
-
+        $result = '\\Homestead\\Report\\' . $result . '\\' . $result;
         $report = new $result($reportId);
 
         return $report;
-    }
-
-    /**
-     * Loads the class file for the given report class name.
-     *
-     * @param String $name Report class name.
-     */
-    public static function loadReportClass($name)
-    {
-        $dir = PHPWS_SOURCE_DIR . 'mod/hms/class/' . ReportFactory::$dir;
-        PHPWS_Core::initModClass('hms', ReportFactory::$dir . "/$name/$name.php");
     }
 
     /**

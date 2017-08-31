@@ -2,6 +2,8 @@
 
 namespace Homestead\Report\FloorRoster;
 
+use \Homestead\ReportHtmlView;
+
 /*
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>

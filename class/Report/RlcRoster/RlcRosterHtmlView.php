@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\RlcRoster;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 class RlcRosterHtmlView extends ReportHtmlView {
 
   protected function render()

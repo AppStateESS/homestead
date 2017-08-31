@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\NoShowList;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 /**
  * HTML View for NoShowList report
  *

@@ -51,7 +51,7 @@ class SendAssignmentNotificationCommand extends Command {
         $db->addWhere('email_sent', 0);
         $db->addWhere('term', $term);
 
-        $result = $db->getObjects("HMS_Assignment");
+        $result = $db->getObjects("\Homestead\HMS_Assignment");
 
         if(PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());

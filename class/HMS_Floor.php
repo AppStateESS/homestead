@@ -181,7 +181,7 @@ class HMS_Floor extends HMS_Item
         $db->addOrder('room_number', 'ASC');
 
         $db->loadClass('hms', 'HMS_Room.php');
-        $result = $db->getObjects('HMS_Room');
+        $result = $db->getObjects('\Homestead\HMS_Room');
         //test($result);
         if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
@@ -662,9 +662,7 @@ class HMS_Floor extends HMS_Item
 
     public static function get_pager_by_hall($hall_id)
     {
-        \PHPWS_Core::initCoreClass('DBPager.php');
-
-        $pager = new DBPager('hms_floor', 'HMS_Floor');
+        $pager = new \DBPager('hms_floor', 'HMS_Floor');
 
         $pager->addWhere('hms_floor.residence_hall_id', $hall_id);
         $pager->db->addOrder('hms_floor.floor_number');

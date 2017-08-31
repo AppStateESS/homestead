@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\InternationalReservedBeds;
 
+use \Homestead\Report;
+use \Homestead\PdoFactory;
+
 /**
 * Report for accessing the number of beds in each hall are internationally reserved
 * for reapplying students.
@@ -27,7 +30,6 @@ class InternationalReservedBeds extends Report
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
         $term = $this->term;
 
         $db = PdoFactory::getPdoInstance();

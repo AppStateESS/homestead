@@ -64,7 +64,7 @@ class NavBar extends View {
             $userTpl['FULL_NAME'] = UserStatus::getDisplayName() . ' (student)';
             $cmd = CommandFactory::getCommand('RemoveMaskAsSelf');
             $userTpl['STUDENT_SELF_RETURN'] = $cmd->getURI(); // Link to return to admin version of self
-        } else if (\UserStatus::isMasquerading()) {
+        } else if (UserStatus::isMasquerading()) {
             // User is masquerading as a student
             $useDropdown = true;
             $cmd = CommandFactory::getCommand('RemoveMask');

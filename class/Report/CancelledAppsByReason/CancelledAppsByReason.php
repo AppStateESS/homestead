@@ -2,6 +2,8 @@
 
 namespace Homestead\Report\CancelledAppsByReason;
 
+use \Homestead\Report;
+use \Homestead\HousingApplication;
 use \PHPWS_DB;
 
 /**
@@ -24,8 +26,6 @@ class CancelledAppsByReason extends Report {
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-
         $this->reasons = HousingApplication::getCancellationReasons();
 
         // All students

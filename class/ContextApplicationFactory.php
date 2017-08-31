@@ -26,10 +26,10 @@ abstract class ContextApplicationFactory {
                 $application = new RestoredSummerApplication();
                 $concreteFactory = new SummerContextApplicationFactory($context, $application);
                 break;
-            case 'lottery':
-                $application = new RestoredLotteryApplication();
+            /*case 'lottery':
+                $application = new RestoredLotteryApplication(); //class does not exist
                 $concreteFactory = new LotteryContextApplicationFactory($context, $application);
-                break;
+                break;*/
         }
 
         $concreteFactory->populateSharedFields($term, $student);

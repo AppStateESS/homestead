@@ -384,9 +384,7 @@ class HMS_RLC_Application extends HMS_Item
     //TODO move this!!
     public static function denied_pager()
     {
-        \PHPWS_Core::initCoreClass('DBPager.php');
-
-        $pager = new DBPager('hms_learning_community_applications', 'HMS_RLC_Application');
+        $pager = new \DBPager('hms_learning_community_applications', 'HMS_RLC_Application');
 
         $pager->db->addWhere('term', Term::getSelectedTerm());
         $pager->db->addWhere('denied', 1); // show only denied applications

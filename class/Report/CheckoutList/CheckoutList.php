@@ -1,7 +1,12 @@
 <?php
 
 namespace Homestead\Report\CheckoutList;
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+
+use \Homestead\Report;
+use \Homestead\iCsvReport;
+use \Homestead\PdoFactory;
+use \Homestead\StudentFactory;
+use \Homestead\HMS_Util;
 
 /**
  * Checkout List Report

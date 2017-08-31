@@ -2,6 +2,11 @@
 
 namespace Homestead\Report\GenderDistributionByHall;
 
+use \Homestead\Report;
+use \Homestead\iCsvReport;
+use \Homestead\ResidenceHallFactory;
+use \Homestead\Exception\DatabaseException;
+
 /**
  * TwentyOne - Report that calculates % of students 21 or older.
  *
@@ -46,9 +51,6 @@ class GenderDistributionByHall extends Report implements iCsvReport {
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-
         if (!isset($this->term) || is_null($this->term)) {
             throw new \InvalidArgumentException('Missing term.');
         }

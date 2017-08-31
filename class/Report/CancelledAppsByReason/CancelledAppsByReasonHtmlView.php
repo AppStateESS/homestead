@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\CancelledAppsByReason;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 /**
  * HTLM view for Cancelled Housing Applications by Reason report.
  *

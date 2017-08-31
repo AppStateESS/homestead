@@ -2,6 +2,11 @@
 
 namespace Homestead\Report\TwentyFive;
 
+use \Homestead\Report;
+use \Homestead\iCsvReport;
+use \Homestead\StudentFactory;
+use \Homestead\Exception\DatabaseException;
+
 /**
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
@@ -23,8 +28,6 @@ class TwentyFive extends Report implements iCsvReport {
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         if (!isset($this->term) || is_null($this->term)) {
             throw new \InvalidArgumentException('Missing term.');
         }

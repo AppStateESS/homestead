@@ -2,6 +2,11 @@
 
 namespace Homestead\Report\MoveInTimes;
 
+use \Homestead\ReportController;
+use \Homestead\iSyncReport;
+use \Homestead\iHtmlReportView;
+use \Homestead\iPdfReportView;
+
 /*
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>

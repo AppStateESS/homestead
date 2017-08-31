@@ -2,6 +2,11 @@
 
 namespace Homestead\Report\CancelledAppsContinuingGraph;
 
+use \Homestead\ReportController;
+use \Homestead\iSyncReport;
+use \Homestead\iSchedReport;
+use \Homestead\iHtmlReportView;
+
 class CancelledAppsContinuingGraphController extends ReportController implements iSyncReport, iSchedReport, iHtmlReportView {
 
     public function setParams(Array $params)

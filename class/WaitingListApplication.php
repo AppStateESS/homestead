@@ -186,11 +186,9 @@ class WaitingListApplication extends HousingApplication {
 
     public static function waitingListPager()
     {
-        \PHPWS_Core::initCoreClass('DBPager.php');
-
         $term = \PHPWS_Settings::get('hms', 'lottery_term');
 
-        $pager = new DBPager('hms_new_application', 'WaitingListApplication');
+        $pager = new \DBPager('hms_new_application', 'WaitingListApplication');
 
         $pager->db->addJoin('LEFT', 'hms_new_application', 'hms_waitlist_application', 'id', 'id');
         $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_assignment', 'username', 'asu_username AND hms_new_application.term = hms_assignment.term');

@@ -2,6 +2,12 @@
 
 namespace Homestead\Report\AppliedStudentData;
 
+use \Homestead\ReportController;
+use \Homestead\iSyncReport;
+use \Homestead\iAsyncReport;
+use \Homestead\iSchedReport;
+use \Homestead\iCsvReportView;
+
 /*
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>

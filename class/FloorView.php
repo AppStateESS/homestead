@@ -91,11 +91,11 @@ class FloorView extends View{
             $form->setMatch('floor_rlc_id', 0);
         }
 
-        PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
+        \PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
         if(isset($this->floor->floor_plan_image_id)){
-            $manager = Cabinet::fileManager('floor_plan_image_id', $this->floor->floor_plan_image_id);
+            $manager = \Cabinet::fileManager('floor_plan_image_id', $this->floor->floor_plan_image_id);
         }else{
-            $manager = Cabinet::fileManager('floor_plan_image_id');
+            $manager = \Cabinet::fileManager('floor_plan_image_id');
         }
         $manager->maxImageWidth(300);
         $manager->maxImageHeight(300);

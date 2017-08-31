@@ -2,13 +2,19 @@
 
 namespace Homestead\Report\AssignedStudentData;
 
+use \Homestead\Report;
+use \Homestead\iCsvReport;
+use \Homestead\Term;
+use \Homestead\StudentFactory;
+use \Homestead\CommandFactory;
+use \Homestead\HMS_Util;
+use \Homestead\Exception\StudentNotFoundException;
+
 /*
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
  * @license http://opensource.org/licenses/gpl-3.0.html
  */
-
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
 class AssignedStudentData extends Report implements iCsvReport {
     const friendlyName = 'Assigned Student Data Export';
@@ -29,8 +35,6 @@ class AssignedStudentData extends Report implements iCsvReport {
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $db = new \PHPWS_DB('hms_assignment');
         $db->addColumn('hms_assignment.banner_id');
         $db->addColumn('hms_assignment.reason');

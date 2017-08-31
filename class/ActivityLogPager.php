@@ -2,8 +2,6 @@
 
 namespace Homestead;
 
-\PHPWS_Core::initCoreClass('DBPager.php');
-
 class ActivityLogPager extends View {
 
     private $actee;
@@ -30,7 +28,7 @@ class ActivityLogPager extends View {
         $this->static		= $static;
         $this->limit		= $limit;
 
-        $this->pager = new DBPager('hms_activity_log','HMS_Activity_Log');
+        $this->pager = new \DBPager('hms_activity_log','HMS_Activity_Log');
     }
 
 

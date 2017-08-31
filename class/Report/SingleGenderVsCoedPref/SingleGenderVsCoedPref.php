@@ -2,8 +2,11 @@
 
 namespace Homestead\Report\SingleGenderVsCoedPref;
 
+use \Homestead\Report;
+use \Homestead\Term;
 use \PHPWS_Error;
 use \PHPWS_DB;
+use \Homestead\Exception\DatabaseException;
 
 /**
  * SingleGenderVsCoedPref
@@ -43,9 +46,6 @@ class SingleGenderVsCoedPref extends Report{
         if($semester != TERM_FALL && $semester != TERM_SPRING){
             throw new \InvalidArgumentException('Term must be Fall or Spring.');
         }
-
-        PHPWS_Core::initModClass('hms', 'FallApplication.php');
-        PHPWS_Core::initModClass('hms', 'SpringApplication.php');
 
         $table2 = $semester == TERM_FALL ? 'hms_fall_application' : 'hms_spring_application';
 

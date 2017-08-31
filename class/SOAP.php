@@ -343,6 +343,6 @@ abstract class SOAP
              $msg .= "($responseCode: $errorMessage)";
          }
 
-         PHPWS_Core::log($msg, 'soap.log', 'SOAP');
+         \PHPWS_Core::log($msg, 'soap.log', 'SOAP');
      }
 }

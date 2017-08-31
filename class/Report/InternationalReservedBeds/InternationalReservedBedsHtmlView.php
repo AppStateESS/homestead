@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\InternationalReservedBeds;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 class InternationalReservedBedsHtmlView extends ReportHtmlView
 {
 

@@ -2,6 +2,10 @@
 
 namespace Homestead\Report\FreshmenApplicationsGraph;
 
+use \Homestead\Report;
+use \Homestead\Term;
+use \Homestead\PdoFactory;
+
 /**
  * Main report class for the Freshmen Applications over time report.
  *
@@ -91,7 +95,6 @@ class FreshmenApplicationsGraph extends Report {
         ORDER BY date";
         */
 
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
 
         $query ="SELECT

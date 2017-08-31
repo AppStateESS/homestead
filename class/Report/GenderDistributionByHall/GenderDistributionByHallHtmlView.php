@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\GenderDistributionByHall;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 /**
  * HTML View for TwentyOne report
  *

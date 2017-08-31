@@ -2,6 +2,11 @@
 
 namespace Homestead\Report\RlcRoster;
 
+use \Homestead\Report;
+use \Homestead\PdoFactory;
+use \Homestead\StudentFactory;
+use \Homestead\RlcMembershipFactory;
+
 /**
  * The RLC Roster report.
  * Finds and displays all members of RLCs and anyone who is
@@ -29,8 +34,6 @@ class RlcRoster extends Report {
 
   public function execute()
   {
-
-
     $db = PdoFactory::getPdoInstance();
 
     $query = "SELECT hms_assignment.banner_id, hms_hall_structure.room_number, hms_hall_structure.hall_name

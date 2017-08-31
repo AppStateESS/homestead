@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\FreshmenApplicationsGraph;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 class FreshmenApplicationsGraphHtmlView extends ReportHtmlView {
 
     protected function render()

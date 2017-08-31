@@ -2,6 +2,12 @@
 
 namespace Homestead\Report\CoedRooms;
 
+use \Homestead\ReportController;
+use \Homestead\iSyncReport;
+use \Homestead\iHtmlReportView;
+use \Homestead\iPdfReportView;
+use \Homestead\iCsvReportView;
+
 /**
  *
  * @author John Felipe

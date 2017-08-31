@@ -147,7 +147,7 @@ class HMS_Roommate
         $query->bindParam(':userb', $b);
 
         $query->execute();
-        $results = $query->fetchAll(\PDO::FETCH_CLASS, "HMS_Roommate");
+        $results = $query->fetchAll(\PDO::FETCH_CLASS, "\Homestead\HMS_Roommate");
 
         return $results[0];
     }
@@ -370,7 +370,7 @@ class HMS_Roommate
         $db->addWhere('term', $term);
         $db->addWhere('confirmed', 0);
         $db->addWhere('requested_on', time() - ROOMMATE_REQ_TIMEOUT, '>=');
-        $result = $db->getObjects('HMS_Roommate');
+        $result = $db->getObjects('\Homestead\HMS_Roommate');
 
         return $result;
     }
@@ -401,7 +401,7 @@ class HMS_Roommate
         $db->addWhere('requestee', $asu_username, 'ILIKE', 'OR', 'grp');
         $db->setGroupConj('grp', 'AND');
         $db->addWhere('term', $term);
-        $result = $db->getObjects('HMS_Roommate');
+        $result = $db->getObjects('\Homestead\HMS_Roommate');
 
         if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
@@ -415,7 +415,7 @@ class HMS_Roommate
         $stmt->bindParam(':term', $term);
 
         $stmt->execute();
-        return $stmt->fetchAll(\PDO::FETCH_CLASS, "HMS_Roommate");
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, "\Homestead\HMS_Roommate");
     }
 
     /**
@@ -432,7 +432,7 @@ class HMS_Roommate
 
         $db->addWhere('confirmed', 0);
         $db->addWhere('term', $term);
-        $requests = $db->getObjects('HMS_Roommate');
+        $requests = $db->getObjects('\Homestead\HMS_Roommate');
 
         if (PHPWS_Error::logIfError($requests)) {
             throw new DatabaseException('Could not remove outstanding requests');
@@ -446,7 +446,7 @@ class HMS_Roommate
         $query->bindParam(':user', $asu_username);
 
         $query->execute();
-        $requests = $query->fetchAll(\PDO::FETCH_CLASS, "HMS_Roommate");
+        $requests = $query->fetchAll(\PDO::FETCH_CLASS, "\Homestead\HMS_Roommate");
 
         if ($requests == null) {
             return true;
@@ -756,8 +756,7 @@ class HMS_Roommate
      */
     public static function display_requests($asu_username, $term)
     {
-        \PHPWS_Core::initCoreClass('DBPager.php');
-        $pager = new DBPager('hms_roommate', 'HMS_Roommate');
+        $pager = new \DBPager('hms_roommate', 'HMS_Roommate');
         $pager->setModule('hms');
         $pager->setTemplate('student/requested_roommate_list.tpl');
         $pager->addRowTags('get_requested_pager_tags');
@@ -773,9 +772,7 @@ class HMS_Roommate
      */
     public static function roommate_pager()
     {
-        \PHPWS_Core::initCoreClass('DBPager.php');
-
-        $pager = new DBPager('hms_roommate', 'HMS_Roommate');
+        $pager = new \DBPager('hms_roommate', 'HMS_Roommate');
 
         $pager->db->addWhere('confirmed', 1);
         $pager->db->addWhere('term', Term::getSelectedTerm());

@@ -498,7 +498,7 @@ class HousingApplication {
         $db->addWhere('banner_id', $student->getBannerId());
         $db->addOrder('term ASC');
 
-        $result = $db->getObjects('HousingApplication');
+        $result = $db->getObjects('\Homestead\HousingApplication');
 
         if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
@@ -540,13 +540,13 @@ class HousingApplication {
         // Add the appropriate join, based on the term
         if ($sem == TERM_FALL) {
             $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_fall_application', 'id', 'id');
-            $result = $db->getObjects('FallApplication');
+            $result = $db->getObjects('\Homestead\FallApplication');
         } else if ($term == TERM_SPRING) {
             $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_spring_application', 'id', 'id');
-            $result = $db->getObjects('SpringApplication');
+            $result = $db->getObjects('\Homestead\SpringApplication');
         } else if ($term == TERM_SUMMER1 || $term == TERM_SUMMER2) {
             $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_summer_application', 'id', 'id');
-            $result = $db->getObjects('SummerApplication');
+            $result = $db->getObjects('\Homestead\SummerApplication');
         }
 
         if (\PEAR::isError($result)) {
@@ -582,7 +582,7 @@ class HousingApplication {
                 $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_summer_application', 'id', 'id');
                 $db->addColumn('hms_new_application.*');
                 //TODO addColumns for joined table
-                $result = $db->getObjects('SummerApplication');
+                $result = $db->getObjects('\Homestead\SummerApplication');
                 break;
             case TERM_FALL:
                 $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_fall_application', 'id', 'id');
@@ -592,13 +592,13 @@ class HousingApplication {
                 $db->addColumn('hms_fall_application.preferred_bedtime');
                 $db->addColumn('hms_fall_application.room_condition');
                 $db->addColumn('hms_fall_application.smoking_preference');
-                $result = $db->getObjects('FallApplication');
+                $result = $db->getObjects('\Homestead\FallApplication');
                 break;
             case TERM_SPRING:
                 $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_spring_application', 'id', 'id');
                 $db->addColumn('hms_new_application.*');
                 //TODO addColumns for joined table
-                $result = $db->getObjects('SpringApplication');
+                $result = $db->getObjects('\Homestead\SpringApplication');
                 break;
             default:
                 throw new InvalidTermException($term);

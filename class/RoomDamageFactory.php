@@ -25,7 +25,7 @@ class RoomDamageFactory {
 
         $stmt->execute($params);
 
-        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'RoomDamageDb');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\RoomDamageDb');
         $result = $stmt->fetch();
 
         return $result;
@@ -45,7 +45,7 @@ class RoomDamageFactory {
 
         $db->addWhere('room_persistent_id', $room->getPersistentId());
         $db->addWhere('repaired', 0);
-        $result = $db->getObjects('RoomDamageDb');
+        $result = $db->getObjects('\Homestead\RoomDamageDb');
 
         if (\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
@@ -77,7 +77,7 @@ class RoomDamageFactory {
 
         $db->addWhere('reported_on', $timestamp, '<=');
 
-        $result = $db->getObjects('RoomDamageDb');
+        $result = $db->getObjects('\Homestead\RoomDamageDb');
 
         if (\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
@@ -116,7 +116,7 @@ class RoomDamageFactory {
 
         $stmt->execute($params);
 
-        return $stmt->fetchAll(\PDO::FETCH_CLASS, 'RoomDamageDb');
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomDamageDb');
     }
 
     public static function save(RoomDamage $dmg)

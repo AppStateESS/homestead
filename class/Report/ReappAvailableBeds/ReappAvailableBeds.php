@@ -2,6 +2,11 @@
 
 namespace Homestead\Report\ReappAvailableBeds;
 
+use \Homestead\Report;
+use \Homestead\iCsvReport;
+use \Homestead\HMS_Residence_Hall;
+use \Homestead\HMS_Util;
+
 /**
 * Report for accessing the number of beds in each hall are still Available
 * for reapplying students.
@@ -9,7 +14,7 @@ namespace Homestead\Report\ReappAvailableBeds;
 * @author Chris Detsch
 * @package HMS
 */
-class ReappAvailableBeds extends Report implements iCSVReport
+class ReappAvailableBeds extends Report implements iCsvReport
 {
 
     const friendlyName = 'Reapplication Available Beds';
@@ -28,9 +33,6 @@ class ReappAvailableBeds extends Report implements iCSVReport
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         $halls = HMS_Residence_Hall::get_halls($this->term);
 
         $rows = array();

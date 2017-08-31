@@ -87,7 +87,7 @@ class CommandContext {
 
     public function plugObject($obj)
     {
-        return PHPWS_Core::plugObject($obj, $this->params);
+        return \PHPWS_Core::plugObject($obj, $this->params);
     }
 
     public function setDefault($key, $val)

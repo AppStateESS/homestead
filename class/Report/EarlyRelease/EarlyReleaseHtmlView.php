@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\EarlyRelease;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
   class EarlyReleaseHtmlView extends ReportHtmlView
   {
     protected function render()

@@ -100,7 +100,7 @@ class HMS_Movein_Time
 
         $db->addWhere('term', $term);
         $db->addOrder('begin_timestamp', 'ASC');
-        $result = $db->getObjects('HMS_Movein_Time');
+        $result = $db->getObjects('\Homestead\HMS_Movein_Time');
 
         if(\PEAR::isError($result)){
             return false;
@@ -120,9 +120,7 @@ class HMS_Movein_Time
     }
 
     public static function get_movein_times_pager(){
-        \PHPWS_Core::initCoreClass('DBPager.php');
-
-        $pager = new DBPager('hms_movein_time', 'HMS_Movein_Time');
+        $pager = new \DBPager('hms_movein_time', 'HMS_Movein_Time');
 
         $pager->addWhere('term', Term::getSelectedTerm());
         $pager->db->addOrder('begin_timestamp', 'DESC');

@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\AssignmentsByType;
 
+use \Homestead\Report;
+use \Homestead\PdoFactory;
+
 /**
  * The Assignments By Type Report.
  *

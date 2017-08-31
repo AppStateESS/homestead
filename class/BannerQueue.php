@@ -83,7 +83,7 @@ class BannerQueue {
         $db = new \PHPWS_DB('hms_banner_queue');
         $db->addWhere('term', $term);
         $db->addOrder('id');
-        $items = $db->getObjects('BannerQueueItem');
+        $items = $db->getObjects('\Homestead\BannerQueueItem');
 
         $errors = array();
         foreach($items as $item) {

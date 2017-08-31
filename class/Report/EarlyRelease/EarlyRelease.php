@@ -2,7 +2,12 @@
 
 namespace Homestead\Report\EarlyRelease;
 
-class EarlyRelease extends Report implements iCSVReport
+use \Homestead\Report;
+use \Homestead\iCsvReport;
+use \Homestead\PdoFactory;
+use \Homestead\StudentFactory;
+
+class EarlyRelease extends Report implements iCsvReport
 {
     const friendlyName = 'Early Release';
     const shortName = 'Early Release';
@@ -45,8 +50,6 @@ class EarlyRelease extends Report implements iCSVReport
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         $db = PdoFactory::getPdoInstance();
 
         $query = 'SELECT hms_new_application.username, hms_new_application.banner_id, hms_lottery_application.early_release FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id WHERE (hms_new_application.term = :term AND hms_lottery_application.early_release IS NOT NULL) ORDER BY hms_lottery_application.early_release ASC, hms_new_application.username ASC';

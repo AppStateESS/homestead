@@ -2,6 +2,13 @@
 
 namespace Homestead\Report\UnassignedFreshmen;
 
+use \Homestead\Report;
+use \Homestead\iCsvReport;
+use \Homestead\Term;
+use \Homestead\HMS_Util;
+use \Homestead\HMS_Roommate;
+use \Homestead\Exception\DatabaseException;
+
 /**
  * Unassigned Freshmen Report
  * Computes the list of all unassigned freshmen for the given term.
@@ -41,13 +48,6 @@ class UnassignedFreshmen extends Report implements iCsvReport {
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'SpringApplication.php');
-        PHPWS_Core::initModClass('hms', 'SummerApplication.php');
-        PHPWS_Core::initModClass('hms', 'FallApplication.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-
         $term = $this->term;
 
         $sem = Term::getTermSem($term);

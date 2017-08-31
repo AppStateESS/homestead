@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\CoedRooms;
 
+use \Homestead\Report;
+use \Homestead\iCsvReport;
+
 /**
  * Coed Room Report.
  *

@@ -2,6 +2,10 @@
 
 namespace Homestead\Report\CancelledAppsContinuingGraph;
 
+use \Homestead\Report;
+use \Homestead\Term;
+use \Homestead\PdoFactory;
+
 /**
  * Main report class for the Cancelled Applications for continuing students over time report.
  *
@@ -64,7 +68,6 @@ class CancelledAppsContinuingGraph extends Report {
             $applicationTerm = Term::getPrevTerm($term);
         }
 
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
 
         $query ="SELECT

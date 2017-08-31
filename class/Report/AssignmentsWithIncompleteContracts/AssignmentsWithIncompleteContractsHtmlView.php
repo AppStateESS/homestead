@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\AssignmentsWithIncompleteContracts;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 class AssignmentsWithIncompleteContractsHtmlView extends ReportHtmlView
 {
 

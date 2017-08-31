@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\UnavailableBeds;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 class UnavailableBedsHtmlView extends ReportHtmlView {
 
     protected function render()

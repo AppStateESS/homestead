@@ -2,6 +2,12 @@
 
 namespace Homestead\Report\CancelledAppsByReason;
 
+use \Homestead\ReportController;
+use \Homestead\iSyncReport;
+use \Homestead\iSchedReport;
+use \Homestead\iHtmlReportView;
+use \Homestead\iPdfReportView;
+
 /**
  * Cancelled Application by Reason Controller
  *

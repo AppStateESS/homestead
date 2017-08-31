@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\UnassignedStudents;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 /**
  * HTML View for UnassignedStudents report
  *

@@ -2,15 +2,17 @@
 
 namespace Homestead\Report\FloorRoster;
 
+use \Homestead\Report;
+use \Homestead\StudentFactory;
+use \Homestead\CommandFactory;
+use \Homestead\HMS_Util;
+use \Homestead\Exception\DatabaseException;
+
 /**
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
  * @license http://opensource.org/licenses/gpl-3.0.html
  */
-
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
 
 class FloorRoster extends Report {
     const friendlyName = 'Floor Roster';

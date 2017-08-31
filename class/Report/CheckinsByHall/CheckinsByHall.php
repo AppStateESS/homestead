@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\CheckinsByHall;
 
+use \Homestead\Report;
+use \Homestead\Exception\DatabaseException;
+
 /**
  * The Checkins By Hall Report.
  *

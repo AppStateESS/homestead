@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\RaReport;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 /**
  * HTML View for Ra Report.
  *

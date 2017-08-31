@@ -23,7 +23,7 @@ class BedFactory {
                     'term'         => $term);
         $stmt->execute($params);
 
-        $results = $stmt->fetchAll(\PDO::FETCH_CLASS, 'BedRestored');
+        $results = $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\BedRestored');
 
         return $results[0];
     }
@@ -42,7 +42,7 @@ class BedFactory {
 		);
         $stmt->execute($params);
 
-        $results = $stmt->fetchAll(\PDO::FETCH_CLASS, 'BedRestored');
+        $results = $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\BedRestored');
 
         return $results[0];
     }

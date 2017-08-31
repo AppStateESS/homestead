@@ -2,6 +2,10 @@
 
 namespace Homestead\Report\MismatchedRoommates;
 
+use \Homestead\Report;
+use \Homestead\PdoFactory;
+use \Homestead\StudentFactory;
+
 /*
  * Mismatched Roommates Report
  * Lists all of the students assigned to rooms that do not contain their roommate.
@@ -33,8 +37,6 @@ class MismatchedRoommates extends Report
 
     public function execute()
     {
-      PHPWS_Core::initModClass('hms', 'PdoFactory.php');
-
       $db = PdoFactory::getInstance()->getPdo();
 
       $query = "SELECT requestor, requestee from hms_roommate

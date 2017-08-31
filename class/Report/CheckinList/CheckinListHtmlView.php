@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\CheckinList;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 /**
  * HTML View for CheckinList report
  *

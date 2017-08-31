@@ -229,9 +229,7 @@ class RoomView extends View {
 
     private function roomDamagePager()
     {
-        \PHPWS_Core::initCoreClass('DBPager.php');
-
-        $pager = new DBPager('hms_room_damage', 'RoomDamageDb');
+        $pager = new \DBPager('hms_room_damage', 'RoomDamageDb');
         $pager->db->addJoin('LEFT OUTER', 'hms_room_damage', 'hms_damage_type', 'damage_type', 'id');
 
 

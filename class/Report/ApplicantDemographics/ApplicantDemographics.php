@@ -2,7 +2,10 @@
 
 namespace Homestead\Report\ApplicantDemographics;
 
+use \Homestead\Report;
+use \Homestead\Term;
 use \PHPWS_DB;
+use \Homestead\Exception\DatabaseException;
 
 /**
  * The Applicant Demographics report.

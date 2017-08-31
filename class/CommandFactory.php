@@ -10,7 +10,7 @@ use \Homestead\Exception\CommandNotFoundException;
  */
 
 class CommandFactory {
-    private static $dir = 'command';
+    private static $dir = 'Command';
 
     public static function getCommand($action = 'Default')
     {
@@ -19,7 +19,7 @@ class CommandFactory {
         }
 
         $class = self::staticInit($action);
-
+        $class = '\\Homestead\\Command\\' . $class;
         $cmd = new $class();
         return $cmd;
     }
@@ -47,12 +47,6 @@ class CommandFactory {
         }
 
         $class = $action.'Command';
-
-        try {
-            PHPWS_Core::initModClass('hms', "{$dir}/{$class}.php");
-        }catch(\Exception $e){
-            throw new CommandNotFoundException("Could not initialize {$class}: {$e->getMessage()}");
-        }
 
         return $class;
     }

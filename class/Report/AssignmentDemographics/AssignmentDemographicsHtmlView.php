@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\AssignmentDemographics;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 class AssignmentDemographicsHtmlView extends ReportHtmlView {
 
     protected function render()

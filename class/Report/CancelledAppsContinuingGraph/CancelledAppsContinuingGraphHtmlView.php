@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\CancelledAppsContinuingGraph;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 class CancelledAppsContinuingGraphHtmlView extends ReportHtmlView {
 
     protected function render()

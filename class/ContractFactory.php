@@ -30,7 +30,7 @@ class ContractFactory {
         $params = array('bannerId' => $student->getBannerId(),
                         'term' => $term);
         $stmt->execute($params);
-        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'ContractRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\ContractRestored');
 
         return $stmt->fetch();
     }

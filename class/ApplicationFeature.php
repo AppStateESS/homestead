@@ -7,8 +7,6 @@ use \Homestead\Exception\MissingDataException;
 use \PHPWS_Error;
 use \PHPWS_DB;
 
-define('APPLICATION_FEATURE_DIR', 'ApplicationFeature');
-
 /**
  * A class to represent each of the various "features" which can be enabled/disabled
  * for housing applications of a particular term.
@@ -233,7 +231,7 @@ abstract class ApplicationFeature
     {
         $features = array();
 
-        $dir = PHPWS_SOURCE_DIR . 'mod/hms/class/' . APPLICATION_FEATURE_DIR;
+        $dir = PHPWS_SOURCE_DIR . 'mod/hms/class/ApplicationFeature';
 
         $files = scandir("{$dir}/");
 
@@ -242,9 +240,9 @@ abstract class ApplicationFeature
             if($feature == $file) {
                 continue;
             }
-            PHPWS_Core::initModClass('hms', APPLICATION_FEATURE_DIR . '/' . $file);
 
             $registration = "{$feature}Registration";
+            $registration = '\\Homestead\\ApplicationFeature\\' . $registration;
             $features[] = new $registration();
         }
 
@@ -307,8 +305,8 @@ abstract class ApplicationFeature
         foreach($results as $result) {
             // Instanciate a registration object
             $path = 'ApplicationFeature/' . $result['name'] . '.php';
-            PHPWS_Core::initModClass('hms', $path);
             $regClass = $result['name'] . 'Registration';
+            $regClass = '\\Homestead\\ApplicationFeature\\' . $regClass;
             $reg = new $regClass;
 
             // Check to see if this feature is allowed for this student
@@ -379,7 +377,7 @@ abstract class ApplicationFeature
 
     public static function getInstanceByName($name)
     {
-        PHPWS_Core::initModClass('hms', APPLICATION_FEATURE_DIR . "/$name.php");
+        $name = '\\Homestead\\ApplicationFeature\\' . $name;
         $f = new $name();
         return $f;
     }

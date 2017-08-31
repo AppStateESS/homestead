@@ -170,7 +170,7 @@ class HMS_Residence_Hall extends HMS_Item {
         $db->addOrder('floor_number', 'ASC');
 
         $db->loadClass('hms', 'HMS_Floor.php');
-        $result = $db->getObjects('HMS_Floor');
+        $result = $db->getObjects('\Homestead\HMS_Floor');
         if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }

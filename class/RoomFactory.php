@@ -45,7 +45,7 @@ class RoomFactory {
 		);
         $stmt->execute($params);
 
-        $results = $stmt->fetchAll(\PDO::FETCH_CLASS, 'RoomRestored');
+        $results = $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomRestored');
 
         return $results[0];
     }

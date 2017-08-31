@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\HallOccupancy;
 
+use \Homestead\Report;
+use \Homestead\ResidenceHallFactory;
+
 /*
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
@@ -40,8 +43,6 @@ class HallOccupancy extends Report {
         if (!isset($this->term) || is_null($this->term)) {
             throw new \InvalidArgumentException('Missing term.');
         }
-
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
 
         $halls = ResidenceHallFactory::getHallsForTerm($this->term);
 

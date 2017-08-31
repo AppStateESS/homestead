@@ -2,6 +2,10 @@
 
 namespace Homestead\Report\AssignmentTypeByFloor;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+use \Homestead\HMS_Util;
+
 class AssignmentTypeByFloorHtmlView extends ReportHtmlView {
 
     protected function render(){

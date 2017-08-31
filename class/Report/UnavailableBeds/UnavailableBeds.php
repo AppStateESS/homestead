@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\UnavailableBeds;
 
+use \Homestead\Report;
+use \Homestead\Exception\DatabaseException;
+
 /**
  * Lists unavailable beds
  *
@@ -44,7 +47,6 @@ class UnavailableBeds extends Report {
         $this->totalBedCount = $db->count();
 
         if(\PHPWS_Error::logIfError($this->totalBedCount)){
-            PHPWS_Core::initModClass('hms', 'exception', 'DatabaseException.php');
             throw new DatabaseException($this->totalBedCount->toString());
         }
 
@@ -76,7 +78,6 @@ class UnavailableBeds extends Report {
         $this->unavailableBeds = $db->select();
 
         if(\PHPWS_Error::logIfError($this->unavailableBeds)){
-            PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
             throw new DatabaseException($this->unavailableBeds->toString());
         }
     }

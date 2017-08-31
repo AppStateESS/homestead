@@ -2,6 +2,12 @@
 
 namespace Homestead\Report\ApplicationsWithIncompleteContracts;
 
+use \Homestead\Report;
+use \Homestead\iCsvReport;
+use \Homestead\PdoFactory;
+use \Homestead\StudentFactory;
+use \Homestead\HMS_Util;
+
 /**
  * Cancelled Housing Applications List
  * Generates a list of all cancelled housing aplications
@@ -30,8 +36,6 @@ class ApplicationsWithIncompleteContracts extends Report implements iCsvReport{
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $pdo = PdoFactory::getPdoInstance();
 
         $sql = "SELECT

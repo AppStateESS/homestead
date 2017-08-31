@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\CheckinsByHall;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 class CheckinsByHallHtmlView extends ReportHtmlView {
 
     protected function render(){

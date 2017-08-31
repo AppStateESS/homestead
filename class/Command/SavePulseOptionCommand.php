@@ -69,7 +69,7 @@ class SavePulseOptionCommand extends Command
         } else {
             throw new \Exception('Unknown schedule type requested');
         }
-        PHPWS_Core::goBack();
+        \PHPWS_Core::goBack();
     }
 
     public function dropAutoAssignSchedule()

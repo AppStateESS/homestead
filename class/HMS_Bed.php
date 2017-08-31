@@ -129,7 +129,7 @@ class HMS_Bed extends HMS_Item {
         $db->addWhere('bed_id', $this->id);
         $db->addWhere('term', $this->term);
         $db->loadClass('hms', 'HMS_Assignment.php');
-        $result = $db->getObjects('HMS_Assignment');
+        $result = $db->getObjects('\Homestead\HMS_Assignment');
 
         if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
@@ -721,9 +721,7 @@ class HMS_Bed extends HMS_Item {
      */
     public static function bed_pager_by_room($room_id)
     {
-        \PHPWS_Core::initCoreClass('DBPager.php');
-
-        $pager = new DBPager('hms_bed', 'HMS_Bed');
+        $pager = new \DBPager('hms_bed', 'HMS_Bed');
         $pager->db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
 
         $pager->addWhere('hms_room.id', $room_id);

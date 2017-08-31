@@ -2,6 +2,13 @@
 
 namespace Homestead\Report\AppliedStudentData;
 
+use \Homestead\Report;
+use \Homestead\iCsvReport;
+use \Homestead\Term;
+use \Homestead\HMS_Assignment;
+use \Homestead\StudentFactory;
+use \Homestead\CommandFactory;
+
 /**
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>
@@ -26,10 +33,6 @@ class AppliedStudentData extends Report implements iCsvReport {
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $db = new \PHPWS_DB('hms_new_application');
         $db->addColumn('hms_new_application.*');
         $db->addWhere('term', $this->term);

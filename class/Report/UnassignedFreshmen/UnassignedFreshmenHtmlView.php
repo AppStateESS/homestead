@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\UnassignedFreshmen;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 /**
  * HTML View for UnassignedFreshmen report
  *

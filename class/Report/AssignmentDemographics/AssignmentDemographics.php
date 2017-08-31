@@ -2,6 +2,10 @@
 
 namespace Homestead\Report\AssignmentDemographics;
 
+use \Homestead\Report;
+use \Homestead\StudentFactory;
+use \Homestead\Exception\DatabaseException;
+
 /**
  * The Assignment Demographics report.
  * Calculates totals breaking down who is assigned to each hall
@@ -67,9 +71,6 @@ class AssignmentDemographics extends Report {
 
     public function execute()
     {
-        // Load the necessary classes
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         // Get a list of hall IDs and names
         $this->halls = $this->getHallList();
 

@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\TwentyOne;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 /**
  * HTML View for TwentyOne report
  *

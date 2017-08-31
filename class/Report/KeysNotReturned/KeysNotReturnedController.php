@@ -2,6 +2,12 @@
 
 namespace Homestead\Report\KeysNotReturned;
 
+use \Homestead\ReportController;
+use \Homestead\iSyncReport;
+use \Homestead\iAsyncReport;
+use \Homestead\iSchedReport;
+use \Homestead\iCsvReportView;
+
 /*
  *
  * @author Jeremy Booker

@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\ReappAvailableBeds;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 class ReappAvailableBedsHtmlView extends ReportHtmlView
 {
 

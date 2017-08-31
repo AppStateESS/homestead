@@ -2,6 +2,11 @@
 
 namespace Homestead\Report\UnassignedStudents;
 
+use \Homestead\Report;
+use \Homestead\iCsvReport;
+use \Homestead\Term;
+use \Homestead\Exception\DatabaseException;
+
 /**
  * Unassigned Students Report
  * Computes the list of all unassigned students for the given term.
@@ -41,14 +46,6 @@ class UnassignedStudents extends Report implements iCsvReport {
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'SpringApplication.php');
-        PHPWS_Core::initModClass('hms', 'SummerApplication.php');
-        PHPWS_Core::initModClass('hms', 'FallApplication.php');
-        PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-
         $term = $this->term;
 
         $sem = Term::getTermSem($term);
@@ -64,19 +61,19 @@ class UnassignedStudents extends Report implements iCsvReport {
             case TERM_SUMMER2:
                 $db->addJoin('', 'hms_new_application', 'hms_summer_application', 'id', 'id');
                 $db->addColumn('hms_summer_application.*');
-                $applicationClassName = 'SummerApplication';
+                $applicationClassName = '\Homestead\SummerApplication';
                 //$db->addWhere('application_type', 'summer');
                 break;
             case TERM_FALL:
                 $db->addJoin('', 'hms_new_application', 'hms_fall_application', 'id', 'id');
                 $db->addColumn('hms_fall_application.*');
-                $applicationClassName = 'FallApplication';
+                $applicationClassName = '\Homestead\FallApplication';
                 //$db->addWhere('application_type', 'fall');
                 break;
             case TERM_SPRING:
                 $db->addJoin('', 'hms_new_application', 'hms_spring_application', 'id', 'id');
                 $db->addColumn('hms_spring_application.*');
-                $applicationClassName = 'SpringApplication';
+                $applicationClassName = '\Homestead\SpringApplication';
                 //$db->addWhere('application_type', 'spring');
                 break;
             default:

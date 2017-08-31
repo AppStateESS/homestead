@@ -2,6 +2,10 @@
 
 namespace Homestead\Report\UnassignedBeds;
 
+use \Homestead\Report;
+use \Homestead\iCsvReport;
+use \Homestead\HMS_Residence_Hall;
+
 /**
  * Unassigned Beds Report
  * Computes the list of all unassigned beds.
@@ -41,8 +45,6 @@ class UnassignedBeds extends Report implements iCsvReport {
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-
         if (!isset($this->term) || is_null($this->term)) {
             throw new \InvalidArgumentException('Missing term.');
         }

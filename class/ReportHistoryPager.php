@@ -2,8 +2,6 @@
 
 namespace Homestead;
 
-\PHPWS_Core::initCoreClass('DBPager.php');
-
 /**
  * ReportHistoryPager
  *
@@ -13,7 +11,7 @@ namespace Homestead;
  * @author jbooker
  * @package HMS
  */
-class ReportHistoryPager extends DBPager {
+class ReportHistoryPager extends \DBPager {
 
     private $reportCtrl;
 

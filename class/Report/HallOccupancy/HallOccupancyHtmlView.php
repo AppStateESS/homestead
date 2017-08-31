@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\HallOccupancy;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 /*
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>

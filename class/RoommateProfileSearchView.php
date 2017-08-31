@@ -2,7 +2,7 @@
 
 namespace Homestead;
 
-    class RoommateProfileSearchView extends DBPager{
+    class RoommateProfileSearchView extends \DBPager{
     /**
      * Sets up the pager object for searching questionnairs.
      *
@@ -16,8 +16,6 @@ namespace Homestead;
 
         $gender = $student->getGender();
 
-        \PHPWS_Core::initCoreClass('DBPager.php');
-
         $pageTags = array();
 
         $pageTags['USERNAME'] = _('Email');
@@ -25,7 +23,7 @@ namespace Homestead;
         $pageTags['LAST_NAME'] = _('Last Name');
         $pageTags['ACTIONS'] = _('Action');
 
-        $pager = new DBPager('hms_student_profiles', 'RoommateProfile');
+        $pager = new \DBPager('hms_student_profiles', 'RoommateProfile');
 
         $pager->db->addWhere('term', $term);
 

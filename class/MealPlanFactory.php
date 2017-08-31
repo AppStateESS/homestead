@@ -87,7 +87,7 @@ class MealPlanFactory {
                     'term' => $term
                 ));
 
-        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'MealPlanRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\MealPlanRestored');
 
         $result = $stmt->fetch();
 
@@ -123,7 +123,7 @@ class MealPlanFactory {
         $stmt->execute(array('term' => $term,
                             'status' => MealPlan::STATUS_NEW));
 
-        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'MealPlanRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\MealPlanRestored');
 
         return $stmt->fetchAll();
     }

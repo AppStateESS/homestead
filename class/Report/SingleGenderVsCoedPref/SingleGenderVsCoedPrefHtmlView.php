@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\SingleGenderVsCoedPref;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 class SingleGenderVsCoedPrefHtmlView extends ReportHtmlView {
 
     protected function render()

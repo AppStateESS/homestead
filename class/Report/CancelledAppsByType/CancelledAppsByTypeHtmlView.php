@@ -2,6 +2,10 @@
 
 namespace Homestead\Report\CancelledAppsByType;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+use \Homestead\HMS_Util;
+
 /**
  * HTML view for the Cancelled Housing Applications by Student Type report.
  *
@@ -12,8 +16,6 @@ class CancelledAppsByTypeHtmlView extends ReportHtmlView {
 
     protected function render(){
         parent::render();
-
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         $this->tpl['TERM'] = Term::toString($this->report->getTerm());
 

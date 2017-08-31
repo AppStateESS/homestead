@@ -2,6 +2,13 @@
 
 namespace Homestead\Report\HallOccupancy;
 
+use \Homestead\ReportController;
+use \Homestead\iSyncReport;
+use \Homestead\iAsyncReport;
+use \Homestead\iSchedReport;
+use \Homestead\iHtmlReportView;
+use \Homestead\iPdfReportView;
+
 /*
  *
  * @author Matthew McNaney <mcnaney at gmail dot com>

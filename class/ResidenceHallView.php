@@ -73,11 +73,11 @@ class ResidenceHallView extends View {
         $form->addCssClass('package_desk', 'form-control');
 
         // Images
-        PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
+        \PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
         if(isset($this->hall->exterior_image_id)){
-            $manager = Cabinet::fileManager('exterior_image_id', $this->hall->exterior_image_id);
+            $manager = \Cabinet::fileManager('exterior_image_id', $this->hall->exterior_image_id);
         }else{
-            $manager = Cabinet::fileManager('exterior_image_id');
+            $manager = \Cabinet::fileManager('exterior_image_id');
         }
 
         $manager->maxImageWidth(300);
@@ -87,9 +87,9 @@ class ResidenceHallView extends View {
 
 
         if(isset($this->hall->other_image_id)){
-            $manager = Cabinet::fileManager('other_image_id', $this->hall->other_image_id);
+            $manager = \Cabinet::fileManager('other_image_id', $this->hall->other_image_id);
         }else{
-            $manager = Cabinet::fileManager('other_image_id');
+            $manager = \Cabinet::fileManager('other_image_id');
         }
 
         $manager->maxImageWidth(300);
@@ -98,9 +98,9 @@ class ResidenceHallView extends View {
         $form->addTplTag('OTHER_IMG', $manager->get());
 
         if(isset($this->hall->map_image_id)){
-            $manager = Cabinet::fileManager('map_image_id', $this->hall->map_image_id);
+            $manager = \Cabinet::fileManager('map_image_id', $this->hall->map_image_id);
         }else{
-            $manager = Cabinet::fileManager('map_image_id');
+            $manager = \Cabinet::fileManager('map_image_id');
         }
 
         $manager->maxImageWidth(300);
@@ -109,9 +109,9 @@ class ResidenceHallView extends View {
         $form->addTplTag('MAP_IMG', $manager->get());
 
         if(isset($this->hall->room_plan_image_id)){
-            $manager = Cabinet::fileManager('room_plan_image_id', $this->hall->room_plan_image_id);
+            $manager = \Cabinet::fileManager('room_plan_image_id', $this->hall->room_plan_image_id);
         }else{
-            $manager = Cabinet::fileManager('room_plan_image_id');
+            $manager = \Cabinet::fileManager('room_plan_image_id');
         }
 
         $manager->maxImageWidth(300);

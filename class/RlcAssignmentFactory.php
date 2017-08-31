@@ -15,6 +15,6 @@ class RlcAssignmentFactory {
         $db->addWhere('hms_learning_community_assignment.state', $state);
         $db->addWhere('application_type', $type);
 
-        return $db->getObjects('HMS_RLC_Assignment');
+        return $db->getObjects('\Homestead\HMS_RLC_Assignment');
     }
 }

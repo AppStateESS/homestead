@@ -15,7 +15,7 @@ class RoomDamageResponsibilityFactory {
 
         $stmt->execute($params);
 
-        return $stmt->fetchAll(\PDO::FETCH_CLASS, 'RoomDamageResponsibilityRestored');
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomDamageResponsibilityRestored');
     }
 
     public static function getResponsibilityById($id)
@@ -28,7 +28,7 @@ class RoomDamageResponsibilityFactory {
         $params = array('id' => $id);
 
         $stmt->execute($params);
-        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'RoomDamageResponsibilityRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\RoomDamageResponsibilityRestored');
 
         return $stmt->fetch();
     }

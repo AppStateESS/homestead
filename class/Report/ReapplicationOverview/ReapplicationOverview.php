@@ -2,6 +2,10 @@
 
 namespace Homestead\Report\ReapplicationOverview;
 
+use \Homestead\Report;
+use \Homestead\iCsvReport;
+use \Homestead\LotteryProcess;
+
 /**
  * ReapplicationOverview report.
  * Gives various statistics related to re-application.
@@ -27,9 +31,6 @@ class ReapplicationOverview extends Report implements iCsvReport {
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        PHPWS_Core::initModClass('hms', 'LotteryProcess.php');
-
         $lotteryTerm = \PHPWS_Settings::get('hms', 'lottery_term');
 
         /*******************************

@@ -2,6 +2,12 @@
 
 namespace Homestead\Report\AssignmentTypeByFloor;
 
+use \Homestead\Report;
+use \Homestead\ResidenceHallFactory;
+use \Homestead\HMS_Residence_Hall;
+use \Homestead\HMS_Floor;
+use \Homestead\Exception\DatabaseException;
+
 /**
  * Assignment Type By Floor Report class
  *
@@ -33,8 +39,6 @@ class AssignmentTypeByFloor extends Report {
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-
         foreach($this->getHalls() as $hall){
             $hallCount = \PHPWS_DB::getAssoc("select reason, count(*) from hms_assignment JOIN hms_bed ON hms_assignment.bed_id = hms_bed.id JOIN hms_room ON hms_bed.room_id = hms_room.id JOIN hms_floor ON hms_room.floor_id = hms_floor.id JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id where hms_residence_hall.id = {$hall->getId()} AND hms_assignment.term = {$this->getTerm()} group by reason order by reason");
 

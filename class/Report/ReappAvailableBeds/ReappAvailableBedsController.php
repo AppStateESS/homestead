@@ -2,6 +2,12 @@
 
 namespace Homestead\Report\ReappAvailableBeds;
 
+use \Homestead\ReportController;
+use \Homestead\iSyncReport;
+use \Homestead\iHtmlReportView;
+use \Homestead\iPdfReportView;
+use \Homestead\iCsvReportView;
+
 class ReappAvailableBedsController extends ReportController implements iSyncReport, iHtmlReportView, iPdfReportView, iCsvReportView
 {
 

@@ -2,6 +2,9 @@
 
 namespace Homestead\Report\MismatchedRoommates;
 
+use \Homestead\ReportHtmlView;
+use \Homestead\Term;
+
 /**
  * HTML View for MismatchedRoommates report
  *

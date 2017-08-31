@@ -2,6 +2,11 @@
 
 namespace Homestead\Report\CancelledAppsList;
 
+use \Homestead\Report;
+use \Homestead\iCsvReport;
+use \Homestead\HousingApplication;
+use \Homestead\CommandFactory;
+
 /**
  * Cancelled Housing Applications List
  * Generates a list of all cancelled housing aplications
@@ -30,9 +35,6 @@ class CancelledAppsList extends Report implements iCsvReport{
 
     public function execute()
     {
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         // Select all cancelled apps for the given term
         $db = new \PHPWS_DB('hms_new_application');
 

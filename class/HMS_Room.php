@@ -239,7 +239,7 @@ class HMS_Room extends HMS_Item
         $db->addOrder('bed_letter', 'ASC');
 
         $db->loadClass('hms', 'HMS_Bed.php');
-        $result = $db->getObjects('HMS_Bed');
+        $result = $db->getObjects('\Homestead\HMS_Bed');
         if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         } else {
@@ -803,10 +803,9 @@ class HMS_Room extends HMS_Item
 
     public static function room_pager_by_floor($floor_id, $editable=false)
     {
-        \PHPWS_Core::initCoreClass('DBPager.php');
         javascript('jquery');
 
-        $pager = new DBPager('hms_room', 'HMS_Room');
+        $pager = new \DBPager('hms_room', 'HMS_Room');
         $pager->addWhere('hms_room.floor_id', $floor_id);
         $pager->db->addOrder('hms_room.room_number');
 
