@@ -6,6 +6,7 @@ use \Homestead\StudentFactory;
 use \Homestead\CommandFactory;
 use \Homestead\Term;
 use \Homestead\HMS_Bed;
+use \Homestead\UserStatus;
 use \Homestead\NotificationView;
 use \Homestead\HousingApplicationFactory;
 use \Homestead\AssignStudentView;

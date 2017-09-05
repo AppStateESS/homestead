@@ -43,7 +43,7 @@ abstract class Report {
         }
 
         // Initalize values
-        $this->report = get_class($this);
+        $this->report = self::getClass();
     }
 
     /**
@@ -78,7 +78,7 @@ abstract class Report {
      */
     public function getClass()
     {
-        return get_class($this);
+        return preg_replace('/(.+\\\)(.+\\\)(.+)(\\\.+)/', '$3', get_class($this));
     }
 
     /**

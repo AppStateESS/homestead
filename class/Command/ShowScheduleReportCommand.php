@@ -28,7 +28,7 @@ class ShowScheduleReportCommand extends Command {
 
         $report = ReportManager::getReportInstance($this->reportName);
 
-        /** TODO
+        /* TODO
          $view = $report->getSetupView();
 
          if(is_null($view)){

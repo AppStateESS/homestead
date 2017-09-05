@@ -141,9 +141,11 @@ class WKPDF {
             $this->cmd = $path;
         }
 
-        if (!file_exists($this->cmd))
+        if (!file_exists($this->cmd)){
             throw new \Exception('WKPDF static executable "' . htmlspecialchars($this->cmd,
                     ENT_QUOTES) . '" was not found.');
+        }
+
         do {
             $this->tmp = $GLOBALS['WKPDF_TEMP_PATH'] . mt_rand() . '.html';
         } while (file_exists($this->tmp));

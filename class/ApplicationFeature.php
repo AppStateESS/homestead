@@ -61,7 +61,7 @@ abstract class ApplicationFeature
     public function save()
     {
         if(!isset($this->name)) {
-            $this->name = get_class($this);
+            $this->name = preg_replace('/(.+\\\)(.+\\\)(.+)(\\\.+)/', '$3', get_class($this));
         }
 
         $missing = $this->validate();
@@ -385,7 +385,7 @@ abstract class ApplicationFeature
     public static function plugInstance(array $data)
     {
         $f = self::getInstanceByName($data['name']);
-        PHPWS_Core::plugObject($f, $data);
+        \PHPWS_Core::plugObject($f, $data);
         return $f;
     }
 

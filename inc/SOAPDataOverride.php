@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+PHPWS_Core::initModClass('hms', 'Term.php');
+
 class SOAPDataOverride {
 
     public function applyExceptions(&$student)

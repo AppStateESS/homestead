@@ -51,7 +51,7 @@ class SOAPDataProvider extends StudentDataProvider {
 
         //SOAPDataProvider::applyExceptions($student);
         require_once(PHPWS_SOURCE_DIR . SOAP_DATA_OVERRIDE_PATH);
-        $dataOverride = new SOAPDataOverride();
+        $dataOverride = new \SOAPDataOverride();
         $dataOverride->applyExceptions($student);
 
         $student->setDataSource(get_class($this));

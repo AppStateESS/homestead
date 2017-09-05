@@ -15,20 +15,6 @@ class ReportFactory {
     public static $dir = 'Report';
 
     /**
-     * Returns the class name for the controller based on the report's class name.
-     *
-     * @param String $reportName Class name of a report.
-     * @return String Class name of the given report's controller class.
-     */
-    private static function getControllerClassName($reportName)
-    {
-        $dir = PHPWS_SOURCE_DIR . 'mod/hms/class/' . self::$dir;
-        $className = $reportName . 'Controller';
-
-        return $className;
-    }
-
-    /**
      * Returns an instance of the corresponding ReportController given a report class name.
      *
      * @param String $reportName Report class name.
@@ -36,7 +22,7 @@ class ReportFactory {
      */
     public static function getControllerInstance($reportName)
     {
-        $ctrlClassName = self::getControllerClassName($reportName);
+        $ctrlClassName = '\\Homestead\\Report\\' . $reportName . '\\' . $reportName . 'Controller';
         return new $ctrlClassName;
     }
 
@@ -49,8 +35,7 @@ class ReportFactory {
      */
     public static function getControllerInstanceByReport(Report $report)
     {
-        $ctrlClassName = self::getControllerClassName($report->getClass());
-        $ctrlClassName = '\\Homestead\\Report\\' . $report->getClass() . '\\' . $ctrlClassName;
+        $ctrlClassName = '\\Homestead\\Report\\' . $report->getClass() . '\\' . $report->getClass() . 'Controller';
         return new $ctrlClassName($report);
     }
 
@@ -94,8 +79,8 @@ class ReportFactory {
             throw new \InvalidArgumentException('The given report ID does not exist.');
         }
 
-        $result = '\\Homestead\\Report\\' . $result . '\\' . $result;
-        $report = new $result($reportId);
+        $classResult = '\\Homestead\\Report\\' . $result . '\\' . $result;
+        $report = new $classResult($reportId);
 
         return $report;
     }
@@ -122,7 +107,8 @@ class ReportFactory {
         // For each report directory, instantiate the report class
         $reportControllers = array();
         foreach($reportDirs as $r){
-            $reportControllers[] = self::getControllerInstance($r);
+            $ctrlClassName = '\\Homestead\\Report\\' . $r . '\\' . $r . 'Controller';
+            $reportControllers[] = new $ctrlClassName;
         }
 
         return $reportControllers;

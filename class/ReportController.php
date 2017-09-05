@@ -58,7 +58,7 @@ abstract class ReportController {
      */
     public function getReportClassName()
     {
-        return preg_replace("/Controller$/", '', get_class($this));
+        return preg_replace('/(.+\\\)(.+\\\)(.+)(\\\.+)/', '$3', get_class($this));
     }
 
     /**
@@ -69,7 +69,8 @@ abstract class ReportController {
     private function getReportInstance()
     {
         $name = $this->getReportClassName();
-        return new $name;
+        $className = '\\Homestead\\Report\\' . $name . '\\' . $name;
+        return new $className;
     }
 
     /**
@@ -308,7 +309,7 @@ abstract class ReportController {
     public function getHtmlView()
     {
         $name = $this->getReportClassName();
-        $className = $name . "HtmlView";
+        $className = '\\Homestead\\Report\\' . $name .'\\' . $name . "HtmlView";
         return new $className($this->report);
     }
 
