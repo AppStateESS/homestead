@@ -805,7 +805,7 @@ class HMS_Room extends HMS_Item
     {
         javascript('jquery');
 
-        $pager = new \DBPager('hms_room', 'HMS_Room');
+        $pager = new \DBPager('hms_room', '\Homestead\HMS_Room');
         $pager->addWhere('hms_room.floor_id', $floor_id);
         $pager->db->addOrder('hms_room.room_number');
 

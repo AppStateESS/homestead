@@ -23,9 +23,9 @@ class EnvelopeFactory {
 		);
 
 
-        $http = new \Guzzle\Http\Client();
+        $http = new \GuzzleHttp\Client();
         //$request = $http->createRequest('POST', $client->getBaseUrl() . '/envelopes', ['body' => json_encode($data)]);
-        $request = $http->createRequest('POST', $client->getBaseUrl() . '/envelopes');
+        $request = new \GuzzleHttp\Psr7\Request('POST', $client->getBaseUrl() . '/envelopes');
         $request->setBody(json_encode($data), 'application/json');
         $request->setHeader('Content-Type', 'application/json');
         $request->setHeader('Accept', 'application/json');
@@ -34,7 +34,7 @@ class EnvelopeFactory {
         try{
             $response = $http->send($request);
             $result = $response->json();
-        }catch (\Guzzle\Http\Exception\BadResponseException $e){
+        }catch (\GuzzleHttp\Exception\BadResponseException $e){
             throw new \Exception(print_r($e->getResponse()->json(), true));
         }
 
@@ -45,7 +45,7 @@ class EnvelopeFactory {
 	public static function getEnvelopeById(Client $client, $envelopeId) {
         $http = new \Guzzle\Http\Client();
         try {
-            $request = $http->createRequest('GET', $client->getBaseUrl() . '/envelopes/' . $envelopeId);
+            $request = new \GuzzleHttp\Psr7\Request('GET', $client->getBaseUrl() . '/envelopes/' . $envelopeId);
             $request->setHeader('Content-Type', 'application/json');
             $request->setHeader('Accept', 'application/json');
             $request->setHeader('X-DocuSign-Authentication', $client->getAuthHeader());
@@ -53,7 +53,7 @@ class EnvelopeFactory {
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             throw new \Exception(print_r($e->getResponse()->json(), true));
         }
-        $result = $response->json();
+        $result = json_decode($response->getBody(), true);
 
         $envelope = new Envelope($result['envelopeId'], '/envelopes/' . $envelopeId, $result['statusChangedDateTime'], $result['status']);
         return $envelope;

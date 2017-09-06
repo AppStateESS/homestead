@@ -229,7 +229,7 @@ class RoomView extends View {
 
     private function roomDamagePager()
     {
-        $pager = new \DBPager('hms_room_damage', 'RoomDamageDb');
+        $pager = new \DBPager('hms_room_damage', '\Homestead\RoomDamageDb');
         $pager->db->addJoin('LEFT OUTER', 'hms_room_damage', 'hms_damage_type', 'damage_type', 'id');
 
 

@@ -756,7 +756,7 @@ class HMS_Roommate
      */
     public static function display_requests($asu_username, $term)
     {
-        $pager = new \DBPager('hms_roommate', 'HMS_Roommate');
+        $pager = new \DBPager('hms_roommate', '\Homestead\HMS_Roommate');
         $pager->setModule('hms');
         $pager->setTemplate('student/requested_roommate_list.tpl');
         $pager->addRowTags('get_requested_pager_tags');
@@ -772,7 +772,7 @@ class HMS_Roommate
      */
     public static function roommate_pager()
     {
-        $pager = new \DBPager('hms_roommate', 'HMS_Roommate');
+        $pager = new \DBPager('hms_roommate', '\Homestead\HMS_Roommate');
 
         $pager->db->addWhere('confirmed', 1);
         $pager->db->addWhere('term', Term::getSelectedTerm());

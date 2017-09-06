@@ -42,7 +42,7 @@ class UpdateDocusignContractStatus {
 
         // Get Docusign and HTTP clients to be used in sending requests later
         $this->docusignClient = DocusignClientFactory::getClient();
-        $this->httpClient = new \Guzzle\Http\Client();
+        $this->httpClient = new \GuzzleHttp\Client();
 
         // Get all future terms
         $futureTerms = Term::getFutureTerms();
@@ -99,7 +99,7 @@ class UpdateDocusignContractStatus {
 
         $url = $docusignClient->getBaseUrl() . '/envelopes/status?envelope_ids=request_body';
         //echo $url . "\n\n";
-        $request = $guzzleClient->createRequest('PUT', $url);
+        $request = new \GuzzleHttp\Psr7\Request('PUT', $url);
         $request->setBody($envelopeIdJson, 'application/json');
         $request->setHeader('Content-Type', 'application/json');
         $request->setHeader('Accept', 'application/json');
@@ -108,7 +108,7 @@ class UpdateDocusignContractStatus {
         try{
             $response = $guzzleClient->send($request);
             $result = $response->json();
-        }catch (\Guzzle\Http\Exception\BadResponseException $e){
+        }catch (\GuzzleHttp\Exception\BadResponseException $e){
             throw new \Exception(print_r($e->getResponse()->json(), true));
         }
 

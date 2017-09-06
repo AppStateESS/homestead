@@ -56,7 +56,7 @@ class ReportDetailView extends View {
 
         $resultsPager = new ReportHistoryPager($this->reportCtrl);
         $tpl['RESULTS_PAGER'] = $resultsPager->get();
-
+        
         $schedulePager = new ReportSchedulePager($this->reportCtrl);
         $tpl['SCHEDULE_PAGER'] = $schedulePager->get();
 

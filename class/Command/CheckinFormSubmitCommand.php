@@ -5,6 +5,7 @@ namespace Homestead\Command;
 use \Homestead\CommandFactory;
 use \Homestead\NotificationView;
 use \Homestead\Term;
+use \Homestead\UserStatus;
 use \Homestead\StudentFactory;
 use \Homestead\CheckinFactory;
 use \Homestead\Checkin;

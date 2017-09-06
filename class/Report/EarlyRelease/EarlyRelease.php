@@ -113,6 +113,7 @@ class EarlyRelease extends Report implements iCsvReport
 
     public function getCsvColumnsArray()
     {
+        //var_dump('data',$this->data);exit;
         return array_keys($this->data[0]);
     }
 

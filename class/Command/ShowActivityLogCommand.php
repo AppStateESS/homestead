@@ -5,6 +5,7 @@ namespace Homestead\Command;
 use \Homestead\HMS_Activity_Log;
 use \Homestead\ActivityLogView;
 use \Homestead\NotificationView;
+use \Homestead\UserStatus;
 use \Homestead\Exception\PermissionException;
 
 class ShowActivityLogCommand extends Command {

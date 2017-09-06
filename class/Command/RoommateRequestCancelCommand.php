@@ -8,6 +8,7 @@ use \Homestead\HMS_Email;
 use \Homestead\StudentFactory;
 use \Homestead\CommandFactory;
 use \Homestead\NotificationView;
+use \Homestead\UserStatus;
 use \Homestead\Exception\PermissionException;
 
 /**

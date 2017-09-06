@@ -8,6 +8,7 @@ use \Homestead\ParticipantStateDenied;
 use \Homestead\HMS_Email;
 use \Homestead\HMS_Bed;
 use \Homestead\CommandFactory;
+use \Homestead\UserStatus;
 use \Homestead\NotificationView;
 
 class RoomChangeDenyCommand extends Command {

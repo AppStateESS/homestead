@@ -47,6 +47,6 @@ class EnableBannerQueueCommand extends Command {
         $term->save();
         \NQ::Simple('hms', NotificationView::SUCCESS, 'Banner Queue has been enabled for ' . Term::toString($term->term) . '.');
 
-        CommandContext::goBack();
+        $context->goBack();
     }
 }

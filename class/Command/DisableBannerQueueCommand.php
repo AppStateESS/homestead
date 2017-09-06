@@ -49,6 +49,6 @@ class DisableBannerQueueCommand extends Command {
             \NQ::Simple('hms', NotificationView::SUCCESS, 'Banner Queue has been disabled for ' . Term::toString($term->term) . '.');
         }
 
-        CommandContext::goBack();
+        $context->goBack();
     }
 }

@@ -3,6 +3,7 @@
 namespace Homestead\Command;
 
 use \Homestead\StatsView;
+use \Homestead\UserStatus;
 use \Homestead\Exception\PermissionException;
 
 class ShowStatsCommand extends Command {

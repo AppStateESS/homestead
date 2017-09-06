@@ -112,7 +112,7 @@ class RlcAssignmentView extends View
         $form->setClass('submit', 'btn btn-primary');
         $tags = $form->getTemplate();
 
-        $pager = new \DBPager('hms_learning_community_applications', 'HMS_RLC_Application');
+        $pager = new \DBPager('hms_learning_community_applications', '\Homestead\HMS_RLC_Application');
         $pager->db->addColumn('hms_learning_community_applications.*');
 
         $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_applications', 'hms_learning_community_assignment', 'id', 'application_id');

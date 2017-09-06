@@ -5,7 +5,7 @@ namespace Homestead;
 class EditRlcView extends View {
 
     public function show(){
-        $pager = new \DBPager('hms_learning_communities', 'HMS_Learning_Community');
+        $pager = new \DBPager('hms_learning_communities', '\Homestead\HMS_Learning_Community');
         $pager->db->addOrder('community_name ASC');
         $pager->setModule('hms');
         $pager->setTemplate('admin/rlc_edit_list.tpl');

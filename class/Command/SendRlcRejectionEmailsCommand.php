@@ -5,6 +5,7 @@ namespace Homestead\Command;
 use \Homestead\Term;
 use \Homestead\HMS_RLC_Application;
 use \Homestead\HMS_Email;
+use \Homestead\UserStatus;
 use \Homestead\NotificationView;
 use \Homestead\StudentFactory;
 use \Homestead\Exception\PermissionException;

@@ -5,6 +5,7 @@ namespace Homestead\Command;
 use \Homestead\CommandFactory;
 use \Homestead\StudentFactory;
 use \Homestead\Term;
+use \Homestead\UserStatus;
 use \Homestead\HMS_Assignment;
 use \Homestead\MealPlanFactory;
 use \Homestead\MealPlan;

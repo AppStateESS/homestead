@@ -662,7 +662,7 @@ class HMS_Floor extends HMS_Item
 
     public static function get_pager_by_hall($hall_id)
     {
-        $pager = new \DBPager('hms_floor', 'HMS_Floor');
+        $pager = new \DBPager('hms_floor', '\Homestead\HMS_Floor');
 
         $pager->addWhere('hms_floor.residence_hall_id', $hall_id);
         $pager->db->addOrder('hms_floor.floor_number');

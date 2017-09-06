@@ -1,8 +1,6 @@
 <?php
 
-namespace Homestead;
-
-PHPWS_Core::initModClass('hms', 'Term.php');
+use \Homestead\Term;
 
 class SOAPDataOverride {
 

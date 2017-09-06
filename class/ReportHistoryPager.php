@@ -17,7 +17,7 @@ class ReportHistoryPager extends \DBPager {
 
     public function __construct(ReportController $reportCtrl)
     {
-        parent::__construct('hms_report', 'GenericReport');
+        parent::__construct('hms_report', '\Homestead\GenericReport');
 
         $this->reportCtrl = $reportCtrl;
 

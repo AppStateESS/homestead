@@ -72,24 +72,17 @@ class Client {
     }
 
     public function authenticate() {
-        $url = $this->getAPIUrl() .  '/login_information';
+        $url = $this->getAPIUrl() . '/login_information';
 
-        $http = new \Guzzle\Http\Client();
+        $http = new \GuzzleHttp\Client();
         try {
-            $request = $http->createRequest('GET', $url);
-            $request->setHeader('Content-Type', 'application/json');
-            $request->setHeader('Accept', 'application/json');
-            $request->setHeader('X-DocuSign-Authentication', $this->getAuthHeader());
-            $response = $http->send($request);
+            $request = new \GuzzleHttp\Psr7\Request('GET', $url);
+            $response = $http->send($request, ['headers' => ['Content-Type' => 'application/json', 'Accept' => 'application/json', 'X-DocuSign-Authentication' => $this->getAuthHeader()]]);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-        	//var_dump($e);
-            //var_dump($e->getRequest());
-            //exit;
             throw $e;
         }
-        $json = $response->json();
-        //var_dump($json);exit;
-        //var_dump($json['loginAccounts'][0]['baseUrl']);
+        $json = json_decode($response->getBody(), true);
+
         $this->baseURL = $json['loginAccounts'][0]['baseUrl'];
         $this->accountID = $json['loginAccounts'][0]['accountId'];
 

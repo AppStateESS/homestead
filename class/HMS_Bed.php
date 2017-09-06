@@ -721,7 +721,7 @@ class HMS_Bed extends HMS_Item {
      */
     public static function bed_pager_by_room($room_id)
     {
-        $pager = new \DBPager('hms_bed', 'HMS_Bed');
+        $pager = new \DBPager('hms_bed', '\Homestead\HMS_Bed');
         $pager->db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
 
         $pager->addWhere('hms_room.id', $room_id);

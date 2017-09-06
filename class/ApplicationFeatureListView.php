@@ -23,10 +23,10 @@ class ApplicationFeatureListView extends View{
         foreach($this->features as $feature) {
             //$featureTpl = array();
             //$featureTpl['DESCRIPTION'] = $feature->getDescription();
-
             $class = $feature->getName();
             if(!isset($termFeatures[$class])) {
-                $f = new $class();
+                $pathName = '\\Homestead\\ApplicationFeature\\' . $class;
+                $f = new $pathName();
                 $f->setTerm($this->term);
                 $termFeatures[$class] = $f;
             }

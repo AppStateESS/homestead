@@ -5,6 +5,7 @@ namespace Homestead\Command;
 use \Homestead\Term;
 use \Homestead\CommandFactory;
 use \Homestead\NotificationView;
+use \Homestead\UserStatus;
 use \Homestead\Exception\PermissionException;
 
 class SetCurrentTermCommand extends Command {

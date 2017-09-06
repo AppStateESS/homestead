@@ -10,6 +10,7 @@ use \Homestead\RoomDamageFactory;
 use \Homestead\RoomDamageResponsibilityFactory;
 use \Homestead\RoomFactory;
 use \Homestead\StudentFactory;
+use \Homestead\UserStatus;
 use \Homestead\Exception\PermissionException;
 
 

@@ -236,16 +236,15 @@ abstract class ApplicationFeature
         $files = scandir("{$dir}/");
 
         foreach($files as $file) {
-            $feature = preg_replace('/\.php$/', '', $file);
-            if($feature == $file) {
+            $featureRem = preg_replace('/\.php$/', '', $file);
+            $feature = preg_replace('/Registration/', '', $featureRem);
+            if($feature == $featureRem) {
                 continue;
             }
 
-            $registration = "{$feature}Registration";
-            $registration = '\\Homestead\\ApplicationFeature\\' . $registration;
+            $registration = '\\Homestead\\ApplicationFeature\\' . $feature . 'Registration';
             $features[] = new $registration();
         }
-
         return $features;
     }
 
@@ -304,7 +303,6 @@ abstract class ApplicationFeature
         $features = array();
         foreach($results as $result) {
             // Instanciate a registration object
-            $path = 'ApplicationFeature/' . $result['name'] . '.php';
             $regClass = $result['name'] . 'Registration';
             $regClass = '\\Homestead\\ApplicationFeature\\' . $regClass;
             $reg = new $regClass;

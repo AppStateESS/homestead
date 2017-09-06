@@ -401,7 +401,7 @@ class LotteryApplication extends HousingApplication {
      */
     public static function specialInterestPager($group, $term)
     {
-        $pager = new \DBPager('hms_new_application', 'LotteryApplication');
+        $pager = new \DBPager('hms_new_application', '\Homestead\LotteryApplication');
         $pager->setModule('hms');
         $pager->addRowTags('specialInterestTags');
 
@@ -444,7 +444,7 @@ class LotteryApplication extends HousingApplication {
     {
         $term = \PHPWS_Settings::get('hms', 'lottery_term');
 
-        $pager = new \DBPager('hms_new_application', 'LotteryApplication');
+        $pager = new \DBPager('hms_new_application', '\Homestead\LotteryApplication');
         $pager->db->addColumn('hms_new_application.*');
         $pager->db->addColumn('hms_lottery_application.*');
         $pager->db->addJoin('LEFT', 'hms_new_application', 'hms_lottery_application', 'id', 'id');

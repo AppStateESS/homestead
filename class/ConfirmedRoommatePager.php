@@ -9,7 +9,7 @@ class ConfirmedRoommatePager extends View {
 
     public function show()
     {
-        $pager = new \DBPager('hms_roommate', 'HMS_Roommate');
+        $pager = new \DBPager('hms_roommate', '\Homestead\HMS_Roommate');
 
         $pager->db->addWhere('confirmed', 1);
         $pager->db->addWhere('term', Term::getSelectedTerm());

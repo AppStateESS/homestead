@@ -28,7 +28,7 @@ class ActivityLogPager extends View {
         $this->static		= $static;
         $this->limit		= $limit;
 
-        $this->pager = new \DBPager('hms_activity_log','HMS_Activity_Log');
+        $this->pager = new \DBPager('hms_activity_log','\Homestead\HMS_Activity_Log');
     }
 
 

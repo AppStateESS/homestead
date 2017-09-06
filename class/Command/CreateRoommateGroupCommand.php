@@ -6,6 +6,7 @@ use \Homestead\StudentFactory;
 use \Homestead\HMS_Roommate;
 use \Homestead\HMS_Activity_Log;
 use \Homestead\Term;
+use \Homestead\UserStatus;
 use \Homestead\CommandFactory;
 use \Homestead\NotificationView;
 use \Homestead\Exception\PermissionException;

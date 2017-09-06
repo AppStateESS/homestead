@@ -6,6 +6,7 @@ use \Homestead\CommandFactory;
 use \Homestead\HMS_Roommate;
 use \Homestead\HMS_Activity_Log;
 use \Homestead\NotificationView;
+use \Homestead\UserStatus;
 use \Homestead\Exception\PermissionException;
 
 class DeleteRoommateGroupCommand extends Command {

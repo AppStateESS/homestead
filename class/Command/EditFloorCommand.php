@@ -5,6 +5,7 @@ namespace Homestead\Command;
 use \Homestead\HMS_Floor;
 use \Homestead\CommandFactory;
 use \Homestead\NotificationView;
+use \Homestead\UserStatus;
 use \Homestead\Exception\PermissionException;
 use \Homestead\Exception\DatabaseException;
 

@@ -23,7 +23,7 @@ namespace Homestead;
         $pageTags['LAST_NAME'] = _('Last Name');
         $pageTags['ACTIONS'] = _('Action');
 
-        $pager = new \DBPager('hms_student_profiles', 'RoommateProfile');
+        $pager = new \DBPager('hms_student_profiles', '\Homestead\RoommateProfile');
 
         $pager->db->addWhere('term', $term);
 

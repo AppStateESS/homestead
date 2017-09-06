@@ -47,9 +47,9 @@ class Envelope {
      */
     public function getEnvelopeViewURI(Client $client)
     {
-        $http = new \Guzzle\Http\Client();
+        $http = new \GuzzleHttp\Client();
         try {
-            $request = $http->createRequest('POST', $client->getBaseUrl() . '/views/console/');
+            $request = new \GuzzleHttp\Psr7\Request('POST', $client->getBaseUrl() . '/views/console/');
             $request->setHeader('Content-Type', 'application/json');
             $request->setHeader('Accept', 'application/json');
             $request->setHeader('X-DocuSign-Authentication', $client->getAuthHeader());
@@ -57,9 +57,6 @@ class Envelope {
             $request->setBody(json_encode($data), 'application/json');
             $response = $http->send($request);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-            //var_dump($e);
-            //var_dump($e->getRequest());
-            //exit;
             throw $e;
         }
         $result = $response->json();
@@ -68,14 +65,14 @@ class Envelope {
 
     public function voidEnvelope(Client $client, $reason)
     {
-        $http = new \Guzzle\Http\Client();
+        $http = new \GuzzleHttp\Client();
 
         $obj = new \stdClass();
         $obj->status = 'voided';
         $obj->voidedReason = $reason;
 
         try {
-            $request = $http->createRequest('PUT', $client->getBaseUrl() . '/envelopes/' . $this->envelopeId);
+            $request = new \GuzzleHttp\Psr7\Request('PUT', $client->getBaseUrl() . '/envelopes/' . $this->envelopeId);
 
             $request->setBody(json_encode($obj), 'application/json');
 

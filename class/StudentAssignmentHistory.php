@@ -10,7 +10,7 @@ use \Homestead\Exception\DatabaseException;
  * @author Adam D. Dixon
  */
 
-class StudentAssignmentHistory extends ArrayObject{
+class StudentAssignmentHistory extends \ArrayObject{
 
     private $bannerId;
     private $assignmentHistory;
