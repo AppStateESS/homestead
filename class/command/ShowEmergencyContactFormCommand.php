@@ -45,11 +45,9 @@ class ShowEmergencyContactFormCommand extends Command {
         }
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
-        $application = HousingApplication::getApplicationByUser($student->getUsername(), $term);
+        $application = HousingApplicationFactory::getApplicationById($student->getBannerId());
         $formView = new EmergencyContactFormView($student, $term, $application);
 
         $context->setContent($formView->show());
     }
 }
-
-

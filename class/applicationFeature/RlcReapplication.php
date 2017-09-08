@@ -35,7 +35,7 @@ class RlcReapplication extends ApplicationFeature {
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
 
-        $application = HousingApplication::getApplicationByUser($student->getUsername(), $this->term);
+        $application = HousingApplicationFactory::getApplicationById($student->getBannerId());
         if(!$application instanceof LotteryApplication){
             $application = null;
         }

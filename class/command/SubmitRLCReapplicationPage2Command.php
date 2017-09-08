@@ -43,7 +43,7 @@ class SubmitRLCReapplicationPage2Command extends Command {
         $errorCmd->setTerm($term);
 
         // Double check the the student is eligible
-        $housingApp = HousingApplication::getApplicationByUser($student->getUsername(), $term);
+        $housingApp = HousingApplicationFactory::getApplicationByID($student->getBannerId());
         if(!$housingApp instanceof LotteryApplication){
             NQ::simple('hms', hms\NotificationView::ERROR, 'You are not eligible to re-apply for a Learning Community.');
             $menuCmd->redirect();

@@ -126,7 +126,7 @@ class BedView extends hms\View
      */
     private function getBedHistoryArray()
     {
-        $db = \Database::newDB();
+        $db = \phpws2\Database::newDB();
         $t1 = $db->addTable('hms_assignment_history');
         $t1->addFieldConditional('bed_id', $this->bed->id);
         /*

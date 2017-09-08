@@ -155,7 +155,7 @@ class LotteryConfirmCommand extends Command {
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_LOTTERY_ROOM_CHOSEN, UserStatus::getUsername(), 'Captcha: ' . $captcha);
 
         // Update the student's meal plan in the housing application, just for future reference
-        $app = HousingApplication::getApplicationByUser($student->getUsername(), $term);
+        $app = HousingApplicationFactory::getApplicationById($student->getBannerId());
         $app->setMealPlan($mealPlanCode);
         $app->save();
 

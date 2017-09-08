@@ -79,7 +79,7 @@ class WithdrawnSearch {
     private function handleApplication(Student $student)
     {
         // Get the application and mark it withdrawn
-        $app = HousingApplication::getApplicationByUser($student->getUsername(), $this->term);
+        $app = HousingApplicationFactory::getApplicationById($student->getBannerId());
         if(!is_null($app)) {
             //$app->setWithdrawn(1);
             //$app->setStudentType(TYPE_WITHDRAWN);
