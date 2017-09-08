@@ -37,17 +37,14 @@ class RecipientView {
             //$request = $http->createRequest('POST', $this->client->getBaseUrl() . $this->envelope->getUri() . '/views/recipient', ['body' => json_encode($data)]);
             $request = new \GuzzleHttp\Psr7\Request('POST', $this->client->getBaseUrl() . $this->envelope->getUri() . '/views/recipient');
             $request->setBody(json_encode($data), 'application/json');
-            $request->setHeader('Content-Type', 'application/json');
-            $request->setHeader('Accept', 'application/json');
-            $request->setHeader('X-DocuSign-Authentication', $this->client->getAuthHeader());
-            $response = $http->send($request);
+            $response = $http->send($request, ['headers' => ['Content-Type' => 'application/json', 'Accept' => 'application/json', 'X-DocuSign-Authentication' => $this->client->getAuthHeader()]]);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             if (extension_loaded('newrelic')) { // Ensure PHP agent is available
                 newrelic_notice_error($e->getResponse()->json(), $e);
             }
             throw $e;
         }
-        $result = $response->json();
+        $result = json_decode($response->getBody(), true);
         //var_dump($result);exit;
         return $result['url'];
     }

@@ -26,16 +26,13 @@ class EnvelopeFactory {
         $http = new \GuzzleHttp\Client();
         //$request = $http->createRequest('POST', $client->getBaseUrl() . '/envelopes', ['body' => json_encode($data)]);
         $request = new \GuzzleHttp\Psr7\Request('POST', $client->getBaseUrl() . '/envelopes');
-        $request->setBody(json_encode($data), 'application/json');
-        $request->setHeader('Content-Type', 'application/json');
-        $request->setHeader('Accept', 'application/json');
-        $request->setHeader('X-DocuSign-Authentication', $client->getAuthHeader());
+        //$request->setBody(json_encode($data), 'application/json');
 
         try{
-            $response = $http->send($request);
-            $result = $response->json();
+            $response = $http->send($request, ['headers' => ['Content-Type' => 'application/json', 'Accept' => 'application/json', 'X-DocuSign-Authentication' => $client->getAuthHeader()]]);
+            $result = json_decode($response->getBody(), true);
         }catch (\GuzzleHttp\Exception\BadResponseException $e){
-            throw new \Exception(print_r($e->getResponse()->json(), true));
+            throw new \Exception($e);
         }
 
 
@@ -46,10 +43,7 @@ class EnvelopeFactory {
         $http = new \Guzzle\Http\Client();
         try {
             $request = new \GuzzleHttp\Psr7\Request('GET', $client->getBaseUrl() . '/envelopes/' . $envelopeId);
-            $request->setHeader('Content-Type', 'application/json');
-            $request->setHeader('Accept', 'application/json');
-            $request->setHeader('X-DocuSign-Authentication', $client->getAuthHeader());
-            $response = $http->send($request);
+            $response = $http->send($request, ['headers' => ['Content-Type' => 'application/json', 'Accept' => 'application/json', 'X-DocuSign-Authentication' => $client->getAuthHeader()]]);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             throw new \Exception(print_r($e->getResponse()->json(), true));
         }

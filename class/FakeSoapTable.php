@@ -8,7 +8,7 @@ use \phpws2\Database;
 // Seconds of delay you want to replicate for each query.
 define('FAKE_SOAP_DELAY', 0);
 
-class TestSOAP extends SOAP
+class FakeSoapTable extends SOAP
 {
 
     /**

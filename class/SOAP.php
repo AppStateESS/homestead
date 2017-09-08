@@ -53,7 +53,8 @@ abstract class SOAP
 
         if(empty(self::$instance)) {
             if(SOAP_INFO_TEST_FLAG) {
-                self::$instance = new TestSOAP($username, $userType);
+                $className = "\\Homestead\\" . SOAP_OVERRIDE_CLASS_NAME;
+                self::$instance = new $className($username, $userType);
             } else {
                 self::$instance = new PhpSOAP($username, $userType);
             }

@@ -22,8 +22,8 @@ define('SOAP_INFO_TEST_FLAG', false);
 /**
  * Name of the SOAP override file. Only used if SOAP_INFO_TEST_FLAG is true
  */
-//define('SOAP_OVERRIDE_FILE', 'FakeSoapTable.php');
-define('SOAP_OVERRIDE_FILE', 'TestSOAP.php');
+ define('SOAP_OVERRIDE_CLASS_NAME', 'FakeSoapTable');
+ //define('SOAP_OVERRIDE_CLASS_NAME', 'TestSOAP');
 
 
 /**
@@ -77,4 +77,3 @@ define('WKPDF_PATH', PHPWS_SOURCE_DIR . 'mod/hms/vendor/ioki/wkhtmltopdf-amd64-c
 
 define('USE_XVFB', true);
 define('XVFB_PATH', '/usr/bin/xvfb-run');
-
