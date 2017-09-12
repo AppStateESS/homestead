@@ -85,9 +85,11 @@ class NoShowList extends Report implements iCsvReport {
 
     public function getCsvColumnsArray()
     {
-      if($this->total != 0)
-      {
-        return array_keys($this->data[0]);
+      if($this->total != 0){
+          if($this->data != null){
+              return array_keys($this->data[0]);
+          }
+          return null;
       }
     }
 

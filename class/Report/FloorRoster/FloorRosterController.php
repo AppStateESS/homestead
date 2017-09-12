@@ -7,7 +7,7 @@ use \Homestead\iSyncReport;
 use \Homestead\iAsyncReport;
 use \Homestead\iSchedReport;
 use \Homestead\iPdfReportView;
-use \Homestead\FloorRosterPdfView;
+use \Homestead\Report\FloorRoster\FloorRosterPdfView;
 
 /**
  *

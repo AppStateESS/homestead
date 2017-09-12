@@ -42,7 +42,7 @@ class RoomChangeParticipantStateFactory {
         // Create a ParticipantState object for each result
         $states = array();
         foreach ($results as $row) {
-            $className = 'ParticipantState' . $row['state_name'];
+            $className = '\\Homestead\\ParticipantState' . $row['state_name'];
             $states[] = new $className($participant, $row['effective_date'], $row['effective_until_date'], $row['committed_by']);
         }
 

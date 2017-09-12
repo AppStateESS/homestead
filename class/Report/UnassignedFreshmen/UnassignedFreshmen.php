@@ -161,7 +161,10 @@ class UnassignedFreshmen extends Report implements iCsvReport {
 
     public function getCsvColumnsArray()
     {
-        return array_keys($this->data[0]);
+        if($this->data != null){
+            return array_keys($this->data[0]);
+        }
+        return null;
     }
 
     public function getCsvRowsArray(){

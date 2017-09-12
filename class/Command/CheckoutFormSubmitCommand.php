@@ -13,13 +13,13 @@ use \Homestead\BedFactory;
 use \Homestead\Term;
 use \Homestead\UserStatus;
 use \Homestead\InfoCard;
-use \Homestead\InfoCardPdfView;
 use \Homestead\HMS_Email;
 use \Homestead\RoomChangeRequestFactory;
 use \Homestead\RoomChangeParticipantFactory;
 use \Homestead\RoomChangeStateComplete;
 use \Homestead\NotificationView;
 use \Homestead\ParticipantStateCheckedOut;
+//use \Homestead\InfoCardPdfView;
 use \Homestead\Exception\PermissionException;
 
 

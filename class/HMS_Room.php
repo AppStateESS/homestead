@@ -423,10 +423,12 @@ class HMS_Room extends HMS_Item
 
         $assignees = array();
 
-        foreach ($this->_beds as $bed) {
-            $assignee = $bed->get_assignee();
-            if (!is_null($assignee)) {
-                $assignees[] = $assignee;
+        if($this->_beds != null){
+            foreach ($this->_beds as $bed) {
+                $assignee = $bed->get_assignee();
+                if (!is_null($assignee)) {
+                    $assignees[] = $assignee;
+                }
             }
         }
 

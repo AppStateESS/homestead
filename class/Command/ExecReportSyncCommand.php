@@ -71,10 +71,10 @@ class ExecReportSyncCommand extends Command {
 
         // Generate the report
         $reportCtrl->generateReport();
-
+//var_dump($reportCtrl);exit;
         // Get the default view command
         $viewCmd = $reportCtrl->getDefaultOutputViewCmd();
-
+//var_dump($viewCmd);exit;
         // Rediect to the view command
         $viewCmd->redirect();
     }

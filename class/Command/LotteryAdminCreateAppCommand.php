@@ -43,12 +43,12 @@ class LotteryAdminCreateAppCommand extends Command {
             $viewCmd->redirect();
         }
 
-        $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), null, MealPlan::BANNER_MEAL_STD, $physicalDisability, $psychDisability, $genderNeed, $medicalNeed, 0, NULL, 0, NULL, 0, 0, 0, 0);
+        $application = new LotteryApplication(0, $term, $student->getBannerId(), $student->getUsername(), $student->getGender(), $student->getType(), $student->getApplicationTerm(), null, MealPlan::BANNER_MEAL_STD, 0, NULL, 0, NULL, 0, 0, 0, 0);
 
         try{
             $application->save();
         }catch(\Exception $e){
-            \NQ::simple('hms', NotificationView::ERROR,'There was a problem saving the application.');
+            \NQ::simple('hms', NotificationView::ERROR, 'There was a problem saving the application.');
             $viewCmd->redirect();
         }
 

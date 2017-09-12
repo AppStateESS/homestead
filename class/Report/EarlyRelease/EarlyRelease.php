@@ -116,7 +116,6 @@ class EarlyRelease extends Report implements iCsvReport
         if($this->data != null){
             return array_keys($this->data[0]);
         }
-
         return null;
     }
 

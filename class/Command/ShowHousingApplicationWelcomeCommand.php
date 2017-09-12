@@ -6,6 +6,7 @@ use \Homestead\StudentFactory;
 use \Homestead\CommandFactory;
 use \Homestead\UserStatus;
 use \Homestead\ApplicationFeature;
+use \Homestead\HousingApplication;
 use \Homestead\HousingApplicationWelcomeView;
 use \Homestead\HousingApplicationNotAvailableView;
 

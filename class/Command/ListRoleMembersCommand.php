@@ -23,14 +23,13 @@ class ListRoleMembersCommand extends Command {
             exit();
         }
 
-        $class    = $context->get('type');
+        $class    = '\\Homestead\\' . $context->get('type');
         $instance = $context->get('instance');
 
         $class     = new $class;
         $class->id = $instance;
         $hms_perm = new HMS_Permission();
         $members = $hms_perm->getMembership('email', $class, null, true);
-
         echo json_encode($members);
         exit();
     }

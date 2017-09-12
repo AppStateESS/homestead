@@ -11,7 +11,6 @@ class ListRolesCommand extends Command {
     public function execute(CommandContext $context){
         $db = new \PHPWS_DB('hms_role');
         $result = $db->select();
-
         if(\PHPWS_Error::logIfError($result)){
             echo json_encode(array());
         } else {

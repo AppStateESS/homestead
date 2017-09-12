@@ -23,7 +23,7 @@ class StartAutoassignCommand extends Command {
             $assigner->autoassign();
         } catch(\Exception $e) {
             echo "EXCEPTION CAUGHT: " . $e->getMessage() . "<br /><br />\n\n";
-            var_dump($e->getTrace());
+            //var_dump($e->getTrace());
         }
 
         echo "</pre></body></html>\n\n";

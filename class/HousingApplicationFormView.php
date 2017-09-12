@@ -2,7 +2,7 @@
 
 namespace Homestead;
 
-use \Homestead\ApplicationFeature\RLCApplicationRegistration;
+use \Homestead\ApplicationFeature\RlcApplicationRegistration;
 
 class HousingApplicationFormView extends View
 {
@@ -224,7 +224,7 @@ class HousingApplicationFormView extends View
         /*******
          * RLC *
          *******/
-        $rlcReg = new RLCApplicationRegistration();
+        $rlcReg = new RlcApplicationRegistration();
         if (HMS_RLC_Application::checkForApplication($this->student->getUsername(), $this->term) == TRUE) {
             // Student has an RLC application on file already
             $tpl['RLC_SUBMITTED'] = '';

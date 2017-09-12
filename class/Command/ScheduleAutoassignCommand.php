@@ -17,7 +17,8 @@ class ScheduleAutoassignCommand extends Command
             $began = strftime('on %d %h %Y at %I:%M %P', $pulse->getStartTime());
             $message = "<h2>The autoassigner is already running.</h2><p>It started at $began and was scheduled by $user.</p>";
         } else {
-            SavePulseOptionCommand::addAutoAssignSchedule();
+            $autoCommand = new SavePulseOptionCommand;
+            $autoCommand->addAutoAssignSchedule();
             $message = '<h2>The autoassigner is now running.</h2><p>You will receive an email when it is finished.</p>';
         }
 

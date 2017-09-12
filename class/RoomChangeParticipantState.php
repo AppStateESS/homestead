@@ -71,7 +71,8 @@ class RoomChangeParticipantState {
 
     public function canTransition(RoomChangeParticipantState $toState)
     {
-        return in_array(get_class($toState), $this->getValidTransitions());
+        $stateName = preg_replace('/(.+\\\)(.+)/', '$2', get_class($toState));
+        return in_array($stateName, $this->getValidTransitions());
     }
 
     public function getName()

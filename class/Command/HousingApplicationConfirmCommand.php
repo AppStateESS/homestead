@@ -17,7 +17,7 @@ use \Homestead\UserStatus;
 use \Homestead\Term;
 use \Homestead\HMS_RLC_Application;
 use \Homestead\NotificationView;
-use \Homestead\ApplicationFeature\RLCApplicationRegistration;
+use \Homestead\ApplicationFeature\RlcApplicationRegistration;
 use \Homestead\Exception\InvalidTermException;
 
 class HousingApplicationConfirmCommand extends Command {
@@ -128,7 +128,7 @@ class HousingApplicationConfirmCommand extends Command {
         $friendly_term = Term::toString($application->getTerm());
         \NQ::simple('hms', NotificationView::SUCCESS, "Your application for $friendly_term was successfully processed!  You will receive an email confirmation in the next 24 hours.");
 
-        $rlcReg = new RLCApplicationRegistration();
+        $rlcReg = new RlcApplicationRegistration();
 
 
         if(ApplicationFeature::isEnabledForStudent($rlcReg, $term, $student)

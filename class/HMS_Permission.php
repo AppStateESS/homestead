@@ -36,7 +36,8 @@ class HMS_Permission extends HMS_Item {
         }
 
         if(!is_null($object)){
-            $db->addWhere('hms_user_role.class', strtolower(get_class($object)));
+            $objectName = preg_replace('/(.+\\\)(.+)/', '$2', get_class($object));
+            $db->addWhere('hms_user_role.class', strtolower($objectName));
             $db->addWhere('hms_user_role.instance', $object->getId());
         }
 

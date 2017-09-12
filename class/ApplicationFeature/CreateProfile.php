@@ -3,7 +3,7 @@
 namespace Homestead\ApplicationFeature;
 
 use \Homestead\Student;
-use \Homestead\RoommateProfile;
+use \Homestead\RoommateProfileFactory;
 use \Homestead\StudentMenuProfileView;
 use \Homestead\ApplicationFeature;
 

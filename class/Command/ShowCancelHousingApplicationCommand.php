@@ -4,6 +4,7 @@ namespace Homestead\Command;
 
 use \Homestead\HousingApplicationFactory;
 use \Homestead\HousingApplicationCancelView;
+use \Homestead\HousingApplication;
 use \Homestead\HMS_Assignment;
 use \Homestead\Term;
 

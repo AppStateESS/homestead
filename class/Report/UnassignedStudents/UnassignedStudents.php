@@ -101,25 +101,29 @@ class UnassignedStudents extends Report implements iCsvReport {
         }
 
         // Post-processing, cleanup, making it pretty
-        foreach($results as $app){
+        if($results != null){
+            foreach($results as $app){
+                // Updates counts
+                $this->total++;
 
-            // Updates counts
-            $this->total++;
+                if($app->getGender() == MALE){
+                    $this->male++;
+                }else if($app->getGender() == FEMALE){
+                    $this->female++;
+                }
 
-            if($app->getGender() == MALE){
-                $this->male++;
-            }else if($app->getGender() == FEMALE){
-                $this->female++;
+                // Copy the cleaned up row to the member var for data
+                $this->data[] = $app->unassignedStudentsFields();
             }
-
-            // Copy the cleaned up row to the member var for data
-            $this->data[] = $app->unassignedStudentsFields();
         }
     }
 
     public function getCsvColumnsArray()
     {
-        return array_keys($this->data[0]);
+        if($this->data != null){
+            return array_keys($this->data[0]);
+        }
+        return null;
     }
 
     public function getCsvRowsArray(){
