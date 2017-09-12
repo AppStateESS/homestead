@@ -59,7 +59,7 @@ class LotteryConfirmRoommateRequestView extends View {
         $tpl['MEAL_PLAN'] = HMS_Util::formatMealOption($this->mealPlan);
 
         \PHPWS_Core::initCoreClass('Captcha.php');
-        $tpl['CAPTCHA'] = Captcha::get();
+        $tpl['CAPTCHA'] = \Captcha::get();
 
         $submitCmd = CommandFactory::getCommand('LotteryConfirmRoommateRequest');
         $submitCmd->setRequestId($this->request['id']);

@@ -15,7 +15,7 @@ class RoomChangeRequestStateFactory {
 
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        $className = 'RoomChangeState' . $result['state_name'];
+        $className = '\\Homestead\\' . 'RoomChangeState' . $result['state_name'];
 
         return new $className($request, $result['effective_date'], $result['effective_until_date'], $result['committed_by']);
     }

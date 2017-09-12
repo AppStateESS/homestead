@@ -312,7 +312,7 @@ abstract class ApplicationFeature
                 continue;
             }
 
-            $className = $result['name'];
+            $className = '\\Homestead\\ApplicationFeature\\' . $result['name'];
 
             // Check for conflicting priorities in the array, make sure we don't overwrite
             // an existing key

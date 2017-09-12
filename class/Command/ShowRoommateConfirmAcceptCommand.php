@@ -59,7 +59,7 @@ class ShowRoommateConfirmAcceptCommand extends Command
         $cmd->setRoommateId($id);
         $cmd->initForm($form);
 
-        $form->addTplTag('CAPTCHA_IMAGE', Captcha::get());
+        $form->addTplTag('CAPTCHA_IMAGE', \Captcha::get());
         $form->addTplTag('NAME', $requestor->getFullName());
 
         $form->addSubmit('Confirm Request');

@@ -22,7 +22,7 @@ class LotteryDenyRoommateRequestView extends View {
         $tpl = array();
 
         $tpl['REQUESTOR']  = $requestor->getName();
-        $tpl['CAPTCHA']    = Captcha::get();
+        $tpl['CAPTCHA']    = \Captcha::get();
 
         $submitCmd = CommandFactory::getCommand('LotteryDenyRoommateRequest');
         $submitCmd->setRequestId($this->request['id']);

@@ -3,6 +3,7 @@
 namespace Homestead\Command;
 
 use \Homestead\CommandFactory;
+use \Homestead\LotteryProcess;
 
 class SendLotteryInvitesCommand extends Command {
 

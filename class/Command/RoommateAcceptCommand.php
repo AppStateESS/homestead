@@ -57,7 +57,7 @@ class RoommateAcceptCommand extends Command
         $err->setRoommateId($id);
 
         \PHPWS_Core::initCoreClass('Captcha.php');
-        $verified = Captcha::verify(TRUE);
+        $verified = \Captcha::verify(TRUE);
         if($verified === FALSE || is_null($verified)) {
             \NQ::Simple('hms', NotificationView::ERROR, 'Sorry, please try again.');
             $err->redirect();

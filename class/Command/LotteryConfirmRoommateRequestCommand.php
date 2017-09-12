@@ -46,7 +46,7 @@ class LotteryConfirmRoommateRequestCommand extends Command {
 
         // Confirm the captcha
         \PHPWS_Core::initCoreClass('Captcha.php');
-        $captcha = Captcha::verify(TRUE);
+        $captcha = \Captcha::verify(TRUE);
         if($captcha === FALSE){
             \NQ::simple('hms', NotificationView::ERROR, 'The words you entered were incorrect. Please try again.');
             $errorCmd->redirect();

@@ -63,7 +63,7 @@ class RoomChangeStudentApproveCommand extends Command {
 
         // Check for CAPTCHA if this is the student; admins don't need a CAPTCHA
         if(!UserStatus::isAdmin()) {
-            $captchaResult = Captcha::verify(true);
+            $captchaResult = \Captcha::verify(true);
             if (UserStatus::getUsername() == $student->getUsername() && $captchaResult === false) {
                 // Failed the captcha
                 \NQ::simple('hms', NotificationView::ERROR, "You didn't type the magic words correctly. Please try again.");

@@ -68,7 +68,7 @@ class RoomChangeRequestStudentApprovalView {
         $tpl['PARTICIPANTS'] = $participantRows;
 
         \PHPWS_Core::initCoreClass('Captcha.php');
-        $tpl['CAPTCHA'] = Captcha::get();
+        $tpl['CAPTCHA'] = \Captcha::get();
 
         return \PHPWS_Template::process($tpl, 'hms', 'student/roomChangeRequestStudentApprove.tpl');
     }

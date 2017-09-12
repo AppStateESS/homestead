@@ -66,7 +66,7 @@ class LotteryConfirmCommand extends Command {
         $successCmd->setRoomId($roomId);
 
         \PHPWS_Core::initCoreClass('Captcha.php');
-        $captcha = Captcha::verify(TRUE); // returns the words entered if correct, FALSE otherwise
+        $captcha = \Captcha::verify(TRUE); // returns the words entered if correct, FALSE otherwise
         //$captcha = TRUE;
         if($captcha === FALSE) {
             \NQ::simple('hms', NotificationView::ERROR, 'Sorry, the words you eneted were incorrect. Please try again.');

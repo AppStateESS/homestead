@@ -86,7 +86,7 @@ class LotteryConfirmView extends View {
         $form->addHidden('meal_plan', $this->mealPlan);
 
         \PHPWS_Core::initCoreClass('Captcha.php');
-        $form->addTplTag('CAPTCHA_IMAGE', Captcha::get());
+        $form->addTplTag('CAPTCHA_IMAGE', \Captcha::get());
 
         $form->addSubmit('submit_form', 'Confirm room & roommates');
         $form->mergeTemplate($tpl);

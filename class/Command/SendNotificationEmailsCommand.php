@@ -142,8 +142,10 @@ class SendNotificationEmailsCommand extends Command {
             */
 
             $students = $floor->getUsernames();
-            foreach($students as $student){
-                HMS_Email::send_email($student . '@' . DOMAIN_NAME, $from, $subject, $body);
+            if ($students != null){
+                foreach($students as $student){
+                    HMS_Email::send_email($student . '@' . DOMAIN_NAME, $from, $subject, $body);
+                }
             }
 
             HMS_Activity_Log::log_activity(\Current_User::getUsername(), ($anonymous ? ACTIVITY_FLOOR_NOTIFIED_ANONYMOUSLY : ACTIVITY_FLOOR_NOTIFIED), \Current_User::getUsername(), $floor->where_am_i());
