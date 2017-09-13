@@ -37,7 +37,7 @@ class Application extends ApplicationFeature {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         PHPWS_Core::initModClass('hms', 'ApplicationMenuBlockView.php');
 
-        $application = HousingApplicationFactory::getApplicationById($student->getBannerId());
+        $application = HousingApplicationFactory::getAppByStudent($student, $term);
 
         return new ApplicationMenuBlockView($this->term, $this->getStartDate(), $this->getEditDate(), $this->getEndDate(), $application);
     }
