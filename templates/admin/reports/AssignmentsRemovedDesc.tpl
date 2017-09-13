@@ -1,0 +1,1 @@
+Provides a CSV export of all assignments that were removed during the selected term. Excludes assignments removed for 'Room Change' and 'Reassignment' reasons. This does not guarantee that some of the students were not assigned again later. Gender, application term, and student type fields may be missing if the student was assigned without having a housing application on file.
