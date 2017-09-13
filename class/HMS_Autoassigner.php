@@ -41,7 +41,8 @@ class HMS_Autoassigner
         // Assign Roommates
         reset($roommates);
         foreach($roommates as $pair) {
-            $a = HousingApplication::getApplicationByUser($pair['requestor'], $term);
+            $a_student = StudentFactory::getStudentByUsername($pair['requestor'], $term);
+            $a = HousingApplicationFactory::getApplicationById($a_student->getBannerId());
 
             if(in_array($a->username, $assigned)) {
                 $notices[] = "<strong>{$a->username}</strong> already scheduled for assignment.";
@@ -54,7 +55,8 @@ class HMS_Autoassigner
                 continue;
             }
 
-            $b = HousingApplication::getApplicationByUser($pair['requestee'], $term);
+            $b_student = StudentFactory::getStudentByUsername($pair['requestee'], $term);
+            $b = HousingApplicationFactory::getApplicationById($b_student->getBannerId());
 
             if(in_array($b->username, $assigned)) {
                 $notices[] = "<strong>{$b->username}</strong> already scheduled for assignment.";
