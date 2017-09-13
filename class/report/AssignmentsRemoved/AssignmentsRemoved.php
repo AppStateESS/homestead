@@ -58,8 +58,8 @@ class AssignmentsRemoved extends Report implements iCsvReport {
         foreach($results as $row){
             $tempArray = $row;
 
-            $tempArray['assigned_on'] = date('m/d/y', $row['assigned_on']);
-            $tempArray['removed_on'] = date('m/d/y', $row['removed_on']);
+            $tempArray['assigned_on'] = date('m/d/Y', $row['assigned_on']);
+            $tempArray['removed_on'] = date('m/d/Y', $row['removed_on']);
             $tempArray['gender'] = HMS_Util::formatGender($row['gender']);
 
             $this->rows[] = $tempArray;
