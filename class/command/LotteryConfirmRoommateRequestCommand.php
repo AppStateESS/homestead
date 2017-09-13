@@ -55,8 +55,7 @@ class LotteryConfirmRoommateRequestCommand extends Command {
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         // Update the meal plan field on the application
-
-        $app = HousingApplicationFactory::getApplicationById($student->getBannerId());
+        $app = HousingApplicationFactory::getAppByStudent($student, $term);
 
         $app->setMealPlan($mealPlanCode);
         $app->save();

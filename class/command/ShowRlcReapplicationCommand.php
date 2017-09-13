@@ -43,7 +43,7 @@ class ShowRlcReapplicationCommand extends Command {
         }
 
         // Double check the the student is eligible
-        $housingApp = HousingApplicationFactory::getApplicationById($student->getBannerId());
+        $housingApp = HousingApplicationFactory::getAppByStudent($student, $term);
         if(!$housingApp instanceof LotteryApplication){
             NQ::simple('hms', hms\NotificationView::ERROR, 'You are not eligible to re-apply for a Residential Learning Community.');
             $errorCmd->redirect();

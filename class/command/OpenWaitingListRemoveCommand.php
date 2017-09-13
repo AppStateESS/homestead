@@ -23,7 +23,7 @@ class OpenWaitingListRemoveCommand extends Command {
         $student = StudentFactory::getStudentByUsername($username, PHPWS_Settings::get('hms', 'lottery_term'));
 
         if(!is_null($username)){
-            $app = HousingApplicationFactory::getApplicationById($student->getBannerId());
+            $app = HousingApplicationFactory::getAppByStudent($student, PHPWS_Settings::get('hms', 'lottery_term'));
             $app->waiting_list_hide = 1;
             $result = $app->save();
 

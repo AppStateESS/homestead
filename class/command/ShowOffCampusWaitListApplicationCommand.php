@@ -43,7 +43,7 @@ class ShowOffCampusWaitListApplicationCommand extends Command {
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         // Check if the student has already applied. If so, redirect to the student menu
-        $app = HousingApplicationFactory::getApplicationById($student->getBannerId());
+        $app = HousingApplicationFactory::getAppByStudent($student, $term);
         //$app = HousingApplication::getApplicationByUser(UserStatus::getUsername(), $term);
 
         if (isset($app) && $app->getApplicationType() == 'offcampus_waiting_list') {
