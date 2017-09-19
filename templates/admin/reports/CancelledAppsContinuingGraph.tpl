@@ -1,5 +1,5 @@
-<script type="text/javascript" src="mod/hms/bower_components/flot/jquery.flot.js"></script>
-<script type="text/javascript" src="mod/hms/bower_components/flot/jquery.flot.time.js"></script>
+<script type="text/javascript" src="mod/hms/node_modules/flot/jquery.flot.js"></script>
+<script type="text/javascript" src="mod/hms/node_modules/flot/jquery.flot.time.js"></script>
 
 <h1>{NAME} - {TERM}</h1>
 

@@ -60,7 +60,6 @@ abstract class ApplicationFeature
      */
     public function save()
     {
-        //var_dump($this);
         if(!isset($this->name)) {
             $this->name = preg_replace('/(.+\\\)(.+\\\)(.+)/', '$3', get_class($this));
         }

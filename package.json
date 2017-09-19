@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/AppStateESS/homestead/",
   "dependencies": {
-    "classnames": "^2.2"
+    "classnames": "^2.2",
+    "flot": "^0.8.0-alpha"
   },
   "devDependencies": {},
   "scripts": {

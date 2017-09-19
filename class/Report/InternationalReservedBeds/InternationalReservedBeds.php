@@ -47,11 +47,15 @@ class InternationalReservedBeds extends Report
         $halls = array();
         $rows = array();
 
-        foreach ($result as $node) {
-            $this->total++;
-            if(!in_array($node['hall_name'], $halls)) {
-                $halls[] = $node['hall_name'];
+        if($result != null){
+            foreach ($result as $node) {
+                $this->total++;
+                if(!in_array($node['hall_name'], $halls)) {
+                    $halls[] = $node['hall_name'];
+                }
             }
+        }else{
+            $this->total = 0;
         }
 
         foreach ($halls as $hall) {
