@@ -40,6 +40,16 @@ class HousingApplicationFormView extends hms\View
         $tpl['STUDENT_STATUS_LBL'] = HMS_Util::formatType($this->student->getType());
         $tpl['TERM'] = Term::toString($this->term);
 
+
+        /**************
+         * Show note about no roommate requests for spring term
+         */
+        $sem = Term::getTermSem($this->term);
+
+        if($sem == TERM_FALL){
+            $tpl['SPRING_ROOMMATE_NOTICE'] = ''; // Dummy var to trigger template block
+        }
+
         /**************
          * Cell Phone *
          **************/
@@ -59,7 +69,6 @@ class HousingApplicationFormView extends hms\View
 
         // This is just getting worse and worse.
         // TODO: this, correctly.
-        $sem = Term::getTermSem($this->term);
         if ($sem == TERM_SPRING || $sem == TERM_FALL) {
 
             /*************
