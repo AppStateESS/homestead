@@ -6,6 +6,7 @@ use \Homestead\CommandFactory;
 use \Homestead\NotificationView;
 use \Homestead\UserStatus;
 use \Homestead\StudentFactory;
+use \Homestead\LotteryProcess;
 use \Homestead\RlcMembershipFactory;
 use \Homestead\LotteryChooseHallView;
 

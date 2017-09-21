@@ -8,6 +8,7 @@ use \Homestead\HMS_Activity_Log;
 use \Homestead\HMS_Room;
 use \Homestead\RoomDamage;
 use \Homestead\RoomDamageFactory;
+use \Homestead\RoomDamageResponsibility;
 use \Homestead\RoomDamageResponsibilityFactory;
 use \Homestead\BedFactory;
 use \Homestead\Term;

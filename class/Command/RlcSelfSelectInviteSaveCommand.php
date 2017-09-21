@@ -49,7 +49,7 @@ class RlcSelfSelectInviteSaveCommand extends Command {
         // Check to see if the user is coming back from DocuSign contract
         $event = $context->get('event');
         if(isset($event) && $event != null && ($event === 'signing_complete' || $event === 'viewing_complete')) {
-var_dump('here');exit;
+
             // Log that the student just signed, but ignore the 'viewing complete' event.
             if($event === 'signing_complete'){
                 HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CONTRACT_STUDENT_SIGN_EMBEDDED, UserStatus::getUsername(), "Student signed contract for $term through the embedded signing process");
@@ -168,7 +168,10 @@ var_dump('here');exit;
         }
 
         //make an array with all the emergency contact and missing person info in it then sent that by session
-        $sessionData = array('emergency_contact_name'=>$emergencyName);//and the rest
+        $sessionData = array('emergency_contact_name' => $emergencyName, 'emergency_contact_relationship' => $emergencyRelationship,
+        'emergency_contact_phone'=>$emergencyPhone, 'emergency_contact_email' => $emergencyEmail, 'missing_person_name' => $missingPersonName,
+        'missing_person_relationship' => $missingPersonRelationship, 'missing_person_phone' => $missingPersonPhone , 'missing_person_email' => $missingPersonEmail);
+        //and the rest
         $_SESSION['application_data'] = $sessionData;
 
         $agreementCmd = CommandFactory::getCommand('ShowTermsAgreement');
