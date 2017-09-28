@@ -1,7 +1,12 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'PdoFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+namespace Homestead\Report\AssignmentsRemoved;
+
+use \Homestead\Report;
+use \Homestead\PdoFactory;
+use \Homestead\HMS_Util;
+use \Homestead\CommandFactory;
+use \Homestead\iCsvReport;
 
 class AssignmentsRemoved extends Report implements iCsvReport {
 
@@ -51,7 +56,7 @@ class AssignmentsRemoved extends Report implements iCsvReport {
 
         $stmt = $db->prepare($query);
         $stmt->execute(array('term' => $this->getTerm()));
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->setFetchMode(\PDO::FETCH_ASSOC);
 
         $results = $stmt->fetchAll();
 

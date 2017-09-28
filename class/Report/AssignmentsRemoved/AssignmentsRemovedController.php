@@ -1,5 +1,13 @@
 <?php
 
+namespace Homestead\Report\AssignmentsRemoved;
+
+use \Homestead\ReportController;
+use \Homestead\iSyncReport;
+use \Homestead\iAsyncReport;
+use \Homestead\iSchedReport;
+use \Homestead\iCsvReportView;
+
 class AssignmentsRemovedController extends ReportController implements iSyncReport, iAsyncReport, iSchedReport, iCsvReportView
 {
 
