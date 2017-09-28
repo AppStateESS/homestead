@@ -1,3 +1,6 @@
+import React from 'react';
+import $ from 'jquery';
+
 var AssignByFloor = React.createClass({
 
     getInitialState: function () {
@@ -371,7 +374,7 @@ var Bed = React.createClass({
         } else {
             button = <i className="fa-lg pull-right fa fa-check-circle"></i>;
         }
-        message2 = <div>{button}{message}</div>;
+        var message2 = <div>{button}{message}</div>;
         return React.createElement('div', {
             className : 'alert alert-' + type + dismissString,
             role: 'alert'

@@ -1,4 +1,7 @@
-var CheckOut = React.createClass({displayName: "CheckOut",
+import React from 'react';
+import $ from 'jquery';
+
+var CheckOut = React.createClass({
     getInitialState: function() {
         // damage_types, existing_damage and residents are plugged in by the CheckOut.html template
         return {
@@ -102,19 +105,19 @@ var CheckOut = React.createClass({displayName: "CheckOut",
     render: function() {
         var disable = !this.isReadyToPost();
         return (
-            React.createElement("div", null,
-                React.createElement(KeyReturn, {keyReturned: this.state.keyReturned, updateKeyReturned: this.updateKeyReturned, updateKeyCode: this.updateKeyCode, previousKeyCode: this.state.previousKeyCode}),
-                React.createElement(ExistingDamages, {responsible: this.state.responsible, existingDamage: this.state.existingDamage, damageTypes: this.state.damageTypes}),
-                React.createElement(NewRoomDamages, {damageTypes: this.state.damageTypes, residents: this.state.residents, updateNewDamage: this.updateNewDamage, newDamage: this.state.newDamage}),
-                React.createElement(CheckOutCompletion, {updateProperCheckout: this.updateProperCheckout, updateImproperNote: this.updateImproperNote}),
-                React.createElement("hr", null),
-                React.createElement("p", {className: "text-center"}, React.createElement("button", {disabled: disable, className: "btn btn-primary btn-lg", onClick: this.postCheckOut}, React.createElement("i", {className: "fa fa-check"}), " Complete Checkout"))
-            )
+            <div>
+                <KeyReturn keyReturned={this.state.keyReturned} updateKeyReturned={this.updateKeyReturned} updateKeyCode={this.updateKeyCode} previousKeyCode={this.state.previousKeyCode}/>
+                <ExistingDamages responsible={this.state.responsible} existingDamage={this.state.existingDamage} damageTypes={this.state.damageTypes}/>
+                <NewRoomDamages damageTypes={this.state.damageTypes} residents={this.state.residents} updateNewDamage={this.updateNewDamage} newDamage={this.state.newDamage}/>
+                <CheckOutCompletion updateProperCheckout={this.updateProperCheckout} updateImproperNote={this.updateImproperNote} />
+                <hr />
+                <p className="text-center"><button disabled={disable} className="btn btn-primary btn-lg" onClick={this.postCheckOut}><i className="fa fa-check"></i> Complete Checkout</button></p>
+            </div>
         );
     }
 });
 
-var KeyReturn = React.createClass({displayName: "KeyReturn",
+var KeyReturn = React.createClass({
     getInitialState: function() {
         return {
             codeAlert: false,
@@ -158,63 +161,63 @@ var KeyReturn = React.createClass({displayName: "KeyReturn",
     },
 
     render: function() {
-        var codeAlertDiv = React.createElement("div", null);
+        var codeAlertDiv = <div></div>;
         if (this.state.codeAlert) {
-            codeAlertDiv = React.createElement("div", {className: "alert alert-warning"}, React.createElement("strong", null, "Note:"), " This keycode does not match the checkin key code: ", this.props.previousKeyCode);
+            codeAlertDiv = <div className="alert alert-warning"><strong>Note:</strong> This keycode does not match the checkin key code: {this.props.previousKeyCode}</div>;
         }
 
         return (
-            React.createElement("div", null,
-                React.createElement("h3", null, "Key status"),
-                React.createElement("div", {className: "row"},
-                    React.createElement("div", {className: "col-sm-3"},
-                        React.createElement("div", null,
-                            React.createElement("label", null,
-                                React.createElement("input", {name: "keyReturned", onChange: this.keyTurnIn, type: "radio", value: "true"}), ' ', " Key returned"
-                            )
-                        ),
-                        React.createElement("div", null,
-                            React.createElement("label", null,
-                                React.createElement("input", {name: "keyReturned", onChange: this.keyTurnIn, type: "radio", value: "false"}), ' ', " Key not returned"
-                            )
-                        )
-                    ),
-                    React.createElement("div", {className: "col-sm-3"},
-                        React.createElement("input", {className: "form-control", disabled: !this.props.keyReturned, id: "keyCode", name: "keyCode", placeholder: "Enter key code", onBlur: this.updateKeyCode, type: "text", ref: "keyCode"})
-                    ),
-                    React.createElement("div", {className: "col-sm-6"},
-                        codeAlertDiv
-                    )
-                )
-            )
+            <div>
+                <h3>Key status</h3>
+                <div className="row">
+                    <div className="col-sm-3">
+                        <div>
+                            <label>
+                                <input name="keyReturned" onChange={this.keyTurnIn} type="radio" value='true'/>{' '} Key returned
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <input name="keyReturned" onChange={this.keyTurnIn} type="radio" value='false'/>{' '} Key not returned
+                            </label>
+                        </div>
+                    </div>
+                    <div className="col-sm-3">
+                        <input className="form-control" disabled={!this.props.keyReturned} id="keyCode" name="keyCode" placeholder="Enter key code" onBlur={this.updateKeyCode} type="text" ref="keyCode"/>
+                    </div>
+                    <div className="col-sm-6">
+                        {codeAlertDiv}
+                    </div>
+                </div>
+            </div>
         );
     }
 
 });
 
-var ExistingDamages = React.createClass({displayName: "ExistingDamages",
+var ExistingDamages = React.createClass({
     render: function() {
         if (this.props.existingDamage.length === 0) {
             return (
-                React.createElement("div", null,
-                    React.createElement("h3", null, "Existing Room Damage"),
-                    React.createElement("p", null, React.createElement("em", null, "No previous damage recorded."))
-                )
+                <div>
+                    <h3>Existing Room Damage</h3>
+                    <p><em>No previous damage recorded.</em></p>
+                </div>
             );
         }
         return (
-            React.createElement("div", null,
-                React.createElement("h3", null, "Existing Room Damage"),
-                this.props.existingDamage.map(function(value, key){ return (
-                React.createElement(Damage, {category: this.props.damageTypes[value.damage_type].category, description: this.props.damageTypes[value.damage_type].description,
-                    key: key, note: value.note, reportedOn: value.reported_on, side: value.side, residents: value.residents})
-                ); }, this)
-            )
+            <div>
+                <h3>Existing Room Damage</h3>
+                {this.props.existingDamage.map(function(value, key){ return (
+                <Damage category={this.props.damageTypes[value.damage_type].category} description={this.props.damageTypes[value.damage_type].description}
+                    key={key} note={value.note} reportedOn={value.reported_on} side={value.side} residents={value.residents}/>
+                ); }, this)}
+            </div>
         );
     }
 });
 
-var NewRoomDamages = React.createClass({displayName: "NewRoomDamages",
+var NewRoomDamages = React.createClass({
     getInitialState: function() {
         return {
             formActive: false
@@ -253,23 +256,23 @@ var NewRoomDamages = React.createClass({displayName: "NewRoomDamages",
     },
 
     render: function() {
-        var button = this.state.formActive ? null : React.createElement("button", {className: "btn btn-success", onClick: this.addDamageForm, autoFocus: true},
-                React.createElement("i", {className: "fa fa-plus"}), ' ', "Add damage");
+        var button = this.state.formActive ? null : <button className="btn btn-success" onClick={this.addDamageForm} autoFocus={true}>
+                <i className="fa fa-plus"></i>{' '}Add damage</button>;
         return (
-            React.createElement("div", null,
-                React.createElement("h3", null, "New Room Damages"),
-                this.props.newDamage.map(function(value, key){ if (value.form === true) { return (
-                React.createElement(DamageForm, React.__spread({},  this.props, {key: key, pushDamage: this.pushDamage, removeForm: this.removeForm}))
+            <div>
+                <h3>New Room Damages</h3>
+                {this.props.newDamage.map(function(value, key){ if (value.form === true) { return (
+                <DamageForm {...this.props} key={key} pushDamage={this.pushDamage} removeForm={this.removeForm}/>
                 ); } else { return (
-                React.createElement(Damage, {category: value.category, description: value.description, key: key, note: value.note, reportedOn: value.reportedOn, side: value.side, residents: value.residents})
-                ); } }, this), " ", button
-            )
+                <Damage category={value.category} description={value.description} key={key} note={value.note} reportedOn={value.reportedOn} side={value.side} residents={value.residents}/>
+                ); } }, this)} {button}
+            </div>
         );
     }
 
 });
 
-var DamageForm = React.createClass({displayName: "DamageForm",
+var DamageForm = React.createClass({
 
     propTypes: {
         // contains _.name, _.studentId
@@ -424,65 +427,65 @@ var DamageForm = React.createClass({displayName: "DamageForm",
         var residentClass = 'col-sm-3 ' + ($.inArray('resident', this.state.error) !== -1 ? 'checkout-error-border' : null);
         var noteClass = 'form-control ' + ($.inArray('note', this.state.error) !== -1 ? 'checkout-error-border' : null);
         if (this.state.error.length) {
-            alert = React.createElement("div", {className: "alert alert-danger"}, "Please complete all highlighted fields.");
+            alert = <div className="alert alert-danger">Please complete all highlighted fields.</div>;
         }
 
         return (
-            React.createElement("div", {className: "panel panel-default", id: "newDamageForm"},
-                React.createElement("div", {className: "panel-body"},
-                    React.createElement("div", {className: "row"},
-                        React.createElement("div", {className: residentClass},
-                            React.createElement("h4", null, "Responsible"),
-                            this.props.residents.map(function(val, key){return (
-                            React.createElement(ResidentCheckbox, {handleChange: this.residentSelected, key: key, name: val.name, value: val.studentId, autoFocus: key === 0})
-                            ); }, this)
-                        ),
-                        React.createElement("div", {className: "col-sm-9"},
-                            React.createElement("h4", null, "Details"),
-                            React.createElement("div", {className: "row"},
-                                React.createElement("div", {className: "col-sm-3"},
-                                    React.createElement(SideSelect, {onChange: this.sideSelected, error: this.state.error})
-                                ),
-                                React.createElement("div", {className: "col-sm-9"},
-                                    React.createElement(DamageTypeSelect, {damageTypes: this.props.damageTypes, onChange: this.categorySelected, error: this.state.error})
-                                )
-                            ),
-                            React.createElement("div", {className: "row", style: {marginTop: '1em'}},
-                                React.createElement("div", {className: "col-sm-12"},
-                                    React.createElement("input", {className: noteClass, maxLength: "200", name: "note", onChange: this.updateNote, placeholder: "Brief description of damage...", type: "text"})
-                                )
-                            )
-                        )
-                    ),
-                    React.createElement("hr", null),
-                    React.createElement("div", {className: "text-center"},
-                        alert,
-                        React.createElement("button", {className: "btn btn-primary", onClick: this.saveDamage},
-                            React.createElement("i", {className: "fa fa-floppy-o"}), ' ', "Save damages"
-                        ), ' ',
-                        React.createElement("button", {className: "btn btn-danger-hover", onClick: this.props.removeForm},
-                            React.createElement("i", {className: "fa fa-times"}), ' ', "Remove"
-                        )
-                    )
-                )
-            )
+            <div className="panel panel-default" id="newDamageForm">
+                <div className="panel-body">
+                    <div className="row">
+                        <div className={residentClass}>
+                            <h4>Responsible</h4>
+                            {this.props.residents.map(function(val, key){return (
+                            <ResidentCheckbox handleChange={this.residentSelected} key={key} name={val.name} value={val.studentId} autoFocus={key === 0}/>
+                            ); }, this)}
+                        </div>
+                        <div className="col-sm-9">
+                            <h4>Details</h4>
+                            <div className="row">
+                                <div className='col-sm-3'>
+                                    <SideSelect onChange={this.sideSelected} error={this.state.error} />
+                                </div>
+                                <div className='col-sm-9'>
+                                    <DamageTypeSelect damageTypes={this.props.damageTypes} onChange={this.categorySelected} error={this.state.error}/>
+                                </div>
+                            </div>
+                            <div className="row" style={{marginTop: '1em'}}>
+                                <div className="col-sm-12">
+                                    <input className={noteClass} maxLength="200" name="note" onChange={this.updateNote} placeholder="Brief description of damage..." type="text"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div className="text-center">
+                        {alert}
+                        <button className="btn btn-primary" onClick={this.saveDamage}>
+                            <i className="fa fa-floppy-o"></i>{' '}Save damages
+                        </button>{' '}
+                        <button className="btn btn-danger-hover" onClick={this.props.removeForm}>
+                            <i className="fa fa-times"></i>{' '}Remove
+                        </button>
+                    </div>
+                </div>
+            </div>
         );
     }
 });
 
-var ResidentCheckbox = React.createClass({displayName: "ResidentCheckbox",
+var ResidentCheckbox = React.createClass({
     render: function() {
         return (
-            React.createElement("div", {className: "checkbox"},
-                React.createElement("label", null,
-                    React.createElement("input", {onChange: this.props.handleChange, type: "checkbox", value: this.props.value, autoFocus: this.props.autoFocus}), ' ', this.props.name
-                )
-            )
+            <div className="checkbox">
+                <label>
+                    <input onChange={this.props.handleChange} type="checkbox" value={this.props.value} autoFocus={this.props.autoFocus}/>{' '}{this.props.name}
+                </label>
+            </div>
         );
     }
 });
 
-var DamageTypeSelect = React.createClass({displayName: "DamageTypeSelect",
+var DamageTypeSelect = React.createClass({
     getInitialState: function() {
         var damageOptions = this.buildDamageOptions(damage_types);
         return {
@@ -508,35 +511,35 @@ var DamageTypeSelect = React.createClass({displayName: "DamageTypeSelect",
     render: function() {
         var damageClass = 'form-control ' + ($.inArray('category', this.props.error) !== -1 ? 'checkout-error-border' : null);
         return (
-            React.createElement("select", {className: damageClass, onChange: this.props.onChange},
-                React.createElement("option", null),
-                Object.keys(this.state.damageOptions).map(function(category, idx){ return(
-                React.createElement("optgroup", {key: idx, label: category},
-                    this.state.damageOptions[category].map(function(optValue, key){ return (
-                    React.createElement("option", {key: key, value: optValue.id}, optValue.description)
-                    ); })
-                )
-                ); }, this)
-            )
+            <select className={damageClass} onChange={this.props.onChange}>
+                <option></option>
+                {Object.keys(this.state.damageOptions).map(function(category, idx){ return(
+                <optgroup key={idx} label={category}>
+                    {this.state.damageOptions[category].map(function(optValue, key){ return (
+                    <option key={key} value={optValue.id}>{optValue.description}</option>
+                    ); })}
+                </optgroup>
+                ); }, this)}
+            </select>
         );
     }
 });
 
-var SideSelect = React.createClass({displayName: "SideSelect",
+var SideSelect = React.createClass({
     render: function() {
         var sideClass = 'form-control damage-select ' + ($.inArray('side', this.props.error) !== -1 ? 'checkout-error-border' : null);
         return (
-            React.createElement("select", {className: sideClass, onChange: this.props.onChange},
-                React.createElement("option", null),
-                React.createElement("option", {value: "Left"}, "Left side"),
-                React.createElement("option", {value: "Right"}, "Right side"),
-                React.createElement("option", {value: "Both"}, "Both sides")
-            )
+            <select className={sideClass} onChange={this.props.onChange}>
+                <option></option>
+                <option value="Left">Left side</option>
+                <option value="Right">Right side</option>
+                <option value="Both">Both sides</option>
+            </select>
         );
     }
 });
 
-var Damage = React.createClass({displayName: "Damage",
+var Damage = React.createClass({
 
     render: function() {
         var residentList = '';
@@ -550,25 +553,25 @@ var Damage = React.createClass({displayName: "Damage",
         reportedOn.setTime(this.props.reportedOn * 1000);
         month = reportedOn.getMonth() + 1;
         return (
-            React.createElement("div", {className: "panel panel-danger"},
-                React.createElement("div", {className: "panel-heading"},
-                    React.createElement("div", {className: "row"},
-                        React.createElement("div", {className: "col-sm-6"}, React.createElement("strong", null, "Damage:"), " ", this.props.category, " - ", this.props.description),
-                        React.createElement("div", {className: "col-sm-2"}, React.createElement("strong", null, "Side:"), " ", this.props.side),
-                        React.createElement("div", {className: "col-sm-4"}, React.createElement("strong", null, "Reported on:"), " ", reportedOn.getFullYear() + '/' + month + '/' + reportedOn.getDate())
-                    )
-                ),
-                React.createElement("div", {className: "panel-body"},
-                    React.createElement("p", null, React.createElement("strong", null, "Description:"), " ", this.props.note),
-                    residentList.length ? React.createElement("p", null, React.createElement("strong", null, "Responsibility:"), " ", residentList) : null,
-                    this.props.removable ? React.createElement("button", null, "Remove") : null
-                )
-            )
+            <div className="panel panel-danger">
+                <div className="panel-heading">
+                    <div className="row">
+                        <div className="col-sm-6"><strong>Damage:</strong> {this.props.category} - {this.props.description}</div>
+                        <div className="col-sm-2"><strong>Side:</strong> {this.props.side}</div>
+                        <div className="col-sm-4"><strong>Reported on:</strong> {reportedOn.getFullYear() + '/' + month + '/' + reportedOn.getDate()}</div>
+                    </div>
+                </div>
+                <div className="panel-body">
+                    <p><strong>Description:</strong> {this.props.note}</p>
+                    {residentList.length ? <p><strong>Responsibility:</strong> {residentList}</p> : null}
+                    {this.props.removable ? <button>Remove</button> : null}
+                </div>
+            </div>
         );
     }
 });
 
-var CheckOutCompletion = React.createClass({displayName: "CheckOutCompletion",
+var CheckOutCompletion = React.createClass({
     getInitialState: function() {
         return {
             noteDisabled : true
@@ -591,26 +594,24 @@ var CheckOutCompletion = React.createClass({displayName: "CheckOutCompletion",
 
     render: function() {
         return (
-            React.createElement("div", null,
-                React.createElement("h3", null, "Final Checkout"),
-                React.createElement("div", {className: "radio"},
-                    React.createElement("label", null,
-                        React.createElement("input", {onChange: this.handleChange, type: "radio", name: "properCheckout", value: "1"}), ' ', "Proper Checkout"
-                    )
-                ),
-                React.createElement("div", {className: "radio"},
-                    React.createElement("label", null,
-                        React.createElement("input", {onChange: this.handleChange, type: "radio", name: "properCheckout", value: "0"}), ' ', "Improper Checkout"
-                    )
-                ),
-                React.createElement("textarea", {ref: "checkoutNotes", className: "form-control", name: "improperCheckoutNote", placeholder: "Please explain why this was an improper checkout", onChange: this.props.updateImproperNote, disabled: this.state.noteDisabled})
-            )
+            <div>
+                <h3>Final Checkout</h3>
+                <div className="radio">
+                    <label>
+                        <input onChange={this.handleChange} type="radio" name="properCheckout" value="1"/>{' '}Proper Checkout
+                    </label>
+                </div>
+                <div className="radio">
+                    <label>
+                        <input onChange={this.handleChange} type="radio"  name="properCheckout" value="0"/>{' '}Improper Checkout
+                    </label>
+                </div>
+                <textarea ref="checkoutNotes" className="form-control" name="improperCheckoutNote" placeholder="Please explain why this was an improper checkout" onChange={this.props.updateImproperNote} disabled={this.state.noteDisabled} />
+            </div>
         );
     }
 
 });
 
 // This script will not run after compiled UNLESS the below is wrapped in $(window).load(function(){...});
-$(window).load(function(){
-    React.render(React.createElement(CheckOut, null), document.getElementById('checkout'));
-});
+React.render(<CheckOut/>, document.getElementById('checkout'));

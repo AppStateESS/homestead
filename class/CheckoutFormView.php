@@ -31,38 +31,18 @@ class CheckoutFormView extends hms\View
             $residents[] = array('studentId' => $s->getBannerId(), 'name' => $s->getName());
         }
 
-        $vars = array();
-        javascript('jquery');
-
-        // Load header for Angular Frontend
-
-        /**
-         * Uncomment below for DEVELOPMENT
-         * Comment out for PRODUCTION
-         */
-        //Layout::addJSHeader("<script src='{$home_http}mod/hms/javascript/react/build/react.js'></script>");
-        //Layout::addJSHeader("<script src='{$home_http}mod/hms/javascript/react/build/JSXTransformer.js'></script>");
-        //Layout::addJSHeader("<script type='text/jsx' src='{$home_http}mod/hms/javascript/CheckOut/src/CheckOut.jsx'></script>");
-
-        /**
-         * Uncomment below for PRODUCTION
-         * Comment out for DEVELOPMENT
-         */
-        Layout::addJSHeader("<script src='{$home_http}mod/hms/javascript/react/build/react.min.js'></script>");
-        Layout::addJSHeader("<script src='{$home_http}mod/hms/javascript/CheckOut/build/CheckOut.js'></script>");
-
         /**
          * Remainder of code is untouched regardless of development status
          */
-        Layout::addJSHeader("<script type='text/javascript'>var sourceHttp = '{$home_http}';</script>");
-        $vars['student'] = $this->student->getFullName();
-        $vars['banner_id'] = $this->student->getBannerId();
-        $vars['hall_name'] = $this->hall->getHallName();
-        $vars['room_number'] = $this->room->getRoomNumber();
-        $vars['residents'] = json_encode($residents);
-        $vars['checkin_id'] = $this->checkin->id;
-        $vars['previous_key_code'] = $this->checkin->key_code;
-        $vars['room_pid'] = $this->room->persistent_id;
+        $tpl = array();
+        $tpl['STUDENT'] = $this->student->getFullName();
+        $tpl['BANNER_ID'] = $this->student->getBannerId();
+        $tpl['HALL_NAME'] = $this->hall->getHallName();
+        $tpl['room_number'] = $this->room->getRoomNumber();
+        $tpl['RESIDENTS'] = json_encode($residents);
+        $tpl['CHECKIN_ID'] = $this->checkin->id;
+        $tpl['PREVIOUS_KEY_CODE'] = $this->checkin->key_code;
+        $tpl['ROOM_PID'] = $this->room->persistent_id;
 
         $damage_types = DamageTypeFactory::getDamageTypeAssoc();
 
@@ -70,16 +50,18 @@ class CheckoutFormView extends hms\View
         foreach ($damage_types as $dt) {
             $damage_options[$dt['category']][] = array('id' => $dt['id'], 'description' => $dt['description']);
         }
-        $vars['damage_types'] = json_encode($damage_types);
+        $tpl['DAMAGE_TYPES'] = json_encode($damage_types);
         if (empty($this->damages)) {
-            $vars['existing_damage'] = '[]';
+            $tpl['EXISTING_DAMAGE'] = '[]';
         } else {
             $this->addResponsible($residents);
-            $vars['existing_damage'] = json_encode($this->damages);
+            $tpl['EXISTING_DAMAGE'] = json_encode($this->damages);
         }
-        $tpl = new \Template($vars);
-        $tpl->setModuleTemplate('hms', 'admin/CheckOut.html');
-        return $tpl->get();
+
+        $tpl['vendor_bundle'] = AssetResolver::resolveJsPath('assets.json', 'vendor');
+        $tpl['entry_bundle'] = AssetResolver::resolveJsPath('assets.json', 'emergencyContact');
+
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/CheckOut.tpl');
     }
 
     private function addResponsible($residents)

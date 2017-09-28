@@ -1,3 +1,7 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import $ from 'jquery';
+
 // Polyfill for Array.prototype.findIndex, because it's not in IE (except Edge)
 if (!Array.prototype.findIndex) {
   Array.prototype.findIndex = function(predicate) {
@@ -58,7 +62,7 @@ var DamageItem = React.createClass({
 
         var newResp = this.props.damage.responsibilities;
 
-        for(resp of newResp){
+        for(var resp of newResp){
             resp.assessedCost = splitAmount;
             this.props.updateResponsibilityCallback(resp);
         }
@@ -74,7 +78,7 @@ var DamageItem = React.createClass({
         }.bind(this));
 
         var sumOfCharges = 0;
-        for (i = 0; i < this.props.damage.responsibilities.length; i++){
+        for (var i = 0; i < this.props.damage.responsibilities.length; i++){
             if(this.props.damage.responsibilities[i].assessedCost != ''){
                 sumOfCharges += parseFloat(this.props.damage.responsibilities[i].assessedCost, 10);
             }
@@ -115,9 +119,9 @@ var DamageRoom = React.createClass({
     getInitialState: function()
     {
         // For each daamage, and for each responsibility -- initialize the assessedCost field of each responsibility
-        damages = this.props.room.damages;
-        for(i = 0; i < damages.length; i++){
-            for(j = 0; j < damages[i].responsibilities.length; j++){
+        var damages = this.props.room.damages;
+        for(var i = 0; i < damages.length; i++){
+            for(var j = 0; j < damages[i].responsibilities.length; j++){
                 damages[i].responsibilities[j].assessedCost = 0;
             }
         }
@@ -170,8 +174,8 @@ var DamageRoom = React.createClass({
     {
         var responsibilities = [];
 
-        for(i = 0; i < this.state.damages.length; i++){
-            for (j = 0; j < this.state.damages[i].responsibilities.length; j++){
+        for(var i = 0; i < this.state.damages.length; i++){
+            for (var j = 0; j < this.state.damages[i].responsibilities.length; j++){
                 responsibilities.push(this.state.damages[i].responsibilities[j]);
             }
         }
@@ -305,7 +309,7 @@ var DamageAssessment = React.createClass({
             var rooms = <h3>There are no damages to assess!</h3>
         } else {
             var rooms = this.state.roomList.map(function(room) {
-                key = room.room_number + room.hallName;
+                var key = room.room_number + room.hallName;
                 return (<DamageRoom room={room} damageTypes={this.state.damageTypes} hideDelay={1500} removeRoomCallback={this.removeRoomCallback} key={key}/>);
             }.bind(this));
         }

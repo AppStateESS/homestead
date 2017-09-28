@@ -16,7 +16,9 @@ class ShowRoomDamageAssessmentCommand extends Command {
         $tpl = array();
 
         $tpl['TERM'] = Term::getSelectedTerm();
-        javascript('jquery');
+
+        $tpl['vendor_bundle'] = AssetResolver::resolveJsPath('assets.json', 'vendor');
+        $tpl['entry_bundle'] = AssetResolver::resolveJsPath('assets.json', 'damageAssessment');
 
         $context->setContent(PHPWS_Template::process($tpl, 'hms', 'admin/roomDamageAssessment.tpl'));
     }

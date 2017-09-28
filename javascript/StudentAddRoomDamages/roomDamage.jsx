@@ -1,3 +1,6 @@
+import React from 'react';
+import classNames from 'classnames';
+import $ from 'jquery';
 
 // Top level component responsible for handling most of the high level logic,
 // storing relevant data, and making ajax calls.
@@ -19,13 +22,13 @@ var RoomDamageBox = React.createClass({
         var categ = '';
         var dmgTypeDesc = '';
         var found = false;
-        for(i = 0; i < optLen; i++)
+        for(var i = 0; i < optLen; i++)
         {
             if(!found)
             {
                 var dmgTypeArr = options[i].DamageTypes;
                 var dmgTypeArrLen = dmgTypeArr.length
-                for(x = 0; x < dmgTypeArrLen; x++)
+                for(var x = 0; x < dmgTypeArrLen; x++)
                 {
                     if(dmgTypeArr[x].id == type)
                     {
@@ -45,7 +48,7 @@ var RoomDamageBox = React.createClass({
     {
         var newDamages = this.state.newDamages;
         //console.log(newDamages)
-        for(i = 0; i < newDamages.length; i++)
+        for(var i = 0; i < newDamages.length; i++)
         {
             var damage = newDamages[i];
             this.addRoomDamages(damage.dmgTypeId, damage.side, damage.note);
@@ -55,7 +58,7 @@ var RoomDamageBox = React.createClass({
     // Function responsible for setting up an ajax call to retrieve the current room damages.
     getRoomDamages: function()
     {
-        inputData = {roomPersistentId: roomPID};
+        var inputData = {roomPersistentId: roomPID};
         $.ajax({
             url: 'index.php?module=hms&action=RetrieveRoomDamage',
             type: 'GET',
@@ -118,7 +121,7 @@ var RoomDamageBox = React.createClass({
         var newDmgsArr = this.state.newDamages;
         var len = newDmgsArr.length;
         var indexToSplice = -1;
-        for(i = 0; i < len; i++)
+        for(var i = 0; i < len; i++)
         {
             if(newDmgsArr[i].id == id)
             {
@@ -240,7 +243,7 @@ var AddDamageBox = React.createClass({
         var options = Array({category:"Welcome", id: 0, description: "Select the type of damage"});//{id: 0, description: "Select the type of Damage"}
 
         var data = this.props.options;
-        for(i = 0; i < data.length; i++) {
+        for(var i = 0; i < data.length; i++) {
           options.push(data[i]);
         }
 
@@ -250,8 +253,8 @@ var AddDamageBox = React.createClass({
             } else {
               var dmgTypes = node.DamageTypes;
               var options = Array();
-              for(i = 0; i < dmgTypes.length;i++) {
-                object = dmgTypes[i];
+              for(var i = 0; i < dmgTypes.length;i++) {
+                var object = dmgTypes[i];
                 options[i+1] = <option key={object.id} value={object.id}>{object.description}</option>;
               }
 

@@ -23,7 +23,8 @@ class ShowViewByRlc extends hms\View{
         $term = Term::getSelectedTerm();
         $tpl['TERM'] = Term::toString($term);
 
-        javascript('jquery');
+        $tpl['vendor_bundle'] = AssetResolver::resolveJsPath('assets.json', 'vendor');
+        $tpl['entry_bundle'] = AssetResolver::resolveJsPath('assets.json', 'rlcMembersList');
 
         return \PHPWS_Template::process($tpl, 'hms', 'admin/rlcMembersList.tpl');
     }

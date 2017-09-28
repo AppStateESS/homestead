@@ -1,3 +1,5 @@
+import React from 'react';
+import $ from 'jquery';
 
 var RoomDamagesBox = React.createClass({
   getInitialState: function() {
@@ -143,6 +145,7 @@ var RoomDamagesDataBox = React.createClass({
     this.props.onAdd(dmgType, side, desc);
   },
   render: function() {
+    var dataBox
     if(this.props.visibility)
     {
       dataBox = <RoomDamagesForm data={this.props.data} options={this.props.options} onAdd={this.add} hideForm={this.toggleFormVisibility} />;
@@ -173,7 +176,7 @@ var RoomDamagesForm = React.createClass({
     var options = Array({category:"Welcome", id: 0, description: "Select the type of damage"});//{id: 0, description: "Select the type of Damage"}
     var data = this.props.options;
 
-    for(i = 0; i < data.length; i++)
+    for(var i = 0; i < data.length; i++)
     {
       options.push(data[i]);
     }
@@ -186,9 +189,9 @@ var RoomDamagesForm = React.createClass({
         {
           var dmgTypes = node.DamageTypes;
           var options = Array();
-          for(i=0; i < dmgTypes.length;i++)
+          for(var i=0; i < dmgTypes.length;i++)
           {
-            object = dmgTypes[i];
+            var object = dmgTypes[i];
             options[i+1] = <option value={object.id}>{object.description}</option>;
           }
 

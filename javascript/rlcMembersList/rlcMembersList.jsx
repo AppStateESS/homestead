@@ -1,3 +1,7 @@
+import React from 'react';
+import classNames from 'classnames';
+import $ from 'jquery';
+
 var RlcMembersList = React.createClass({
     getInitialState: function()
     {
@@ -348,7 +352,7 @@ var ListRowBox = React.createClass({
         });
 
         // Just use the first roommate
-        roommate = ''
+        var roommate = ''
         if(Array.isArray(this.props.node.roommates) && this.props.node.roommates.length > 0){
             roommate = <a href={this.props.node.roommates[0].profileUri}>{this.props.node.roommates[0].name}</a>
         }
