@@ -79,7 +79,7 @@ class CancelledAppsContinuingGraph extends Report {
                 and cancelled = 1
                 and cancelled_reason NOT IN ('offer_made', 'before_assignment')
                 GROUP BY date
-                ORDER BY date;";
+                ORDER BY date";
 
         $stmt = $db->prepare($query);
         $stmt->bindParam(':term', $term);

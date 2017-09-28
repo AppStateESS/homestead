@@ -28,7 +28,6 @@ class ReappWaitingListRegistration extends ApplicationFeatureRegistration {
 
         $application = HousingApplication::checkForApplication($student->getUsername(), $term);
         $assignment = HMS_Assignment::checkForAssignment($student->getUsername(), $term);
-
         // for returning students (summer terms)
         if($term > $student->getApplicationTerm() && $assignment !== TRUE && $application !== FALSE){
             return true;

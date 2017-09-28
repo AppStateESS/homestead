@@ -3,6 +3,7 @@
 namespace Homestead\Report\CancelledAppsList;
 
 use \Homestead\Report;
+use \Homestead\HMS_Util;
 use \Homestead\iCsvReport;
 use \Homestead\HousingApplication;
 use \Homestead\CommandFactory;
