@@ -26,6 +26,14 @@
       {STUDENT_NAME}
     </div>
   </div>
+  <div class="row">
+    <label class="col-md-3">
+      Cell Phone:
+    </label>
+    <div class="col-md-3 col-md-offset-3">
+        {CELL_PHONE}
+    </div>
+  </div>
 
   <div class="row">
     <h3>
