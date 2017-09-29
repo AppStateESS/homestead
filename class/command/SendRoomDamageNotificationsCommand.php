@@ -32,7 +32,7 @@ class SendRoomDamageNotificationsCommand extends Command {
 
         foreach($damages as $dmg)
         {
-        	$student = StudentFactory::getStudentByBannerId($dmg['banner_id'], $term);
+        	 $student = StudentFactory::getStudentByBannerId($dmg['banner_id'], $term);
 
             // Get the student's last checkout
             // (NB: the damages may be for multiple check-outs,
@@ -48,10 +48,10 @@ class SendRoomDamageNotificationsCommand extends Command {
 
             if($coordinators != null){
             	$coordinatorName  = $coordinators[0]->getDisplayName();
-                $coordinatorEmail = $coordinators[0]->getEmail();
+              $coordinatorEmail = $coordinators[0]->getEmail();
             } else {
             	$coordinatorName  = '(No coordinator set for this hall.)';
-                $coordinatorEmail = '(No coordinator set for this hall.)';
+              $coordinatorEmail = '(No coordinator set for this hall.)';
             }
 
             HMS_Email::sendDamageNotification($student, $term, $dmg['sum'], $coordinatorName, $coordinatorEmail);
@@ -59,7 +59,7 @@ class SendRoomDamageNotificationsCommand extends Command {
         }
 
         // Show a success message and redirect back to the main admin menu
-    	NQ::simple('hms', hms\NotificationView::SUCCESS, 'Room damage noties sent.');
+    	  NQ::simple('hms', hms\NotificationView::SUCCESS, 'Room damage noties sent.');
         $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
         $cmd->redirect();
     }

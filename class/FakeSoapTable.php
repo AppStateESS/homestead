@@ -115,7 +115,7 @@ class TestSOAP extends SOAP
     public function getBannerId($username)
     {
         $this->createDelay();
-        $db = \Database::newDB();
+        $db = \phpws2\Database::newDB();
         $t = $db->addTable('fake_soap');
         $t->addFieldConditional('username', (string) $username);
         $t->addField('banner_id');
