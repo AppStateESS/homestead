@@ -395,6 +395,8 @@ define('ACTIVITY_CONTRACT_REMOVED_VOIDED',      82);
 
 define('ACTIVITY_MEAL_PLAN_SENT',               83); // Meal plan reported to Banner
 
+define('ACTIVITY_ROOM_DAMAGE_NOTIFICATION',     84); // Room damage notification 
+
 /**
  * Errors
  */

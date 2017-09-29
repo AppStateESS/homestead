@@ -232,6 +232,7 @@ class HMS_Activity_Log{
             ACTIVITY_CONTRACT_STUDENT_SIGN_EMBEDDED => 'Student Signed Contract via Embedded Signing',
             ACTIVITY_CONTRACT_REMOVED_VOIDED        => 'Removed Voided Contract',
             ACTIVITY_MEAL_PLAN_SENT                 => 'Meal Plan Reported to Banner'
+            ACTIVITY_ROOM_DAMAGE_NOTIFICATION       => 'Room damage notification sent'
         );
     }
 
