@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import $ from 'jquery';
 
@@ -8,7 +9,7 @@ var RoomDamageBox = React.createClass({
     // Sets up an initial state for the class, with default values.
     getInitialState: function()
     {
-        return ({room: {location: roomLocation}, damages: undefined, newDamages: [], options: [], alert: undefined});
+        return ({room: {location: this.props.roomLocation}, damages: undefined, newDamages: [], options: [], alert: undefined});
     },
     componentWillMount: function()
     {
@@ -58,7 +59,7 @@ var RoomDamageBox = React.createClass({
     // Function responsible for setting up an ajax call to retrieve the current room damages.
     getRoomDamages: function()
     {
-        var inputData = {roomPersistentId: roomPID};
+        var inputData = {roomPersistentId: this.props.roomPID};
         $.ajax({
             url: 'index.php?module=hms&action=RetrieveRoomDamage',
             type: 'GET',
@@ -88,7 +89,7 @@ var RoomDamageBox = React.createClass({
             }.bind(this),
             error: function(xhr, status, err) {
                 alert("Failed to grab the damages options for drop down")
-                console.error(this.props.url, stats, err.toString());
+                console.error(this.props.url, status, err.toString());
             }.bind(this)
         });
     },
@@ -98,7 +99,7 @@ var RoomDamageBox = React.createClass({
         //console.log(desc)
         $.ajax({
           //url: 'index.php?module=hms&action=AddRoomDamage&roomPersistentId='+roomPID+'&damageType='+type+'&side='+side+'&description='+desc+'&term='+term,
-          url: 'index.php?module=hms&action=AddRoomDamage&roomPersistentId=' + roomPID + '&term=' + term,
+          url: 'index.php?module=hms&action=AddRoomDamage&roomPersistentId=' + this.props.roomPID + '&term=' + this.props.term,
           type: 'POST',
           data: {damageType: type,
                 side: side,
@@ -454,7 +455,4 @@ var UnsavedDamageRow = React.createClass({
 
 
 //Inserts all the react components within the given element.
-React.render(
-  <RoomDamageBox/>,
-  document.getElementById('roomDamage')
-);
+ReactDOM.render(<RoomDamageBox roomLocation={window.roomLocation} roomPID={window.roomPID} term={window.term}/>, document.getElementById('roomDamage'));

@@ -326,4 +326,4 @@ var DamageAssessment = React.createClass({
     }
 });
 
-ReactDOM.render(<DamageAssessment term={term}/>, document.getElementById('DamageAssessment'));
+ReactDOM.render(<DamageAssessment term={window.term}/>, document.getElementById('DamageAssessment'));

@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import $ from 'jquery';
 
 var RoomDamagesBox = React.createClass({
@@ -20,7 +21,7 @@ var RoomDamagesBox = React.createClass({
   },
   getData: function() {
     $.ajax({
-      url: 'index.php?module=hms&action=RetrieveRoomDamage&roomPersistentId='+roomPersistentId,
+      url: 'index.php?module=hms&action=RetrieveRoomDamage&roomPersistentId='+ this.props.roomPersistentId,
       type: 'GET',
       dataType: 'json',
       success: function(data) {
@@ -42,13 +43,13 @@ var RoomDamagesBox = React.createClass({
       }.bind(this),
       error: function(xhr, status, err) {
         alert("Failed to grab the damages options for drop down")
-        console.error(this.props.url, stats, err.toString());
+        console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
   },
   postData: function(type, side, desc) {
     $.ajax({
-      url: 'index.php?module=hms&action=AddRoomDamage&roomPersistentId='+roomPersistentId+'&damageType='+type+'&side='+side+'&description=' + desc + '&term=' + this.props.term,
+      url: 'index.php?module=hms&action=AddRoomDamage&roomPersistentId='+ this.props.roomPersistentId+'&damageType='+type+'&side='+side+'&description=' + desc + '&term=' + this.props.term,
       type: 'POST',
       success: function(data) {
         this.getData();
@@ -250,7 +251,4 @@ var RoomDamagesForm = React.createClass({
 });
 
 
-React.render(
-  <RoomDamagesBox term={term} />,
-  document.getElementById('RoomDamages')
-);
+ReactDOM.render(<RoomDamagesBox term={window.term} roomPersistentId={window.roomPersistentId}/>, document.getElementById('RoomDamages'));

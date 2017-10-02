@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import $ from 'jquery';
 
@@ -130,7 +131,7 @@ var RlcMembersList = React.createClass({
     },
     getRlcMembers: function()
     {
-        var inputData = {id: rlcId};
+        var inputData = {id: this.props.rlcId};
         $.ajax({
             url: 'index.php?module=hms&action=AjaxGetRLCMembers',
             type: 'GET',
@@ -149,8 +150,8 @@ var RlcMembersList = React.createClass({
     render: function()
     {
         var backUrl = "index.php?module=hms&action=ShowSearchByRlc"
-        var addMembersUrl = "index.php?module=hms&action=ShowAdminAddRlcMember&communityId=" + rlcId;
-        var exportUrl = "index.php?module=hms&action=CreateCsvByRlc&id=" + rlcId
+        var addMembersUrl = "index.php?module=hms&action=ShowAdminAddRlcMember&communityId=" + this.props.rlcId;
+        var exportUrl = "index.php?module=hms&action=CreateCsvByRlc&id=" + this.props.rlcId
 
         return(
             <div>
@@ -170,7 +171,7 @@ var RlcMembersList = React.createClass({
 
                 <div className="row">
                     <div className="col-md-12">
-                        <h2>{rlcName} Members <small>{term}</small></h2>
+                        <h2>{this.props.rlcName} Members <small>{this.props.term}</small></h2>
                         <a className="btn btn-default pull-right" href={exportUrl}>
                             <i className="fa fa-file-excel-o"></i> Export to Spreadsheet
                         </a>
@@ -399,7 +400,4 @@ var ListRowBox = React.createClass({
 
 
 //Inserts all the react components within the giving element.
-React.render(
-  <RlcMembersList/>,
-  document.getElementById('rlcMembers')
-);
+ReactDOM.render(<RlcMembersList rlcId={window.rlcId} rlcName={window.rlcName} term={window.term}/>, document.getElementById('rlcMembers'));

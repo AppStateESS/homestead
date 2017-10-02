@@ -8,11 +8,9 @@ class AssignByFloorView extends hms\View
 
     public function show()
     {
-        javascript('jquery');
-        $home_http = PHPWS_SOURCE_HTTP;
-
         $tpl = array();
 
+        $tpl['SOURCE_HTTP'] = PHPWS_SOURCE_HTTP;
         $tpl['vendor_bundle'] = AssetResolver::resolveJsPath('assets.json', 'vendor');
         $tpl['entry_bundle'] = AssetResolver::resolveJsPath('assets.json', 'assignByFloor');
 
