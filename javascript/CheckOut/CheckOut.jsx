@@ -257,29 +257,30 @@ class NewRoomDamages extends React.Component{
     }
 }
 
-var DamageForm = React.createClass({
-
-    propTypes: {
-        // contains _.name, _.studentId
-        residents: React.PropTypes.array
-    },
-
-    getInitialState: function() {
-
+class DamageForm extends React.Component{
+    constructor(props){
+        super(props);
         var resTemp = [];
         this.props.residents.map(function(value, i){
             resTemp.push({studentId:value.studentId, selected:false});
         });
-        return {
+        this.state = {
             damage_type: null,
             side: null,
             note: null,
             residents: resTemp,
             error: []
-        };
-    },
+        }
+        this.errorFree = this.errorFree.bind(this);
+        this.shouldComponentUpdate = this.shouldComponentUpdate.bind(this);
+        this.categorySelected = this.categorySelected.bind(this);
+        this.sideSelected = this.sideSelected.bind(this);
+        this.residentSelected = this.residentSelected.bind(this);
+        this.updateNote = this.updateNote.bind(this);
+        this.saveDamage = this.saveDamage.bind(this);
 
-    errorFree: function() {
+    }
+    errorFree() {
         var all_clear = true;
         var errors = [];
         var resident_selected;
@@ -327,60 +328,37 @@ var DamageForm = React.createClass({
             }
         }
 
-        this.setState({
-            error : errors,
-            render: true
-        });
-
+        this.setState({error : errors, render: true});
         return all_clear;
-    },
-
-    shouldComponentUpdate: function(nextProps, nextState) {
+    }
+    shouldComponentUpdate(nextProps, nextState) {
         if (nextState.render !== undefined) {
             return nextState.render;
         } else {
             return true;
         }
-    },
-
-
+    }
 // category is saved as damage_type, which is the actual id, not the
 // category/description that is displayed
-    categorySelected: function(selected) {
-        this.setState({
-            render: false,
-            damage_type: selected.target.value
-        });
-    },
-
-    sideSelected: function(selected) {
-        this.setState({
-            render: false,
-            side: selected.target.value
-        });
-    },
-
-    residentSelected: function(selected) {
+    categorySelected(selected) {
+        this.setState({render: false, damage_type: selected.target.value});
+    }
+    sideSelected(selected) {
+        this.setState({render: false, side: selected.target.value});
+    }
+    residentSelected(selected) {
         var updatedResidents = this.state.residents;
         updatedResidents.map(function(value,key){
             if (value.studentId === selected.target.value) {
                 updatedResidents[key].selected = selected.target.checked;
             }
         });
-        this.setState({
-            render: false,
-            residents: updatedResidents
-        });
-    },
-
-    updateNote: function(note) {
-        this.setState({
-            render: false,
-            note: note.target.value
-        });
-    },
-
-    saveDamage: function() {
+        this.setState({render: false, residents: updatedResidents});
+    }
+    updateNote(note) {
+        this.setState({render: false, note: note.target.value});
+    }
+    saveDamage() {
         if (this.errorFree()) {
             var damage = {};
             damage.form = false;
@@ -404,10 +382,8 @@ var DamageForm = React.createClass({
             this.props.removeForm();
             this.props.pushDamage(damage);
         }
-
-    },
-
-    render: function() {
+    }
+    render() {
         var alert = null;
         var residentClass = 'col-sm-3 ' + ($.inArray('resident', this.state.error) !== -1 ? 'checkout-error-border' : null);
         var noteClass = 'form-control ' + ($.inArray('note', this.state.error) !== -1 ? 'checkout-error-border' : null);
@@ -456,10 +432,15 @@ var DamageForm = React.createClass({
             </div>
         );
     }
-});
+}
 
-var ResidentCheckbox = React.createClass({
-    render: function() {
+DamageForm.propTypes = {
+    // contains _.name, _.studentId
+    residents: PropTypes.array
+}
+
+class ResidentCheckbox extends React.Component{
+    render() {
         return (
             <div className="checkbox">
                 <label>
@@ -468,17 +449,17 @@ var ResidentCheckbox = React.createClass({
             </div>
         );
     }
-});
+}
 
-var DamageTypeSelect = React.createClass({
-    getInitialState: function() {
+class DamageTypeSelect extends React.Component{
+    constructor(props){
+        super(props);
+
+        this.buildDamageOptions = this.buildDamageOptions.bind(this);
         var damageOptions = this.buildDamageOptions(this.props.damage_types);
-        return {
-            damageOptions: damageOptions
-        };
-    },
-
-    buildDamageOptions : function(damageTypes) {
+        this.state = {damageOptions: damageOptions};
+    }
+    buildDamageOptions(damageTypes) {
         var damageOptions = {};
         Object.keys(this.props.damage_types).map(function(key, idx){
             var opt = {};
@@ -491,9 +472,8 @@ var DamageTypeSelect = React.createClass({
             damageOptions[value.category].push(opt);
         });
         return damageOptions;
-    },
-
-    render: function() {
+    }
+    render() {
         var damageClass = 'form-control ' + ($.inArray('category', this.props.error) !== -1 ? 'checkout-error-border' : null);
         return (
             <select className={damageClass} onChange={this.props.onChange}>
@@ -508,10 +488,10 @@ var DamageTypeSelect = React.createClass({
             </select>
         );
     }
-});
+}
 
-var SideSelect = React.createClass({
-    render: function() {
+class SideSelect extends React.Component{
+    render() {
         var sideClass = 'form-control damage-select ' + ($.inArray('side', this.props.error) !== -1 ? 'checkout-error-border' : null);
         return (
             <select className={sideClass} onChange={this.props.onChange}>
@@ -522,11 +502,10 @@ var SideSelect = React.createClass({
             </select>
         );
     }
-});
+}
 
-var Damage = React.createClass({
-
-    render: function() {
+class Damage extends React.Component{
+    render() {
         var residentList = '';
         if (this.props.residents !== undefined) {
             this.props.residents.map(function(val){
@@ -554,16 +533,16 @@ var Damage = React.createClass({
             </div>
         );
     }
-});
+}
 
-var CheckOutCompletion = React.createClass({
-    getInitialState: function() {
-        return {
-            noteDisabled : true
-        };
-    },
+class CheckOutCompletion extends React.Component{
+    constructor(props){
+        super(props);
 
-    handleChange: function(event) {
+        this.state = {noteDisabled : true};
+        this.handleChange = this.handleChange.bind(this);
+    }
+    handleChange(event) {
         this.props.updateProperCheckout(event.target.value);
         if (event.target.value === '0') {
             this.setState({
@@ -575,9 +554,8 @@ var CheckOutCompletion = React.createClass({
                 noteDisabled : true
             });
         }
-    },
-
-    render: function() {
+    }
+    render() {
         return (
             <div>
                 <h3>Final Checkout</h3>
@@ -595,8 +573,7 @@ var CheckOutCompletion = React.createClass({
             </div>
         );
     }
-
-});
+}
 
 // This script will not run after compiled UNLESS the below is wrapped in $(window).load(function(){...});
 ReactDOM.render(<CheckOut residents={window.residents} existing_damage={window.existing_damage} previous_key_code={window.previous_key_code}

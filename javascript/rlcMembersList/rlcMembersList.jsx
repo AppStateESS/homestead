@@ -3,20 +3,26 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import $ from 'jquery';
 
-var RlcMembersList = React.createClass({
-    getInitialState: function()
-    {
-        return ({rlcMembers: [], alert: {message: "", alert: ""}, sortedBy: "", sortOrder: "", loadingMembers: true});
-    },
-    componentWillMount: function()
-    {
+class RlcMembersList extends React.Component{
+    constructor(props){
+        super(props);
+
+        this.state = {rlcMembers: [], alert: {message: "", alert: ""}, sortedBy: "", sortOrder: "", loadingMembers: true}
+        this.componentWillMount = this.componentWillMount.bind(this);
+        this.startSort = this.startSort.bind(this);
+        this.sortMembers = this.sortMembers.bind(this);
+        this.setStatus = this.setStatus.bind(this);
+        this.remove = this.remove.bind(this);
+        this.removeDeny = this.removeDeny.bind(this);
+        this.getRlcMembers = this.getRlcMembers.bind(this);
+    }
+    componentWillMount(){
         this.getRlcMembers();
         this.sortMembers();
-    },
-    startSort: function(column)
-    {
-        if(this.state.sortedBy == column){
-            if(this.state.sortOrder == "ASC"){
+    }
+    startSort(column){
+        if(this.state.sortedBy === column){
+            if(this.state.sortOrder === "ASC"){
                 this.setState({sortOrder: "DESC"}); // TODO: These seem backwards. IF sortOrder is ASC, why are we setting state to DESC?
             }else{
                 this.setState({sortOrder: "ASC"});
@@ -27,10 +33,8 @@ var RlcMembersList = React.createClass({
         }
 
         this.sortMembers();
-    },
-
-    sortMembers: function()
-    {
+    }
+    sortMembers(){
         var members = this.state.rlcMembers;
         switch(this.state.sortedBy){
             case "gender":
@@ -68,12 +72,9 @@ var RlcMembersList = React.createClass({
                     return a.name.localeCompare(b.name);
                 });
         }
-
         this.setState({rlcMembers: members});
-
-    },
-    setStatus:function(newStatus, assignId)
-    {
+    }
+    setStatus(newStatus, assignId){
         var inputData = {status: newStatus, assignmentId: assignId};
         $.ajax({
             url: 'index.php?module=hms&action=AjaxSetRlcAssignmentStatus',
@@ -92,9 +93,8 @@ var RlcMembersList = React.createClass({
                 console.error(this.props.url, status, err.toString());
             }.bind(this)
         });
-    },
-    remove: function(assignId)
-    {
+    }
+    remove(assignId){
         $.ajax({
             url: 'index.php?module=hms&action=RemoveRlcAssignment&assignmentId='+assignId,
             type: 'POST',
@@ -110,9 +110,8 @@ var RlcMembersList = React.createClass({
                 console.error(this.props.url, status, err.toString());
             }.bind(this)
         });
-    },
-    removeDeny: function(assignId)
-    {
+    }
+    removeDeny(assignId){
         $.ajax({
             url: 'index.php?module=hms&action=RemoveDenyRlcAssignment&assignId='+assignId,
             type: 'POST',
@@ -128,9 +127,8 @@ var RlcMembersList = React.createClass({
                 console.error(this.props.url, status, err.toString());
             }.bind(this)
         });
-    },
-    getRlcMembers: function()
-    {
+    }
+    getRlcMembers(){
         var inputData = {id: this.props.rlcId};
         $.ajax({
             url: 'index.php?module=hms&action=AjaxGetRLCMembers',
@@ -146,9 +144,8 @@ var RlcMembersList = React.createClass({
                 console.error(this.props.url, status, err.toString());
             }.bind(this)
         });
-    },
-    render: function()
-    {
+    }
+    render(){
         var backUrl = "index.php?module=hms&action=ShowSearchByRlc"
         var addMembersUrl = "index.php?module=hms&action=ShowAdminAddRlcMember&communityId=" + this.props.rlcId;
         var exportUrl = "index.php?module=hms&action=CreateCsvByRlc&id=" + this.props.rlcId
@@ -186,22 +183,20 @@ var RlcMembersList = React.createClass({
             </div>
         );
     }
-});
+}
 
-var AlertBox = React.createClass({
-    render: function()
-    {
-        if(this.props.alert == undefined || this.props.alert.message == "") {
+class AlertBox extends React.Component{
+    render(){
+        if(this.props.alert === undefined || this.props.alert.message === "") {
             return (<div></div>)
         } else {
-            var alert;
             var success = false;
             var error = false;
 
-            if(this.props.alert.type == "success") {
-                var success = true;
+            if(this.props.alert.type === "success") {
+                success = true;
             } else {
-                var error = true;
+                error = true;
             }
 
             var alertClass = classNames({
@@ -226,38 +221,40 @@ var AlertBox = React.createClass({
             );
         }
     }
-});
+}
 
-var ListBox = React.createClass({
-    sortGender: function()
-    {
+class ListBox extends React.Component{
+    constructor(props){
+        super(props);
+        this.sortGender = this.sortGender.bind(this);
+        this.sortStudentType = this.sortStudentType.bind(this);
+        this.sortUsername = this.sortUsername.bind(this);
+        this.sortStatus = this.sortStatus.bind(this);
+        this.sortAssignment = this.sortAssignment.bind(this);
+        this.sortRoommate = this.sortRoommate.bind(this);
+    }
+    sortGender(){
         this.props.startSort("gender");
-    },
-    sortStudentType: function()
-    {
+    }
+    sortStudentType(){
         this.props.startSort("studentType");
-    },
-    sortUsername: function()
-    {
+    }
+    sortUsername(){
         this.props.startSort("username");
-    },
-    sortStatus: function()
-    {
+    }
+    sortStatus(){
         this.props.startSort("status")
-    },
-    sortAssignment: function()
-    {
+    }
+    sortAssignment(){
         this.props.startSort("assignment")
-    },
-    sortRoommate: function()
-    {
+    }
+    sortRoommate(){
         this.props.startSort("roommate")
-    },
-    render: function()
-    {
+    }
+    render(){
         if(this.props.loadingMembers){
             return (<div><p className="text-muted"><i className="fa fa-spinner fa-spin"></i> Loading Community Members...</p></div>)
-        }else if (this.props.rlcMembers.length == 0) {
+        }else if (this.props.rlcMembers.length === 0) {
             return (<div><p className="text-muted">There are no members currently in this community.</p></div>)
         } else {
             var data = this.props.rlcMembers;
@@ -295,54 +292,55 @@ var ListBox = React.createClass({
                 </table>);
         }
     }
-});
+}
 
-var ListRowBox = React.createClass({
-    remove: function()
-    {
+class ListRowBox extends React.Component{
+    constructor(props){
+        super(props);
+        this.remove = this.remove.bind(this);
+        this.removeDeny = this.removeDeny.bind(this);
+        this.setConfirm = this.setConfirm.bind(this);
+        this.setDecline = this.setDecline.bind(this);
+        this.setNotInvited = this.setNotInvited.bind(this);
+        this.setPending = this.setPending.bind(this);
+        this.setSelfSelectAvail = this.setSelfSelectAvail.bind(this);
+    }
+    remove(){
         this.props.remove(this.props.node.assignmentId);
-    },
-    removeDeny: function()
-    {
+    }
+    removeDeny(){
         this.props.removeDeny(this.props.node.assignmentId);
-    },
-    setConfirm: function()
-    {
+    }
+    setConfirm(){
         this.props.setStatus("confirmed", this.props.node.assignmentId);
-    },
-    setDecline: function()
-    {
+    }
+    setDecline(){
         this.props.setStatus("declined", this.props.node.assignmentId);
-    },
-    setNotInvited: function()
-    {
+    }
+    setNotInvited(){
         this.props.setStatus("new", this.props.node.assignmentId);
-    },
-    setPending: function()
-    {
+    }
+    setPending(){
         this.props.setStatus("invited", this.props.node.assignmentId);
-    },
-    setSelfSelectAvail: function()
-    {
+    }
+    setSelfSelectAvail(){
         this.props.setStatus("selfselect-invite", this.props.node.assignmentId);
-    },
-    setSelfSelected: function()
-    {
+    }
+    setSelfSelected(){
         this.props.setStatus("selfselect-assigned", this.props.node.assignmentId);
-    },
-    render: function()
-    {
+    }
+    render(){
         var profileLink = "index.php?module=hms&action=ShowStudentProfile&username=" + this.props.node.username;
         var applicationLink = "index.php?module=hms&action=ShowRlcApplicationReView&appId=" + this.props.node.applicationId;
         var success = false;
         var danger = false;
         var muted = false;
 
-        if(this.props.node.status == 'confirmed' || this.props.node.status == "self-selected") {
+        if(this.props.node.status === 'confirmed' || this.props.node.status === "self-selected") {
             success = true;
-        } else if(this.props.node.status == 'declined') {
+        } else if(this.props.node.status === 'declined') {
             danger = true;
-        } else if(this.props.node.status == 'not invited' || this.props.node.status == 'pending' || this.props.node.status == 'self-select available') {
+        } else if(this.props.node.status === 'not invited' || this.props.node.status === 'pending' || this.props.node.status === 'self-select available') {
             muted = true;
         }
 
@@ -396,7 +394,7 @@ var ListRowBox = React.createClass({
                 </td>
             </tr>);
     }
-})
+}
 
 
 //Inserts all the react components within the giving element.

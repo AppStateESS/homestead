@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import $ from 'jquery';
 
 // Polyfill for Array.prototype.findIndex, because it's not in IE (except Edge)
@@ -26,19 +27,20 @@ if (!Array.prototype.findIndex) {
   };
 }
 
-var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-
 // Component representing
-var DamageResponsibility = React.createClass({
-    handleCostChange: function(e)
-    {
+class DamageResponsibility extends React.Component{
+    constructor(props){
+        super(props);
+
+        this.handleCostChange = this.handleCostChange.bind(this);
+    }
+    handleCostChange(e){
         var updatedResp = this.props.responsibility;
         updatedResp.assessedCost = e.target.value;
 
         this.props.handleCostChange(updatedResp);
-    },
-    render: function()
-    {
+    }
+    render(){
         return (
             <div className="row" style={{marginTop:'.5em'}}>
                 <div className="col-md-2 col-md-offset-1">{this.props.responsibility.studentName}</div>
@@ -52,23 +54,25 @@ var DamageResponsibility = React.createClass({
             </div>
         );
     }
-});
-
+}
 
 // Component representing an individual damage
-var DamageItem = React.createClass({
-    handleSplitCost: function() {
-        var splitAmount = this.props.damageTypes[this.props.damage.damage_type].cost / this.props.damage.responsibilities.length;
+class DamageItem extends React.Component{
+    constructor(props){
+        super(props);
 
+        this.handleSplitCost = this.handleSplitCost.bind(this);
+    }
+    handleSplitCost() {
+        var splitAmount = this.props.damageTypes[this.props.damage.damage_type].cost / this.props.damage.responsibilities.length;
         var newResp = this.props.damage.responsibilities;
 
         for(var resp of newResp){
             resp.assessedCost = splitAmount;
             this.props.updateResponsibilityCallback(resp);
         }
-
-    },
-    render: function() {
+    }
+    render() {
         // Get the damageType (name, desc, cost) from the list of damageTypes based on this damage's type id
         var dmgType = this.props.damageTypes[this.props.damage.damage_type];
 
@@ -79,7 +83,7 @@ var DamageItem = React.createClass({
 
         var sumOfCharges = 0;
         for (var i = 0; i < this.props.damage.responsibilities.length; i++){
-            if(this.props.damage.responsibilities[i].assessedCost != ''){
+            if(this.props.damage.responsibilities[i].assessedCost !== ''){
                 sumOfCharges += parseFloat(this.props.damage.responsibilities[i].assessedCost, 10);
             }
         }
@@ -110,14 +114,12 @@ var DamageItem = React.createClass({
             </div>
         );
     }
-});
-
-
+}
 
 // Room level component - encapsulates one or more damages to a room
-var DamageRoom = React.createClass({
-    getInitialState: function()
-    {
+class DamageRoom extends React.Component{
+    constructor(props){
+        super(props);
         // For each daamage, and for each responsibility -- initialize the assessedCost field of each responsibility
         var damages = this.props.room.damages;
         for(var i = 0; i < damages.length; i++){
@@ -126,52 +128,53 @@ var DamageRoom = React.createClass({
             }
         }
 
-        return ({damages: damages,
+        this.state = {damages: damages,
                 submitted: false,
                 saved: false,
                 saveError: false,
                 visible: true
-            });
-    },
-    updateResponsibility: function(responsiblity)
-    {
+            };
+        this.updateResponsibility = this.updateResponsibility.bind(this);
+        this.handleSave = this.handleSave.bind(this);
+        this.saveResponsibilities = this.saveResponsibilities.bind(this);
+        this.setTimer = this.setTimer.bind(this);
+    }
+    updateResponsibility(responsiblity){
         // Find the corresponding responsiblity in our current state and update it
         var currentDamages = this.state.damages;
 
         var dmgIndex = currentDamages.findIndex(function(element, index, arr){
-            if(responsiblity.damage_id == element.id){
+            if(responsiblity.damage_id === element.id){
                 return true;
             } else {
                 return false;
             }
-        }.bind(this));
+        });
 
 
         var currentResp = this.state.damages[dmgIndex].responsibilities;
 
         var respIndex = currentResp.findIndex(function(element, index, arr){
-            if(responsiblity.id == element.id){
+            if(responsiblity.id === element.id){
                 return true;
             } else {
                 return false;
             }
-        }.bind(this));
+        });
 
         currentResp[respIndex] = responsiblity;
         currentDamages[dmgIndex].responsibilities = currentResp;
 
         this.setState({damages: currentDamages});
-    },
-    handleSave: function()
-    {
+    }
+    handleSave(){
         // Update state to disable submit button and show spinner
         this.setState({submitted: true}, function(){
             // Post to server
             this.saveResponsibilities();
         }.bind(this));
-    },
-    saveResponsibilities: function()
-    {
+    }
+    saveResponsibilities(){
         var responsibilities = [];
 
         for(var i = 0; i < this.state.damages.length; i++){
@@ -195,31 +198,32 @@ var DamageRoom = React.createClass({
                 console.error(status, err.toString());
             }.bind(this)
         });
-    },
-    setTimer: function(){
-        this.timer != null ? clearTimeout(this.timer) : null;
-
+    }
+    setTimer(){
+        if (this.timer != null){
+            clearTimeout(this.timer)
+        }
         this.timer = setTimeout(function(){
             this.props.removeRoomCallback(this.props.room.id);
             this.timer = null;
         }.bind(this), this.props.hideDelay);
-    },
-    render: function()
-    {
+    }
+    render(){
         var damageItems = this.state.damages.map(function(damage){
             return (
                 <DamageItem key={damage.id} damage={damage} damageTypes={this.props.damageTypes} updateResponsibilityCallback={this.updateResponsibility}/>
             );
         }.bind(this));
 
+        var submitButton
         if(this.state.saved){
-            var submitButton = <button className="btn btn-success disabled" disabled="disabled">Saved Successfully!</button>;
+            submitButton = <button className="btn btn-success disabled" disabled="disabled">Saved Successfully!</button>;
         } else if(this.state.saveError){
-            var submitButton = <button className="btn btn-default disabled btn-danger" disabled="disabled">Something went wrong while sending to Student Accounts!</button>
+            submitButton = <button className="btn btn-default disabled btn-danger" disabled="disabled">Something went wrong while sending to Student Accounts!</button>
         } else if(this.state.submitted){
-            var submitButton = <button className="btn btn-default disabled" disabled="disabled"><i className="fa fa-spinner fa-pulse"></i> Sending to Student Accounts</button>
+            submitButton = <button className="btn btn-default disabled" disabled="disabled"><i className="fa fa-spinner fa-pulse"></i> Sending to Student Accounts</button>
         } else {
-            var submitButton = <button className="btn btn-default" onClick={this.handleSave}>Report to Student Accounts</button>
+            submitButton = <button className="btn btn-default" onClick={this.handleSave}>Report to Student Accounts</button>
         }
 
         return(
@@ -242,16 +246,19 @@ var DamageRoom = React.createClass({
             </div>
         );
     }
-});
+}
 
 // Top-level parent component
-var DamageAssessment = React.createClass({
-    getInitialState: function()
-    {
-        return ({roomList: null, damageTypes: null, error: null});
-    },
-    componentWillMount: function()
-    {
+class DamageAssessment extends React.Component{
+    constructor(props){
+        super(props);
+
+        this.state = {roomList: null, damageTypes: null, error: null}
+        this.componentWillMount = this.componentWillMount.bind(this);
+        this.removeRoomCallback = this.removeRoomCallback.bind(this);
+
+    }
+    componentWillMount(){
         // Load the list of damage types
         $.ajax({
             url: 'index.php?module=hms&action=GetDamageTypes',
@@ -269,7 +276,7 @@ var DamageAssessment = React.createClass({
                         this.setState({roomList: data});
                     }.bind(this),
                     error: function(xhr, status, err) {
-                        if(xhr.status == 401){
+                        if(xhr.status === 401){
                             this.setState({error: "You do not have permission to assess damages in any halls. You need to have the RD or Coordinator role for at least one Residence Hall."})
                             return;
                         }
@@ -280,35 +287,34 @@ var DamageAssessment = React.createClass({
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(status, err.toString());
-            }.bind(this)
+            }
         });
-
-    },
-    removeRoomCallback: function(roomId){
+    }
+    removeRoomCallback(roomId){
 
         var roomList = this.state.roomList;
 
         var roomIndex = roomList.findIndex(function(element, index, arr){
-            if(roomId == element.id){
+            if(roomId === element.id){
                 return true;
             } else {
                 return false;
             }
-        }.bind(this));
+        });
 
         roomList.splice(roomIndex, 1);
         this.setState({roomList: roomList});
-    },
-    render: function()
-    {
+    }
+    render(){
+        var rooms
         if (this.state.error !== null){
-            var rooms = <div className="alert alert-danger" role="alert">{this.state.error}</div>
+            rooms = <div className="alert alert-danger" role="alert">{this.state.error}</div>
         } else if(this.state.roomList == null) {
-            var rooms = <h3><i className="fa fa-spinner fa-pulse"></i> Loading Damages</h3>
-        } else if (this.state.roomList.length == 0) {
-            var rooms = <h3>There are no damages to assess!</h3>
+            rooms = <h3><i className="fa fa-spinner fa-pulse"></i> Loading Damages</h3>
+        } else if (this.state.roomList.length === 0) {
+            rooms = <h3>There are no damages to assess!</h3>
         } else {
-            var rooms = this.state.roomList.map(function(room) {
+            rooms = this.state.roomList.map(function(room) {
                 var key = room.room_number + room.hallName;
                 return (<DamageRoom room={room} damageTypes={this.state.damageTypes} hideDelay={1500} removeRoomCallback={this.removeRoomCallback} key={key}/>);
             }.bind(this));
@@ -324,6 +330,6 @@ var DamageAssessment = React.createClass({
             </div>
         );
     }
-});
+}
 
 ReactDOM.render(<DamageAssessment term={window.term}/>, document.getElementById('DamageAssessment'));
