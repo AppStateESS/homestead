@@ -12,7 +12,7 @@ class BedView extends View
     private $room;
     private $bed;
 
-    public function __construct(HMS_Residence_Hall $hall, HMS_Floor $floor, HMS_Room $room, HMS_Bed $bed)
+    public function __construct(ResidenceHall $hall, Floor $floor, Room $room, Bed $bed)
     {
         $this->hall = $hall;
         $this->floor = $floor;

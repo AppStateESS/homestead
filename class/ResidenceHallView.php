@@ -8,7 +8,7 @@ class ResidenceHallView extends View {
 
     private $hall;
 
-    public function __construct(HMS_Residence_Hall $hall){
+    public function __construct(ResidenceHall $hall){
         $this->hall = $hall;
     }
 
@@ -134,9 +134,9 @@ class ResidenceHallView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        $tpl['FLOOR_PAGER'] = HMS_Floor::get_pager_by_hall($this->hall->getId());
+        $tpl['FLOOR_PAGER'] = Floor::get_pager_by_hall($this->hall->getId());
         javascript('modules/hms/role_editor');
-        $tpl['ROLE_EDITOR'] = \PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Residence_Hall'", 'ID'=>$this->hall->id), 'hms', 'admin/role_editor.tpl');
+        $tpl['ROLE_EDITOR'] = \PHPWS_Template::process(array('CLASS_NAME'=>"'ResidenceHall'", 'ID'=>$this->hall->id), 'hms', 'admin/role_editor.tpl');
 
         \Layout::addPageTitle("Edit Residence Hall");
 

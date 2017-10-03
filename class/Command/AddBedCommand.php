@@ -6,8 +6,8 @@ use \Homestead\CommandFactory;
 use \Homestead\NotificationView;
 use \Homestead\Exception\PermissionException;
 use \Homestead\UserStatus;
-use \Homestead\HMS_Room;
-use \Homestead\HMS_Bed;
+use \Homestead\Room;
+use \Homestead\Bed;
 
 class AddBedCommand extends Command {
 
@@ -67,7 +67,7 @@ class AddBedCommand extends Command {
         $raRoommate = $context->get('ra_roommate') == 1 ? 1 : 0;
         $intlReserved = $context->get('international_reserved') == 1 ? 1 : 0;
 
-        $room = new HMS_Room($roomId);
+        $room = new Room($roomId);
 
         if(is_null($room)){
             \NQ::simple('hms', NotificationView::ERROR, 'Could not create bed. Invalid room.');
@@ -80,7 +80,7 @@ class AddBedCommand extends Command {
 
         # Try to create the bed
         try{
-            HMS_Bed::addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raRoommate, $intlReserved, $raBed, $persistentId);
+            Bed::addBed($roomId, $term, $bedLetter, $bedroomLabel, $phoneNumber, $bannerId, $raRoommate, $intlReserved, $raBed, $persistentId);
         }catch(\Exception $e){
             \NQ::simple('hms', NotificationView::ERROR, 'There was an error creating the bed: ' . $e->getMessage());
             $errorCmd->redirect();

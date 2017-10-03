@@ -19,7 +19,7 @@ class LotteryChooseRoomView extends View {
 
     public function show()
     {
-        $floor  = new HMS_Floor($this->floorId);
+        $floor  = new Floor($this->floorId);
 
         $tpl = array();
 

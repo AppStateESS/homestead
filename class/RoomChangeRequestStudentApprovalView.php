@@ -56,8 +56,8 @@ class RoomChangeRequestStudentApprovalView {
                 $row['STRONG_STYLE'] = '';
             }
 
-            $fromBed = new HMS_Bed($p->getFromBed());
-            $toBed   = new HMS_Bed($p->getToBed());
+            $fromBed = new Bed($p->getFromBed());
+            $toBed   = new Bed($p->getToBed());
 
             $row['FROM_BED'] = $fromBed->where_am_i();
             $row['TO_BED']   = $toBed->where_am_i();

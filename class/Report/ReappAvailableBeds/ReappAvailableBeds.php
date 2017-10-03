@@ -4,7 +4,7 @@ namespace Homestead\Report\ReappAvailableBeds;
 
 use \Homestead\Report;
 use \Homestead\iCsvReport;
-use \Homestead\HMS_Residence_Hall;
+use \Homestead\ResidenceHall;
 use \Homestead\HMS_Util;
 
 /**
@@ -33,7 +33,7 @@ class ReappAvailableBeds extends Report implements iCsvReport
 
     public function execute()
     {
-        $halls = HMS_Residence_Hall::get_halls($this->term);
+        $halls = ResidenceHall::get_halls($this->term);
 
         $rows = array();
 

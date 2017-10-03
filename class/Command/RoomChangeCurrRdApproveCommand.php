@@ -8,7 +8,7 @@ use \Homestead\RoomChangeParticipantFactory;
 use \Homestead\UserStatus;
 use \Homestead\NotificationView;
 use \Homestead\Student;
-use \Homestead\HMS_Bed;
+use \Homestead\Bed;
 use \Homestead\HMS_Email;
 use \Homestead\ParticipantStateCurrRdApproved;
 use \Homestead\Exception\PermissionException;
@@ -78,7 +78,7 @@ class RoomChangeCurrRdApproveCommand extends Command {
 
         // Set the selected bed, if needed
         if (is_null($toBedId) && $toBedSelected != '-1') {
-            $bed = new HMS_Bed($toBedSelected);
+            $bed = new Bed($toBedSelected);
 
             // Check that the bed isn't already reserved for a room change
             if($bed->isRoomChangeReserved()){
@@ -108,7 +108,7 @@ class RoomChangeCurrRdApproveCommand extends Command {
 
             // If all Current RDs have approved, notify future roommates
             foreach($request->getParticipants() as $p) {
-                $bed = new HMS_Bed($p->getToBed());
+                $bed = new Bed($p->getToBed());
                 $room = $bed->get_parent();
 
                 foreach($room->get_assignees() as $a) {

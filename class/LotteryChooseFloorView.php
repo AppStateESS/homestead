@@ -20,7 +20,7 @@ class LotteryChooseFloorView extends View {
     {
         \PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
 
-        $hall = new HMS_Residence_Hall($this->hallId);
+        $hall = new ResidenceHall($this->hallId);
 
         $tpl = array();
 

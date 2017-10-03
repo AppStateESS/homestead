@@ -6,8 +6,8 @@ use \Homestead\StudentFactory;
 use \Homestead\UserStatus;
 use \Homestead\CommandFactory;
 use \Homestead\NotificationView;
-use \Homestead\HMS_Room;
-use \Homestead\HMS_Bed;
+use \Homestead\Room;
+use \Homestead\Bed;
 use \Homestead\HMS_Lottery;
 use \Homestead\HMS_Assignment;
 use \Homestead\HMS_Activity_Log;
@@ -73,7 +73,7 @@ class LotteryConfirmCommand extends Command {
             $errorCmd->redirect();
         }
 
-        $room = new HMS_Room($roomId);
+        $room = new Room($roomId);
 
         // Check for an RLC assignment in the self-select status
         $rlcAssignment = RlcMembershipFactory::getMembership($student, $term);
@@ -89,7 +89,7 @@ class LotteryConfirmCommand extends Command {
             }
 
             // Make sure the bed is still empty
-            $bed = new HMS_Bed($bed_id);
+            $bed = new Bed($bed_id);
 
             if($bed->has_vacancy() != TRUE){
                 \NQ::simple('hms', NotificationView::ERROR, 'One or more of the beds in the room you selected is no longer available. Please try again.');
@@ -182,7 +182,7 @@ class LotteryConfirmCommand extends Command {
 
             # Reserve the bed for the roommate
             $expires_on = time() + (INVITE_TTL_HRS * 3600);
-            $bed = new HMS_Bed($bed_id);
+            $bed = new Bed($bed_id);
             if(!$bed->lottery_reserve($username, $student->getUsername(), $expires_on)){
                 \NQ::smiple('hms', NotificationView::WARNING, "You were assigned, but there was a problem reserving space for your roommates. Please contact University Housing.");
                 $successCmd->redirect();

@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
-use \Homestead\HMS_Room;
+use \Homestead\Room;
 use \Homestead\AddBedView;
 use \Homestead\UserStatus;
 use \Homestead\Exception\PermissionException;
@@ -67,7 +67,7 @@ class ShowAddBedCommand extends Command {
 
         $roomId = $context->get('roomId');
 
-        $room	= new HMS_Room($roomId);
+        $room	= new Room($roomId);
         $floor	= $room->get_parent();
         $hall	= $floor->get_parent();
 

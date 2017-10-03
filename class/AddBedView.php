@@ -12,7 +12,7 @@ class AddBedView extends View
     private $phoneNumber;
     private $bannerId;
 
-    public function __construct(HMS_Residence_Hall $hall, HMS_Floor $floor, HMS_Room $room, $bedLetter = NULL, $bedroomLabel
+    public function __construct(ResidenceHall $hall, Floor $floor, Room $room, $bedLetter = NULL, $bedroomLabel
     = NULL, $phoneNumber = NULL, $bannerId = NULL)
     {
         $this->hall = $hall;

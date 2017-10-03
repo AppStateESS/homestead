@@ -3,7 +3,7 @@
 namespace Homestead\Command;
 
 use \Homestead\HallOverview;
-use \Homestead\HMS_Residence_Hall;
+use \Homestead\ResidenceHall;
 use \Homestead\UserStatus;
 use \Homestead\Exception\PermissionException;
 
@@ -41,7 +41,7 @@ class HallOverviewNakedDisplayCommand extends Command {
             throw new \InvalidArgumentException('Missing hall ID.');
         }
 
-        $hall = new HMS_Residence_Hall($hallId);
+        $hall = new ResidenceHall($hallId);
 
         $hallOverview = new HallOverview($hall, TRUE);
         $context->setContent($hallOverview->show());

@@ -18,7 +18,7 @@ class LotteryConfirmRoommateRequestView extends View {
     public function show()
     {
         # Get the roommate request record from the database
-        $bed = new HMS_Bed($this->request['bed_id']);
+        $bed = new Bed($this->request['bed_id']);
         $room = $bed->get_parent();
 
         $tpl = array();

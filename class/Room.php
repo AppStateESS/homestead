@@ -17,7 +17,7 @@ use \PHPWS_DB;
  * @author Kevin Wilcox <kevin at tux dot appstate dot edu>
  */
 
-class HMS_Room extends HMS_Item
+class Room extends HMS_Item
 {
 
     public $term;
@@ -59,7 +59,7 @@ class HMS_Room extends HMS_Item
     public $_beds                  = null;
 
     /**
-     * Parent HMS_Floor object of this room
+     * Parent Floor object of this room
      * @public object
      */
     public $_floor                 = null;
@@ -218,7 +218,7 @@ class HMS_Room extends HMS_Item
      */
     public function loadFloor()
     {
-        $result = new HMS_Floor($this->floor_id);
+        $result = new Floor($this->floor_id);
         if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
@@ -238,8 +238,8 @@ class HMS_Room extends HMS_Item
         $db->addOrder('bedroom_label', 'ASC');
         $db->addOrder('bed_letter', 'ASC');
 
-        $db->loadClass('hms', 'HMS_Bed.php');
-        $result = $db->getObjects('\Homestead\HMS_Bed');
+        $db->loadClass('hms', 'Bed.php');
+        $result = $db->getObjects('\Homestead\Bed');
         if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         } else {
@@ -257,7 +257,7 @@ class HMS_Room extends HMS_Item
     public function create_child_objects($bedrooms_per_room)
     {
         for ($i = 0; $i < $bedroooms_per_room; $i++) {
-            $bed = new HMS_Bed;
+            $bed = new Bed;
 
             $bed->room_id     = $this->id;
             $bed->term        = $this->term;
@@ -807,7 +807,7 @@ class HMS_Room extends HMS_Item
     {
         javascript('jquery');
 
-        $pager = new \DBPager('hms_room', '\Homestead\HMS_Room');
+        $pager = new \DBPager('hms_room', '\Homestead\Room');
         $pager->addWhere('hms_room.floor_id', $floor_id);
         $pager->db->addOrder('hms_room.room_number');
 
@@ -856,7 +856,7 @@ class HMS_Room extends HMS_Item
             throw new \InvalidArgumentException('Invalid room id.');
         }
 
-        $room = new HMS_Room($roomId);
+        $room = new Room($roomId);
 
         // make sure there isn't an assignment
         if ($room->get_number_of_assignees() != 0) {
@@ -868,7 +868,7 @@ class HMS_Room extends HMS_Item
             if ($room->loadBeds()) {
                 if (!empty($room->_beds)) {
                     foreach($room->_beds as $bed) {
-                        HMS_Bed::deleteBed($bed->id);
+                        Bed::deleteBed($bed->id);
                     }
                 }
             }
@@ -947,7 +947,7 @@ class HMS_Room extends HMS_Item
 
         // Make sure each room is empty and has only two beds
         $ret = array_values(array_filter($result,
-                array('HMS_Room', 'check_two_bed_and_empty_by_id')));
+                array('Room', 'check_two_bed_and_empty_by_id')));
 
         if ($randomize) {
             shuffle($ret);

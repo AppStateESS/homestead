@@ -3,7 +3,7 @@
 namespace Homestead\Command;
 
 use \Homestead\UserStatus;
-use \Homestead\HMS_Residence_Hall;
+use \Homestead\ResidenceHall;
 use \Homestead\ResidenceHallView;
 use \Homestead\Term;
 use \Homestead\CommandFactory;
@@ -49,7 +49,7 @@ class EditResidenceHallViewCommand extends Command {
             throw new \InvalidArgumentException('Missing hall ID.');
         }
 
-        $hall = new HMS_Residence_Hall($hallId);
+        $hall = new ResidenceHall($hallId);
 
         // Check for a hall/term mismatch, since halls are indexed by ID and not by name & term
         if($hall->term != Term::getSelectedTerm()){

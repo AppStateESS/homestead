@@ -23,7 +23,7 @@ class CheckinHistoryView extends View {
         foreach ($this->checkins as $checkin) {
             $row = array();
 
-            $bed = new HMS_Bed($checkin->getBedId());
+            $bed = new Bed($checkin->getBedId());
 
             $row['room']     = $bed->where_am_i();
             $row['term']     = Term::toString($checkin->getTerm());

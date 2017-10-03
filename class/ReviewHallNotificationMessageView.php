@@ -35,14 +35,14 @@ class ReviewHallNotificationMessageView extends View {
 
         if(is_array($this->floors)){
             foreach($this->floors as $floorId){
-                $floor = new HMS_Floor();
+                $floor = new Floor();
                 $floor->id = $floorId;
                 $floor->load();
                 $floor->loadHall();
                 $tpl['halls'][$floor->_hall->getHallName()][] = 'Floor '.$floor->getFloorNumber();
             }
         } else {
-            $floor = new HMS_Floor();
+            $floor = new Floor();
             $floor->id = $this->floors;
             $floor->load();
             $floor->loadHall();

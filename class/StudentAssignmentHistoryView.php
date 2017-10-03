@@ -52,7 +52,7 @@ class StudentAssignmentHistoryView extends View {
                 $removedOn = date('M jS, Y \a\t g:ia', $ah->removed_on);
             }
 
-            $bed = new HMS_Bed($ah->getBedId());
+            $bed = new Bed($ah->getBedId());
 
             $row['room'] = $bed->where_am_i();
             $row['term'] = Term::toString($ah->term);

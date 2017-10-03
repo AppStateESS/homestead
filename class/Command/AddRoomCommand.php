@@ -3,8 +3,8 @@
 namespace Homestead\Command;
 
 use \Homestead\CommandFactory;
-use \Homestead\HMS_Room;
-use \Homestead\HMS_Floor;
+use \Homestead\Room;
+use \Homestead\Floor;
 use \Homestead\Term;
 use \Homestead\Exception\PermissionException;
 
@@ -38,7 +38,7 @@ class AddRoomCommand extends Command {
 
         $floor_id = $context->get('floor');
 
-        $room = new HMS_Room;
+        $room = new Room;
         $room->floor_id = $floor_id;
         $room->room_number = $context->get('room_number');
         $room->gender_type = $context->get('gender_type');
@@ -61,7 +61,7 @@ class AddRoomCommand extends Command {
         $room->term = Term::getSelectedTerm();
 
         // Get the building code
-        $floor = new HMS_Floor($floor_id);
+        $floor = new Floor($floor_id);
         $hall = $floor->get_parent();
 
         // and set the rooms building code to the same as the hall it is in

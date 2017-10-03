@@ -14,7 +14,7 @@ class HallOverview extends View{
     private $hall;
     private $nakedDisplay;
 
-    public function __construct(HMS_Residence_Hall $hall, $nakedDisplay = FALSE){
+    public function __construct(ResidenceHall $hall, $nakedDisplay = FALSE){
         $this->hall = $hall;
         $this->nakedDisplay = $nakedDisplay;
     }

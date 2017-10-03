@@ -2,7 +2,7 @@
 
 namespace Homestead\UI;
 
-use \Homestead\HMS_Residence_Hall;
+use \Homestead\ResidenceHall;
 use \Homestead\HMS_Term;
 use \Homestead\HMS_Activity_Log;
 use \Homestead\HMS_Email;
@@ -47,7 +47,7 @@ class Notification {
 
         $tpl=array();
         if(\Current_User::allow('hms', 'email_all')){
-            $halls = HMS_Residence_Hall::get_halls(HMS_Term::get_selected_term());
+            $halls = ResidenceHall::get_halls(HMS_Term::get_selected_term());
             $form = new \PHPWS_Form('select_halls_to_email');
             foreach($halls as $hall){
                 if($hall->is_online != 1){
@@ -83,7 +83,7 @@ class Notification {
                 $i++;
             }
         } else {
-            $tpl['SELECT'] = HMS_Residence_Hall::show_select_residence_hall('Select recipient Hall', 'notification', 'edit');
+            $tpl['SELECT'] = ResidenceHall::show_select_residence_hall('Select recipient Hall', 'notification', 'edit');
         }
 
         return \PHPWS_Template::process($tpl, 'hms', 'admin/messages.tpl');
@@ -131,11 +131,11 @@ class Notification {
         $tpl = array();
         if(is_array($_REQUEST['hall'])){
             foreach($_REQUEST['hall'] as $hall){
-                $_hall = new HMS_Residence_Hall($hall);
+                $_hall = new ResidenceHall($hall);
                 $tpl['halls'][] = array('HALL'=>$_hall->hall_name);
             }
         } else {
-            $hall = new HMS_Residence_Hall($_REQUEST['hall']);
+            $hall = new ResidenceHall($_REQUEST['hall']);
             $tpl['halls'][] = array('HALL'=>$hall->hall_name);
         }
 
@@ -191,7 +191,7 @@ class Notification {
 
         if(is_array($_REQUEST['hall'])){
             foreach($_REQUEST['hall'] as $hall_id){
-                $hall = new HMS_Residence_Hall($hall_id);
+                $hall = new ResidenceHall($hall_id);
                 $floors = $hall->get_floors();
                 foreach($floors as $floor){
                     $rooms = $floor->get_rooms();
@@ -209,7 +209,7 @@ class Notification {
                 }
             }
         } else {
-            $hall = new HMS_Residence_Hall($_REQUEST['hall']);
+            $hall = new ResidenceHall($_REQUEST['hall']);
             $floors = $hall->get_floors();
             foreach($floors as $floor){
                 $rooms = $floor->get_rooms();

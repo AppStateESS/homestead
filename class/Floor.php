@@ -14,7 +14,7 @@ use \PHPWS_DB;
  * @author Kevin Wilcox <kevin at tux dot appstate dot edu>
  */
 
-class HMS_Floor extends HMS_Item
+class Floor extends HMS_Item
 {
     public $term;
     public $floor_number;
@@ -161,7 +161,7 @@ class HMS_Floor extends HMS_Item
      */
     public function loadHall()
     {
-        $result = new HMS_Residence_Hall($this->residence_hall_id);
+        $result = new ResidenceHall($this->residence_hall_id);
         if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
@@ -180,8 +180,8 @@ class HMS_Floor extends HMS_Item
         $db->addWhere('floor_id', $this->id);
         $db->addOrder('room_number', 'ASC');
 
-        $db->loadClass('hms', 'HMS_Room.php');
-        $result = $db->getObjects('\Homestead\HMS_Room');
+        $db->loadClass('hms', 'Room.php');
+        $result = $db->getObjects('\Homestead\Room');
         //test($result);
         if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
@@ -197,7 +197,7 @@ class HMS_Floor extends HMS_Item
     public function create_child_objects($rooms_per_floor, $beds_per_room)
     {
         for ($i = 0; $i < $rooms_per_floor; $i++) {
-            $room = new HMS_Room;
+            $room = new Room;
 
             $room->floor_id     = $this->id;
             $room->term         = $this->term;
@@ -489,7 +489,7 @@ class HMS_Floor extends HMS_Item
     /**
      * Returns an array of the bed on the current floor
      *
-     * @return Array An array of HMS_Bed objects that exist on the current floor.
+     * @return Array An array of Bed objects that exist on the current floor.
      */
     public function get_beds()
     {
@@ -546,7 +546,7 @@ class HMS_Floor extends HMS_Item
     /**
      * Returns an array of room objects on this floor that have vacancies
      *
-     * @return Array<HMS_Room> An array of HMS_Room objects which are vacant on this floor.
+     * @return Array<Room> An array of Room objects which are vacant on this floor.
      */
     public function getRoomsWithVacancies()
     {
@@ -662,7 +662,7 @@ class HMS_Floor extends HMS_Item
 
     public static function get_pager_by_hall($hall_id)
     {
-        $pager = new \DBPager('hms_floor', '\Homestead\HMS_Floor');
+        $pager = new \DBPager('hms_floor', '\Homestead\Floor');
 
         $pager->addWhere('hms_floor.residence_hall_id', $hall_id);
         $pager->db->addOrder('hms_floor.floor_number');

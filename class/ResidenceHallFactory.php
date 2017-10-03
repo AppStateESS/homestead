@@ -5,7 +5,7 @@ namespace Homestead;
 use \Homestead\Exception\DatabaseException;
 
 /**
- * ResidenceHallFactory - Factory methods to aid in creating HMS_Residence_Hall objects.
+ * ResidenceHallFactory - Factory methods to aid in creating ResidenceHall objects.
  *
  * @author jbooker
  * @package hms
@@ -13,12 +13,12 @@ use \Homestead\Exception\DatabaseException;
 class ResidenceHallFactory {
 
     /**
-     * Returns an array of HMS_Residence_Hall objects for the given term.
+     * Returns an array of ResidenceHall objects for the given term.
      *
      * @param integer $term
      * @throws \InvalidArgumentException
      * @throws DatabaseException
-     * @return multitype:HMS_Residence_Hall
+     * @return multitype:ResidenceHall
      */
     public static function getHallsForTerm($term)
     {
@@ -42,7 +42,7 @@ class ResidenceHallFactory {
 
         //TODO this is terribly inefficient
         foreach($results as $result){
-            $halls[] = new HMS_Residence_Hall($result['id']);
+            $halls[] = new ResidenceHall($result['id']);
         }
 
         return $halls;

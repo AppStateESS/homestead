@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
-use \Homestead\HMS_Floor;
+use \Homestead\Floor;
 use \Homestead\HMS_Util;
 
 class AjaxGetRoomsWithVacanciesCommand extends Command {
@@ -15,7 +15,7 @@ class AjaxGetRoomsWithVacanciesCommand extends Command {
     {
         //TODO check for a floorId
 
-        $floor = new HMS_Floor($context->get('floorId'));
+        $floor = new Floor($context->get('floorId'));
 
         $rooms = $floor->getRoomsWithVacancies();
 

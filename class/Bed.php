@@ -14,7 +14,7 @@ use \PHPWS_DB;
  * @author Matthew McNaney <mcnaney at gmail dot com>
  */
 
-class HMS_Bed extends HMS_Item {
+class Bed extends HMS_Item {
 
     public $id;
     public $term;
@@ -139,7 +139,7 @@ class HMS_Bed extends HMS_Item {
         } else if ($result == null) {
             return true;
         } elseif (sizeof($result) > 1) {
-            PHPWS_Error::log(HMS_MULTIPLE_ASSIGNMENTS, 'hms', 'HMS_Bed::loadAssignment', "bedid : {$this->id}");
+            PHPWS_Error::log(HMS_MULTIPLE_ASSIGNMENTS, 'hms', 'Bed::loadAssignment', "bedid : {$this->id}");
             return false;
         } else {
             $this->_curr_assignment = $result[0];
@@ -149,7 +149,7 @@ class HMS_Bed extends HMS_Item {
 
     public function loadRoom()
     {
-        $result = new HMS_Room($this->room_id);
+        $result = new Room($this->room_id);
         if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
@@ -627,7 +627,7 @@ class HMS_Bed extends HMS_Item {
     public static function get_free_bed($term, $gender, $randomize = FALSE)
     {
         // Get the list of all free beds
-        $beds = HMS_Bed::get_all_free_beds($term, $gender);
+        $beds = Bed::get_all_free_beds($term, $gender);
 
         // Check for db errors
         if (\PEAR::isError($beds)) {
@@ -666,7 +666,7 @@ class HMS_Bed extends HMS_Item {
         }
 
         // Create a new bed object
-        $bed = new HMS_Bed();
+        $bed = new Bed();
 
         $bed->room_id = $roomId;
         $bed->term = $term;
@@ -699,7 +699,7 @@ class HMS_Bed extends HMS_Item {
         }
 
         // Create the bed object
-        $bed = new HMS_Bed($bedId);
+        $bed = new Bed($bedId);
 
         // Make sure the bed isn't assigned to anyone
         $bed->loadAssignment();
@@ -724,7 +724,7 @@ class HMS_Bed extends HMS_Item {
      */
     public static function bed_pager_by_room($room_id)
     {
-        $pager = new \DBPager('hms_bed', '\Homestead\HMS_Bed');
+        $pager = new \DBPager('hms_bed', '\Homestead\Bed');
         $pager->db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
 
         $pager->addWhere('hms_room.id', $room_id);

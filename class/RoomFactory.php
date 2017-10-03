@@ -21,7 +21,7 @@ class RoomFactory {
         $db->addWhere('term', $term);
         $db->addWhere('persistent_id', $roomId);
 
-        $room = new HMS_Room(0);
+        $room = new Room(0);
         $result = $db->loadObject($room);
 
         if(\PHPWS_Error::logIfError($result)){

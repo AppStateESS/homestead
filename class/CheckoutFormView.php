@@ -11,7 +11,7 @@ class CheckoutFormView extends View
     private $damages;
     private $checkin;
 
-    public function __construct(Student $student, HMS_Residence_Hall $hall, HMS_Room $room, HMS_Bed $bed, Array $damages = null, Checkin $checkin)
+    public function __construct(Student $student, ResidenceHall $hall, Room $room, Bed $bed, Array $damages = null, Checkin $checkin)
     {
         $this->student = $student;
         $this->hall = $hall;

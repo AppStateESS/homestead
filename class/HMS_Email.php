@@ -761,12 +761,12 @@ class HMS_Email{
         $requestorBid = $requestor->getBannerId();
         $requestorStudent = StudentFactory::getStudentByBannerID($requestorBid, $term);
         $requestorCurrent = HMS_Assignment::getAssignmentByBannerID($requestorBid, $term);
-        $requestorFuture  = new HMS_Bed($requestor->getToBed());
+        $requestorFuture  = new Bed($requestor->getToBed());
 
         $requesteeBid = $requestee->getBannerId();
         $requesteeStudent = StudentFactory::getStudentByBannerID($requesteeBid, $term);
         $requesteeCurrent = HMS_Assignment::getAssignmentByBannerID($requesteeBid, $term);
-        $requesteeFuture  = new HMS_Bed($requestee->getToBed());
+        $requesteeFuture  = new Bed($requestee->getToBed());
 
         $tags = array(
             'REQUESTOR_NAME' => $requestorStudent->getName(),
@@ -828,7 +828,7 @@ class HMS_Email{
             // If they have a future assignment, show it
             $futureBedId = $p->getToBed();
             if($futureBedId) {
-                $bed = new HMS_Bed($futureBedId);
+                $bed = new Bed($futureBedId);
                 $participantTags['DESTINATION'] = $bed->where_am_i();
             }
 
@@ -943,7 +943,7 @@ class HMS_Email{
             $bid = $p->getBannerId();
             $student = StudentFactory::getStudentByBannerID($bid, $term);
             $assign = HMS_Assignment::getAssignmentByBannerID($bid, $term);
-            $future = new HMS_Bed($p->getToBed());
+            $future = new Bed($p->getToBed());
 
             $participantTags = array(
                 'BANNER_ID'   => $student->getBannerId(),
@@ -1020,8 +1020,8 @@ class HMS_Email{
 
         foreach($r->getParticipants() as $p) {
             $student = Studentfactory::getStudentByBannerID($p->getBannerID(), $r->getTerm());
-            $current = new HMS_Bed($p->getFromBed());
-            $future = new HMS_Bed($p->getToBed());
+            $current = new Bed($p->getFromBed());
+            $future = new Bed($p->getToBed());
 
             $recipients[] = $student;
 

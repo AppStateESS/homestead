@@ -32,7 +32,7 @@ class Checkin {
 
     const CHECKIN_TIMEOUT = 172800; // Allow max 48 hours between checkins
 
-    public function __construct(Student $student, HMS_Bed $bed, $term, $checkinBy, $keyCode)
+    public function __construct(Student $student, Bed $bed, $term, $checkinBy, $keyCode)
     {
         $this->setBannerId($student->getBannerId());
         $this->setBedPersistentId($bed->getPersistentId());

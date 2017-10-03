@@ -14,7 +14,7 @@ use \PHPWS_DB;
  * @author Kevin Wilcox <kevin at tux dot appstate dot edu>
  */
 
-class HMS_Residence_Hall extends HMS_Item {
+class ResidenceHall extends HMS_Item {
 
     public $hall_name = NULL;
     public $term;
@@ -169,13 +169,19 @@ class HMS_Residence_Hall extends HMS_Item {
         $db->addWhere('residence_hall_id', $this->id);
         $db->addOrder('floor_number', 'ASC');
 
-        $db->loadClass('hms', 'HMS_Floor.php');
-        $result = $db->getObjects('\Homestead\HMS_Floor');
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
+        $db->loadClass('hms', 'Floor.php');
+        $result = $db->getObjects('\Homestead\Floor');
 
         $this->_floors = & $result;
+
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT *
+            FROM hms_floor
+            WHERE residence_hall_id = :id
+            ORDER BY floor_number ASC";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $this->id));
+        $sth->fetchObject(\PDO::FETCH_CLASS, '\Homestead\Floor');
         return true;
     }
 
@@ -189,7 +195,7 @@ class HMS_Residence_Hall extends HMS_Item {
         }
 
         for ($i = 0; $i < $num_floors; $i++) {
-            $floor = new HMS_Floor();
+            $floor = new Floor();
 
             $floor->residence_hall_id = $this->id;
             $floor->term = $this->term;
@@ -738,7 +744,7 @@ class HMS_Residence_Hall extends HMS_Item {
         }
 
         foreach ($results as $result) {
-            $halls[] = new HMS_Residence_Hall($result['id']);
+            $halls[] = new ResidenceHall($result['id']);
         }
 
         return $halls;
@@ -806,7 +812,7 @@ class HMS_Residence_Hall extends HMS_Item {
         $hallArray = array();
         $hallArray[0] = 'Select...';
 
-        $halls = HMS_Residence_Hall::getHallsWithVacancies($term);
+        $halls = ResidenceHall::getHallsWithVacancies($term);
 
         foreach ($halls as $hall) {
             $hallArray[$hall->id] = $hall->hall_name;
@@ -823,7 +829,7 @@ class HMS_Residence_Hall extends HMS_Item {
      */
     public static function get_lottery_avail_hall_list($term)
     {
-        $halls = HMS_Residence_Hall::get_halls($term);
+        $halls = ResidenceHall::get_halls($term);
 
         $output_list = array();
 

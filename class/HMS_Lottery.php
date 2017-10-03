@@ -334,7 +334,7 @@ class HMS_Lottery {
             $student = StudentFactory::getStudentByUsername($row['asu_username'], $term);
             $requestor = StudentFactory::getStudentByUsername($row['requestor'], $term);
 
-            $bed = new HMS_Bed($row['bed_id']);
+            $bed = new Bed($row['bed_id']);
             $hall_room = $bed->where_am_i();
             HMS_Email::send_lottery_roommate_reminder($row['asu_username'], $student->getName(), $row['expires_on'], $requestor->getName(), $hall_room, $year);
             HMS_Activity_Log::log_activity($row['asu_username'], ACTIVITY_LOTTERY_ROOMMATE_REMINDED, 'hms');
@@ -421,7 +421,7 @@ class HMS_Lottery {
         }
 
         // Check that the reserved bed is still empty
-        $bed = new HMS_Bed($invite['bed_id']);
+        $bed = new Bed($invite['bed_id']);
         if (!$bed->has_vacancy()) {
             return E_ASSIGN_BED_NOT_EMPTY;
         }

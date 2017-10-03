@@ -49,12 +49,12 @@ class RoomChangeParticipantView extends View {
         $pref2 = $this->participant->getHallPref2();
 
         if (!is_null($pref1)) {
-            $hall1 = new HMS_Residence_Hall($pref1);
+            $hall1 = new ResidenceHall($pref1);
             $hallName = $hall1->getHallName();
 
             // Check if there's also a second hall preference
             if (!is_null($pref2)) {
-                $hall2 = new HMS_Residence_Hall($pref2);
+                $hall2 = new ResidenceHall($pref2);
                 $hallName .= ', ' . $hall2->getHallName();
             }
 
@@ -62,14 +62,14 @@ class RoomChangeParticipantView extends View {
         }
 
         // From bed
-        $fromBed = new HMS_Bed($this->participant->getFromBed());
+        $fromBed = new Bed($this->participant->getFromBed());
         $tpl['FROM_ROOM'] = $fromBed->where_am_i();
 
         // To bed
         $toBedId = $this->participant->getToBed();
         if (isset($toBedId)) {
             // If there's already a bed set, show the selected bed
-            $toBed = new HMS_Bed($toBedId);
+            $toBed = new Bed($toBedId);
             $tpl['TO_ROOM'] = $toBed->where_am_i();
         }
 

@@ -72,7 +72,7 @@ class CheckinFactory {
     }
 
     // TODO: There could potentially be multiple check-ins for a student in a single bed
-    public static function getCheckinByBed(Student $student, HMS_Bed $bed)
+    public static function getCheckinByBed(Student $student, Bed $bed)
     {
         $db = new PHPWS_DB('hms_checkin');
         $db->addWhere('banner_id', $student->getBannerId());
@@ -192,7 +192,7 @@ class CheckinFactory {
      * has not checked out of yet.
      * //TODO update for persistent ID
      */
-    public static function getPendingCheckoutForStudentByHall(Student $student, HMS_Residence_Hall $hall)
+    public static function getPendingCheckoutForStudentByHall(Student $student, ResidenceHall $hall)
     {
         $db = new PHPWS_DB('hms_checkin');
 

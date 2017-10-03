@@ -3,7 +3,7 @@
 namespace Homestead\Command;
 
 use \Homestead\Term;
-use \Homestead\HMS_Residence_Hall;
+use \Homestead\ResidenceHall;
 use \Homestead\CommandFactory;
 use \Homestead\SelectFloorView;
 
@@ -48,7 +48,7 @@ class SelectFloorCommand extends Command {
     public function execute(CommandContext $context)
     {
         $term = Term::getSelectedTerm();
-        $halls = HMS_Residence_Hall::getHallsDropDownValues($term);
+        $halls = ResidenceHall::getHallsDropDownValues($term);
 
         $onSelectCmd = CommandFactory::getCommand($context->get('onSelectAction'));
         $onSelectCmd->setFloorId($context->get('floor'));

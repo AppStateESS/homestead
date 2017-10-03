@@ -6,7 +6,7 @@ use \Homestead\UserStatus;
 use \Homestead\CommandFactory;
 use \Homestead\NotificationView;
 use \Homestead\Term;
-use \Homestead\HMS_Residence_Hall;
+use \Homestead\ResidenceHall;
 use \Homestead\Exception\DatabaseException;
 use \Homestead\Exception\PermissionException;
 
@@ -103,7 +103,7 @@ class CreateTermCommand extends Command {
         try{
             $db->query('BEGIN');
             # Get the halls from the current term
-            $halls = HMS_Residence_Hall::get_halls($fromTerm);
+            $halls = ResidenceHall::get_halls($fromTerm);
             set_time_limit(36000);
 
             foreach ($halls as $hall){
