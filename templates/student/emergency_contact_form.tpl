@@ -17,7 +17,6 @@
       Demographic Information
     </h3>
   </div>
-
   <div class="row">
     <label class="col-md-3">
       Name:
@@ -26,6 +25,7 @@
       {STUDENT_NAME}
     </div>
   </div>
+  <br />
   <div class="row">
     <label class="col-md-3">
       Cell Phone:
@@ -39,6 +39,7 @@
     <h3>
       Emergency Contact Information
     </h3>
+
   </div>
 
   <div class="row">
@@ -49,7 +50,7 @@
       {EMERGENCY_CONTACT_NAME}
     </div>
   </div>
-
+  <br />
   <div class="row">
     <label class="col-md-4">
       Emergency Contact Relationship:
@@ -58,7 +59,7 @@
       {EMERGENCY_CONTACT_RELATIONSHIP}
     </div>
   </div>
-
+  <br />
   <div class="row">
     <label class="col-md-4">
       Emergency Contact Phone Number:
@@ -67,7 +68,7 @@
       {EMERGENCY_CONTACT_PHONE}
     </div>
   </div>
-
+  <br />
   <div class="row">
     <label class="col-md-4">
       Emergency Contact Email:
@@ -76,7 +77,7 @@
       {EMERGENCY_CONTACT_EMAIL}
     </div>
   </div>
-
+  <br />
   <div class="row">
     <p class="col-md-9">
       Are there any medical conditions you have which our staff should be aware
@@ -106,7 +107,7 @@
       than 24 hours. Please list your contact person's information below:
     </p>
   </div>
-
+  <br />
   <div class="row">
     <label class="col-md-3">
       Contact Person Name:
@@ -115,7 +116,7 @@
       {MISSING_PERSON_NAME}
     </div>
   </div>
-
+  <br />
   <div class="row">
     <label class="col-md-3">
       Contact Person Relationship:
@@ -124,7 +125,7 @@
       {MISSING_PERSON_RELATIONSHIP}
     </div>
   </div>
-
+  <br />
   <div class="row">
     <label class="col-md-4">
       Contact Person Phone Number:
@@ -133,7 +134,7 @@
       {MISSING_PERSON_PHONE}
     </div>
   </div>
-
+  <br />
   <div class="row">
     <label class="col-md-3">
       Contact Person Email:
@@ -142,7 +143,7 @@
       {MISSING_PERSON_EMAIL}
     </div>
   </div>
-
+  <br />
   <p>
   </p>
 

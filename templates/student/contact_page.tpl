@@ -27,7 +27,7 @@
         {START_FORM}
         <div class="form-group">
             {NAME_LABEL}
-            <input type="text" class="form-control" id="{NAME_ID" name="{NAME_NAME}" autofocus>
+            <input type="text" class="form-control" id="{NAME_ID}" name="{NAME_NAME}" autofocus>
         </div>
 
         <div class="form-group">
