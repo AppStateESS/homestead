@@ -97,47 +97,7 @@
                 "web service"
             ],
             "time": "2013-12-05T23:39:20+00:00"
-        },
-        {
-            "name": "ioki/wkhtmltopdf-amd64-centos6",
-            "version": "0.12.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/IOKI/wkhtmltopdf-amd64-centos6.git",
-                "reference": "1fa493e38c24c20268118fc3976c93854ab1cb6b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/IOKI/wkhtmltopdf-amd64-centos6/zipball/1fa493e38c24c20268118fc3976c93854ab1cb6b",
-                "reference": "1fa493e38c24c20268118fc3976c93854ab1cb6b",
-                "shasum": ""
-            },
-            "bin": [
-                "bin/wkhtmltopdf-amd64-centos6"
-            ],
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL Version 3"
-            ],
-            "authors": [
-                {
-                    "name": "Terry Harmon",
-                    "email": "terry@polymorphdev.com"
-                }
-            ],
-            "description": "All the wkhtmltopdf binaries for Centos6.",
-            "homepage": "https://github.com/ioki/wkhtmltopdf-amd64-centos6",
-            "keywords": [
-                "binary",
-                "convert",
-                "pdf",
-                "snapshot",
-                "thumbnail",
-                "wkhtmltopdf"
-            ],
-            "time": "2015-04-15T14:19:57+00:00"
-        },
+        }, 
         {
             "name": "michelf/php-markdown",
             "version": "1.3",
