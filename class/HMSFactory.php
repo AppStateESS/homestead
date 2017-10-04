@@ -11,7 +11,7 @@ class HMSFactory
 
     public static function getHMS()
     {
-        $rh = getallheaders();
+        //$rh = getallheaders();
 
         if (isset(HMSFactory::$hms)) {
             return HMSFactory::$hms;
@@ -19,9 +19,9 @@ class HMSFactory
         } else if (isset($_REQUEST['ajax'])
             || (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
                 && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
-            || isset($_REQUEST['callback'])
-            || (array_key_exists('Accept', $rh)
-                && stripos($rh['Accept'], 'application/json') !== FALSE)) {
+            || isset($_REQUEST['callback']) ) {
+            //|| (array_key_exists('Accept', $rh)
+                //&& stripos($rh['Accept'], 'application/json') !== FALSE)) {
             PHPWS_Core::initModClass('hms', 'AjaxHMS.php');
             HMSFactory::$hms = new AjaxHMS();
         } else if (UserStatus::isAdmin()) {
