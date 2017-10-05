@@ -128,15 +128,15 @@ class Bed extends HMS_Item {
 
     public function loadAssignment()
     {
-        $db = new PHPWS_DB('hms_assignment');
-        $db->addWhere('bed_id', $this->id);
-        $db->addWhere('term', $this->term);
-        $db->loadClass('hms', 'HMS_Assignment.php');
-        $result = $db->getObjects('\Homestead\HMS_Assignment');
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT *
+            FROM hms_assignment
+            WHERE bed_id = :id and term = :term";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $this->id, 'term' => $this->term));
+        $result = $sth->fetchAll(\PDO::FETCH_CLASS, '\Homestead\HMS_Assignment');
 
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        } else if ($result == null) {
+        if ($result == null) {
             return true;
         } elseif (sizeof($result) > 1) {
             PHPWS_Error::log(HMS_MULTIPLE_ASSIGNMENTS, 'hms', 'Bed::loadAssignment', "bedid : {$this->id}");

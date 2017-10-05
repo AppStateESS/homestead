@@ -233,19 +233,16 @@ class Room extends HMS_Item
      */
     public function loadBeds()
     {
-        $db = new PHPWS_DB('hms_bed');
-        $db->addWhere('room_id', $this->id);
-        $db->addOrder('bedroom_label', 'ASC');
-        $db->addOrder('bed_letter', 'ASC');
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT *
+            FROM hms_bed
+            WHERE room_id = :id
+            ORDER BY bedroom_label, bed_letter ASC";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $this->id));
+        $this->_beds = $sth->fetchAll(\PDO::FETCH_CLASS, '\Homestead\BedRestored');
 
-        $db->loadClass('hms', 'Bed.php');
-        $result = $db->getObjects('\Homestead\Bed');
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        } else {
-            $this->_beds = & $result;
-            return true;
-        }
+        return true;
     }
 
     /*

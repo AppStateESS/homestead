@@ -175,20 +175,16 @@ class Floor extends HMS_Item
      */
     public function loadRooms()
     {
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT *
+            FROM hms_room
+            WHERE floor_id = :id
+            ORDER BY room_number ASC";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $this->id));
+        $this->_rooms = $sth->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomRestored');
 
-        $db = new PHPWS_DB('hms_room');
-        $db->addWhere('floor_id', $this->id);
-        $db->addOrder('room_number', 'ASC');
-
-        $db->loadClass('hms', 'Room.php');
-        $result = $db->getObjects('\Homestead\Room');
-        //test($result);
-        if(PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        } else {
-            $this->_rooms = & $result;
-            return true;
-        }
+        return true;
     }
 
     /**
@@ -233,6 +229,7 @@ class Floor extends HMS_Item
      */
     public function can_change_gender($target_gender, $ignore_upper = false)
     {
+        var_dump($ignore_upper);exit;
         // Ignore upper is true, we're trying to change a hall's gender
         if($ignore_upper) {
             // If ignore upper is true and the target gender is coed, then
@@ -281,17 +278,15 @@ class Floor extends HMS_Item
 
     public function check_for_rooms_of_gender($gender_type)
     {
-        $db = new PHPWS_DB('hms_room');
-
-        $db->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
-        $db->addWhere('hms_room.gender_type', $gender_type);
-        $db->addWhere('hms_floor.id', $this->id);
-
-        $result = $db->select('count');
-
-        if(PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT hms_room.id
+            FROM hms_room
+            LEFT JOIN hms_floor
+            ON floor_id = hms_floor.id
+            WHERE hms_floor.id = :id AND hms_room.gender_type = :gender";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $this->id, 'gender' => $gender_type));
+        $result = $sth->rowCount();
 
         if($result == 0) {
             return false;
@@ -310,17 +305,15 @@ class Floor extends HMS_Item
      */
     public function checkForOtherRoomGenders($gender)
     {
-        $db = new PHPWS_DB('hms_room');
-
-        $db->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
-        $db->addWhere('hms_room.gender_type', $gender, '!=');
-        $db->addWhere('hms_floor.id', $this->id);
-
-        $result = $db->select('count');
-
-        if(PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT hms_room.id
+            FROM hms_room
+            LEFT JOIN hms_floor
+            ON floor_id = hms_floor.id
+            WHERE hms_floor.id = :id AND hms_room.gender_type != :gender";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $this->id, 'gender' => $gender));
+        $result = $sth->rowCount();
 
         if($result > 0) {
             return true;
@@ -331,21 +324,19 @@ class Floor extends HMS_Item
 
     public function getUsernames()
     {
-        $db = new PHPWS_DB('hms_assignment');
-
-        $db->addColumn('asu_username');
-
-        $db->addJoin('LEFT OUTER', 'hms_assignment','hms_bed',            'bed_id',             'id');
-        $db->addJoin('LEFT OUTER', 'hms_bed',       'hms_room',           'room_id',            'id');
-        $db->addJoin('LEFT OUTER', 'hms_room',      'hms_floor',          'floor_id',           'id');
-
-        $db->addWhere('hms_floor.id', $this->id);
-
-        $result = $db->select('col');
-
-        if(PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT hms_assignment.asu_username
+           FROM hms_assignment
+           LEFT JOIN hms_bed
+           ON bed_id = hms_bed.id
+           LEFT JOIN hms_room
+           ON room_id = hms_room.id
+           LEFT JOIN hms_floor
+           ON floor_id = hms_floor.id
+           WHERE hms_floor.id = :id";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $this->id));
+        $result = $sth->fetchAll(\PDO::FETCH_COLUMN);
 
         return $result;
     }
@@ -591,7 +582,7 @@ class Floor extends HMS_Item
                     JOIN hms_floor ON hms_room.floor_id = hms_floor.id
                     WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
                     AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
-              AND hms_floor.id = {$this->id}
+                    AND hms_floor.id = {$this->id}
         			AND hms_floor.rlc_id IS null
         			AND hms_floor.is_online = 1
                     AND hms_room.gender_type IN ($gender, 3)
