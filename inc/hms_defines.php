@@ -72,9 +72,3 @@ define('EMAIL_TEST_FLAG', false);
 
 /* Memory limit */
 ini_set('memory_limit', '512M');
-
-define('WKPDF_PATH', PHPWS_SOURCE_DIR . 'mod/hms/vendor/ioki/wkhtmltopdf-amd64-centos6/bin/');
-
-define('USE_XVFB', true);
-define('XVFB_PATH', '/usr/bin/xvfb-run');
-
