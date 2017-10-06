@@ -51,7 +51,7 @@ class ReportPdfViewFromHtml extends ReportPdfView
      */
     public function getPdfContent()
     {
-        return $this->pdf->stream();
+        return $this->pdf->output();
     }
 
 }
