@@ -351,7 +351,7 @@ abstract class ReportController {
      * for returning an object which extends the ReportPdfView class.
      *
      * This implementation expects a htmlView to exist and attempts to convert
-     * it to PDF using the WKPDF class. Override this to provide your own ReportPdfView
+     * it to PDF. Override this to provide your own ReportPdfView
      * implementation which generates a custom PDF for this controller's report.
      *
      * @see iHtmlReportView
