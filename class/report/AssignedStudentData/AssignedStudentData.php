@@ -105,9 +105,14 @@ class AssignedStudentData extends Report implements iCsvReport {
                     $zip = $address->zip;
                 }
 
-                $lifestyle = $row['lifestyle_option'];
-                if($lifestyle != ''){
-                    $lifestyle = ($lifestyle == 1) ? 'Single Gender' : 'Co-Ed';
+                if(isset($row['lifestyle_option'])){
+                    $lifestyle = $row['lifestyle_option'];
+                    
+                    if($lifestyle != ''){
+                        $lifestyle = ($lifestyle == 1) ? 'Single Gender' : 'Co-Ed';
+                    }
+                } else {
+                    $lifestyle = '';
                 }
 
             } catch (StudentNotFoundException $e) {
