@@ -351,16 +351,15 @@ class Floor extends HMS_Item
      */
     public function get_number_of_rooms()
     {
-        $db = new PHPWS_DB('hms_room');
-
-        $db->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
-        $db->addWhere('hms_floor.id', $this->id);
-
-        $result = $db->select('count');
-
-        if(PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT hms_room.id
+            FROM hms_room
+            LEFT JOIN hms_floor
+            ON floor_id = hms_floor.id
+            WHERE hms_floor.id = :id";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $this->id));
+        $result = $sth->rowCount();
 
         return $result;
     }
@@ -370,42 +369,34 @@ class Floor extends HMS_Item
      */
     public function get_number_of_beds()
     {
-        $db = new PHPWS_DB('hms_bed');
-
-        $db->addJoin('LEFT OUTER', 'hms_bed',     'hms_room',           'room_id',           'id');
-        $db->addJoin('LEFT OUTER', 'hms_room',    'hms_floor',          'floor_id',          'id');
-        $db->addWhere('hms_floor.id', $this->id);
-
-        $result = $db->select('count');
-
-        if(PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT hms_bed.id
+            FROM hms_bed
+            LEFT JOIN hms_room
+            ON room_id = hms_room.id
+            LEFT JOIN hms_floor
+            ON floor_id = hms_floor.id
+            WHERE hms_floor.id = :id";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $this->id));
+        $result = $sth->rowCount();
 
         return $result;
     }
 
     public function countNominalBeds()
     {
-        $db = new PHPWS_DB('hms_bed');
-
-        $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
-        $db->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
-
-        $db->addWhere('hms_floor.id', $this->id);
-        $db->addWhere('hms_room.offline', 0);
-        $db->addWhere('hms_room.overflow', 0);
-        $db->addWhere('hms_room.parlor', 0);
-
-        $result = $db->select('count');
-
-        if ($result == 0) {
-            return 0;
-        }
-
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT hms_bed.id
+            FROM hms_bed
+            LEFT JOIN hms_room
+            ON room_id = hms_room.id
+            LEFT JOIN hms_floor
+            ON floor_id = hms_floor.id
+            WHERE hms_floor.id = :id AND hms_room.offline = 0 AND hms_room.overflow = 0 AND hms_room.parlor = 0";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $this->id));
+        $result = $sth->rowCount();
 
         return $result;
     }
@@ -415,23 +406,19 @@ class Floor extends HMS_Item
      */
     public function get_number_of_assignees()
     {
-        $db = new PHPWS_DB('hms_assignment');
-
-        $db->addJoin('LEFT OUTER', 'hms_assignment','hms_bed',            'bed_id',             'id');
-        $db->addJoin('LEFT OUTER', 'hms_bed',       'hms_room',           'room_id',            'id');
-        $db->addJoin('LEFT OUTER', 'hms_room',      'hms_floor',          'floor_id',           'id');
-
-        $db->addWhere('hms_floor.id', $this->id);
-
-        $result = $db->select('count');
-
-        if($result == 0) {
-            return $result;
-        }
-
-        if(PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT hms_assignment.id
+            FROM hms_assignment
+            LEFT JOIN hms_bed
+            ON bed_id = hms_bed.id
+            LEFT JOIN hms_room
+            ON room_id = hms_room.id
+            LEFT JOIN hms_floor
+            ON floor_id = hms_floor.id
+            WHERE hms_floor.id = :id";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $this->id));
+        $result = $sth->rowCount();
 
         return $result;
     }
@@ -576,37 +563,39 @@ class Floor extends HMS_Item
     {
         $now = time();
 
+        $db = PdoFactory::getPdoInstance();
         // Calculate the number of non-full male/female rooms in this hall
-        $query =   "SELECT DISTINCT COUNT(hms_room.id) FROM hms_room
+        $query =   "SELECT DISTINCT hms_room.id FROM hms_room
                     JOIN hms_bed ON hms_bed.room_id = hms_room.id
                     JOIN hms_floor ON hms_room.floor_id = hms_floor.id
-                    WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
-                    AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
-                    AND hms_floor.id = {$this->id}
+                    WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = :term AND expires_on > :now)
+                    AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = :term))
+                    AND hms_floor.id = :id
         			AND hms_floor.rlc_id IS null
         			AND hms_floor.is_online = 1
-                    AND hms_room.gender_type IN ($gender, 3)
+                    AND hms_room.gender_type IN (:gender, 3)
                     AND hms_room.reserved = 0
                     AND hms_room.offline = 0
                     AND hms_room.private = 0
                     AND hms_room.overflow = 0
                     AND hms_room.parlor = 0 ";
 
+        $params = array('id' => $this->id, 'term' => $this->term, 'now' => $now, 'gender' => $gender);
+
         if($rlcId != null) {
-        	$query .= "AND hms_room.reserved_rlc_id = $rlcId ";
-        }
-        else {
-          $query .= "AND hms_room.reserved_rlc_id IS NULL ";
+            $query .= "AND hms_room.reserved_rlc_id = $rlcId ";
+            $params += ['rlc' => $rlcId];
+        }else {
+            $query .= "AND hms_room.reserved_rlc_id IS NULL ";
         }
 
         $query .= "AND hms_bed.international_reserved = 0
                     AND hms_bed.ra = 0
                     AND hms_bed.ra_roommate = 0";
 
-        $avail_rooms = PHPWS_DB::getOne($query);
-        if(PHPWS_Error::logIfError($avail_rooms)) {
-            throw new DatabaseException($result->toString());
-        }
+        $sth = $db->prepare($query);
+        $sth->execute($params);
+        $avail_rooms = $sth->rowCount();
 
         return $avail_rooms;
     }

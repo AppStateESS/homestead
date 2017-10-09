@@ -331,17 +331,15 @@ class Room extends HMS_Item
     */
     public function get_number_of_beds()
     {
-        $db = new PHPWS_DB('hms_bed');
-
-        $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
-
-        $db->addWhere('hms_room.id', $this->id);
-
-        $result = $db->select('count');
-
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT hms_bed.id
+            FROM hms_bed
+            LEFT JOIN hms_room
+            ON room_id = hms_room.id
+            WHERE hms_room.id = :id";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $this->id));
+        $result = $sth->rowCount();
 
         return $result;
     }
@@ -351,19 +349,17 @@ class Room extends HMS_Item
     */
     public function get_number_of_assignees()
     {
-        $db = new PHPWS_DB('hms_assignment');
-
-        $db->addJoin('LEFT OUTER', 'hms_assignment', 'hms_bed', 'bed_id', 'id'  );
-        $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id' );
-
-        $db->addWhere('hms_room.id', $this->id);
-
-
-        $result = $db->select('count');
-
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT hms_assignment.id
+            FROM hms_assignment
+            LEFT JOIN hms_bed
+            ON bed_id = hms_bed.id
+            LEFT JOIN  hms_room
+            ON room_id = hms_room.id
+            WHERE hms_room.id = :id";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $this->id));
+        $result = $sth->rowCount();
 
         return $result;
     }
@@ -502,12 +498,13 @@ class Room extends HMS_Item
     {
         $now = time();
 
+        $db = PdoFactory::getPdoInstance();
         // Count the number of beds which are free in this room
-        $query =   "SELECT DISTINCT COUNT(hms_bed.id) FROM hms_bed
+        $query =   "SELECT DISTINCT hms_bed.id FROM hms_bed
         JOIN hms_room ON hms_bed.room_id = hms_room.id
-        WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = {$this->term} AND expires_on > $now)
-        AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = {$this->term}))
-        AND hms_room.id = {$this->id}
+        WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = :term AND expires_on > :now)
+        AND hms_bed.id NOT IN (SELECT bed_id FROM hms_assignment WHERE term = :term))
+        AND hms_room.id = :id
         AND hms_room.reserved = 0
         AND hms_room.offline = 0
         AND hms_room.private = 0
@@ -517,10 +514,9 @@ class Room extends HMS_Item
         AND hms_bed.ra = 0
         AND hms_bed.ra_roommate = 0";
 
-        $avail_rooms = PHPWS_DB::getOne($query);
-        if (PHPWS_Error::logIfError($avail_rooms)) {
-            throw new DatabaseException($result->toString());
-        }
+        $sth = $db->prepare($query);
+        $sth->execute(array('id' => $this->id, 'term' => $this->term, 'now' => $now));
+        $avail_rooms = $sth->rowCount();
 
         return $avail_rooms;
     }
@@ -885,62 +881,45 @@ class Room extends HMS_Item
     // TODO: finish this, see Trac #156
     public static function get_free_room($term, $gender, $randomize = false)
     {
-        $db = new PHPWS_DB('hms_room');
-
         // Only get free rooms
-        $db->addJoin('LEFT OUTER', 'hms_room', 'hms_bed', 'id', 'room_id');
-        $db->addJOIN('LEFT OUTER', 'hms_bed', 'hms_assignment', 'id', 'bed_id');
-
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT hms_room.id
+            FROM hms_room
+            LEFT JOIN hms_bed
+            ON room_id = hms_room.id
+            LEFT JOIN hms_assignment
+            ON bed_id = hms_assignment.id";
+        $sth = $db->prepare($sql);
+        $sth->execute(array());
     }
 
+    // Was not being called or working before update to PDO, so check if it's returning correctly if you do call it
+    // This calls check_two_bed_and_empty_by_id so that will also have to be checked since this is the only call to it
     public static function getAllFreeRooms($term)
     {
-        $db = new PHPWS_DB('hms_room');
-
-        $db->addColumn('id');
-        $db->setDistinct();
-
         // Join other tables so we can do the other 'assignable' checks
-        $db->addJoin('LEFT', 'hms_room', 'hms_bed', 'id', 'room_id');
-        $db->addJoin('LEFT', 'hms_room', 'hms_floor', 'floor_id', 'id');
-        $db->addJoin('LEFT', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
-
-        // Term
-        $db->addWhere('hms_room.term', $term);
-
         // Only get rooms with free beds
-        $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_assignment', 'id', 'bed_id');
-        $db->addWhere('hms_assignment.asu_username', NULL);
-
         // Order by gender preference (0=>female, 1=>male, 2=>coed), rooms in a single gender hall will be first
-        $db->addOrder('hms_residence_hall.gender_type ASC');
-
-        // Make sure everything is online
-        $db->addWhere('hms_room.offline', 0);
-        $db->addWhere('hms_floor.is_online', 1);
-        $db->addWhere('hms_residence_hall.is_online', 1);
-
-        // Make sure nothing is reserved
-        $db->addWhere('hms_room.reserved', 0);
-
-        // Don't get RA beds
-        $db->addWhere('hms_room.ra', 0);
-
-        // Don't get lobbies
-        $db->addWhere('hms_room.overflow', 0);
-
-        // Don't get private rooms
-        $db->addWhere('hms_room.private', 0);
-
-        // Don't get rooms on floors reserved for an RLC
-        $db->addWhere('hms_floor.rlc_id', NULL);
-
-        $result = $db->select('col');
-
-        // In case of an error, log it and return false
-        if (PHPWS_Error::logIfError($result)) {
-            return false;
-        }
+        // Make sure everything is online, nothing is reserved
+        // Don't get RA beds, lobbies, private rooms, or rooms on floors reserved for an RLC
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT DISTINCT hms_room.id
+            FROM hms_room
+            LEFT JOIN hms_bed
+            ON room_id = hms_room.id
+            LEFT JOIN hms_floor
+            ON floor_id = hms_room.id
+            LEFT JOIN hms_residence_hall
+            ON residence_hall_id = hms_residence_hall.id
+            LEFT JOIN hms_assignment
+            ON bed_id = hms_bed.id
+            WHERE hms_room.term = :term AND hms_assignment.asu_username = NULL AND hms_room.offline = 0
+            AND hms_floor.is_online = 1 AND hms_residence_hall.is_online = 1 AND hms_room.reserved = 0
+            AND hms_room.ra = 0 AND hms_room.overflow = 0 AND  hms_room.private = 0 AND hms_floor.rlc_id = NULL
+            ORDER BY hms_residence_hall.gender_type ASC";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('term' => $term));
+        $result = $sth->fetchAll(\PDO::FETCH_COLUMN);
 
         // Make sure each room is empty and has only two beds
         $ret = array_values(array_filter($result,
@@ -955,16 +934,15 @@ class Room extends HMS_Item
 
     public static function check_two_bed_and_empty_by_id($room)
     {
-        $db = new PHPWS_DB('hms_bed');
-        $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_assignment', 'id', 'bed_id');
-        $db->addColumn('hms_assignment.id', NULL, 'ass_id');
-        $db->addWhere('room_id', $room);
-        $db->addWhere('hms_bed.term', Term::getSelectedTerm());
-        $result = $db->select('col');
-
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT hms_bed.id, hms_assignment.id
+            FROM hms_bed
+            LEFT JOIN hms_assignment
+            ON bed_id = hms_bed.id
+            WHERE room_id = :id AND term = :term";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $room, 'term' => Term::getSelectedTerm()));
+        $result = $sth->fetchAll(\PDO::FETCH_COLUMN);
 
         // If not two-bedroom, toss it out
         if (count($result) != 2) {

@@ -53,7 +53,7 @@ class Bed extends HMS_Item {
             return false;
         }
 
-        // echo "in hms_beds, making a copy of this bed<br>";
+        // echo "in hms_bed, making a copy of this bed<br>";
 
         $new_bed = clone ($this);
         $new_bed->reset();
@@ -408,9 +408,13 @@ class Bed extends HMS_Item {
         $db->addWhere('expires_on', time(), '>');
         $result = $db->select('count');
 
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT id
+            FROM hms_lottery_reservation
+            WHERE bed_id = :id AND term = :term AND expires_on > :now";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $this->id, 'term' => $this->term, 'now' => time()));
+        $result = $sth->rowCount();
 
         if ($result > 0) {
             return TRUE;
@@ -427,9 +431,13 @@ class Bed extends HMS_Item {
         $db->addWhere('expires_on', time(), '>');
         $result = $db->select('row');
 
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT id
+            FROM hms_lottery_reservation
+            WHERE bed_id = :id AND term = :term AND expires_on > :now";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $this->id, 'term' => $this->term, 'now' => time()));
+        $result = $sth->fetch();
 
         return $result;
     }
@@ -552,65 +560,39 @@ class Bed extends HMS_Item {
             $db->addColumn('hms_residence_hall.banner_building_code');
         }
         $db->addColumn('id');
-
         // Only get free beds
         $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_assignment', 'id', 'bed_id');
         $db->addWhere('hms_assignment.asu_username', NULL);
-
         // Join other tables so we can do the other 'assignable' checks
         $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
         $db->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
         $db->addJoin('LEFT OUTER', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
-
-        // Term
         $db->addWhere('hms_bed.term', $term);
-
-        // Gender
         $db->addWhere('hms_room.gender_type', $gender);
-
         // Make sure everything is online
         $db->addWhere('hms_room.offline', 0);
         $db->addWhere('hms_floor.is_online', 1);
         $db->addWhere('hms_residence_hall.is_online', 1);
-
         // Make sure nothing is reserved
         $db->addWhere('hms_room.reserved', 0);
         // $db->addWhere('hms_room.is_medical', 0);
-
         // Don't get RA beds
         $db->addWhere('hms_room.ra', 0);
-
         // Don't get lobbies
         $db->addWhere('hms_room.overflow', 0);
-
         // Don't get private rooms
         $db->addWhere('hms_room.private', 0);
-
         // Don't get rooms on floors reserved for an RLC
         $db->addWhere('hms_floor.rlc_id', NULL);
-
         // Randomize if necessary
         if ($randomize) {
             $db->addOrder('random');
         }
-
-        // $db->setTestMode();
-
         if ($banner) {
             $result = $db->select();
-            if (PHPWS_Error::logIfError($result)) {
-                throw new DatabaseException($result->toString());
-            }
-
             return $result;
         }
-
         $result = $db->select('col');
-
-        // In case of an error, log it and return it
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
 
         // Return FALSE if there were no results
         if (sizeof($result) <= 0) {

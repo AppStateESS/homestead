@@ -610,8 +610,7 @@ class ResidenceHall extends HMS_Item {
         if($rlcId != null) {
             $query .= "AND hms_room.reserved_rlc_id = :rlc ";
             $params += ['rlc' => $rlcId];
-        }
-        else {
+        }else {
             $query .= "AND hms_room.reserved_rlc_id IS NULL ";
         }
 
@@ -705,7 +704,7 @@ class ResidenceHall extends HMS_Item {
         $sth = $db->prepare($sql);
         $sth->execute($params);
         $results = $sth->fetchAll(\PDO::FETCH_ASSOC);
-        
+
         foreach ($results as $result) {
             $halls[] = new ResidenceHall($result['id']);
         }
