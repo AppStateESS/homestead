@@ -92,7 +92,7 @@ class ApplicantDemographics extends Report {
             throw new DatabaseException($results->toString());
         }
 
-        $types      = array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING, TYPE_NONDEGREE);
+        $types      = array(TYPE_FRESHMEN, TYPE_TRANSFER, TYPE_CONTINUING, TYPE_NONDEGREE, TYPE_GRADUATE);
         $genders    = array(MALE, FEMALE);
 
         // Initalize the array for totals
