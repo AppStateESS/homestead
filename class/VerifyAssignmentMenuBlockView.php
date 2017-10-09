@@ -5,12 +5,14 @@ class VerifyAssignmentMenuBlockView extends hms\View {
     private $student;
     private $startDate;
     private $endDate;
+    private $term;
 
-    public function __construct(Student $student, $startDate, $endDate)
+    public function __construct(Student $student, $startDate, $endDate, $term)
     {
         $this->student = $student;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
+        $this->term = $term;
     }
 
     public function show()
@@ -22,7 +24,7 @@ class VerifyAssignmentMenuBlockView extends hms\View {
         // Don't show the app-feature if it's not time
         if($this->startDate <= time()){
             $cmd = CommandFactory::getCommand('ShowVerifyAssignment');
-            $cmd->setUsername($this->student->getUsername());
+            $cmd->setTerm($this->term);
             $tpl['VIEW_APP'] = $cmd->getLink('here');
             $tpl['ICON'] = FEATURE_OPEN_ICON;
             return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/verifyAssignmentMenuBlock.tpl');
@@ -33,5 +35,3 @@ class VerifyAssignmentMenuBlockView extends hms\View {
         }
     }
 }
-
-

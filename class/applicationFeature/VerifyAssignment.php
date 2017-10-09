@@ -23,7 +23,7 @@ class VerifyAssignment extends ApplicationFeature {
     public function getMenuBlockView(Student $student)
     {
         PHPWS_Core::initModClass('hms', 'VerifyAssignmentMenuBlockView.php');
-        return new VerifyAssignmentMenuBlockView($student, $this->getStartDate(), $this->getEndDate());
+        return new VerifyAssignmentMenuBlockView($student, $this->getStartDate(), $this->getEndDate(), $this->term);
     }
 
 }
