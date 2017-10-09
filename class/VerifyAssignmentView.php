@@ -5,12 +5,15 @@ class VerifyAssignmentView extends hms\View{
     private $student;
     private $term;
 
-    public function __construct($username)
+    public function __construct($term)
     {
         PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        $student = StudentFactory::getStudentByUsername($username,Term::getCurrentTerm());
-        $this->student = $student;
-        $this->term = $student->getApplicationTerm();
+        PHPWS_Core::initModClass('hms', 'UserStatus.php');
+
+        $username = UserStatus::getUsername();
+
+        $this->term = $term;
+        $this->student = StudentFactory::getStudentByUsername($username,$this->term);
     }
 
 
@@ -24,7 +27,8 @@ class VerifyAssignmentView extends hms\View{
 
         $tpl = array();
 
-        $assignment = HMS_Assignment::getAssignment($this->student->getUsername(), $this->term);
+        $assignment = HMS_Assignment::getAssignmentByBannerId($this->student->getBannerId(), $this->term);
+
         if($assignment === NULL || $assignment == FALSE){
             $tpl['NO_ASSIGNMENT'] = "You do not currently have a housing assignment.";
         }else{

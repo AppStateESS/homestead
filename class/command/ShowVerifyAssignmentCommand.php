@@ -2,25 +2,24 @@
 
 class ShowVerifyAssignmentCommand extends Command
 {
-    private $username;
+    private $term;
 
     public function getRequestVars()
     {
-        $vars = array('action' => 'ShowVerifyAssignment', 'username' => $this->username);
+        $vars = array('action' => 'ShowVerifyAssignment', 'term' => $this->term);
         return $vars;
-
     }
 
     public function execute(CommandContext $context)
     {
         PHPWS_Core::initModClass('hms', 'VerifyAssignmentView.php');
-        $view = new VerifyAssignmentView($context->get('username'));
+
+        $view = new VerifyAssignmentView($context->get('term'));
         $context->setContent($view->show());
     }
 
-    public function setUsername($username)
+    public function setTerm($term)
     {
-        $this->username = $username;
+        $this->term = $term;
     }
 }
-
