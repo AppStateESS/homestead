@@ -28,17 +28,14 @@ class ResidenceHallFactory {
 
         $halls = array();
 
-        $db = new \PHPWS_DB('hms_residence_hall');
-        $db->addColumn('id');
-        $db->addOrder('hall_name', 'DESC');
-
-        $db->addWhere('term', $term);
-
-        $results = $db->select();
-
-        if(\PHPWS_Error::logIfError($results)){
-            throw new DatabaseException($result->toString());
-        }
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT id
+           FROM hms_residence_hall
+           WHERE term = :term
+           ORDER BY hall_name ASC";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('term' => $term));
+        $results = $sth->fetchAll(\PDO::FETCH_ASSOC);
 
         //TODO this is terribly inefficient
         foreach($results as $result){

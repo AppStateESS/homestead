@@ -565,7 +565,7 @@ class Floor extends HMS_Item
 
         $db = PdoFactory::getPdoInstance();
         // Calculate the number of non-full male/female rooms in this hall
-        $query =   "SELECT DISTINCT hms_room.id FROM hms_room
+        $query =   "SELECT DISTINCT COUNT(hms_room.id) FROM hms_room
                     JOIN hms_bed ON hms_bed.room_id = hms_room.id
                     JOIN hms_floor ON hms_room.floor_id = hms_floor.id
                     WHERE (hms_bed.id NOT IN (SELECT bed_id FROM hms_lottery_reservation WHERE term = :term AND expires_on > :now)
@@ -595,7 +595,7 @@ class Floor extends HMS_Item
 
         $sth = $db->prepare($query);
         $sth->execute($params);
-        $avail_rooms = $sth->rowCount();
+        $avail_rooms = $sth->fetch(\PDO::FETCH_COLUMN);
 
         return $avail_rooms;
     }

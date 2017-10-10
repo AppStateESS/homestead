@@ -696,10 +696,10 @@ class ResidenceHall extends HMS_Item {
         $params = array();
         $sql = "SELECT id FROM hms_residence_hall ";
         if (isset($term)) {
-            $sql .= 'WHERE term = :term ORDER BY hall_name DESC';
+            $sql .= 'WHERE term = :term ORDER BY hall_name ASC';
             $params += ['term' => $term];
         }else{
-            $sql .= 'ORDER BY hall_name DESC';
+            $sql .= 'ORDER BY hall_name ASC';
         }
         $sth = $db->prepare($sql);
         $sth->execute($params);
