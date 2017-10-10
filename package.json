@@ -25,8 +25,8 @@
     "babel-core": "~6.25.0",
     "babel-eslint": "7.2.3",
     "babel-loader": "~7.1.1",
-    "babel-preset-react": "~6.24.1",
     "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "~6.24.1",
     "classnames": "^2.2",
     "css-loader": "~0.28.4",
     "es6-promise": "~4.1.1",
@@ -44,7 +44,8 @@
     "react-dom": "~15.6.1",
     "strip-loader": "~0.1.2",
     "style-loader": "~0.18.2",
-    "webpack": "^3.0.0"
+    "webpack": "^3.0.0",
+    "whatwg-fetch": "^2.0.3"
   },
   "scripts": {
     "dev": "webpack --config webpack.config.dev.js -d --watch",

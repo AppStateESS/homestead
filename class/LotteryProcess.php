@@ -207,7 +207,7 @@ class LotteryProcess {
         $this->numInvitesSent['TOTAL']++;
 
         // Send the notification email
-        HMS_Email::send_lottery_invite($student->getUsername(), $student->getName(), $this->academicYear);
+        HMS_Email::send_lottery_invite($student, $student->getName(), $this->academicYear);
 
         // Log that the invite was sent
         HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_LOTTERY_INVITED, UserStatus::getUsername(), "Expires on " . date('m/d/Y h:i:s a', $this->expireTime));
@@ -235,7 +235,7 @@ class LotteryProcess {
 
         foreach ($result as $row) {
             $student = StudentFactory::getStudentByUsername($row['username'], $this->term);
-            HMS_Email::send_lottery_invite_reminder($row['username'], $student->getName(), $this->academicYear);
+            HMS_Email::send_lottery_invite_reminder($student, $student->getName(), $this->academicYear);
             HMS_Activity_Log::log_activity($row['username'], ACTIVITY_LOTTERY_REMINDED, UserStatus::getUsername());
         }
     }

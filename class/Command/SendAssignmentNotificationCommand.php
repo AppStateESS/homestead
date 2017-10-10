@@ -159,7 +159,7 @@ class SendAssignmentNotificationCommand extends Command {
             }
 
             // Send the email
-            HMS_Email::sendAssignmentNotice($student->getUsername(), $student->getName(), $term, $location, $roommates, $movein_time);
+            HMS_Email::sendAssignmentNotice($student, $student->getName(), $term, $location, $roommates, $movein_time);
 
             // Mark the student as having received an email
             $db->reset();

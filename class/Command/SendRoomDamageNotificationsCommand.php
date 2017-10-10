@@ -11,6 +11,7 @@ use \Homestead\HMS_Email;
 use \Homestead\CommandFactory;
 use \Homestead\NotificationView;
 use \Homestead\HMS_Activity_Log;
+use \Homestead\UserStatus;
 
 /**
  * SendRoomDamageNotificationsCommand.php
