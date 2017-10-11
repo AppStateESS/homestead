@@ -38,3 +38,18 @@
     </div>
 </div>
 -->
+<div class='panel panel-default'>
+    <div class='panel-body'>
+        <?php if(isset($roomChangeReminder_create)):?>
+            <a class="btn btn-success btn-sm" href="index.php?module=hms&amp;action=SavePulseOption&amp;cmd=add&amp;schedule_type=roomChangeReminder">
+                <i class="fa fa-plus"></i> Create schedule
+            </a>
+        <?php endif; ?>
+        <?php if (isset($roomChangeReminder_remove)):?>
+            <a class="btn btn-danger btn-sm" href="index.php?module=hms&amp;action=SavePulseOption&amp;cmd=remove&amp;schedule_type=roomChangeReminder">
+                <i class="fa fa-trash-o"></i> Drop schedule
+            </a>
+        <?php endif; ?>
+        <?=$roomChangeReminder?>
+    </div>
+</div>

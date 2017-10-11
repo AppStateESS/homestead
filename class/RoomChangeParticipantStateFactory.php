@@ -48,4 +48,35 @@ class RoomChangeParticipantStateFactory {
 
         return $states;
     }
+
+    public static function getRCPStateByCurrentState($stateName)
+    {
+        $db = PdoFactory::getPdoInstance();
+
+        $query = "SELECT * FROM hms_room_change_participant_state
+                    WHERE state_name = :stateName and effective_until_date IS NULL";
+
+        $stmt = $db->prepare($query);
+
+        $params = array("stateName" => $stateName);
+
+        $stmt->execute($params);
+
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // If no results, just return here
+        if (sizeof($results) <= 0) {
+            return null;
+        }
+
+        // Create a ParticipantState object for each result
+        $states = array();
+        foreach ($results as $row) {
+            $className = 'ParticipantState' . $row['state_name'];
+            $participant = RoomChangeParticipantFactory::getParticipantById($row['participant_id']);
+            $states[] = new $className($participant, $row['effective_date'], $row['effective_until_date'], $row['committed_by']);
+        }
+
+        return $states;
+    }
 }
