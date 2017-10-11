@@ -77,7 +77,7 @@ class CheckoutFormView extends hms\View
             $this->addResponsible($residents);
             $vars['existing_damage'] = json_encode($this->damages);
         }
-        $tpl = new \Template($vars);
+        $tpl = new \phpws2\Template($vars);
         $tpl->setModuleTemplate('hms', 'admin/CheckOut.html');
         return $tpl->get();
     }
