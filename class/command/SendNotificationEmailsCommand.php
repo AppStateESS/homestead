@@ -139,6 +139,12 @@ class SendNotificationEmailsCommand extends Command {
             */
 
             $students = $floor->getUsernames();
+            
+            if(!is_array($students) || sizeof($students) <= 0){
+                // If no results, skip to the next floor.
+                continue;
+            }
+            
             foreach($students as $student){
                 HMS_Email::send_email($student . '@' . DOMAIN_NAME, $from, $subject, $body);
             }
