@@ -114,7 +114,7 @@ class BedView extends hms\View
         } else {
             $tpl = array('rows' => $data, 'message' => null);
         }
-        $template = new \Template($tpl);
+        $template = new \phpws2\Template($tpl);
         $template->setModuleTemplate('hms', 'admin/getBedHistoryContent.html');
         return $template->get();
     }

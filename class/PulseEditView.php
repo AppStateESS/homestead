@@ -49,7 +49,7 @@ class PulseEditView extends hms\View
             $vars['nightly_cache_create'] = 1;
         }
 
-        $tpl = new \Template($vars);
+        $tpl = new \phpws2\Template($vars);
         $tpl->setModuleTemplate('hms', 'admin/pulse/settings.html');
         return $tpl->get();
     }
