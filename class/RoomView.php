@@ -185,8 +185,7 @@ class RoomView extends hms\View {
         && !Current_User::allow('hms', 'room_attributes')
         && !Current_User::allow('hms', 'room_structure'))
         {
-            $form_vars = get_object_vars($form);
-            $elements = $form_vars['_elements'];
+            $elements = $form->getAllElements();
 
             foreach($elements as $element => $value){
                 $form->setDisabled($element);
