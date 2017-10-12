@@ -717,9 +717,15 @@ class HMS_Email{
             self::logSwiftmailMessageLong($message);
         } else {
             $transport = Swift_SmtpTransport::newInstance('localhost');
+            //$transport = Swift_SmtpTransport::newInstance('smtp.mandrillapp.com', 587);
+            //$transport->setUsername('Electronic Student Services / Appalachian State University');
+            //$transport->setPassword('wcdHwGg1BIg5POxYQuEUXw');
+
             $mailer = Swift_Mailer::newInstance($transport);
 
             self::logSwiftmailMessage($message);
+
+
             return $mailer->send($message);
         }
     }
@@ -1205,11 +1211,11 @@ class HMS_Email{
         $tags['COORDINATOR_NAME'] = $coordinatorName;
         $tags['COORDINATOR_EMAIL'] = $coordinatorEmail;
 
-        self::sendSwiftmailMessage(
-            self::makeSwiftmailMessage(
-                $student, $subject, $tags, $template
-            )
-        );
+        $content = PHPWS_Template::process($tags, 'hms', $template);
+        $htmlContent = Markdown::defaultTransform($content);
+
+        $message = new MandrillMessage('wcdHwGg1BIg5POxYQuEUXw', array($student->getEmailAddress()), array(), FROM_ADDRESS, SYSTEM_NAME, $subject, $content, $htmlContent, array('bannerId'=>$student->getBannerId()));
+        $result = $message->send();
     }
 
 } // End HMS_Email class

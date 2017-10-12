@@ -160,7 +160,7 @@ class RoomDamageFactory {
     {
     	$db = PdoFactory::getPdoInstance();
 
-        $query = "select banner_id, sum(amount) from hms_room_damage JOIN hms_room_damage_responsibility ON hms_room_damage.id = hms_room_damage_responsibility.damage_id where term = :term and state = 'assessed' group by banner_id";
+        $query = "select banner_id, sum(amount) from hms_room_damage JOIN hms_room_damage_responsibility ON hms_room_damage.id = hms_room_damage_responsibility.damage_id where term = :term and state = 'reportedToAccount' group by banner_id";
 
         $params = array('term' => $term);
 
