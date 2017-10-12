@@ -160,8 +160,19 @@ class HMS_RLC_Application extends HMS_Item
 
         $row['email']               = $student->getUsername() . '@appstate.edu';
         $row['first_chocie']        = $rlc_list[$this->getFirstChoice()];
-        $row['second_choice']       = $rlc_list[$this->getSecondChoice()];
-        $row['third_choice']        = $rlc_list[$this->getThirdChoice()];
+
+        if($this->getSecondChoice() !== null) {
+            $row['second_choice'] = $rlc_list[$this->getSecondChoice()];
+        } else {
+            $row['second_choice'] = '';
+        }
+
+        if($this->getThirdChoice() !== null) {
+            $row['third_choice'] = $rlc_list[$this->getThirdChoice()];
+        } else {
+            $row['third_choice'] = '';
+        }
+
         $row['application_date']    = $application_date;
         $row['denied']              = (isset($this->denied) && $this->denied == 0) ? 'no' : 'yes';
 
