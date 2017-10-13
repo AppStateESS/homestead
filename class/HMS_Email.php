@@ -1214,6 +1214,8 @@ class HMS_Email{
         $content = PHPWS_Template::process($tags, 'hms', $template);
         $htmlContent = Markdown::defaultTransform($content);
 
+        // TODO $to = array('name' => '', 'email'=>'');
+
         $message = new MandrillMessage('wcdHwGg1BIg5POxYQuEUXw', array($student->getEmailAddress()), array(), FROM_ADDRESS, SYSTEM_NAME, $subject, $content, $htmlContent, array('bannerId'=>$student->getBannerId()));
         $result = $message->send();
     }
