@@ -13,70 +13,68 @@ error_reporting(E_ALL);
 
 require_once('cliCommon.php');
 
-$args = array('phpwsPath' => '',
-                'phpwsUser' => '',
-                'term' => '',
-                'inputFileName' => '',
-                'outputFileName' => '',
-                'hallCode' => ''
-            );
+// Make sure this can only be run from the command line
+if(php_sapi_name() !== 'cli'){
+    die('This script can only be run from the command line.');
+}
 
+// Expected arguments
+$args = array('phpwsConfigPath'=>'',
+              'module' => '',
+              'phpwsUser' => '',
+              'term' => '',
+              'inputFileName' => '',
+              'outputFileName' => '');
 $switches = array();
+
+// Process arguments into $args
 check_args($argc, $argv, $args, $switches);
 
-$phpwsPath  = $args['phpwsPath'];
 $phpwsUser  = $args['phpwsUser'];
 $term       = $args['term'];
 $inputFileName  = $args['inputFileName'];
 $outputFileName = $args['outputFileName'];
-$hallCode = $args['hallCode'];
 
-require_once($phpwsPath . 'mod/hms/contrib/dbConnect.php');
+// Try to include the main phpws config file
+includePhpwsConfigFile($args['phpwsConfigPath']);
 
-require_once $phpwsPath . 'config/core/config.php';
-define('DEFAULT_LANGUAGE', 'en_US');
-define('CURRENT_LANGUAGE', 'en_US');
-//require_once 'src/Bootstrap.php';
+// Change current dir to the root of phpws' install
+chdir(PHPWS_SOURCE_DIR);
 
-// For older versions of PHPWS, comment this out
-require_once $phpwsPath . 'src/Autoloader.php';
-require_once $phpwsPath . 'src/Translation.php';
-require_once $phpwsPath . 'src/Log.php';
+// Define these to avoid errors in sanity checking later
+$_SERVER['REQUEST_URI'] = 'cli.php';
+$_SERVER['HTTP_HOST'] = 'localhost';
+//$_SERVER['SERVER_NAME'] = 'aa.ess'; // NB: Pass SERVER_NAME="blah.blah" on the command line *before* the php executable
 
-// For older versions of PHPWS, uncomment these
-//require_once $phpwsPath . 'core/conf/defines.php';
-require_once $phpwsPath . 'Global/Functions.php';
-//require_once $phpwsPath . 'Global/Implementations.php';
-//require_once $phpwsPath . 'config/core/source.php';
-require_once $phpwsPath. 'src/phpws/config/defines.php';
+// Include PHPWS bootstrapping code
+require_once PHPWS_SOURCE_DIR . 'config/core/source.php';
+require_once PHPWS_SOURCE_DIR . 'src/Bootstrap.php';
 
-// Composer autoloader for Homestead
-require_once $phpwsPath . 'mod/hms/vendor/autoload.php';
+// Set the 'module' request variable to help the autoloader find classes
+$_REQUEST['module'] = $args['module'];
 
-// Load Users classes and classes needed for logging in
-PHPWS_Core::initModClass('users', 'Users.php');
-PHPWS_Core::initModClass('users', 'Current_User.php');
-PHPWS_Core::initModClass('users', 'Authorization.php');
+\PHPWS_Core::initModClass('users', 'Users.php');
+\PHPWS_Core::initModClass('users', 'Current_User.php');
 
-// Fake a phpws user login
-$user = new PHPWS_User(0, $phpwsUser);
-//Current_User::loadAuthorization($user);
-Current_User::init($user->id);
-$_SESSION['User']->_logged = true;
-$_SESSION['User']->username = $phpwsUser;
+// Log in the requested user
+$userId = \PHPWS_DB::getOne("SELECT id FROM users WHERE username = '$phpwsUser'");
+$user = new \PHPWS_User($userId);
+// Uncomment for production on branches
 
+//$user->auth_script = 'shibboleth.php';
+//$user->auth_name = 'shibboleth';
+$user->auth_script = 'local.php';
+$user->auth_name = 'local';
 
-// Connect to the database
-/*
-$db = connectToDb();
-if(!$db){
-    die('Could not connect to database.\n');
-}
-*/
+//$user->login();
+$user->setLogged(true);
+\Current_User::loadAuthorization($user);
+//\Current_User::init($user->id);
+$_SESSION['User'] = $user;
 
 // Include more HMS specific stuff
-require_once $phpwsPath . 'mod/hms/inc/defines.php';
-require_once $phpwsPath . 'inc/hms_defines.php';
+require_once './mod/hms/inc/defines.php';
+require_once './inc/hms_defines.php';
 PHPWS_Core::initModClass('hms', 'PdoFactory.php');
 PHPWS_Core::initModClass('hms', 'UserStatus.php');
 
