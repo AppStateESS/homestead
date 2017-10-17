@@ -61,7 +61,7 @@ class CheckoutFormView extends hms\View
         $vars['room_number'] = $this->room->getRoomNumber();
         $vars['residents'] = json_encode($residents);
         $vars['checkin_id'] = $this->checkin->id;
-        $vars['previous_key_code'] = $this->checkin->key_code;
+        $vars['previous_key_code'] = json_encode($this->checkin->key_code);
         $vars['room_pid'] = $this->room->persistent_id;
 
         $damage_types = DamageTypeFactory::getDamageTypeAssoc();
@@ -77,7 +77,8 @@ class CheckoutFormView extends hms\View
             $this->addResponsible($residents);
             $vars['existing_damage'] = json_encode($this->damages);
         }
-        $tpl = new \Template($vars);
+
+        $tpl = new phpws2\Template($vars);
         $tpl->setModuleTemplate('hms', 'admin/CheckOut.html');
         return $tpl->get();
     }
