@@ -460,7 +460,8 @@ class PhpSOAP extends SOAP
             throw new BannerException('Error while moving room assignments in Banner.', $response->basic_response->error_num, 'MoveRoomAssignmentResult', $params);
         }
 
-        $logParams = print_r($params, true);
+        $logParams = array();
+        $logParams['params'] = print_r($params, true);
         
         SOAP::logSoap('moveRoomAssignment', 'success', $logParams, true);
     }
