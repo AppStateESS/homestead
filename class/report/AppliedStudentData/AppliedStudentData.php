@@ -38,6 +38,9 @@ class AppliedStudentData extends Report implements iCsvReport {
         if($term == TERM_FALL) {
             $db->addJoin('LEFT', 'hms_new_application', 'hms_fall_application', 'id', 'id');
             $db->addColumn('hms_fall_application.*');
+        } else if($term == TERM_SPRING) {
+            $db->addJoin('LEFT', 'hms_new_application', 'hms_spring_application', 'id', 'id');
+            $db->addColumn('hms_spring_application.*');
         } else if($term == TERM_SUMMER1 || $term == TERM_SUMMER2) {
             $db->addJoin('LEFT', 'hms_new_application', 'hms_summer_application', 'id', 'id');
             $db->addColumn('hms_summer_application.*');
