@@ -112,8 +112,7 @@ class FloorView extends hms\View{
         && !Current_User::allow('hms', 'floor_attributes')
         && !Current_User::allow('hms', 'floor_structure'))
         {
-            $form_vars = get_object_vars($form);
-            $elements = $form_vars['_elements'];
+            $elements = $form->getAllElements()
 
             foreach($elements as $element => $value){
                 $form->setDisabled($element);
