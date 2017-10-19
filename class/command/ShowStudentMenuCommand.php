@@ -86,7 +86,7 @@ class ShowStudentMenuCommand extends Command {
             if($studentType == TYPE_READMIT){
                 $applicationTerm = Term::getNextTerm(Term::getCurrentTerm());
                 //TODO find a way around this, because this doesn't work
-                $_SESSION['application_term'] = $application_term;
+                $_SESSION['application_term'] = $applicationTerm;
             }
 
             /*********************
