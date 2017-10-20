@@ -20,8 +20,10 @@ class OpenWaitingListRemoveCommand extends Command {
         $username = $context->get('username');
         $cmd      = CommandFactory::getCommand('ShowOpenWaitingList');
 
+
         if(!is_null($username)){
-            $app = HousingApplication::getApplicationByUser($username, PHPWS_Settings::get('hms', 'lottery_term'));
+            $student = StudentFactory::getStudentByUsername($username, PHPWS_Settings::get('hms', 'lottery_term'));
+            $app = HousingApplicationFactory::getAppByStudent($student, PHPWS_Settings::get('hms', 'lottery_term'));
             $app->waiting_list_hide = 1;
             $result = $app->save();
 
@@ -34,5 +36,3 @@ class OpenWaitingListRemoveCommand extends Command {
         $cmd->redirect();
     }
 }
-
-

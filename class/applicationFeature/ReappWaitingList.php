@@ -43,7 +43,7 @@ class ReappWaitingList extends ApplicationFeature {
         PHPWS_Core::initModClass('hms', 'HousingApplication.php');
 
         $term = PHPWS_Settings::get('hms', 'lottery_term');
-        $application = HousingApplication::getApplicationByUser(UserStatus::getUsername(), $term, 'lottery');
+        $application = HousingApplicationFactory::getAppByStudent($student, $term, 'lottery');
 
         return new ReapplicationWaitingListMenuBlockView($this->term, $this->getStartDate(), $this->getEndDate(), $application);
     }

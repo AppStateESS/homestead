@@ -84,7 +84,7 @@ class ShowHousingApplicationFormCommand extends Command {
         }
 
         // Check to see if the user has an existing application for the term in question
-        $existingApplication = HousingApplication::getApplicationByUser($student->getUsername(), $term);
+        $existingApplication = HousingApplicationFactory::getAppByStudent($student, $term);
 
 
         // Check for an in-progress application on the context, ignore any exceptions (in case there isn't an application on the context)

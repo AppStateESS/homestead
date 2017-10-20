@@ -21,7 +21,9 @@ class WaitingListRemoveCommand extends Command {
         $cmd      = CommandFactory::getCommand('ShowLotteryWaitingList');
 
         if(!is_null($username)){
-            $app = HousingApplication::getApplicationByUser($username, PHPWS_Settings::get('hms', 'lottery_term'));
+            $term    = PHPWS_Settings::get('hms', 'lottery_term');
+            $student = StudentFactory::getStudentByUsername($username, $term);
+            $app     = HousingApplicationFactory::getAppByStudent($student, $term);
             $app->waiting_list_hide = 1;
             $result = $app->save();
 
@@ -34,4 +36,3 @@ class WaitingListRemoveCommand extends Command {
         $cmd->redirect();
     }
 }
-

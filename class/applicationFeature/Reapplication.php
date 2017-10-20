@@ -36,7 +36,7 @@ class Reapplication extends ApplicationFeature {
         PHPWS_Core::initModClass('hms', 'ReapplicationMenuBlockView.php');
 
         $assignment       = HMS_Assignment::getAssignment($student->getUsername(), $this->term);
-        $application      = HousingApplication::getApplicationByUser($student->getUsername(), $this->term);
+        $application      = HousingApplicationFactory::getAppByStudent($student, $this->term);
 
         if(!$application instanceof LotteryApplication){
             $application = null;
