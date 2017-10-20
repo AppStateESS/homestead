@@ -42,14 +42,36 @@ class RoomChangeMenuBlockView extends hms\View {
             $participant = RoomChangeParticipantFactory::getParticipantByRequestStudent($this->changeRequest, $this->student);
             $state = $participant->getState();
 
-            // If this student needs to approve their part of this request
+            // If this student needs to approve their part of this request, show link to view request
             if($state instanceof ParticipantStateNew) {
                 $approvalCmd = CommandFactory::getCommand('ShowRoomChangeRequestApproval');
                 $tpl['APPROVAL_CMD'] = $approvalCmd->getLink('View the request');
             } else {
-                // Request if pending, but this student doesn't need to do anything
-            $tpl['PENDING'] = "";
+                // Otherwise, if this student has approved
+                if($state instanceof ParticipantStateStudentApproved) {
 
+                    // Check whether everyone else has approved it
+                    $participantList = RoomChangeParticipantFactory::getParticipantsByRequest($this->changeRequest);
+                    $allApproved     = true;
+                    foreach($participantList as $rcParticipant) {
+                        if($rcParticipant->state_name == 'New') {
+                            $allApproved = false;
+                        }
+                    }
+
+                    // If not all the participants have approved then give the participants that have approved a
+                    // link to cancel the request, but if all have approved they can no longer cancel via student menu.
+                    if(!$allApproved) {
+                        $cancelCmd     = CommandFactory::getCommand('RoomChangeStudentCancel');
+                        $tpl['CANCEL'] = $cancelCmd->getUri() . '&requestId=' . $this->changeRequest->getId();
+                    } else {
+                        // Request is pending, but this student doesn't need to do anything
+                        $tpl['PENDING'] = "";
+                    }
+                } else {
+                    // Request is pending, but this student doesn't need to do anything
+                    $tpl['PENDING'] = "";
+                }
             }
             $tpl['ICON'] = FEATURE_OPEN_ICON;
         } else {
