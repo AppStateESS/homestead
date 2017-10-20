@@ -7,7 +7,7 @@ class AjaxGetRoomsCommand extends Command {
     private $floorId;
 
     public function getRequestVars(){
-        return array('action'=>'AjaxGetFloors');
+        return array('action'=>'AjaxGetRooms');
     }
 
     public function execute(CommandContext $context)
@@ -19,16 +19,68 @@ class AjaxGetRoomsCommand extends Command {
 
         $floor = new HMS_Floor($context->get('floorId'));
 
-        $rooms = $floor->get_rooms();
+        $roomsResult = $floor->get_rooms();
 
-        $json_rooms = array();
-        $json_rooms[0] = 'Select...';
+        $rooms = array();
+        $i = 0;
 
-        foreach ($rooms as $room){
-            $json_rooms[$room->id] = $room->room_number;
+        foreach ($roomsResult as $room)
+        {
+          $text = $room->getRoomNumber();
+
+          if($floor->gender_type == COED){
+              $text .= (' (' . HMS_Util::formatGender($room->gender_type) . ')');
+          }
+
+          if($room->ra == 1){
+              $text .= (' (RA)');
+          }
+
+          if($room->reserved == 1)
+          {
+              $text .= (' (Reserved)');
+          }
+
+          if($room->offline == 1)
+          {
+              $text .= (' (Offline)');
+          }
+
+          if($room->private == 1)
+          {
+              $text .= (' (Private)');
+          }
+
+          if($room->overflow == 1)
+          {
+              $text .= (' (Overflow)');
+          }
+
+          if($room->parlor == 1)
+          {
+              $text .= (' (Parlor)');
+          }
+
+          if($room->ada == 1)
+          {
+              $text .= (' (ADA)');
+          }
+
+          if($room->hearing_impaired == 1)
+          {
+              $text .= (' (Hearing Impaired)');
+          }
+
+          if($room->bath_en_suite)
+          {
+              $text .= (' (Bath En Suite)');
+          }
+
+          $rooms[$i]['room_number'] = $text;
+          $rooms[$i]['room_id'] = $room->getId();
+          $i++;
         }
 
-        $context->setContent(json_encode($json_rooms));
+        $context->setContent(json_encode($rooms));
     }
 }
-
