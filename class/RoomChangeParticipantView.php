@@ -36,6 +36,8 @@ class RoomChangeParticipantView extends hms\View {
 
     public function show()
     {
+        javascript('jquery');
+
         $tpl = array();
 
         // Student info
@@ -69,19 +71,23 @@ class RoomChangeParticipantView extends hms\View {
         $tpl['FROM_ROOM'] = $fromBed->where_am_i();
 
         // To bed
+        $currentToBed = -1;
         $toBedId = $this->participant->getToBed();
         if (isset($toBedId)) {
             // If there's already a bed set, show the selected bed
             $toBed = new HMS_Bed($toBedId);
             $tpl['TO_ROOM'] = $toBed->where_am_i();
+            $currentToBed = $toBed->getId();
         }
+
+
+
 
         /**
           * Check to see if the state is already approved or completed
           */
         $requestState = $this->request->getState();
-        if($requestState instanceof RoomChangeStatePending || $requestState instanceof RoomChangeStateHold)
-        {
+        if($requestState instanceof RoomChangeStatePending || $requestState instanceof RoomChangeStateHold) {
           /**
             * Check that the participant is checked into their current assignment
             */
@@ -101,10 +107,10 @@ class RoomChangeParticipantView extends hms\View {
 
         if ($particpantState instanceof ParticipantStateNew) {
             // Particpant is in new state, waiting on this student'a approval
+            javascriptMod('hms', 'roomChangeDestination', array('PARTICIPANT_ID' => $this->participant->getId()));
 
             // If the student is logged in, or the user is an admin, show the approve button
-            if(UserStatus::getUsername() == $this->student->getUsername()
-                || Current_User::allow('hms', 'admin_approve_room_change')) {
+            if(UserStatus::getUsername() == $this->student->getUsername() || Current_User::allow('hms', 'admin_approve_room_change')) {
 
                 $approveCmd = CommandFactory::getCommand('RoomChangeStudentApprove');
                 $approveCmd->setParticipantId($this->participant->getId());
@@ -125,20 +131,18 @@ class RoomChangeParticipantView extends hms\View {
 
                 // If current user is an RD for the "from bed" or an admin
             if (in_array(UserStatus::getUsername(), $rds) || Current_User::allow('hms', 'admin_approve_room_change')) {
-
                 if (!isset($toBedId) && count($this->participants) == 1) {
                     /*
                      * If there's only one particpant and the toBed is not already set,
-                     * and the currnent user if the participants current RD, then show the bed selector
+                     * and the currnent user is the participant's current RD, then show the bed selector
                      *
                      * Limit to 1 participant since room selection is for room "switch" requests only, not swaps.
                      * For swaps, the destination bed is already known and is not editable.
                      */
                     // Show the "select a bed" dialog, values are loaded via AJAX
-                    $form->addDropBox('bed_select', array(
-                            '-1' => 'Loading...'
-                    ));
-                    $form->addHidden('gender', $this->student->getGender());
+                    javascriptMod('hms', 'roomChange', array('CURRENT_TO_BED' => $currentToBed, 'GENDER'=>$this->student->getGender(), 'PARTICIPANT_ID' => $this->participant->getId()));
+                } else {
+                    javascriptMod('hms', 'roomChangeDestination', array('PARTICIPANT_ID' => $this->participant->getId()));
                 }
 
                 $approveCmd = CommandFactory::getCommand('RoomChangeCurrRdApprove');
@@ -152,6 +156,7 @@ class RoomChangeParticipantView extends hms\View {
                 $tpl['APPROVE_BTN'] = ''; // dummy tag for approve button
             }
         } else if ($particpantState instanceof ParticipantStateCurrRdApproved) {
+            javascriptMod('hms', 'roomChangeDestination', array('PARTICIPANT_ID' => $this->participant->getId()));
             // Current RD has approved, Future RD needs to approve
             // If current user if future RD or admin, show the approve button
 
@@ -171,7 +176,12 @@ class RoomChangeParticipantView extends hms\View {
 
                 $tpl['APPROVE_BTN'] = '';
             }
+        } else if ($particpantState instanceof ParticipantStateFutureRdApproved) {
+            if (count($this->participants) == 1) {
+                javascriptMod('hms', 'roomChange', array('CURRENT_TO_BED' => $currentToBed, 'GENDER'=>$this->student->getGender(), 'PARTICIPANT_ID' => $this->participant->getId()));
+            }
         }
+
 
         // Show the edit link for to room if request type is a "switch", user has permissions, and status allows it
         // TODO
@@ -191,6 +201,7 @@ class RoomChangeParticipantView extends hms\View {
         }
 
         $tpl['history_rows'] = $stateRows;
+
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/roomChangeParticipantView.tpl');
     }

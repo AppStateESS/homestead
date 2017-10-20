@@ -28,6 +28,12 @@ class RoomChangeApproveCommand extends Command {
 
     public function execute(CommandContext $context)
     {
+        // Check Permissions
+        if(!Current_User::allow('hms', 'admin_approve_room_change')){
+            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+            throw new PermissionException('You do not have permission to approve room changes.');
+        }
+
         // Get input
         $requestId = $context->get('requestId');
 

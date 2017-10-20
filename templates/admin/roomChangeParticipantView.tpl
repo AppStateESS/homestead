@@ -1,31 +1,36 @@
 <div>
   <h3>{NAME} ({BANNER_ID})</h3>
-  
+
   <p>
     Cell phone: {CELL_PHONE}
-  
+
     <!-- BEGIN hall_pref -->
     <br />Preferences: {HALL_PREF}
     <!-- END hall_pref -->
   </p>
-  
-  <strong>From</strong> {FROM_ROOM}
-  <!-- BEGIN to_room -->
-  <strong>To</strong> {TO_ROOM}
-  <!-- END to_room -->
-  
-  <br />
-  
+
   {START_FORM}
   <!-- BEGIN to_select -->
   <strong>To</strong> {BED_SELECT}
   <!-- END to_select -->
-  
+
+  <div class="row">
+    <div class="col-md-5">
+      <div id="destination"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+      <div id="RoomPicker"></div>
+    </div>
+  </div>
+
   <!-- BEGIN approve_btn -->
   {APPROVE_BTN}
   <button type="submit" class="btn btn-primary">Approve</button>
   <!-- END approve_btn -->
-  
+
   {END_FORM}
 </div>
 <div style="margin-top:1em;">
