@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 class SingleGenderAssignmentStrategy extends Assignmentstrategy
 {
     public function __construct($term)

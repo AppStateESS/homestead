@@ -1,7 +1,6 @@
 <?php
-namespace Docusign;
+namespace Homestead\Docusign;
 
-\PHPWS_Core::initModClass('hms', 'Docusign/Creds.php');
 require_once PHPWS_SOURCE_DIR . 'mod/hms/vendor/autoload.php';
 
 /*
@@ -21,15 +20,15 @@ require_once PHPWS_SOURCE_DIR . 'mod/hms/vendor/autoload.php';
  */
 
 if (! function_exists('json_decode')) {
-  throw new Exception('DocuSign PHP API Client requires the JSON PHP extension');
+  throw new \Exception('DocuSign PHP API Client requires the JSON PHP extension');
 }
 
 if (! function_exists('curl_version')) {
-  throw new Exception('DocuSign PHP API Client requires the PHP Client URL Library');
+  throw new \Exception('DocuSign PHP API Client requires the PHP Client URL Library');
 }
 
 if (! function_exists('http_build_query')) {
-  throw new Exception('DocuSign PHP API Client requires http_build_query()');
+  throw new \Exception('DocuSign PHP API Client requires http_build_query()');
 }
 
 if (! ini_get('date.timezone') && function_exists('date_default_timezone_set')) {
@@ -73,24 +72,17 @@ class Client {
     }
 
     public function authenticate() {
-        $url = $this->getAPIUrl() .  '/login_information';
+        $url = $this->getAPIUrl() . '/login_information';
 
-        $http = new \Guzzle\Http\Client();
+        $http = new \GuzzleHttp\Client();
         try {
-            $request = $http->createRequest('GET', $url);
-            $request->setHeader('Content-Type', 'application/json');
-            $request->setHeader('Accept', 'application/json');
-            $request->setHeader('X-DocuSign-Authentication', $this->getAuthHeader());
-            $response = $http->send($request);
+            $request = new \GuzzleHttp\Psr7\Request('GET', $url);
+            $response = $http->send($request, ['headers' => ['Content-Type' => 'application/json', 'Accept' => 'application/json', 'X-DocuSign-Authentication' => $this->getAuthHeader()]]);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-        	//var_dump($e);
-            //var_dump($e->getRequest());
-            //exit;
             throw $e;
         }
-        $json = $response->json();
-        //var_dump($json);exit;
-        //var_dump($json['loginAccounts'][0]['baseUrl']);
+        $json = json_decode($response->getBody(), true);
+
         $this->baseURL = $json['loginAccounts'][0]['baseUrl'];
         $this->accountID = $json['loginAccounts'][0]['accountId'];
 
@@ -145,8 +137,3 @@ class Client {
         return $authJson;
     }
 }
-
-// Exceptions that the DocuSign PHP API Library can throw
-class Exception extends \Exception {}
-class AuthException extends Exception {}
-class IOException extends Exception {}

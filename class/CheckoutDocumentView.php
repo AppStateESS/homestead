@@ -1,10 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+namespace Homestead;
 
-class CheckoutDocumentView extends hms\View {
+class CheckoutDocumentView extends View {
 
     private $checkin;
 
@@ -30,8 +28,6 @@ class CheckoutDocumentView extends hms\View {
 
         $tpl['INFO_CARD_LINK'] = $pdfCmd->getLink('Resident Information Card', '_blank');
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/checkoutComplete.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/checkoutComplete.tpl');
     }
 }
-
-

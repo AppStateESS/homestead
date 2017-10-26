@@ -1,6 +1,10 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+use \PHPWS_Error;
+use \PHPWS_DB;
 
 class SummerApplication extends HousingApplication{
 
@@ -147,8 +151,4 @@ class SummerApplication extends HousingApplication{
     public function setSmokingPreference($preference){
         $this->smoking_preference = $preference;
     }
-}
-
-class RestoredSummerApplication extends SummerApplication {
-    public function __construct(){}
 }

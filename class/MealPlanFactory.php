@@ -1,10 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'PdoFactory.php');
-PHPWS_Core::initModClass('hms', 'MealPlan.php');
-PHPWS_Core::initModClass('hms', 'MealPlanRestored.php');
-PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+namespace Homestead;
 
 /**
  * Factory for loading and saving MealPlan objects
@@ -13,9 +9,6 @@ PHPWS_Core::initModClass('hms', 'HousingApplication.php');
  * @package Homestead
  */
 class MealPlanFactory {
-
-
-
 
     /**
      * Creates a meal plan given a Student, term, and (optionally) a Housing Application.
@@ -71,7 +64,7 @@ class MealPlanFactory {
      * @param integer $bannerId
      * @param string $term
      * @return MealPlanRestored Required meal plan object, null if none exists
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function getMealByBannerIdTerm($bannerId, $term)
     {
@@ -94,7 +87,7 @@ class MealPlanFactory {
                     'term' => $term
                 ));
 
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'MealPlanRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\MealPlanRestored');
 
         $result = $stmt->fetch();
 
@@ -130,7 +123,7 @@ class MealPlanFactory {
         $stmt->execute(array('term' => $term,
                             'status' => MealPlan::STATUS_NEW));
 
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'MealPlanRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\MealPlanRestored');
 
         return $stmt->fetchAll();
     }

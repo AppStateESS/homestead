@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * ReportPdfView
  *
@@ -12,8 +14,6 @@
  * @author jbooker
  * @package HMS
  */
-
-PHPWS_Core::initModClass('hms', 'ReportView.php');
 
 abstract class ReportPdfView extends ReportView{
 

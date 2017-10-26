@@ -1,8 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+namespace Homestead;
 
-class FreshmenApplicationReview extends hms\View {
+class FreshmenApplicationReview extends View {
 
     private $student;
     private $term;
@@ -63,7 +63,7 @@ class FreshmenApplicationReview extends hms\View {
             $tpl['RLC_REVIEW'] = $this->app->rlc_interest == 0?'No':'Yes';
         }
 
-        $form = new PHPWS_Form('hidden_form');
+        $form = new \PHPWS_Form('hidden_form');
         $submitCmd = CommandFactory::getCommand('HousingApplicationConfirm');
         $submitCmd->setVars($_REQUEST);
 
@@ -81,6 +81,6 @@ class FreshmenApplicationReview extends hms\View {
 
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
     }
 }

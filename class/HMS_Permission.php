@@ -1,5 +1,8 @@
 <?php
-PHPWS_Core::initModClass('hms', 'HMS_Item.php');
+
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
 
 class HMS_Permission extends HMS_Item {
     public $id;
@@ -12,7 +15,7 @@ class HMS_Permission extends HMS_Item {
     }
 
     public static function getDb(){
-        return new PHPWS_DB('hms_permission');
+        return new \PHPWS_DB('hms_permission');
     }
 
     public static function getMembership($permission=null, $object=null, $username=null, $display_name=false){
@@ -33,7 +36,8 @@ class HMS_Permission extends HMS_Item {
         }
 
         if(!is_null($object)){
-            $db->addWhere('hms_user_role.class', strtolower(get_class($object)));
+            $objectName = preg_replace('/(.+\\\)(.+)/', '$2', get_class($object));
+            $db->addWhere('hms_user_role.class', strtolower($objectName));
             $db->addWhere('hms_user_role.instance', $object->getId());
         }
 
@@ -51,7 +55,7 @@ class HMS_Permission extends HMS_Item {
 
         $result = $db->select();
 
-        if(PHPWS_Error::logIfError($result)){
+        if(\PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
         }
 
@@ -60,14 +64,14 @@ class HMS_Permission extends HMS_Item {
 
     public static function getUserRolesForInstance($instance)
     {
-        $db = new PHPWS_DB('hms_user_role');
+        $db = new \PHPWS_DB('hms_user_role');
 
         $db->addWhere('hms_user_role.class', strtolower(get_class($instance)));
         $db->addWhere('hms_user_role.instance', $instance->id);
 
         $result = $db->select();
 
-        if(PHPWS_Error::logIfError($result)){
+        if(\PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
         }
 
@@ -76,8 +80,6 @@ class HMS_Permission extends HMS_Item {
 
     public static function getUsersInRoleForInstance($roleName, $instance)
     {
-    	PHPWS_Core::initModClass('hms', 'PdoFactory.php');
-
         $pdo = PdoFactory::getPdoInstance();
 
         $query = "SELECT user_id FROM hms_user_role JOIN hms_role ON hms_user_role.role = hms_role.id WHERE hms_role.name = :roleName AND class = :className AND instance = :instanceId";
@@ -90,7 +92,7 @@ class HMS_Permission extends HMS_Item {
                         );
         $stmt->execute($params);
 
-        $userIds = $stmt->fetchAll(PDO::FETCH_COLUMN, 'user_id');
+        $userIds = $stmt->fetchAll(\PDO::FETCH_COLUMN, 'user_id');
 
         if(sizeof($userIds) <= 0){
         	return null;
@@ -98,7 +100,7 @@ class HMS_Permission extends HMS_Item {
 
         $users = array();
         foreach ($userIds as $id) {
-        	$users[] = new PHPWS_User($id);
+        	$users[] = new \PHPWS_User($id);
         }
 
         return $users;

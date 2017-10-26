@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 class HMS_Eligibility_Waiver{
 
     public $id = 0;
@@ -14,15 +16,15 @@ class HMS_Eligibility_Waiver{
         $this->asu_username = $asu_username;
         $this->term = $term;
         $this->created_on = time();
-        $this->created_by = Current_User::getUsername();
+        $this->created_by = \Current_User::getUsername();
     }
 
     public function save()
     {
-        $db = new PHPWS_DB('hms_eligibility_waiver');
+        $db = new \PHPWS_DB('hms_eligibility_waiver');
         $result = $db->saveObject($this);
 
-        if(!$result || PHPWS_Error::logIfError($result)){
+        if(!$result || \PHPWS_Error::logIfError($result)){
             return false;
         }
 
@@ -42,10 +44,10 @@ class HMS_Eligibility_Waiver{
     /******************
      * Static methods *
      ******************/
-    
+
     public static function checkForWaiver($username, $term = NULL)
     {
-        $db = new PHPWS_DB('hms_eligibility_waiver');
+        $db = new \PHPWS_DB('hms_eligibility_waiver');
         $db->addWhere('asu_username', $username);
 
         if(!isset($term)){
@@ -59,7 +61,7 @@ class HMS_Eligibility_Waiver{
 
     public function createWaiver()
     {
-        
+
     }
 
     public function getPager()
@@ -67,5 +69,3 @@ class HMS_Eligibility_Waiver{
         #TODO
     }
 }
-
-

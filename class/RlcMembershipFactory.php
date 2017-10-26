@@ -1,7 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'PdoFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
+namespace Homestead;
 
 class RlcMembershipFactory {
 
@@ -19,7 +18,7 @@ class RlcMembershipFactory {
                 'username' => $student->getUsername(),
                 'term'     => $term
         ));
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RlcMembershipRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\RlcMembershipRestored');
 
         return $stmt->fetch();
     }
@@ -42,6 +41,6 @@ class RlcMembershipFactory {
         $stmt = $db->prepare($query);
         $stmt->execute($params);
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

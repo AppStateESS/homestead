@@ -1,7 +1,5 @@
 <?php
-
-PHPWS_Core::initModClass('hms', 'ReportPdfView.php');
-require_once PHPWS_SOURCE_DIR . 'mod/hms/vendor/autoload.php';
+namespace Homestead;
 
 use Dompdf\Dompdf;
 

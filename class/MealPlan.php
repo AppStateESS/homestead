@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * Class to represent a meal plan assignment for a given student.
  *

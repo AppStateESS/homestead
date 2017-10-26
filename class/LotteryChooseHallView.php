@@ -1,6 +1,8 @@
 <?php
 
-class LotteryChooseHallView extends hms\View {
+namespace Homestead;
+
+class LotteryChooseHallView extends View {
 
     private $student;
     private $term;
@@ -58,8 +60,8 @@ class LotteryChooseHallView extends hms\View {
             $tpl['NOTHING_LEFT'] = '';
         }
 
-        Layout::addPageTitle("Choose Hall");
+        \Layout::addPageTitle("Choose Hall");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_hall.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_hall.tpl');
     }
 }

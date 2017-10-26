@@ -1,6 +1,8 @@
 <?php
 
-class RoommateProfileSearchForm extends hms\View {
+namespace Homestead;
+
+class RoommateProfileSearchForm extends View {
 
     private $term;
 
@@ -31,7 +33,7 @@ class RoommateProfileSearchForm extends hms\View {
         $submitCmd = CommandFactory::getCommand('RoommateProfileSearch');
         $submitCmd->setTerm($this->term);
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd->initForm($form);
         $form->setMethod('get');
         $form->useRowRepeat();
@@ -101,8 +103,8 @@ class RoommateProfileSearchForm extends hms\View {
         $form->mergeTemplate($tags);
         $tags = $form->getTemplate();
 
-        Layout::addPageTitle("Roommate Profile Search");
+        \Layout::addPageTitle("Roommate Profile Search");
 
-        return PHPWS_Template::process($tags,'hms','student/profile_search.tpl');
+        return \PHPWS_Template::process($tags,'hms','student/profile_search.tpl');
     }
 }

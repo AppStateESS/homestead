@@ -1,4 +1,5 @@
 <?php
+namespace Homestead;
 
 class Student
 {
@@ -84,7 +85,7 @@ class Student
         $gender = $this->getGender();
 
         if ($gender === '' || is_null($gender)) {
-            throw new InvalidArgumentException('Missing gender.');
+            throw new \InvalidArgumentException('Missing gender.');
         }
 
         if ($gender == FEMALE) {
@@ -94,7 +95,7 @@ class Student
         }
 
         // If we make it here, there's a big problem.
-        throw new InvalidArgumentException('Invalid gender.');
+        throw new \InvalidArgumentException('Invalid gender.');
     }
 
     public function getPrintableGenderAbbreviation()
@@ -102,7 +103,7 @@ class Student
         $gender = $this->getGender();
 
         if ($gender === '' || is_null($gender)) {
-            throw new InvalidArgumentException('Missing gender.');
+            throw new \InvalidArgumentException('Missing gender.');
         }
 
         if ($gender == FEMALE) {
@@ -112,7 +113,7 @@ class Student
         }
 
         // If we make it here, there's a big problem.
-        throw new InvalidArgumentException('Invalid gender.');
+        throw new \InvalidArgumentException('Invalid gender.');
     }
 
     public function getPrintableType()
@@ -290,7 +291,7 @@ class Student
         }
 
         if (is_null($this->application_term) || !isset($this->application_term)) {
-            throw new InvalidArgumentException('Missing application term!');
+            throw new \InvalidArgumentException('Missing application term!');
         } else if ($this->application_term >= $baseTerm) {
             // The application term is greater than the current term, then they're certainly a freshmen
             return CLASS_FRESHMEN;
@@ -317,7 +318,7 @@ class Student
      */
     public function getDobDateTime()
     {
-        return DateTime::createFromFormat('!Y-m-d', $this->getDob(), new DateTimeZone('America/New_York'));
+        return \DateTime::createFromFormat('!Y-m-d', $this->getDob(), new \DateTimeZone('America/New_York'));
     }
 
     /**
@@ -329,7 +330,7 @@ class Student
         $dob = $this->getDobDateTime();
 
         // Add 18 years
-        $dob->add(new DateInterval('P18Y'));
+        $dob->add(new \DateInterval('P18Y'));
 
         // Format as Unix timestamp
         $timestamp = $dob->format('U');

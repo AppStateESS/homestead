@@ -1,6 +1,10 @@
 <?php
 
-class HousingApplicationWelcomeView extends hms\View {
+namespace Homestead;
+
+use \Homestead\Command\Command;
+
+class HousingApplicationWelcomeView extends View {
 
     private $student;
     private $submitCmd;
@@ -59,7 +63,7 @@ class HousingApplicationWelcomeView extends hms\View {
         $tpl['CONTACT_LINK'] = $contactCmd->getLink('contact us');
 
         # Setup the form for the 'continue' button.
-        $form = new PHPWS_Form;
+        $form = new \PHPWS_Form;
         $this->submitCmd->initForm($form);
 
         $form->mergeTemplate($tpl);
@@ -67,17 +71,17 @@ class HousingApplicationWelcomeView extends hms\View {
 
         $studentType = $this->student->getType();
 
-        Layout::addPageTitle("Welcome");
+        \Layout::addPageTitle("Welcome");
 
         if(count($appsOnFile) > 0) {
             // User is now past step one.  No longer just welcoming, we are now welcoming back.
-            return PHPWS_Template::process($tpl, 'hms', 'student/welcome_back_screen.tpl');
+            return \PHPWS_Template::process($tpl, 'hms', 'student/welcome_back_screen.tpl');
         }
 
         if($studentType == TYPE_FRESHMEN || $studentType == TYPE_NONDEGREE || $this->student->isInternational()){
-            return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_freshmen.tpl');
+            return \PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_freshmen.tpl');
         }else{
-            return PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_transfer.tpl');
+            return \PHPWS_Template::process($tpl, 'hms', 'student/welcome_screen_transfer.tpl');
         }
     }
 }

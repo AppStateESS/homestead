@@ -1,5 +1,10 @@
 <?php
-PHPWS_Core::initModClass('hms', 'HMS_Item.php');
+
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+use \PHPWS_Error;
+use \PHPWS_DB;
 
 /**
  * Learning Community objects for HMS
@@ -208,7 +213,7 @@ class HMS_Learning_Community extends HMS_Item
      */
     public function JSONLearningCommunity($id)
     {
-        if( !Current_User::allow('hms', 'learning_community_maintenance') ){
+        if( !\Current_User::allow('hms', 'learning_community_maintenance') ){
             die();
         }
         if(is_numeric($id)){
@@ -311,9 +316,9 @@ class HMS_Learning_Community extends HMS_Item
      */
     public function rlc_assignment_export()
     {
-        if( !Current_User::allow('hms', 'view_rlc_applications') ){
+        if( !\Current_User::allow('hms', 'view_rlc_applications') ){
             $tpl = array();
-            return PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
+            return \PHPWS_Template::process($tpl, 'hms', 'admin/permission_denied.tpl');
         }
 
         $db = new PHPWS_DB('hms_learning_communities');
@@ -356,14 +361,4 @@ class HMS_Learning_Community extends HMS_Item
         echo $buffer;
         die();
     }
-}
-
-/**
- * Empty constructor child class for restoring RLC objects from the database.
- *
- * @author Jeremy Booker
- * @package hms
- */
-class RestoredRlc extends HMS_Learning_Community {
-    public function __construct(){}
 }

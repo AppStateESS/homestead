@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * Shows the re-application (lottery) form.
  *
@@ -7,7 +9,7 @@
  * @package hms
  */
 
-class ReApplicationFormView extends hms\View {
+class ReApplicationFormView extends View {
 
     private $student;
     private $term;
@@ -20,8 +22,6 @@ class ReApplicationFormView extends hms\View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-
         javascript('jquery');
         javascript('jquery_ui');
 
@@ -33,7 +33,7 @@ class ReApplicationFormView extends hms\View {
         /*
          * onSubmit command
          */
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd = CommandFactory::getCommand('ReApplicationFormSubmit');
         $submitCmd->setTerm($this->term);
         $submitCmd->initForm($form);
@@ -145,8 +145,8 @@ class ReApplicationFormView extends hms\View {
 
         $form->mergeTemplate($tpl);
 
-        Layout::addPageTitle("Re-Application Form");
+        \Layout::addPageTitle("Re-Application Form");
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/reapplicationForm.tpl');
+        return \PHPWS_Template::process($form->getTemplate(), 'hms', 'student/reapplicationForm.tpl');
     }
 }

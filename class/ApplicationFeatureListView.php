@@ -1,8 +1,10 @@
 <?php
 
-class ApplicationFeatureListView extends hms\View{
+namespace Homestead;
 
-    public static $dir = 'applicationFeature';
+class ApplicationFeatureListView extends View{
+
+    public static $dir = 'ApplicationFeature';
     private $features;
     private $term;
 
@@ -21,10 +23,10 @@ class ApplicationFeatureListView extends hms\View{
         foreach($this->features as $feature) {
             //$featureTpl = array();
             //$featureTpl['DESCRIPTION'] = $feature->getDescription();
-
             $class = $feature->getName();
             if(!isset($termFeatures[$class])) {
-                $f = new $class();
+                $pathName = '\\Homestead\\ApplicationFeature\\' . $class;
+                $f = new $pathName();
                 $f->setTerm($this->term);
                 $termFeatures[$class] = $f;
             }
@@ -33,6 +35,6 @@ class ApplicationFeatureListView extends hms\View{
             $tpl['features'][] = array('feature' => $view->show());
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/ApplicationFeaturesList.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/ApplicationFeaturesList.tpl');
     }
 }

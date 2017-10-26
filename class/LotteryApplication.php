@@ -1,6 +1,10 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+use \PHPWS_Error;
+use \PHPWS_DB;
 
 /**
  * Lottery Application - Model to represent a lottery re-application
@@ -168,7 +172,6 @@ class LotteryApplication extends HousingApplication {
      */
     public function isWinner()
     {
-        PHPWS_Core::initModClass('hms', 'LotteryProcess.php');
         $ttl = INVITE_TTL_HRS * 3600;
 
         if(!is_null($this->invited_on) && ($this->invited_on + $ttl) > time()){
@@ -203,14 +206,13 @@ class LotteryApplication extends HousingApplication {
      * @return Array Array of row tags for this LotteryApplication.
      */
     public function getRowTags(){
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
 
         $template = array();
 
         $template['ASU_USERNAME']        = $student->getProfileLink();
 
-        $form = new PHPWS_Form('clear_disabilities');
+        $form = new \PHPWS_Form('clear_disabilities');
         $form->addHidden('da_clear', $this->asu_username);
         $form->addHidden('type',     'lottery');
         $form->addHidden('op',       'view_lottery_needs');
@@ -228,8 +230,6 @@ class LotteryApplication extends HousingApplication {
      */
     public function specialInterestTags()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $this->load($this->id);
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
 
@@ -263,7 +263,6 @@ class LotteryApplication extends HousingApplication {
      */
     public function specialInterestCsvRow()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
         $tags = array();
 
@@ -280,8 +279,6 @@ class LotteryApplication extends HousingApplication {
      */
     public function waitingListTags()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
 
         $tags = array();
@@ -301,8 +298,8 @@ class LotteryApplication extends HousingApplication {
         $tags['GENDER']     = $student->getPrintableGender();
         $tags['APP_DATE'] = date("n/j/Y h:ia", $this->getWaitingListDate());
 
-        $assign_link = PHPWS_Text::secureLink('[Assign]','hms', array('module'=>'hms', 'action'=>'ShowAssignStudent', 'username'=>$this->username));
-        $remove_link = PHPWS_Text::secureLink('[Remove]','hms', array('module'=>'hms', 'action'=>'WaitingListRemove', 'username'=>$this->username));
+        $assign_link = \PHPWS_Text::secureLink('[Assign]','hms', array('module'=>'hms', 'action'=>'ShowAssignStudent', 'username'=>$this->username));
+        $remove_link = \PHPWS_Text::secureLink('[Remove]','hms', array('module'=>'hms', 'action'=>'WaitingListRemove', 'username'=>$this->username));
         $tags['ACTION']     = "$assign_link $remove_link";
 
         return $tags;
@@ -314,8 +311,6 @@ class LotteryApplication extends HousingApplication {
      */
     public function waitingListCsvTags()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
 
         $tags = array();
@@ -402,13 +397,11 @@ class LotteryApplication extends HousingApplication {
      *
      * @param unknown $group
      * @param unknown $term
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function specialInterestPager($group, $term)
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
-
-        $pager = new DBPager('hms_new_application', 'LotteryApplication');
+        $pager = new \DBPager('hms_new_application', '\Homestead\LotteryApplication');
         $pager->setModule('hms');
         $pager->addRowTags('specialInterestTags');
 
@@ -432,7 +425,7 @@ class LotteryApplication extends HousingApplication {
             $pager->addWhere('hms_lottery_application.sorority_pref', $group);
         }else{
             // bad group
-            throw new InvalidArgumentException('Invalid special interest group specified.');
+            throw new \InvalidArgumentException('Invalid special interest group specified.');
         }
 
         $pager->setOrder('hms_lottery_application.special_interest', 'desc');
@@ -449,11 +442,9 @@ class LotteryApplication extends HousingApplication {
      */
     public static function waitingListPager()
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
+        $term = \PHPWS_Settings::get('hms', 'lottery_term');
 
-        $term = PHPWS_Settings::get('hms', 'lottery_term');
-
-        $pager = new DBPager('hms_new_application', 'LotteryApplication');
+        $pager = new \DBPager('hms_new_application', '\Homestead\LotteryApplication');
         $pager->db->addColumn('hms_new_application.*');
         $pager->db->addColumn('hms_lottery_application.*');
         $pager->db->addJoin('LEFT', 'hms_new_application', 'hms_lottery_application', 'id', 'id');

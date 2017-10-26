@@ -1,6 +1,8 @@
 <?php
 
-class CheckoutFormView extends hms\View
+namespace Homestead;
+
+class CheckoutFormView extends View
 {
     private $student;
     private $hall;
@@ -9,8 +11,7 @@ class CheckoutFormView extends hms\View
     private $damages;
     private $checkin;
 
-    public function __construct(Student $student, HMS_Residence_Hall $hall, HMS_Room $room, HMS_Bed $bed, Array $damages
-    = null, Checkin $checkin)
+    public function __construct(Student $student, HMS_Residence_Hall $hall, HMS_Room $room, HMS_Bed $bed, Array $damages = null, Checkin $checkin)
     {
         $this->student = $student;
         $this->hall = $hall;
@@ -72,10 +73,9 @@ class CheckoutFormView extends hms\View
         }
 
         $persistent_id = $this->room->getPersistentId();
-        $query = "select banner_id, damage_id from hms_room_damage_responsibility as t1 left join hms_room_damage as t2 on t1.damage_id=t2.id
-	where t2.room_persistent_id='$persistent_id'";
+        $query = "select banner_id, damage_id from hms_room_damage_responsibility as t1 left join hms_room_damage as t2 on t1.damage_id=t2.id where t2.room_persistent_id='$persistent_id'";
         $pdo = PdoFactory::getPdoInstance();
-        $result = $pdo->query($query, PDO::FETCH_ASSOC);
+        $result = $pdo->query($query, \PDO::FETCH_ASSOC);
         $rows = $result->fetchAll();
 
         $sdamage = array();

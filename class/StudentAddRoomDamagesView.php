@@ -1,8 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+namespace Homestead;
 
-class StudentAddRoomDamagesView extends hms\View {
+class StudentAddRoomDamagesView extends View {
 
     private $student;
 
@@ -31,6 +31,6 @@ class StudentAddRoomDamagesView extends hms\View {
         $tpl['vendor_bundle'] = AssetResolver::resolveJsPath('assets.json', 'vendor');
         $tpl['entry_bundle'] = AssetResolver::resolveJsPath('assets.json', 'studentRoomDamage');
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/addRoomDamages.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/addRoomDamages.tpl');
     }
 }

@@ -1,6 +1,6 @@
 <?php
-PHPWS_Core::initModClass('hms', 'RoomChangeRequestState.php');
 
+namespace Homestead;
 
 /**
  * Room change types
@@ -119,7 +119,7 @@ class RoomChangeRequest {
         }
 
         if (!$this->state->canTransition($toState)) {
-            throw new InvalidArgumentException("Invalid state change from: {$this->state->getName()} to {$toState->getName()}.");
+            throw new \InvalidArgumentException("Invalid state change from: {$this->state->getName()} to {$toState->getName()}.");
         }
 
         // Set the end date on the current state
@@ -137,8 +137,6 @@ class RoomChangeRequest {
 
     public function getState()
     {
-        PHPWS_Core::initModClass('hms', 'RoomChangeRequestStateFactory.php');
-
         $this->state = RoomChangeRequestStateFactory::getCurrentState($this);
         return $this->state;
     }
@@ -164,8 +162,6 @@ class RoomChangeRequest {
 
     public function getParticipants()
     {
-        PHPWS_Core::initModClass('hms', 'RoomChangeParticipantFactory.php');
-
         return RoomChangeParticipantFactory::getParticipantsByRequest($this);
     }
 
@@ -254,7 +250,7 @@ class RoomChangeRequest {
         $stmt->execute(array(
                 'requestId' => $this->getId()
         ));
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->setFetchMode(\PDO::FETCH_ASSOC);
 
         $value = $stmt->fetch();
 
@@ -313,24 +309,5 @@ class RoomChangeRequest {
         }
 
         return false;
-    }
-}
-
-
-/**
- * Subclass for resotring RoomChange objects form the database
- * without calling the actual constructor.
- *
- * @author jbooker
- *
- */
-class RoomChangeRequestRestored extends RoomChangeRequest {
-
-    /**
-     * Emptry constructor to override parent
-     */
-    public function __construct()
-    {
-        //TODO Use the RoomChangeRequestStateFactory to load this room change's current state
     }
 }

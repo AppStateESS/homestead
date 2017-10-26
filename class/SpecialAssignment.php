@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+
 class SpecialAssignment
 {
     var $id;
@@ -24,10 +28,10 @@ class SpecialAssignment
 
     public function save()
     {
-        $db = new PHPWS_DB('hms_special_assignment');
+        $db = new \PHPWS_DB('hms_special_assignment');
         $result = $db->saveObject($this);
 
-        if(PHPWS_Error::logIfError($result)) {
+        if(\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->getMessage());
         }
 
@@ -39,16 +43,14 @@ class SpecialAssignment
         if(is_null($this->id) || !is_numeric($this->id))
             return false;
 
-        $db = new PHPWS_DB('hms_special_assignment');
+        $db = new \PHPWS_DB('hms_special_assignment');
         $db->addWhere('id', $this->id);
         $result = $db->loadObject($this);
 
-        if(PHPWS_Error::logIfError($result)) {
+        if(\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->getMessage());
         }
 
         return true;
     }
 }
-
-

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * PinDisabledView
  *
@@ -9,13 +11,11 @@
  * @package HMS
  */
 
-class PinDisabledView extends hms\View {
+class PinDisabledView extends View {
 
     public function show()
     {
         $tpl = array();
-        return PHPWS_Template::process($tpl, 'hms', 'student/pinDisabled.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/pinDisabled.tpl');
     }
 }
-
-

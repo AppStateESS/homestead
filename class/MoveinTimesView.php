@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /*
  * MoveinTimesView
  *
@@ -8,16 +10,14 @@
  * @author Daniel West <dwest at tux dot appstate dot edu>
  * @package hms
  */
-class MoveinTimesView extends hms\View {
+class MoveinTimesView extends View {
 
     public function show(){
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         $tpl = array();
 
         $tpl['TITLE'] = 'Edit Move-in Times';
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
 
         $form->addDropBox('begin_day', HMS_Util::get_days());
         $form->addCssClass('begin_day', 'form-control');
@@ -53,9 +53,9 @@ class MoveinTimesView extends hms\View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Move-in Times");
+        \Layout::addPageTitle("Move-in Times");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/edit_movein_time.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/edit_movein_time.tpl');
     }
 
 }

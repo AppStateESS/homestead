@@ -1,6 +1,8 @@
 <?php
 
-class RlcSelfAssignStartView extends Hms\View {
+namespace Homestead;
+
+class RlcSelfAssignStartView extends View {
 
     private $student;
     private $term;
@@ -24,7 +26,7 @@ class RlcSelfAssignStartView extends Hms\View {
         $tpl['COMMUNITY_NAME'] = $this->rlcAssignment->getRlcName();
         $tpl['TERM'] = Term::toString($this->term);
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
 
         $submitCmd = CommandFactory::getCommand('RlcSelfSelectInviteSave');
         $submitCmd->setTerm($this->term);
@@ -105,7 +107,7 @@ class RlcSelfAssignStartView extends Hms\View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/rlcSelfAssignStart.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/rlcSelfAssignStart.tpl');
     }
 
 }

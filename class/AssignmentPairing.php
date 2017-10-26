@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 class AssignmentPairing {
 
     private $student1;
@@ -88,5 +90,3 @@ class AssignmentPairing {
         return $this->earliestTime;
     }
 }
-
-

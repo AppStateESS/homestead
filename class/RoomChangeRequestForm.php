@@ -1,8 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+namespace Homestead;
 
-class RoomChangeRequestForm extends hms\View {
+class RoomChangeRequestForm extends View {
 
     private $student;
 
@@ -16,7 +16,7 @@ class RoomChangeRequestForm extends hms\View {
 
     public function show()
     {
-        $form = new PHPWS_Form('room_change_request');
+        $form = new \PHPWS_Form('room_change_request');
 
         /* Cell phone */
         $form->addText('cell_num');
@@ -57,6 +57,6 @@ class RoomChangeRequestForm extends hms\View {
 
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/roomChangeRequestForm.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/roomChangeRequestForm.tpl');
     }
 }

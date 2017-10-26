@@ -1,6 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'CommandMenu.php');
+namespace Homestead;
 
 class ReapplicationMaintenanceMenu extends CommandMenu {
 
@@ -9,18 +9,18 @@ class ReapplicationMaintenanceMenu extends CommandMenu {
         parent::__construct();
 
         if(UserStatus::isAdmin()){
-            if(Current_User::allow('hms', 'lottery_admin')){
+            if(\Current_User::allow('hms', 'lottery_admin')){
                 $this->addCommandByName('Settings', 'ShowLotterySettings');
                 $this->addCommandByName('Create entry', 'ShowLotteryAdminEntry');
                 $this->addCommandByName('Set automatic winners', 'ShowLotteryAutoWinners');
                 $this->addCommandByName('Eligibility waivers', 'ShowLotteryEligibilityWaiver');
             }
 
-            if(Current_User::allow('hms', 'special_interest_approval')){
+            if(\Current_User::allow('hms', 'special_interest_approval')){
                 $this->addCommandByName('Interest group approval', 'ShowSpecialInterestGroupApproval');
             }
 
-            if(Current_User::allow('hms', 'lottery_admin')){
+            if(\Current_User::allow('hms', 'lottery_admin')){
                 $this->addCommandByName('Send Lottery Invites', 'ShowSendLotteryInvites');
                 $this->addCommandByName('Re-Application waiting list', 'ShowLotteryWaitingList');
                 $this->addCommandByName('Open Waiting list', 'ShowOpenWaitingList');
@@ -38,6 +38,6 @@ class ReapplicationMaintenanceMenu extends CommandMenu {
 
         $tpl['MENU'] = parent::show();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/menus/ReapplicationMaintenanceMenu.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/menus/ReapplicationMaintenanceMenu.tpl');
     }
 }

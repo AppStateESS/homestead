@@ -1,6 +1,8 @@
 <?php
 
-class SearchProfilesMenuBlockView extends hms\View {
+namespace Homestead;
+
+class SearchProfilesMenuBlockView extends View {
 
     private $student;
     private $startDate;
@@ -42,7 +44,7 @@ class SearchProfilesMenuBlockView extends hms\View {
             $tpl['SEARCH_ROOMMATES'] = $searchCmd->getLink('Search roommate profiles.');
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/searchProfilesMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/searchProfilesMenuBlock.tpl');
     }
 
 }

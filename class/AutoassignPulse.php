@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 require_once PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php';
 
 class AutoassignPulse
@@ -15,9 +17,6 @@ class AutoassignPulse
 
     public static function execute()
     {
-        PHPWS_Core::initModClass('hms', 'HMS.php');
-        PHPWS_Core::initModClass('hms', 'Autoassigner.php');
-
         ob_start();
 
         echo "<html><head><title>AUTOASSIGNER - SCHEDULED BY PULSE</title></head><body><pre>\n\n";
@@ -26,7 +25,7 @@ class AutoassignPulse
         try {
             $assigner = new Autoassigner(Term::getSelectedTerm());
             $assigner->autoassign();
-        } catch(Exception $e) {
+        } catch(\Exception $e) {
             echo "EXCEPTION CAUGHT: " . $e->getMessage();
         }
 
@@ -41,5 +40,3 @@ class AutoassignPulse
         return TRUE;
     }
 }
-
-

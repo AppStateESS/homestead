@@ -1,5 +1,11 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * HMS Residence Hall class
  *
@@ -102,22 +108,20 @@ class HMS_Residence_Hall extends HMS_Item {
 
         try {
             $new_hall->save();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // rethrow it to the top level
             throw $e;
         }
 
         // Copy any roles related to this residence hall.
         if ($roles) {
-            PHPWS_Core::initModClass("hms", "HMS_Permission.php");
-            PHPWS_Core::initModClass("hms", "HMS_Role.php");
             // Get memberships by object instance.
             $membs = HMS_Permission::getUserRolesForInstance($this);
             // test($membs,1);
             // Add each user to new hall
             foreach ($membs as $m) {
                 // Lookup the username
-                $user = new PHPWS_User($m['user_id']);
+                $user = new \PHPWS_User($m['user_id']);
 
                 // Load role and add user to new instance
                 $role = new HMS_Role();
@@ -133,7 +137,7 @@ class HMS_Residence_Hall extends HMS_Item {
         if (empty($this->_floors)) {
             try {
                 $this->loadFloors();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 throw $e;
             }
         }
@@ -143,7 +147,7 @@ class HMS_Residence_Hall extends HMS_Item {
             foreach ($this->_floors as $floor) {
                 try {
                     $floor->copy($to_term, $new_hall->id, $assignments, $roles);
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     throw $e;
                 }
             }
@@ -166,7 +170,7 @@ class HMS_Residence_Hall extends HMS_Item {
         $db->addOrder('floor_number', 'ASC');
 
         $db->loadClass('hms', 'HMS_Floor.php');
-        $result = $db->getObjects('HMS_Floor');
+        $result = $db->getObjects('\Homestead\HMS_Floor');
         if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }

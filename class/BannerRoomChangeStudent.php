@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * Class used to represent room changes for the Banner web Service
  *

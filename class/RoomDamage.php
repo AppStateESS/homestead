@@ -1,6 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'DamageTypeFactory.php');
+namespace Homestead;
 
 /**
  * Model class for representing a room damage
@@ -137,8 +137,4 @@ class RoomDamage {
     {
         return $this->reported_on;
     }
-}
-
-class RoomDamageDb extends RoomDamage {
-    public function __construct(){}
 }

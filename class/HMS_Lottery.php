@@ -1,4 +1,10 @@
 <?php
+
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+use \PHPWS_Error;
+use \PHPWS_DB;
 define('MAX_INVITES_PER_BATCH', 500);
 define('INVITE_TTL_HRS', 48);
 
@@ -20,7 +26,7 @@ class HMS_Lottery {
 
         $result = PHPWS_DB::getRow($query);
 
-        if (PEAR::isError($result)) {
+        if (\PEAR::isError($result)) {
             PHPWS_Error::log($result);
             return null;
         }
@@ -48,7 +54,7 @@ class HMS_Lottery {
 
         $num_remaining_entries = PHPWS_DB::getOne($sql);
 
-        if (PEAR::isError($num_remaining_entries)) {
+        if (\PEAR::isError($num_remaining_entries)) {
             PHPWS_Error::log($num_remaining_entries);
             return false;
         }
@@ -70,7 +76,7 @@ class HMS_Lottery {
 
         $result = PHPWS_DB::getOne($query);
 
-        if (PEAR::isError($result)) {
+        if (\PEAR::isError($result)) {
             PHPWS_Error::log($result);
             return false;
         } else {
@@ -92,7 +98,7 @@ class HMS_Lottery {
 
         $result = PHPWS_DB::getOne($query);
 
-        if (PEAR::isError($result)) {
+        if (\PEAR::isError($result)) {
             PHPWS_Error::log($result);
             return false;
         } else {
@@ -131,7 +137,7 @@ class HMS_Lottery {
 
         $result = PHPWS_DB::getOne($query);
 
-        if (PEAR::isError($result)) {
+        if (\PEAR::isError($result)) {
             PHPWS_Error::log($result);
             return false;
         } else {
@@ -168,7 +174,7 @@ class HMS_Lottery {
 
         $result = PHPWS_DB::getOne($query);
 
-        if (PEAR::isError($result)) {
+        if (\PEAR::isError($result)) {
             PHPWS_Error::log($result);
             return false;
         } else {
@@ -205,7 +211,7 @@ class HMS_Lottery {
 
         $result = PHPWS_DB::getOne($query);
 
-        if (PEAR::isError($result)) {
+        if (\PEAR::isError($result)) {
             PHPWS_Error::log($result);
             return false;
         } else {
@@ -239,7 +245,7 @@ class HMS_Lottery {
 
         $result = PHPWS_DB::getOne($query);
 
-        if (PEAR::isError($result)) {
+        if (\PEAR::isError($result)) {
             PHPWS_Error::log($result);
             return false;
         } else {
@@ -276,7 +282,7 @@ class HMS_Lottery {
 
         $result = PHPWS_DB::getOne($query);
 
-        if (PEAR::isError($result)) {
+        if (\PEAR::isError($result)) {
             PHPWS_Error::log($result);
             return false;
         } else {
@@ -286,10 +292,6 @@ class HMS_Lottery {
 
     public static function send_winning_reminder_emails($term)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        PHPWS_Core::initModclass('hms', 'StudentFactory.php');
-
         // Get a list of lottery winners who have not chosen a room yet, send them reminder emails
         $query = "select hms_new_application.username, hms_lottery_application.invite_expires_on FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id
                 LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term AND lottery = 1) as foo ON hms_new_application.username = foo.asu_username
@@ -298,7 +300,7 @@ class HMS_Lottery {
 
         $result = PHPWS_DB::getAll($query);
 
-        if (PEAR::isError($result)) {
+        if (\PEAR::isError($result)) {
             PHPWS_Error::log($result);
             test($result, 1);
         }
@@ -314,9 +316,6 @@ class HMS_Lottery {
 
     public static function send_roommate_reminder_emails($term)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-        PHPWS_Core::initModclass('hms', 'StudentFactory.php');
-
         // Get a list of outstanding roommate requests, send them reminder emails
         $query = "select hms_lottery_reservation.* FROM hms_lottery_reservation
                 LEFT OUTER JOIN (SELECT asu_username FROM hms_assignment WHERE term=$term AND lottery = 1) as foo ON hms_lottery_reservation.asu_username = foo.asu_username
@@ -324,7 +323,7 @@ class HMS_Lottery {
                 AND hms_lottery_reservation.expires_on > " . time();
 
         $result = PHPWS_DB::getAll($query);
-        if (PEAR::isError($result)) {
+        if (\PEAR::isError($result)) {
             PHPWS_Error::log($result);
             test($result, 1);
         }
@@ -411,13 +410,7 @@ class HMS_Lottery {
 
     public static function confirm_roommate_request($username, $requestId)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
-        $term = PHPWS_Settings::get('hms', 'lottery_term');
+        $term = \PHPWS_Settings::get('hms', 'lottery_term');
 
         // Get the roommate invite
         $invite = HMS_Lottery::get_lottery_roommate_invite_by_id($requestId);
@@ -469,14 +462,11 @@ class HMS_Lottery {
     */
     public static function determineEligibility($username)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Eligibility_Waiver.php');
-
         // First, check for an assignment in the current term
         if (HMS_Assignment::checkForAssignment($username, Term::getCurrentTerm())) {
             return true;
             // If that didn't work, check for a waiver in the lottery term
-        } elseif (HMS_Eligibility_Waiver::checkForWaiver($username, PHPWS_Settings::get('hms', 'lottery_term'))) {
+        } elseif (HMS_Eligibility_Waiver::checkForWaiver($username, \PHPWS_Settings::get('hms', 'lottery_term'))) {
             return true;
             // If that didn't work either, then the student is not elibible, so return false
         } else {
@@ -567,7 +557,7 @@ class HMS_Lottery {
      */
     public static function getSizeOfOnCampusWaitList()
     {
-        $term = PHPWS_Settings::get('hms', 'lottery_term');
+        $term = \PHPWS_Settings::get('hms', 'lottery_term');
 
         // Get the list of user names still on the waiting list, sorted by ID (first come, first served)
         $sql = "SELECT count(*) FROM hms_new_application JOIN hms_lottery_application ON hms_new_application.id = hms_lottery_application.id

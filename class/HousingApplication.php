@@ -1,5 +1,13 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+use \Homestead\Exception\InvalidTermException;
+use \PHPWS_Error;
+use \PHPWS_DB;
+\PHPWS_Core::initCoreClass('Mail.php');
+
 /**
  * Main model class to represent a Housing Application.
  *
@@ -180,8 +188,6 @@ class HousingApplication {
      */
     public function log()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-
         // Determine which user name to use as the current user
         $username = UserStatus::getUsername();
 
@@ -215,18 +221,15 @@ class HousingApplication {
      */
     public function reportToBanner()
     {
-        PHPWS_Core::initModClass('hms', 'SOAP.php');
-
         try {
             $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
             $soap->createHousingApp($this->getBannerId(), $this->getTerm());
-        } catch(Exception $e) {
+        } catch(\Exception $e) {
             // Send an email notification
-            PHPWS_Core::initCoreClass('Mail.php');
             $send_to = array();
             $send_to[] = 'jb67803@appstate.edu';
 
-            $mail = new PHPWS_Mail;
+            $mail = new \PHPWS_Mail;
 
             $mail->addSendTo($send_to);
             $mail->setFrom(FROM_ADDRESS);
@@ -240,7 +243,6 @@ class HousingApplication {
         }
 
         // Log the fact that the application was sent to banner
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_APPLICATION_REPORTED, UserStatus::getUsername());
     }
 
@@ -251,8 +253,6 @@ class HousingApplication {
      */
     public function getStudent()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         return StudentFactory::getStudentByBannerId($this->getBannerId(), $this->getTerm());
     }
 
@@ -319,20 +319,19 @@ class HousingApplication {
     public function cancel($reasonKey)
     {
         $this->cancelled = 1;
-        $this->cancelled_by = Current_User::getUsername();
+        $this->cancelled_by = \Current_User::getUsername();
         $this->cancelled_on = time();
 
         $reasons = self::getCancellationReasons();
 
         if ($reasonKey == "0" || !array_key_exists($reasonKey, $reasons)) {
-            throw new InvalidArgumentException('Invalid cancellation reason key.');
+            throw new \InvalidArgumentException('Invalid cancellation reason key.');
         }
 
         $this->cancelled_reason = $reasonKey;
 
         // Log that this happened
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_CANCEL_HOUSING_APPLICATION, Current_User::getUsername(), Term::toString($this->getTerm()) . ': ' . $reasons[$reasonKey]);
+        HMS_Activity_Log::log_activity($this->getUsername(), ACTIVITY_CANCEL_HOUSING_APPLICATION, \Current_User::getUsername(), Term::toString($this->getTerm()) . ': ' . $reasons[$reasonKey]);
     }
 
 
@@ -372,7 +371,7 @@ class HousingApplication {
 
         $result = $db->select('row');
 
-        if (PEAR::isError($result)) {
+        if (\PEAR::isError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -392,17 +391,10 @@ class HousingApplication {
     * @param unknown_type $term
     * @param unknown_type $applicationType
     * @throws DatabaseException
-    * @throws InvalidArgumentException
+    * @throws \InvalidArgumentException
     */
     public static function getApplicationByUser($username, $term, $applicationType = null)
     {
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'FallApplication.php');
-        PHPWS_Core::initModClass('hms', 'SpringApplication.php');
-        PHPWS_Core::initModClass('hms', 'SummerApplication.php');
-        PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
-        PHPWS_Core::initModClass('hms', 'WaitingListApplication.php');
-
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('username', $username);
         $db->addWhere('term', $term);
@@ -438,7 +430,7 @@ class HousingApplication {
                 $app = new WaitingListApplication($result['id']);
                 break;
             default:
-                throw new InvalidArgumentException('Unknown application type: ' . $result['application_type']);
+                throw new \InvalidArgumentException('Unknown application type: ' . $result['application_type']);
         }
 
         return $app;
@@ -459,8 +451,6 @@ class HousingApplication {
      */
     public static function getAllApplications($username = null, $banner_id = null, $term = null)
     {
-        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
-
         $db = new PHPWS_DB('hms_new_application');
 
         if (!is_null($banner_id)) {
@@ -493,7 +483,7 @@ class HousingApplication {
      *
      * @param Student $student
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @throws DatabaseException
      * @return Array Array of HousingApplication objects for the given user.
      */
@@ -502,13 +492,13 @@ class HousingApplication {
         $db = new PHPWS_DB('hms_new_application');
 
         if (!isset($student) || empty($student) || is_null($student)) {
-            throw new InvalidArgumentException('Missing/invalid student.');
+            throw new \InvalidArgumentException('Missing/invalid student.');
         }
 
         $db->addWhere('banner_id', $student->getBannerId());
         $db->addOrder('term ASC');
 
-        $result = $db->getObjects('HousingApplication');
+        $result = $db->getObjects('\Homestead\HousingApplication');
 
         if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
@@ -535,11 +525,6 @@ class HousingApplication {
      */
     public static function getAllFreshmenApplications($term)
     {
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'FallApplication.php');
-        PHPWS_Core::initModClass('hms', 'SpringApplication.php');
-        PHPWS_Core::initModClass('hms', 'SummerApplication.php');
-
         $sem = Term::getTermSem($term);
 
         $db = new PHPWS_DB('hms_new_application');
@@ -555,16 +540,16 @@ class HousingApplication {
         // Add the appropriate join, based on the term
         if ($sem == TERM_FALL) {
             $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_fall_application', 'id', 'id');
-            $result = $db->getObjects('FallApplication');
+            $result = $db->getObjects('\Homestead\FallApplication');
         } else if ($term == TERM_SPRING) {
             $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_spring_application', 'id', 'id');
-            $result = $db->getObjects('SpringApplication');
+            $result = $db->getObjects('\Homestead\SpringApplication');
         } else if ($term == TERM_SUMMER1 || $term == TERM_SUMMER2) {
             $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_summer_application', 'id', 'id');
-            $result = $db->getObjects('SummerApplication');
+            $result = $db->getObjects('\Homestead\SummerApplication');
         }
 
-        if (PEAR::isError($result)) {
+        if (\PEAR::isError($result)) {
             return false;
         }
 
@@ -584,8 +569,6 @@ class HousingApplication {
      */
     public static function getUnassignedFreshmenApplications($term, $gender)
     {
-        PHPWS_Core::initModClass('hms', 'Term.php');
-
         $db = new PHPWS_DB('hms_new_application');
         $db->addWhere('student_type', 'F');
         $db->addWhere('term', $term);
@@ -596,14 +579,12 @@ class HousingApplication {
         switch(Term::getTermSem($term)) {
             case TERM_SUMMER1:
             case TERM_SUMMER2:
-                PHPWS_Core::initModClass('hms', 'SummerApplication.php');
                 $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_summer_application', 'id', 'id');
                 $db->addColumn('hms_new_application.*');
                 //TODO addColumns for joined table
-                $result = $db->getObjects('SummerApplication');
+                $result = $db->getObjects('\Homestead\SummerApplication');
                 break;
             case TERM_FALL:
-                PHPWS_Core::initModClass('hms', 'FallApplication.php');
                 $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_fall_application', 'id', 'id');
                 // Add columns for joined table
                 $db->addColumn('hms_new_application.*');
@@ -611,17 +592,15 @@ class HousingApplication {
                 $db->addColumn('hms_fall_application.preferred_bedtime');
                 $db->addColumn('hms_fall_application.room_condition');
                 $db->addColumn('hms_fall_application.smoking_preference');
-                $result = $db->getObjects('FallApplication');
+                $result = $db->getObjects('\Homestead\FallApplication');
                 break;
             case TERM_SPRING:
-                PHPWS_Core::initModClass('hms', 'SpringApplication.php');
                 $db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_spring_application', 'id', 'id');
                 $db->addColumn('hms_new_application.*');
                 //TODO addColumns for joined table
-                $result = $db->getObjects('SpringApplication');
+                $result = $db->getObjects('\Homestead\SpringApplication');
                 break;
             default:
-                PHPWS_Core::initModClass('hms', 'exception/InvalidTermException.php');
                 throw new InvalidTermException($term);
         }
 

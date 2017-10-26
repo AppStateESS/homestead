@@ -42,7 +42,7 @@ class MyLocalCacheDataProvider extends LocalCacheDataProvider {
 
 $term     = Term::getSelectedTerm();
 $sql      = "select term, username from hms_new_application where term=$term union select term, asu_username as username from hms_assignment where term=$term;";
-$db       = new PHPWS_DB();
+$db       = new \PHPWS_DB();
 $results  = $db->select('all', $sql);
 $provider = MyLocalCacheDataProvider::getInstance();
 

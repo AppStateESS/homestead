@@ -1,6 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+namespace Homestead;
+
+use \Homestead\Exception\PermissionException;
 
 /**
  * List Reports View
@@ -13,7 +15,7 @@ PHPWS_Core::initModClass('hms', 'HMS_Util.php');
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  * @package HMS
 */
-class ListReportsView extends hms\View{
+class ListReportsView extends View{
 
     private $reportControllers; // Array of ReportController objects
 
@@ -36,8 +38,7 @@ class ListReportsView extends hms\View{
     {
         $this->setTitle("Reports");
 
-        if(!Current_User::allow('hms', 'reports')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+        if(!\Current_User::allow('hms', 'reports')){
             throw new PermissionException('You do not have permission to run reports.');
         }
 
@@ -49,7 +50,7 @@ class ListReportsView extends hms\View{
             $tpl['REPORTS'][]['ITEM'] = $itemView->show();
         }
 
-        $final = PHPWS_Template::process($tpl, 'hms', 'admin/display_reports.tpl');
+        $final = \PHPWS_Template::process($tpl, 'hms', 'admin/display_reports.tpl');
         return $final;
     }
 }

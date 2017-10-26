@@ -1,11 +1,10 @@
 <?php
-PHPWS_Core::initModClass('hms', 'exception/DatabaseException.php');
 
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+use \PHPWS_Error;
+use \PHPWS_DB;
 
 if (!defined('MAX_INVITES_PER_BATCH')) {
     define('MAX_INVITES_PER_BATCH', 500);
@@ -55,7 +54,7 @@ class LotteryProcess {
         $this->inviteCounts = $inviteCounts;
 
         // One-time date/time calculations, setup for later on
-        $this->term = PHPWS_Settings::get('hms', 'lottery_term');
+        $this->term = \PHPWS_Settings::get('hms', 'lottery_term');
         $this->year = Term::getTermYear($this->term);
         $this->academicYear = Term::toString($this->term) . ' - ' . Term::toString(Term::getNextTerm($this->term));
         $this->now = time();
@@ -134,7 +133,7 @@ class LotteryProcess {
                     $this->applicationsRemaining[$c][$g] = LotteryProcess::countRemainingApplicationsByClassGender($this->term, $c, $g);
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->output[] = 'Error counting outstanding lottery entires, quitting. Exception: ' . $e->getMessage();
             return;
         }
@@ -199,7 +198,7 @@ class LotteryProcess {
             $entry->invited_on = $this->now;
 
             $entry->save();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->output[] = 'Error while trying to select a winning student. Exception: ' . $e->getMessage();
             return;
         }
@@ -345,9 +344,9 @@ class LotteryProcess {
      */
     public static function getHardCap()
     {
-        $hardCap = PHPWS_Settings::get('hms', 'lottery_hard_cap');
+        $hardCap = \PHPWS_Settings::get('hms', 'lottery_hard_cap');
         if (!isset($hardCap) || empty($hardCap)) {
-            throw new InvalidArgumentException('Hard cap not set!');
+            throw new \InvalidArgumentException('Hard cap not set!');
         }
 
         return $hardCap;
@@ -443,9 +442,9 @@ class LotteryProcess {
 
     public static function getJrSoftCap()
     {
-        $softCap = PHPWS_Settings::get('hms', 'lottery_jr_goal');
+        $softCap = \PHPWS_Settings::get('hms', 'lottery_jr_goal');
         if (!isset($softCap) || empty($softCap)) {
-            throw new InvalidArgumentException('Junior soft cap not set!');
+            throw new \InvalidArgumentException('Junior soft cap not set!');
         }
 
         return $softCap;
@@ -453,9 +452,9 @@ class LotteryProcess {
 
     public static function getSrSoftCap()
     {
-        $softCap = PHPWS_Settings::get('hms', 'lottery_sr_goal');
+        $softCap = \PHPWS_Settings::get('hms', 'lottery_sr_goal');
         if (!isset($softCap) || empty($softCap)) {
-            throw new InvalidArgumentException('Junior soft cap not set!');
+            throw new \InvalidArgumentException('Junior soft cap not set!');
         }
 
         return $softCap;

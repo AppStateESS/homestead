@@ -1,9 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'Contract.php');
-PHPWS_Core::initModClass('hms', 'PdoFactory.php');
-PHPWS_Core::initModClass('hms', 'DocusignClientFactory.php');
-PHPWS_Core::initModClass('hms', 'Docusign/EnvelopeFactory.php');
+namespace Homestead;
+
+use \Homestead\Docusign\EnvelopeFactory;
 
 class ContractFactory {
 
@@ -22,7 +21,6 @@ class ContractFactory {
      */
     public static function getContractByStudentTerm(Student $student, $term)
     {
-        PHPWS_Core::initModClass('hms', 'Contract.php');
         $db = PdoFactory::getPdoInstance();
 
         $query = 'SELECT * FROM hms_contract WHERE banner_id = :bannerId AND term = :term';
@@ -32,7 +30,7 @@ class ContractFactory {
         $params = array('bannerId' => $student->getBannerId(),
                         'term' => $term);
         $stmt->execute($params);
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'ContractRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\ContractRestored');
 
         return $stmt->fetch();
     }
@@ -153,7 +151,7 @@ class ContractFactory {
         $docusignClient = DocusignClientFactory::getClient();
 
         // Create the envelope
-        $envelope = Docusign\EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $envelopeTemplateId, 'University Housing Contract', $templateRoles, Contract::STATUS_SENT, $student->getBannerId());
+        $envelope = EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $envelopeTemplateId, 'University Housing Contract', $templateRoles, Contract::STATUS_SENT, $student->getBannerId());
 
         // Create the corresponding Contract object and save it
         $contract = new Contract($student, $term, $envelope->getEnvelopeId(), $envelope->getStatus(), strtotime($envelope->getStatusDateTime()));

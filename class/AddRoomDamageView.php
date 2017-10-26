@@ -1,20 +1,20 @@
 <?php
-PHPWS_Core::initModClass('hms', 'DamageTypeFactory.php');
 
+namespace Homestead;
 
 /**
  *
  * @author jbooker
  * @deprecated
  */
-class AddRoomDamageView extends hms\View {
+class AddRoomDamageView extends View {
 
     private $room;
 
     public function __construct(HMS_Room $room)
     {
         if ($room->getId() == 0) {
-            throw new Exception('Ivalid room object.');
+            throw new \Exception('Ivalid room object.');
         }
 
         $this->room = $room;
@@ -25,7 +25,7 @@ class AddRoomDamageView extends hms\View {
         $submitCmd = CommandFactory::getCommand('AddRoomDamage');
         $submitCmd->setRoom($this->room);
 
-        $form = new PHPWS_Form('addDamageForm');
+        $form = new \PHPWS_Form('addDamageForm');
 
 
         $submitCmd->initForm($form);
@@ -80,6 +80,6 @@ class AddRoomDamageView extends hms\View {
         // var_dump($tags);
         // exit;
 
-        return PHPWS_Template::process($tags, 'hms', 'admin/addRoomDamage.tpl');
+        return \PHPWS_Template::process($tags, 'hms', 'admin/addRoomDamage.tpl');
     }
 }

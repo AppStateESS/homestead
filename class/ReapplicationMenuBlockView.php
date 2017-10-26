@@ -1,9 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-PHPWS_Core::initModClass('hms', 'LotteryProcess.php');
+namespace Homestead;
 
-class ReapplicationMenuBlockView extends hms\View {
+class ReapplicationMenuBlockView extends View {
 
     private $term;
     private $startDate;
@@ -78,7 +77,7 @@ class ReapplicationMenuBlockView extends hms\View {
         }
 
         if(!$hardCapReached && time() > $this->startDate){
-            if($this->roommateRequests != FALSE && !is_null($this->roommateRequests) && $this->assignment != TRUE && !PEAR::isError($this->assignment)){
+            if($this->roommateRequests != FALSE && !is_null($this->roommateRequests) && $this->assignment != TRUE && !\PEAR::isError($this->assignment)){
                 $tpl['roommates'] = array();
                 $tpl['ROOMMATE_REQUEST'] = ''; // dummy tag
                 foreach($this->roommateRequests as $invite){
@@ -86,11 +85,11 @@ class ReapplicationMenuBlockView extends hms\View {
                     $cmd->setRequestId($invite['id']);
                     $roommie = StudentFactory::getStudentByUsername($invite['requestor'], $this->term);
                     $tpl['roommates'][]['ROOMMATE_LINK'] = $cmd->getLink($roommie->getName());
-                    //$tpl['roommates'][]['ROOMMATE_LINK'] = PHPWS_Text::secureLink(HMS_SOAP::get_name($invite['requestor']), 'hms', array('type'=>'student', 'op'=>'lottery_show_roommate_request', 'id'=>$invite['id']));
+                    //$tpl['roommates'][]['ROOMMATE_LINK'] = \PHPWS_Text::secureLink(HMS_SOAP::get_name($invite['requestor']), 'hms', array('type'=>'student', 'op'=>'lottery_show_roommate_request', 'id'=>$invite['id']));
                 }
             }
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/reApplicationMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/reApplicationMenuBlock.tpl');
     }
 }

@@ -1,5 +1,7 @@
 <?php
-namespace hms;
+
+namespace Homestead;
+
 /**
  * HMS View
  * Handles the very basic HMS view.  This has a top-bar to show login status

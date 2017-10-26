@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * ReportSetupView
  *
@@ -8,7 +10,7 @@
  *
  * @author jbooker
  */
-class ReportSetupView extends hms\View {
+class ReportSetupView extends View {
 
     protected $report;
     protected $datePicker;
@@ -23,7 +25,7 @@ class ReportSetupView extends hms\View {
 
     public function __construct(Report $report){
         $this->report = $report;
-        //$this->form = new PHPWS_Form('report-setup-form');
+        //$this->form = new \PHPWS_Form('report-setup-form');
         $this->tpl = array();
         $this->useDatePicker = false;
         $this->runNow = false;
@@ -41,7 +43,7 @@ class ReportSetupView extends hms\View {
 
         $js = javascript('modules/hms/reportSetupDialog', $params);
 
-        $this->form = new PHPWS_Form($this->formId);
+        $this->form = new \PHPWS_Form($this->formId);
 
         $this->tpl['LINK_TEXT'] = $this->linkText;
         $this->tpl['LINK_ID'] = $this->dialogId . "-link";
@@ -59,7 +61,7 @@ class ReportSetupView extends hms\View {
         $this->form->mergeTemplate($this->tpl);
         $this->tpl = $this->form->getTemplate();
 
-        return PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/SetupDialog.tpl') . $js;
+        return \PHPWS_Template::process($this->tpl, 'hms', 'admin/reports/SetupDialog.tpl') . $js;
     }
 
     protected function getDialogContents()

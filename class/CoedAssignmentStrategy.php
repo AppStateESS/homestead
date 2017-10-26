@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 class CoedAssignmentStrategy extends AssignmentStrategy
 {
     public function __construct($term)
@@ -22,5 +24,3 @@ class CoedAssignmentStrategy extends AssignmentStrategy
         return true;
     }
 }
-
-

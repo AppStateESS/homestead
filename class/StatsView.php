@@ -1,6 +1,10 @@
 <?php
 
-class StatsView extends hms\View {
+namespace Homestead;
+
+use \PHPWS_DB;
+
+class StatsView extends View {
 
     public function show()
     {
@@ -44,8 +48,7 @@ class StatsView extends hms\View {
         $num_rlc_applications = $db->select('count');
         unset($db);
 
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        $lottery_term = PHPWS_Settings::get('hms', 'lottery_term');
+        $lottery_term = \PHPWS_Settings::get('hms', 'lottery_term');
 
         $db = new PHPWS_DB('hms_lottery_entry');
         $db->addWhere('term', $lottery_term);
@@ -68,8 +71,7 @@ class StatsView extends hms\View {
         $tpl['NUM_T_APPLICATIONS']      = $num_t_applications;
         $tpl['NUM_RLC_APPLICATIONS']    = $num_rlc_applications;
 
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        $lottery_term = PHPWS_Settings::get('hms', 'lottery_term');
+        $lottery_term = \PHPWS_Settings::get('hms', 'lottery_term');
 
         $tpl['LOTTERY_APPLICATIONS']    = $num_lottery_entries;
         $tpl['SOPH_APPLICATIONS']       = HMS_Lottery::count_applications_by_class($lottery_term, CLASS_SOPHOMORE);
@@ -97,9 +99,9 @@ class StatsView extends hms\View {
         $tpl['JR_INVITES']              = HMS_Lottery::count_invites_by_class($lottery_term, CLASS_JUNIOR);
         $tpl['SR_INVITES']              = HMS_Lottery::count_invites_by_class($lottery_term, CLASS_SENIOR);
 
-        $final = PHPWS_Template::process($tpl, 'hms', 'admin/statistics.tpl');
+        $final = \PHPWS_Template::process($tpl, 'hms', 'admin/statistics.tpl');
 
-        Layout::addPageTitle("Statistics");
+        \Layout::addPageTitle("Statistics");
 
         return $final;
     }

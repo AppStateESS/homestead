@@ -1,6 +1,8 @@
 <?php
 
-class ApplicationFeatureSettingsView extends hms\View{
+namespace Homestead;
+
+class ApplicationFeatureSettingsView extends View{
 
     private $feature;
 
@@ -14,8 +16,8 @@ class ApplicationFeatureSettingsView extends hms\View{
         $f = $this->feature;
         $reg = $f->getRegistration();
 
-        PHPWS_Core::initCoreClass('Form.php');
-        $form = new PHPWS_Form($reg->getName());
+        \PHPWS_Core::initCoreClass('Form.php');
+        $form = new \PHPWS_Form($reg->getName());
 
         $cmd = CommandFactory::getCommand('SaveApplicationFeature');
         if($f->getId() < 1) {
@@ -75,6 +77,6 @@ class ApplicationFeatureSettingsView extends hms\View{
         javascript('modules/hms/ajaxForm', $vars);
 
         $tpl = $form->getTemplate();
-        return PHPWS_Template::process($tpl, 'hms', 'admin/ApplicationFeatureSettingsView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/ApplicationFeatureSettingsView.tpl');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'RoomChangeRequestState.php');
+namespace Homestead;
 
 class RoomChangeRequestStateFactory {
 
@@ -13,9 +13,9 @@ class RoomChangeRequestStateFactory {
         $stmt = $db->prepare($query);
         $stmt->execute(array('requestId' => $request->getId()));
 
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        $className = 'RoomChangeState' . $result['state_name'];
+        $className = '\\Homestead\\' . 'RoomChangeState' . $result['state_name'];
 
         return new $className($request, $result['effective_date'], $result['effective_until_date'], $result['committed_by']);
     }
@@ -25,4 +25,3 @@ class RoomChangeRequestStateFactory {
         //TODO
     }
 }
-
