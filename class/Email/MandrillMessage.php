@@ -67,5 +67,7 @@ class MandrillMessage {
 
 
         );
+
+        return $messageArray;
     }
 }

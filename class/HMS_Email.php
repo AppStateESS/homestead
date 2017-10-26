@@ -14,6 +14,8 @@ require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
 
 PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+PHPWS_Core::initModClass('hms', 'Email/MandrillMessage.php');
+PHPWS_Core::initModClass('hms', 'EmailLogFactory.php');
 
 class HMS_Email{
 
@@ -1214,10 +1216,12 @@ class HMS_Email{
         $content = PHPWS_Template::process($tags, 'hms', $template);
         $htmlContent = Markdown::defaultTransform($content);
 
-        // TODO $to = array('name' => '', 'email'=>'');
+        $to = array();
+        $to[] = array('name' => $student->getName(), 'email'=>$student->getEmailAddress());
 
-        $message = new MandrillMessage('wcdHwGg1BIg5POxYQuEUXw', array($student->getEmailAddress()), array(), FROM_ADDRESS, SYSTEM_NAME, $subject, $content, $htmlContent, array('bannerId'=>$student->getBannerId()));
+        $message = new MandrillMessage('wcdHwGg1BIg5POxYQuEUXw', $to, array(), FROM_ADDRESS, SYSTEM_NAME, $subject, $content, $htmlContent, array('bannerId'=>$student->getBannerId()));
         $result = $message->send();
+        EmailLogFactory::logMessage($student, $result, 'Damage Notification');
     }
 
 } // End HMS_Email class
