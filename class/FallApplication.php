@@ -1,6 +1,10 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+use \PHPWS_Error;
+use \PHPWS_DB;
 
 class FallApplication extends HousingApplication{
 
@@ -170,10 +174,4 @@ class FallApplication extends HousingApplication{
     public function setRlcInterest($interest){
         $this->rlc_interest = $interest;
     }
-}
-
-class RestoredFallApplication extends FallApplication {
-    public function __construct(){
-    } // Empty constructor
-
 }

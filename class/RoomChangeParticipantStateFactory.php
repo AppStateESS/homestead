@@ -1,6 +1,6 @@
 <?php
-PHPWS_Core::initModClass('hms', 'RoomChangeParticipantState.php');
 
+namespace Homestead;
 
 class RoomChangeParticipantStateFactory {
 
@@ -15,9 +15,9 @@ class RoomChangeParticipantStateFactory {
                 'participantId' => $participant->getId()
         ));
 
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        $className = 'ParticipantState' . $result['state_name'];
+        $className = '\\Homestead\\' . 'ParticipantState' . $result['state_name'];
 
         return new $className($participant, $result['effective_date'], $result['effective_until_date'], $result['committed_by']);
     }
@@ -32,7 +32,7 @@ class RoomChangeParticipantStateFactory {
                 'participantId' => $participant->getId()
         ));
 
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         // If no results, just return here
         if (sizeof($results) <= 0) {
@@ -42,7 +42,7 @@ class RoomChangeParticipantStateFactory {
         // Create a ParticipantState object for each result
         $states = array();
         foreach ($results as $row) {
-            $className = 'ParticipantState' . $row['state_name'];
+            $className = '\\Homestead\\ParticipantState' . $row['state_name'];
             $states[] = new $className($participant, $row['effective_date'], $row['effective_until_date'], $row['committed_by']);
         }
 

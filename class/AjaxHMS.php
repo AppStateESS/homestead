@@ -1,12 +1,13 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\PermissionException;
+
 /**
  * HMS Ajax ViewController
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
-
-PHPWS_Core::initModClass('hms', 'HMS.php');
-PHPWS_Core::initModClass('hms', 'JsonError.php');
 
 class AjaxHMS extends HMS
 {
@@ -33,7 +34,7 @@ class AjaxHMS extends HMS
             $error->setMessage('You are not authorized to perform this action.  You may need to sign back in.');
             $error->renderStatus();
             $content = $error->encode();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $error = new JsonError('500 Internal Server Error');
             $error->setMessage($e->getMessage());
             $error->renderStatus();
@@ -57,7 +58,7 @@ class AjaxHMS extends HMS
 
         echo $response;
 
-        // This sets NQ (notifications), which aren't valid for AJAX, so we aren't doing it. Just exit instead.
+        // This sets \NQ (notifications), which aren't valid for AJAX, so we aren't doing it. Just exit instead.
         //HMS::quit();
         exit;
     }

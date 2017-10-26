@@ -1,6 +1,8 @@
 <?php
 
-class RoommateProfileView extends hms\View {
+namespace Homestead;
+
+class RoommateProfileView extends View {
 
     private $student;
     private $profile;
@@ -15,10 +17,10 @@ class RoommateProfileView extends hms\View {
     {
         require(PHPWS_SOURCE_DIR . 'mod/hms/inc/profile_options.php');
 
-        $majors = hms\MajorFactory::getMajorsList();
+        $majors = MajorFactory::getMajorsList();
 
         $tpl = array();
-        $profile_form = new PHPWS_Form('profile_form');
+        $profile_form = new \PHPWS_Form('profile_form');
         $profile_form->useRowRepeat();
 
         $none_given = '<span style="color:#CCC;">none given</span>';
@@ -147,8 +149,8 @@ class RoommateProfileView extends hms\View {
         $tpl = $profile_form->getTemplate();
 
 
-        Layout::addPageTitle("Roommate Profile");
+        \Layout::addPageTitle("Roommate Profile");
 
-        return PHPWS_Template::process($tpl,'hms','student/profile_form.tpl');
+        return \PHPWS_Template::process($tpl,'hms','student/profile_form.tpl');
     }
 }

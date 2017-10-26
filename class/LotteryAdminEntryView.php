@@ -1,6 +1,8 @@
 <?php
 
-class LotteryAdminEntryView extends hms\View {
+namespace Homestead;
+
+class LotteryAdminEntryView extends View {
 
     public function __construct()
     {
@@ -11,7 +13,7 @@ class LotteryAdminEntryView extends hms\View {
     {
         $submitCmd = CommandFactory::getCommand('LotteryAdminCreateApp');
 
-        $form = new PHPWS_Form('admin_entry');
+        $form = new \PHPWS_Form('admin_entry');
         $submitCmd->initForm($form);
 
         $form->addText('asu_username');
@@ -24,8 +26,8 @@ class LotteryAdminEntryView extends hms\View {
 
         $form->addSubmit('enter_into_lottery', 'Add to lottery');
 
-        Layout::addPageTitle("Lottery Entry");
+        \Layout::addPageTitle("Lottery Entry");
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/add_to_lottery.tpl');
+        return \PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/add_to_lottery.tpl');
     }
 }

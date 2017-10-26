@@ -1,6 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'SpecialAssignment.php');
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
 
 class SpecialAssignmentStrategy extends Assignmentstrategy
 {
@@ -10,11 +12,11 @@ class SpecialAssignmentStrategy extends Assignmentstrategy
     {
         parent::__construct($term);
 
-        $db = new PHPWS_DB('hms_special_assignment');
+        $db = new \PHPWS_DB('hms_special_assignment');
         $db->addWhere('term', $this->term);
-        $result = $db->getObjects('SpecialAssignment');
+        $result = $db->getObjects('\Homestead\SpecialAssignment');
 
-        if(PHPWS_Error::logIfError($result)) {
+        if(\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->getMessage());
         }
 

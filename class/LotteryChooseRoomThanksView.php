@@ -1,6 +1,8 @@
 <?php
 
-class LotteryChooseRoomThanksView extends hms\View {
+namespace Homestead;
+
+class LotteryChooseRoomThanksView extends View {
 
     private $room;
 
@@ -20,8 +22,8 @@ class LotteryChooseRoomThanksView extends hms\View {
 
         $tpl['LOGOUT'] = UserStatus::getLogoutLink();
 
-        Layout::addPageTitle("Thank you");
+        \Layout::addPageTitle("Thank you");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_room_thanks.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_room_thanks.tpl');
     }
 }

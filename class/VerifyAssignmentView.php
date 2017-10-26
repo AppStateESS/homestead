@@ -1,15 +1,14 @@
 <?php
 
-class VerifyAssignmentView extends hms\View{
+namespace Homestead;
+
+class VerifyAssignmentView extends View{
 
     private $student;
     private $term;
 
     public function __construct($term)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'UserStatus.php');
-
         $username = UserStatus::getUsername();
 
         $this->term = $term;
@@ -19,12 +18,6 @@ class VerifyAssignmentView extends hms\View{
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-
         $tpl = array();
 
         $assignment = HMS_Assignment::getAssignmentByBannerId($this->student->getBannerId(), $this->term);
@@ -77,10 +70,10 @@ class VerifyAssignmentView extends hms\View{
             $tpl['RLC'] = 'You have been assigned to the ' . $rlc_list[$rlc_assignment['rlc_id']];
         }
 
-        $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Back to Main Menu', 'hms', array('type'=>'student', 'op'=>'show_main_menu'));
+        $tpl['MENU_LINK'] = \PHPWS_Text::secureLink('Back to Main Menu', 'hms', array('type'=>'student', 'op'=>'show_main_menu'));
 
-        Layout::addPageTitle("Verify Assignment");
+        \Layout::addPageTitle("Verify Assignment");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/verify_assignment.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/verify_assignment.tpl');
     }
 }

@@ -1,95 +1,11 @@
 <?php
 
-define('APPLICATION_FEATURE_DIR', 'applicationFeature');
+namespace Homestead;
 
-
-/**
- * A class to hold meta-data for ApplicationFeatures.
- *
- * @package hms
- * @author Jeremy Booker
- *
- */
-abstract class ApplicationFeatureRegistration
-{
-
-    protected $name;
-    protected $description;
-    protected $startDateRequired;
-    protected $editDateRequired;
-    protected $endDateRequired;
-    protected $priority;
-
-    /**
-     * Empty constructor
-     */
-    public abstract function __construct();
-
-    /**
-     * Returns the name of this feature.
-     * @return String The name of this feature.
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Returns the description of this feature.
-     * @return String Feature description
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Returns whether or not a start date is required
-     * @return boolean Start date required
-     */
-    public function requiresStartDate()
-    {
-        return $this->startDateRequired;
-    }
-
-    /**
-     * Returns whether or not an edit date is required
-     * @return boolean edit date required
-     */
-    public function requiresEditDate()
-    {
-        return $this->editDateRequired;
-    }
-
-    /**
-     * Returns whether or not an edit date is required.
-     * @return boolean end date required
-     */
-    public function requiresEndDate()
-    {
-        return $this->endDateRequired;
-    }
-
-    /**
-     * Returns the priority of this feature. Determines the order in which they're displayed.
-     * NB: Feature priorities can conflict! Don't give two features the same priority!
-     * @returns Integer feature priority
-     */
-    public function getPriority()
-    {
-        return $this->priority;
-    }
-
-    /**
-     * Determines whether or not to show a feature for a particular student.
-     *
-     * @abstract
-     * @param Student $student
-     * @param Integer $term
-     * @return boolean Wether or not to show this feature for a particular student
-     */
-    public abstract function showForStudent(Student $student, $term);
-}
+use \Homestead\Exception\DatabaseException;
+use \Homestead\Exception\MissingDataException;
+use \PHPWS_Error;
+use \PHPWS_DB;
 
 /**
  * A class to represent each of the various "features" which can be enabled/disabled
@@ -145,12 +61,11 @@ abstract class ApplicationFeature
     public function save()
     {
         if(!isset($this->name)) {
-            $this->name = get_class($this);
+            $this->name = preg_replace('/(.+\\\)(.+\\\)(.+)/', '$3', get_class($this));
         }
 
         $missing = $this->validate();
         if(!empty($missing)) {
-            PHPWS_Core::initModClass('hms', 'exception/MissingDataException.php');
             throw new MissingDataException('Missing required data.', $missing);
         }
 
@@ -225,7 +140,7 @@ abstract class ApplicationFeature
     /**
      *
      * @param $student - The student we're generating a menu for.
-     * @return hms\View - A View object which can generate the HTML for this block
+     * @return View - A View object which can generate the HTML for this block
      */
     public abstract function getMenuBlockView(Student $student);
 
@@ -316,21 +231,20 @@ abstract class ApplicationFeature
     {
         $features = array();
 
-        $dir = PHPWS_SOURCE_DIR . 'mod/hms/class/' . APPLICATION_FEATURE_DIR;
+        $dir = PHPWS_SOURCE_DIR . 'mod/hms/class/ApplicationFeature';
 
         $files = scandir("{$dir}/");
 
         foreach($files as $file) {
-            $feature = preg_replace('/\.php$/', '', $file);
-            if($feature == $file) {
+            $featureRem = preg_replace('/\.php$/', '', $file);
+            $feature = preg_replace('/Registration/', '', $featureRem);
+            if($feature == $featureRem) {
                 continue;
             }
-            PHPWS_Core::initModClass('hms', APPLICATION_FEATURE_DIR . '/' . $file);
 
-            $registration = "{$feature}Registration";
+            $registration = '\\Homestead\\ApplicationFeature\\' . $feature . 'Registration';
             $features[] = new $registration();
         }
-
         return $features;
     }
 
@@ -389,9 +303,8 @@ abstract class ApplicationFeature
         $features = array();
         foreach($results as $result) {
             // Instanciate a registration object
-            $path = 'applicationFeature/' . $result['name'] . '.php';
-            PHPWS_Core::initModClass('hms', $path);
             $regClass = $result['name'] . 'Registration';
+            $regClass = '\\Homestead\\ApplicationFeature\\' . $regClass;
             $reg = new $regClass;
 
             // Check to see if this feature is allowed for this student
@@ -399,12 +312,12 @@ abstract class ApplicationFeature
                 continue;
             }
 
-            $className = $result['name'];
+            $className = '\\Homestead\\ApplicationFeature\\' . $result['name'];
 
             // Check for conflicting priorities in the array, make sure we don't overwrite
             // an existing key
             if(array_key_exists($reg->getPriority(), $features)){
-                throw new Exception("Conflicting menu item priorities: {$result['name']}, $term");
+                throw new \Exception("Conflicting menu item priorities: {$result['name']}, $term");
             }
 
             $features[$reg->getPriority()] = new $className($result['id']);
@@ -431,11 +344,11 @@ abstract class ApplicationFeature
     public static function getInstanceByNameAndTerm($name, $term)
     {
         if(!isset($name)){
-            throw new InvalidArgumentException('Missing feature name.');
+            throw new \InvalidArgumentException('Missing feature name.');
         }
 
         if(!isset($term)){
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         $db = new PHPWS_DB('hms_application_feature');
@@ -462,7 +375,7 @@ abstract class ApplicationFeature
 
     public static function getInstanceByName($name)
     {
-        PHPWS_Core::initModClass('hms', APPLICATION_FEATURE_DIR . "/$name.php");
+        $name = '\\Homestead\\ApplicationFeature\\' . $name;
         $f = new $name();
         return $f;
     }
@@ -470,7 +383,7 @@ abstract class ApplicationFeature
     public static function plugInstance(array $data)
     {
         $f = self::getInstanceByName($data['name']);
-        PHPWS_Core::plugObject($f, $data);
+        \PHPWS_Core::plugObject($f, $data);
         return $f;
     }
 

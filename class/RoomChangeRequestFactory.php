@@ -1,7 +1,6 @@
 <?php
-PHPWS_Core::initModClass('hms', 'PdoFactory.php');
-PHPWS_Core::initModClass('hms', 'RoomChangeRequest.php');
 
+namespace Homestead;
 
 /**
  * Factory class for loading RoomChangeRequest objects from
@@ -15,7 +14,7 @@ class RoomChangeRequestFactory {
     public static function getRequestById($id)
     {
         if (!isset($id) || is_null($id)) {
-            throw new InvalidArgumentException('Missing request id.');
+            throw new \InvalidArgumentException('Missing request id.');
         }
 
         $db = PdoFactory::getPdoInstance();
@@ -26,7 +25,7 @@ class RoomChangeRequestFactory {
         $stmt->execute(array(
                 'requestId' => $id
         ));
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\RoomChangeRequestRestored');
 
         return $stmt->fetch();
     }
@@ -37,12 +36,12 @@ class RoomChangeRequestFactory {
      * get the last room change request for the given bed
      * @param HMS_Bed $bed The HMS_Bed object that you want the room change request for
      * @return RoomChangeRequestRestored Room change request object that corresponds to this bed
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public static function getCurrentRequestByBed(HMS_Bed $bed)
     {
         if (!isset($bed) || is_null($bed)) {
-            throw new InvalidArgumentException('Missing bed.');
+            throw new \InvalidArgumentException('Missing bed.');
         }
 
         $db = PdoFactory::getPdoInstance();
@@ -57,7 +56,7 @@ class RoomChangeRequestFactory {
         $stmt->execute(array(
                 'bedId' => $bed->getId()
         ));
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\RoomChangeRequestRestored');
 
         return $stmt->fetch();
     }
@@ -91,11 +90,11 @@ class RoomChangeRequestFactory {
                 'bannerId' => $student->getBannerId()
         ));
 
-        $results = $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        $results = $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomChangeRequestRestored');
 
         // If more than one pending request is found, throw an exception
         if (sizeof($results) > 1) {
-            throw new InvalidArgumentException('More than one pending room change detected.');
+            throw new \InvalidArgumentException('More than one pending room change detected.');
         } else if (sizeof($results) == 0) {
             return null;
         } else {
@@ -122,7 +121,7 @@ class RoomChangeRequestFactory {
         foreach ($floorList as $floor) {
             $placeholder = "floor_id_" . $floor->getId(); // piece together a placeholder name
 
-            $floorPlaceholders[] = ':' . $placeholder; // Add it to the list of placeholders for PDO
+            $floorPlaceholders[] = ':' . $placeholder; // Add it to the list of placeholders for \PDO
             $floorParams[$placeholder] = $floor->getId(); // Add the value for this placeholder, to be passed to execute()
         }
 
@@ -176,7 +175,7 @@ class RoomChangeRequestFactory {
 
         $stmt->execute($params);
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomChangeRequestRestored');
     }
 
     /**
@@ -196,7 +195,7 @@ class RoomChangeRequestFactory {
         foreach ($floorList as $floor) {
             $placeholder = "floor_id_" . $floor->getId(); // piece together a placeholder name
 
-            $floorPlaceholders[] = ':' . $placeholder; // Add it to the list of placeholders for PDO
+            $floorPlaceholders[] = ':' . $placeholder; // Add it to the list of placeholders for \PDO
             $floorParams[$placeholder] = $floor->getId(); // Add the value for this placeholder, to be passed to execute()
         }
 
@@ -241,7 +240,7 @@ class RoomChangeRequestFactory {
 
         $stmt->execute($params);
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomChangeRequestRestored');
     }
 
     /**
@@ -269,7 +268,7 @@ class RoomChangeRequestFactory {
         $stmt = $db->prepare($query);
         $params = array('term' => $term);
         $stmt->execute($params);
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomChangeRequestRestored');
     }
 
     /**
@@ -307,7 +306,7 @@ class RoomChangeRequestFactory {
 
         $stmt->execute($params);
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomChangeRequestRestored');
     }
 
     public static function getRequestPendingCheckout(Student $student, $term)
@@ -328,11 +327,11 @@ class RoomChangeRequestFactory {
                 'bannerId' => $student->getBannerId()
         ));
 
-        $results = $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeRequestRestored');
+        $results = $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomChangeRequestRestored');
 
         // If more than one pending request is found, throw an exception
         if (sizeof($results) > 1) {
-            throw new InvalidArgumentException('More than one pending room change detected.');
+            throw new \InvalidArgumentException('More than one pending room change detected.');
         } else if (sizeof($results) == 0) {
             return null;
         } else {

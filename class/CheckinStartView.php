@@ -1,6 +1,8 @@
 <?php
 
-class CheckinStartView extends hms\View {
+namespace Homestead;
+
+class CheckinStartView extends View {
 
     private $halls;
     private $term;
@@ -19,11 +21,11 @@ class CheckinStartView extends hms\View {
         javascriptMod('hms', 'jqueryCookie');
         javascriptMod('hms', 'checkinStart');
 
-        Layout::addPageTitle('Check-in');
+        \Layout::addPageTitle('Check-in');
 
         $tpl = array();
 
-        $form = new PHPWS_Form('checkin_form');
+        $form = new \PHPWS_Form('checkin_form');
 
         $submitCmd = CommandFactory::getCommand('StartCheckinSubmit');
         $submitCmd->initForm($form);
@@ -55,6 +57,6 @@ class CheckinStartView extends hms\View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/checkinStart.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/checkinStart.tpl');
     }
 }

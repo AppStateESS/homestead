@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * SendRlcInvitesView
  *
@@ -8,7 +10,7 @@
  * @author jbooker
  * @package HMS
  */
-class SendRlcInvitesView extends hms\View {
+class SendRlcInvitesView extends View {
 
     public function show()
     {
@@ -16,13 +18,12 @@ class SendRlcInvitesView extends hms\View {
 
         $submitCmd = CommandFactory::getCommand('SendRlcInvites');
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd->initForm($form);
 
         $tpl['RESPOND_BY_DATE'] = javascript('datepicker', array('name'=>'respond_by_date', 'id'=>'respond_by_date'));
         $tpl['TERM'] = Term::toString(Term::getSelectedTerm());
 
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $form->addDropBox('time', HMS_Util::get_hours());
         $form->setMatch('time', '17');
         $form->setClass('time', 'form-control');
@@ -34,8 +35,6 @@ class SendRlcInvitesView extends hms\View {
 
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
-        return PHPWS_Template::process($tpl, 'hms', 'admin/sendRlcInvites.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/sendRlcInvites.tpl');
     }
 }
-
-

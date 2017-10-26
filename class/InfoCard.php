@@ -1,11 +1,6 @@
 <?php
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-PHPWS_Core::initModClass('hms', 'RoomDamage.php');
-PHPWS_Core::initModClass('hms', 'RoomDamageFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
+namespace Homestead;
 
 /**
  * Model class for representing InfoCards

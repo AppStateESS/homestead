@@ -1,6 +1,8 @@
 <?php
 
-class RoomChangeListView extends hms\View {
+namespace Homestead;
+
+class RoomChangeListView extends View {
 
     private $requests;
     private $term;
@@ -18,7 +20,7 @@ class RoomChangeListView extends hms\View {
         // Check for an empty array of requests
         if (sizeof($this->requests) == 0) {
             $tpl['NO_REQUESTS'] = 'No pending requests found.';
-            return PHPWS_Template::process($tpl, 'hms', 'admin/roomChangeListView.tpl');
+            return \PHPWS_Template::process($tpl, 'hms', 'admin/roomChangeListView.tpl');
         }
 
         javascriptMod('hms', 'livestamp');
@@ -46,6 +48,6 @@ class RoomChangeListView extends hms\View {
             $tpl['REQUESTS'][] = $row;
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/roomChangeListView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/roomChangeListView.tpl');
     }
 }

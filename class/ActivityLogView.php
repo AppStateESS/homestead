@@ -1,8 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'ActivityLogPager.php');
+namespace Homestead;
 
-class ActivityLogView extends hms\View {
+class ActivityLogView extends View {
 
     private $actee;
     private $actor;
@@ -38,12 +38,12 @@ class ActivityLogView extends hms\View {
         $tags['CONTENT'] = $this->pager->show();
         $tags['FILTERS'] = ActivityLogView::showFilters($_REQUEST);
 
-        Layout::addPageTitle("Activity Log");
+        \Layout::addPageTitle("Activity Log");
 
         javascript('jquery_ui');
         javascript('modules/hms/note', array('LINK'=>'activity-log-note'));
 
-        return PHPWS_Template::Process($tags, 'hms', 'admin/activity_log_box.tpl');
+        return \PHPWS_Template::Process($tags, 'hms', 'admin/activity_log_box.tpl');
     }
 
     /**
@@ -56,11 +56,11 @@ class ActivityLogView extends hms\View {
      */
     public static function showFilters($selection = NULL)
     {
-        PHPWS_Core::initCoreClass('Form.php');
+        \PHPWS_Core::initCoreClass('Form.php');
 
         $submitCmd = CommandFactory::getCommand('ShowActivityLog');
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd->initForm($form);
 
         $form->setMethod('get');
@@ -108,6 +108,6 @@ class ActivityLogView extends hms\View {
         javascript('jquery');
         javascript('modules/hms/activity_log');
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/activity_log_filters.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/activity_log_filters.tpl');
     }
 }

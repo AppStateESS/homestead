@@ -1,7 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'StudentDataProvider.php');
-PHPWS_Core::initModClass('hms', 'Student.php');
+namespace Homestead;
 
 class StudentFactory {
 

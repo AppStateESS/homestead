@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\StudentNotFoundException;
+
 abstract class StudentDataProvider {
 
     // For singleton pattern
@@ -29,10 +33,6 @@ abstract class StudentDataProvider {
         if (!is_null(self::$instance)) {
             return self::$instance;
         }
-
-        PHPWS_Core::initModClass('hms', 'ApcDataProvider.php');
-        PHPWS_Core::initModClass('hms', 'SOAPDataProvider.php');
-        PHPWS_Core::initModClass('hms', 'LocalCacheDataProvider.php');
 
         if (extension_loaded('apc')) {
             self::$instance = new ApcDataProvider(new LocalCacheDataProvider(new SOAPDataProvider()));
@@ -77,7 +77,6 @@ abstract class StudentDataProvider {
     {
         if (!isset($this->fallbackProvider) || is_null($this->fallbackProvider)) {
             // No fallback provider is set, so throw an exception
-            PHPWS_Core::initModClass('hms', 'exception/StudentNotFoundException.php');
             throw new StudentNotFoundException();
         } else {
             return $this->fallbackProvider;

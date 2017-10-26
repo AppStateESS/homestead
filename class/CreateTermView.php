@@ -1,19 +1,22 @@
 <?php
+
+namespace Homestead;
+
+use \Homestead\Exception\PermissionException;
+
 /**
  * @author Jeremy Booker
  * @package hms
  */
-class CreateTermView extends hms\View {
+class CreateTermView extends View {
 
     public function __construct(){}
 
     public function show()
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'edit_terms')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'edit_terms')){
             throw new PermissionException('You do not have permission to edit terms.');
         }
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         javascript('jquery');
         javascript('modules/hms/newTermCopyPick');
 
@@ -29,7 +32,7 @@ class CreateTermView extends hms\View {
 
         $submitCmd = CommandFactory::getCommand('CreateTerm');
 
-        $form = new PHPWS_Form('new_term_form');
+        $form = new \PHPWS_Form('new_term_form');
         $submitCmd->initForm($form);
 
         $form->addDropBox('from_term', Term::getTermsAssoc());
@@ -55,8 +58,8 @@ class CreateTermView extends hms\View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Create Term");
+        \Layout::addPageTitle("Create Term");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/add_term.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/add_term.tpl');
     }
 }

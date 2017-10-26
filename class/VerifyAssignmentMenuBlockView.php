@@ -1,6 +1,8 @@
 <?php
 
-class VerifyAssignmentMenuBlockView extends hms\View {
+namespace Homestead;
+
+class VerifyAssignmentMenuBlockView extends View {
 
     private $student;
     private $startDate;
@@ -27,11 +29,11 @@ class VerifyAssignmentMenuBlockView extends hms\View {
             $cmd->setTerm($this->term);
             $tpl['VIEW_APP'] = $cmd->getLink('here');
             $tpl['ICON'] = FEATURE_OPEN_ICON;
-            return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/verifyAssignmentMenuBlock.tpl');
+            return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/verifyAssignmentMenuBlock.tpl');
         } else {
             $tpl['BEGIN_DEADLINE'] = HMS_Util::getFriendlyDate($this->startDate);
             $tpl['ICON'] = FEATURE_NOTYET_ICON;
-            return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/verifyAssignmentMenuBlock.tpl');
+            return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/verifyAssignmentMenuBlock.tpl');
         }
     }
 }

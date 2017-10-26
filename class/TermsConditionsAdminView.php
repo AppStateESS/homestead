@@ -1,6 +1,10 @@
 <?php
 
-class TermsConditionsAdminView extends hms\View{
+namespace Homestead;
+
+use \Homestead\Exception\InvalidConfigurationException;
+
+class TermsConditionsAdminView extends View{
 
     private $term;
 
@@ -13,7 +17,7 @@ class TermsConditionsAdminView extends hms\View{
     {
         $submitCmd = CommandFactory::getCommand('SaveTermSettings');
 
-        $form = new PHPWS_Form('docusign');
+        $form = new \PHPWS_Form('docusign');
         $submitCmd->initForm($form);
 
 
@@ -23,7 +27,7 @@ class TermsConditionsAdminView extends hms\View{
         try {
         	$existingTemplate = $this->term->getDocusignTemplate();
         } catch (InvalidConfigurationException $e) {
-        	NQ::simple('hms', hms\NotificationView::WARNING, 'No DocuSign template id has been set for students over 18.');
+        	\NQ::simple('hms', NotificationView::WARNING, 'No DocuSign template id has been set for students over 18.');
         }
 
         $form->addText('template', $existingTemplate);
@@ -36,7 +40,7 @@ class TermsConditionsAdminView extends hms\View{
         try{
         	$under18Template = $this->term->getDocusignUnder18Template();
         } catch (InvalidConfigurationException $e) {
-            NQ::simple('hms', hms\NotificationView::WARNING, 'No DocuSign template id has been set for students under 18.');
+            \NQ::simple('hms', NotificationView::WARNING, 'No DocuSign template id has been set for students under 18.');
         }
 
         $form->addText('under18_template', $under18Template);
@@ -45,6 +49,6 @@ class TermsConditionsAdminView extends hms\View{
 
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/TermsConditionsAdminView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/TermsConditionsAdminView.tpl');
     }
 }

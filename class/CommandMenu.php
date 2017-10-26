@@ -1,5 +1,10 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Command\Command;
+use \Homestead\Command\CommandContext;
+
 /**
  * HMS Command Menu
  *
@@ -8,7 +13,7 @@
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
 
-class CommandMenu extends hms\View {
+class CommandMenu extends View {
     protected $context;
     protected $commands;
 
@@ -62,6 +67,6 @@ class CommandMenu extends hms\View {
 
         $this->plugCommands($tpl);
 
-        return PHPWS_Template::process($tpl, 'hms', 'CommandMenu.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'CommandMenu.tpl');
     }
 }

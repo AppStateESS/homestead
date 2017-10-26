@@ -1,8 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'RlcFactory.php');
+namespace Homestead;
 
-class RlcSelfSelectionMenuBlockView extends hms\View {
+class RlcSelfSelectionMenuBlockView extends View {
 
     private $term;
     private $startDate;
@@ -74,7 +74,7 @@ class RlcSelfSelectionMenuBlockView extends hms\View {
         }
 
         // Show roommate requests, if any
-        if(time() > $this->startDate && $this->roommateRequests != false && !is_null($this->roommateRequests) && $this->roomAssignment != true && !PEAR::isError($this->roomAssignment)){
+        if(time() > $this->startDate && $this->roommateRequests != false && !is_null($this->roommateRequests) && $this->roomAssignment != true && !\PEAR::isError($this->roomAssignment)){
             $tpl['roommates'] = array();
             $tpl['ROOMMATE_REQUEST'] = ''; // dummy tag
             foreach($this->roommateRequests as $invite){
@@ -86,6 +86,6 @@ class RlcSelfSelectionMenuBlockView extends hms\View {
             }
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/rlcSelfSelection.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/rlcSelfSelection.tpl');
     }
 }

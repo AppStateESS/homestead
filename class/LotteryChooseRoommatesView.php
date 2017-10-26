@@ -1,6 +1,8 @@
 <?php
 
-class LotteryChooseRoommatesView extends hms\View {
+namespace Homestead;
+
+class LotteryChooseRoommatesView extends View {
 
     private $student;
     private $term;
@@ -15,11 +17,6 @@ class LotteryChooseRoommatesView extends hms\View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-
         javascript('jquery');
 
         $tpl = array();
@@ -35,7 +32,7 @@ class LotteryChooseRoommatesView extends hms\View {
 
         $tpl['ROOM'] = $room->where_am_i();
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
 
         $submitCmd = CommandFactory::getCommand('LotteryChooseRoommates');
         $submitCmd->setRoomId($this->roomId);
@@ -124,8 +121,8 @@ class LotteryChooseRoommatesView extends hms\View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Lottery Choose Roommate");
+        \Layout::addPageTitle("Lottery Choose Roommate");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/lottery_select_roommate.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/lottery_select_roommate.tpl');
     }
 }

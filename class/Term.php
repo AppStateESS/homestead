@@ -1,5 +1,13 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+use \Homestead\Exception\InvalidConfigurationException;
+use \Homestead\Exception\InvalidTermException;
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * HMS Term
  * Maintains the "current" term, "active" term, and handles tasks related
@@ -110,7 +118,6 @@ class Term
     public function getDocusignTemplate()
     {
         if(is_null($this->docusign_template_id) || $this->docusign_template_id == '') {
-            PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('No Docusign template set for ' . $this->term);
         }
 
@@ -125,7 +132,6 @@ class Term
     public function getDocusignUnder18Template()
     {
     	if(is_null($this->docusign_under18_template_id) || $this->docusign_under18_template_id == '') {
-            PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('No Docusign under 18 template set for ' . $this->term);
         }
 
@@ -183,7 +189,6 @@ class Term
         } else if($sem == TERM_FALL) {
             $result['term'] = FALL;
         } else {
-            PHPWS_Core::initModClass('hms', 'exception/InvalidTermException.php');
             throw new InvalidTermException("Bad term: $term");
         }
 
@@ -196,16 +201,15 @@ class Term
 
     public static function getCurrentTerm()
     {
-        return PHPWS_Settings::get('hms', 'current_term');
+        return \PHPWS_Settings::get('hms', 'current_term');
     }
 
     public static function setCurrentTerm($term)
     {
-        PHPWS_Settings::set('hms', 'current_term', $term);
-        PHPWS_Settings::save('hms');
+        \PHPWS_Settings::set('hms', 'current_term', $term);
+        \PHPWS_Settings::save('hms');
 
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        $username = Current_User::getUsername();
+        $username = \Current_User::getUsername();
         HMS_Activity_Log::log_activity($username, ACTIVITY_CHANGE_ACTIVE_TERM, $username, "Active term set by $username to $term");
     }
 
@@ -288,7 +292,7 @@ class Term
     {
         $db = new PHPWS_DB('hms_term');
         $db->addOrder('term desc');
-        $result = $db->getObjects('Term');
+        $result = $db->getObjects('\Homestead\Term');
 
         if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
@@ -337,7 +341,6 @@ class Term
     public static function validateTerm($term)
     {
         if(!self::isValidTerm($term)) {
-            PHPWS_Core::initModClass('hms', 'exception/InvalidTermException.php');
             throw new InvalidTermException("$term is not a valid term.");
         }
     }
@@ -347,7 +350,7 @@ class Term
         $objs = self::getTerms();
 
         $terms = array();
-        if (is_array($objs) || $objs instanceof Traversable){
+        if (is_array($objs) || $objs instanceof \Traversable){
             foreach($objs as $term) {
                 $t = $term->term;
                 $terms[$t] = Term::toString($t);

@@ -1,11 +1,15 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Docusign\EnvelopeFactory;
+
 /**
  * ProfileHousingAppList - View to show the list of houing apps on the Student Profile.
  *
  * @author jbooker
  */
-class ProfileHousingAppList extends hms\View
+class ProfileHousingAppList extends View
 {
     private $student;
     private $housingApps;
@@ -25,7 +29,7 @@ class ProfileHousingAppList extends hms\View
 
         if (empty($this->housingApps)) {
             $tpl['APPLICATIONS_EMPTY'] = 'No applications found.';
-            return PHPWS_Template::process($tpl, 'hms', 'admin/profileHousingAppList.tpl');
+            return \PHPWS_Template::process($tpl, 'hms', 'admin/profileHousingAppList.tpl');
         }
 
         // Include javascript for cancel application jquery dialog
@@ -74,7 +78,7 @@ class ProfileHousingAppList extends hms\View
                 $row['row_style'] = 'warning';
             } else {
                 // Show Cancel Command, if user has permission to cancel apps
-                if (Current_User::allow('hms', 'cancel_housing_application')) {
+                if (\Current_User::allow('hms', 'cancel_housing_application')) {
                     $cancelCmd = CommandFactory::getCommand('ShowCancelHousingApplication');
                     $cancelCmd->setHousingApp($app);
                     $cancel = $cancelCmd->getURI();
@@ -83,7 +87,7 @@ class ProfileHousingAppList extends hms\View
 
                 $contract = ContractFactory::getContractByStudentTerm($this->student, $app->getTerm());
                 if($contract !== false){
-                    $envelope = \Docusign\EnvelopeFactory::getEnvelopeById($this->docusignClient, $contract->getEnvelopeId());
+                    $envelope = EnvelopeFactory::getEnvelopeById($this->docusignClient, $contract->getEnvelopeId());
                     $row['contract'] = $envelope->getEnvelopeViewURI($this->docusignClient);
                 } else {
                     $row['contract'] = 'No Contract';
@@ -98,7 +102,7 @@ class ProfileHousingAppList extends hms\View
         $tpl['APPLICATIONS'] = $app_rows;
 
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/profileHousingAppList.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/profileHousingAppList.tpl');
     }
 
 }

@@ -1,6 +1,9 @@
 <?php
+namespace Homestead;
 
-    class RoommateProfileFactory {
+use \Homestead\Exception\DatabaseException;
+
+class RoommateProfileFactory {
     /**
      * check_for_profile
      * Returns the id number of a profile, if it
@@ -16,13 +19,13 @@
     //public static function checkForProfile($username, $term)
     public static function checkForProfile($bannerId, $term)
     {
-        $db = new PHPWS_DB('hms_student_profiles');
+        $db = new \PHPWS_DB('hms_student_profiles');
 
         $db->addWhere('banner_id', $bannerId);
         $db->addWhere('term', $term);
         $result = $db->select('row');
 
-        if (PHPWS_Error::logIfError($result)) {
+        if (\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -47,13 +50,13 @@
     {
         $profile = new RoommateProfile();
 
-        $db = new PHPWS_DB('hms_student_profiles');
+        $db = new \PHPWS_DB('hms_student_profiles');
 
         $db->addWhere('banner_id', $bannerId);
         $db->addWhere('term', $term);
         $result = $db->loadObject($profile);
 
-        if (PHPWS_Error::logIfError($result)) {
+        if (\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 

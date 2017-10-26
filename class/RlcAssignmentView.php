@@ -1,7 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'RlcFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+namespace Homestead;
 
 /**
  * RlcAssignmentView - View class for assigning students to LearningCommunitites.
@@ -9,7 +8,7 @@ PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
  * @author Jeremy Booker
  * @package hms
  */
-class RlcAssignmentView extends hms\View
+class RlcAssignmentView extends View
 {
     private $term; // The terms we're looking at applications for.
     private $rlc; // the rlc to limit this view to
@@ -38,7 +37,7 @@ class RlcAssignmentView extends hms\View
         $tags['FILTERS'] = $this->getFilters();
         $tags['ASSIGNMENTS_PAGER'] = $this->rlcApplicationPager();
 
-        $exportForm = new PHPWS_Form('export_form');
+        $exportForm = new \PHPWS_Form('export_form');
         $exportCmd = CommandFactory::getCommand('ExportRlcApps');
         $exportCmd->initForm($exportForm);
 
@@ -50,7 +49,7 @@ class RlcAssignmentView extends hms\View
         $exportForm->mergeTemplate($tags);
         $tags = $exportForm->getTemplate();
 
-        return PHPWS_Template::process($tags, 'hms', 'admin/make_new_rlc_assignments.tpl');
+        return \PHPWS_Template::process($tags, 'hms', 'admin/make_new_rlc_assignments.tpl');
     }
 
     /**
@@ -74,7 +73,7 @@ class RlcAssignmentView extends hms\View
 
         // Initialize form and submit command
         $submitCmd = CommandFactory::getCommand('ShowAssignRlcApplicants');
-        $form = new PHPWS_Form('dropdown_selector');
+        $form = new \PHPWS_Form('dropdown_selector');
         $submitCmd->initForm($form);
         $form->setMethod('get');
 
@@ -96,7 +95,7 @@ class RlcAssignmentView extends hms\View
         $form->setClass('student_type', 'form-control');
         $form->setExtra('student_type', 'onChange="refresh_page(\'dropdown_selector\')"');
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/rlcApplicationListFilters.tpl');
+        return \PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/rlcApplicationListFilters.tpl');
     }
 
     /**
@@ -106,16 +105,14 @@ class RlcAssignmentView extends hms\View
      */
     public function rlcApplicationPager()
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
-
         $submitCmd = CommandFactory::getCommand('AssignRlcApplicants');
-        $form = new PHPWS_Form;
+        $form = new \PHPWS_Form;
         $submitCmd->initForm($form);
         $form->addSubmit('submit', 'Submit Changes');
         $form->setClass('submit', 'btn btn-primary');
         $tags = $form->getTemplate();
 
-        $pager = new DBPager('hms_learning_community_applications', 'HMS_RLC_Application');
+        $pager = new \DBPager('hms_learning_community_applications', '\Homestead\HMS_RLC_Application');
         $pager->db->addColumn('hms_learning_community_applications.*');
 
         $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_applications', 'hms_learning_community_assignment', 'id', 'application_id');
@@ -145,7 +142,7 @@ class RlcAssignmentView extends hms\View
         $pager->addRowTags('getAdminPagerTags');
         $pager->setReportRow('applicantsReport');
 
-        Layout::addPageTitle("RLC Assignments");
+        \Layout::addPageTitle("RLC Assignments");
 
         return $pager->get();
     }

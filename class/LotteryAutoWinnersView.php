@@ -1,20 +1,22 @@
 <?php
 
-class LotteryAutoWinnersView extends hms\View {
+namespace Homestead;
+
+class LotteryAutoWinnersView extends View {
 
     public function show() {
 
         $submitCmd = CommandFactory::getCommand('LotteryAdminSetWinner');
 
-        $form = new PHPWS_Form('magic_form');
+        $form = new \PHPWS_Form('magic_form');
         $submitCmd->initForm($form);
 
         $form->addTextArea('banner_ids');
 
         $form->addSubmit('Submit');
 
-        Layout::addPageTitle("Automatic Lottery Winners");
+        \Layout::addPageTitle("Automatic Lottery Winners");
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/lotteryAutoWinnersView.tpl');
+        return \PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/lotteryAutoWinnersView.tpl');
     }
 }

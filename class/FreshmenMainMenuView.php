@@ -1,15 +1,13 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'StudentMenuTermBlock.php');
-PHPWS_Core::initModClass('hms', 'StudentMenuWithdrawnTermBlock.php');
-PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+namespace Homestead;
 
 define('FEATURE_LOCKED_ICON',   '<i class="fa fa-lock"></i>');
 define('FEATURE_NOTYET_ICON',   '<i class="fa fa-calendar"></i>');
 define('FEATURE_OPEN_ICON',     '<i class="fa fa-arrow-right"></i>');
 define('FEATURE_COMPLETED_ICON','<i class="fa fa-check"></i>');
 
-class FreshmenMainMenuView extends hms\View {
+class FreshmenMainMenuView extends View {
 
     private $student;
 
@@ -40,9 +38,9 @@ class FreshmenMainMenuView extends hms\View {
             $tpl['TERMBLOCK'][] = array('TERMBLOCK_CONTENT'=>$termBlock->show());
         }
 
-        Layout::addPageTitle("Main Menu");
+        \Layout::addPageTitle("Main Menu");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/freshmenMenu.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/freshmenMenu.tpl');
     }
 
 }

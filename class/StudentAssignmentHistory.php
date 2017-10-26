@@ -1,24 +1,25 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+
 /**
  * StudentAssignmentHistory.php
  *
  * @author Adam D. Dixon
  */
 
-PHPWS_Core::initModClass('hms', 'AssignmentHistory.php');
-PHPWS_Core::initModClass('hms', 'Term.php');
-
-class StudentAssignmentHistory extends ArrayObject{
+class StudentAssignmentHistory extends \ArrayObject{
 
     private $bannerId;
     private $assignmentHistory;
 
     // http://weierophinney.net/matthew/archives/131-Overloading-arrays-in-PHP-5.2.0.html
     public function __construct($bannerId) {
-         
+
         if(is_null($bannerId)){
-            throw InvalidArgumentException('Missing id.');
+            throw \InvalidArgumentException('Missing id.');
         }else{
             $this->bannerId = $bannerId;
         }
@@ -40,13 +41,13 @@ class StudentAssignmentHistory extends ArrayObject{
      * @return boolean flag to signal if the initialization was a success
      */
     private function init () {
-        $db = new PHPWS_DB('hms_assignment_history');
+        $db = new \PHPWS_DB('hms_assignment_history');
         $db->addWhere('banner_id', $this->bannerId);
         $db->loadClass('hms', 'AssignmentHistory.php');
         $db->addOrder(array('term DESC', 'assigned_on DESC'));
-        $result = $db->getObjects('AssignmentHistory');
+        $result = $db->getObjects('\Homestead\AssignmentHistory');
 
-        if(PHPWS_Error::logIfError($result)){
+        if(\PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
         }
 
@@ -104,5 +105,3 @@ class StudentAssignmentHistory extends ArrayObject{
         return $sah;
     }
 }
-
-

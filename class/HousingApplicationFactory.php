@@ -1,12 +1,9 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-PHPWS_Core::initModClass('hms', 'FallApplication.php');
-PHPWS_Core::initModClass('hms', 'SpringApplication.php');
-PHPWS_Core::initModClass('hms', 'SummerApplication.php');
-PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
+namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'ContextApplicationFactory.php');
+use \Homestead\Exception\DatabaseException;
+use \Homestead\Command\CommandContext;
 
 class HousingApplicationFactory {
 
@@ -25,20 +22,13 @@ class HousingApplicationFactory {
 
     public static function getApplicationById($id)
     {
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'FallApplication.php');
-        PHPWS_Core::initModClass('hms', 'SpringApplication.php');
-        PHPWS_Core::initModClass('hms', 'SummerApplication.php');
-        PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
-        PHPWS_Core::initModClass('hms', 'WaitingListApplication.php');
-
         $application = new HousingApplication();
-        $db = new PHPWS_DB('hms_new_application');
+        $db = new \PHPWS_DB('hms_new_application');
         $db->addWhere('id', $id);
         $result = $db->loadObject($application);
 
-        if(PHPWS_Error::logIfError($result)){
-            throw new Exception("There was an retreiving the HousingApplication object from the database.");
+        if(\PHPWS_Error::logIfError($result)){
+            throw new \Exception("There was an retreiving the HousingApplication object from the database.");
         }
 
         if(is_null($application)){
@@ -62,7 +52,7 @@ class HousingApplicationFactory {
                 $app = new WaitingListApplication($application->id);
                 break;
             default:
-                //throw new InvalidArgumentException('Unknown application type: ' . $application->application_type);
+                //throw new \InvalidArgumentException('Unknown application type: ' . $application->application_type);
                 $app = new FallApplication($application->id);
         }
 
@@ -80,19 +70,12 @@ class HousingApplicationFactory {
      * @param string $term
      * @param string $applicationType
      * @throws DatabaseException
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @return Mixed<HousingApplication|null> A HousingApplication subclass object, or null of no applicaiton exists
      */
     public static function getAppByStudent(Student $student, $term, $applicationType = NULL)
     {
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
-        PHPWS_Core::initModClass('hms', 'FallApplication.php');
-        PHPWS_Core::initModClass('hms', 'SpringApplication.php');
-        PHPWS_Core::initModClass('hms', 'SummerApplication.php');
-        PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
-        PHPWS_Core::initModClass('hms', 'WaitingListApplication.php');
-
-        $db = new PHPWS_DB('hms_new_application');
+        $db = new \PHPWS_DB('hms_new_application');
         $db->addWhere('banner_id', $student->getBannerId());
         $db->addWhere('term', $term);
 
@@ -102,7 +85,7 @@ class HousingApplicationFactory {
 
         $result = $db->select('row');
 
-        if (PHPWS_Error::logIfError($result)) {
+        if (\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -127,7 +110,7 @@ class HousingApplicationFactory {
                 $app = new WaitingListApplication($result['id']);
                 break;
             default:
-                throw new InvalidArgumentException('Unknown application type: ' . $result['application_type']);
+                throw new \InvalidArgumentException('Unknown application type: ' . $result['application_type']);
         }
 
         return $app;

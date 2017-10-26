@@ -1,5 +1,6 @@
 <?php
 
+namespace Homestead;
 
 abstract class RoomChangeRequestState {
 
@@ -93,81 +94,12 @@ abstract class RoomChangeRequestState {
 
     public function getValidTransitions()
     {
-        throw new Exception('No transitions implemented.');
+        throw new \Exception('No transitions implemented.');
     }
 
     public function canTransition(RoomChangeRequestState $toState)
     {
-        return in_array(get_class($toState), $this->getValidTransitions());
-    }
-}
-
-
-class RoomChangeStatePending extends RoomChangeRequestState {
-
-    const STATE_NAME = 'Pending'; // Text state name
-
-    public function getValidTransitions()
-    {
-        return array(
-                'RoomChangeStateHold',
-                'RoomChangeStateApproved',
-                'RoomChangeStateDenied',
-                'RoomChangeStateCancelled'
-        );
-    }
-}
-
-class RoomChangeStateApproved extends RoomChangeRequestState {
-
-    const STATE_NAME = 'Approved';
-
-    public function getValidTransitions()
-    {
-        return array('RoomChangeStateComplete', 'RoomChangeStateCancelled');
-    }
-
-    // TODO Send approval notifiction to student/RDs
-}
-
-class RoomChangeStateComplete extends RoomChangeRequestState {
-
-    const STATE_NAME = 'Complete';
-
-    public function getValidTransitions()
-    {
-        return array();
-    }
-}
-
-class RoomChangeStateHold extends RoomChangeRequestState {
-
-    const STATE_NAME = 'Hold';
-
-    public function getValidTransitions()
-    {
-        return array('RoomChangeStateApproved',
-                     'RoomChangeStateCancelled',
-                     'RoomChangeStateDenied');
-    }
-}
-
-class RoomChangeStateDenied extends RoomChangeRequestState {
-
-    const STATE_NAME = 'Denied';
-
-    public function getValidTransitions()
-    {
-        return array();
-    }
-}
-
-class RoomChangeStateCancelled extends RoomChangeRequestState {
-
-    const STATE_NAME = 'Cancelled';
-
-    public function getValidTransitions()
-    {
-        return array();
+        $stateName = preg_replace('/(.+\\\)(.+)/', '$2', get_class($toState));
+        return in_array($stateName, $this->getValidTransitions());
     }
 }

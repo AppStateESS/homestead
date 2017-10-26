@@ -1,6 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'RlcAssignmentState.php');
+namespace Homestead;
 
 /**
  * RlcAssignmentDeclinedState

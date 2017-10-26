@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 class RoomChangeParticipantState {
 
     const STATE_NAME = 'ParentState'; // Text state name
@@ -64,12 +66,13 @@ class RoomChangeParticipantState {
 
     public function getValidTransitions()
     {
-        throw new Exception('No transitions implemented.');
+        throw new \Exception('No transitions implemented.');
     }
 
     public function canTransition(RoomChangeParticipantState $toState)
     {
-        return in_array(get_class($toState), $this->getValidTransitions());
+        $stateName = preg_replace('/(.+\\\)(.+)/', '$2', get_class($toState));
+        return in_array($stateName, $this->getValidTransitions());
     }
 
     public function getName()
@@ -117,110 +120,3 @@ class RoomChangeParticipantState {
         // By default, don't send any notifications.
     }
 }
-
-
-class ParticipantStateNew extends RoomChangeParticipantState {
-    const STATE_NAME = 'New';
-    const FRIENDLY_NAME = 'Created';
-
-    public function getValidTransitions()
-    {
-        return array('ParticipantStateStudentApproved', 'ParticipantStateDenied', 'ParticipantStateDeclined', 'ParticipantStateCancelled');
-    }
-}
-
-class ParticipantStateStudentApproved extends RoomChangeParticipantState {
-    const STATE_NAME = 'StudentApproved';
-    const FRIENDLY_NAME = 'Student Approved';
-
-    public function getValidTransitions()
-    {
-        return array('ParticipantStateCurrRdApproved', 'ParticipantStateDenied', 'ParticipantStateCancelled');
-    }
-
-    //TODO Send notification to current RD
-}
-
-class ParticipantStateCurrRdApproved extends RoomChangeParticipantState {
-    const STATE_NAME = 'CurrRdApproved';
-    const FRIENDLY_NAME = 'Current RD Approved';
-
-    public function getValidTransitions()
-    {
-        return array('ParticipantStateFutureRdApproved', 'ParticipantStateDenied', 'ParticipantStateCancelled');
-    }
-
-    // TODO send notification to future RD
-}
-
-class ParticipantStateFutureRdApproved extends RoomChangeParticipantState {
-    const STATE_NAME = 'FutureRdApproved';
-    const FRIENDLY_NAME = 'Future RD Approved';
-
-    public function getValidTransitions()
-    {
-        return array('ParticipantStateInProcess', 'ParticipantStateDenied', 'ParticipantStateCancelled');
-    }
-
-    // TODO If all participants are FutureRdApproved, send notification to Housing
-}
-
-class ParticipantStateInProcess extends RoomChangeParticipantState {
-    const STATE_NAME = 'InProcess';
-    const FRIENDLY_NAME = 'Approved - Move in Progress';
-
-    public function getValidTransitions()
-    {
-        return array('ParticipantStateCheckedOut', 'ParticipantStateCancelled');
-    }
-}
-
-class ParticipantStateCheckedOut extends RoomChangeParticipantState {
-    const STATE_NAME = 'CheckedOut';
-    const FRIENDLY_NAME = 'Checked-out of Old Room';
-
-    public function getValidTransitions()
-    {
-        return array();
-    }
-
-    // TODO Notify "old" RD and Housing
-    // TODO If all participants checked out, move request to Complete
-}
-
-class ParticipantStateDeclined extends RoomChangeParticipantState {
-    const STATE_NAME = 'Declined';
-    const FRIENDLY_NAME = 'Declined';
-
-    public function getValidTransitions()
-    {
-        return array();
-    }
-
-    // TODO Move Request to Cancelled, which will notify everyone
-}
-
-class ParticipantStateDenied extends RoomChangeParticipantState {
-    const STATE_NAME = 'Denied';
-    const FRIENDLY_NAME = 'Denied';
-
-    public function getValidTransitions()
-    {
-        return array();
-    }
-
-    // TODO Move Request to Denied, which will notify everyone
-}
-
-class ParticipantStateCancelled extends RoomChangeParticipantState {
-    const STATE_NAME = 'Cancelled';
-    const FRIENDLY_NAME = 'Cancelled';
-
-    public function getValidTransitions()
-    {
-        return array();
-    }
-
-    // TODO Move request to cancelled, which will notify everyone
-}
-

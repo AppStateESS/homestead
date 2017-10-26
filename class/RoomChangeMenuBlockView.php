@@ -1,6 +1,8 @@
 <?php
 
-class RoomChangeMenuBlockView extends hms\View {
+namespace Homestead;
+
+class RoomChangeMenuBlockView extends View {
 
     private $student;
     private $startDate;
@@ -20,12 +22,8 @@ class RoomChangeMenuBlockView extends hms\View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'RoomChangeParticipantFactory.php');
-
-
         $tpl = array();
 
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
 
         if (time() < $this->startDate) { // too early
@@ -59,6 +57,6 @@ class RoomChangeMenuBlockView extends hms\View {
             $tpl['NEW_REQUEST'] = $changeReqCmd->getLink('request a room change');
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/roomChangeMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/roomChangeMenuBlock.tpl');
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
-class LotteryChooseRoomView extends hms\View {
+namespace Homestead;
+
+class LotteryChooseRoomView extends View {
 
     public $student;
     public $term;
@@ -17,8 +19,6 @@ class LotteryChooseRoomView extends hms\View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-
         $floor  = new HMS_Floor($this->floorId);
 
         $tpl = array();
@@ -26,7 +26,8 @@ class LotteryChooseRoomView extends hms\View {
         $tpl['HALL_FLOOR'] = $floor->where_am_i();
 
         if(isset($floor->floor_plan_image_id) && $floor->floor_plan_image_id != 0){
-            $file = Cabinet::getFile($floor->floor_plan_image_id);
+            \PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
+            $file = \Cabinet::getFile($floor->floor_plan_image_id);
 
             //if the image loaded properly
             if($file->id == $floor->floor_plan_image_id)
@@ -92,8 +93,8 @@ class LotteryChooseRoomView extends hms\View {
             $tpl['room_list'][] = $row;
         }
 
-        Layout::addPageTitle("Lottery Choose Room");
+        \Layout::addPageTitle("Lottery Choose Room");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_room.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/lottery_choose_room.tpl');
     }
 }
