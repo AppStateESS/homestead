@@ -16,8 +16,6 @@ class StudentAddRoomDamagesView extends hms\View {
 
     public function show()
     {
-        javascript('jquery');
-
         $tpl = array();
 
         $assignment = HMS_Assignment::getAssignment($this->student->getUsername(), $this->term);
@@ -29,6 +27,9 @@ class StudentAddRoomDamagesView extends hms\View {
         $tpl['ROOM_PID'] = $room->getPersistentId();
         $tpl['ROOM_LOCATION'] = $room->where_am_i();
         $tpl['TERM'] = $this->term;
+
+        $tpl['vendor_bundle'] = AssetResolver::resolveJsPath('assets.json', 'vendor');
+        $tpl['entry_bundle'] = AssetResolver::resolveJsPath('assets.json', 'studentRoomDamage');
 
         return PHPWS_Template::process($tpl, 'hms', 'student/addRoomDamages.tpl');
     }

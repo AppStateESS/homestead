@@ -160,3 +160,11 @@
 </script>
 
 <div id="addDamageDialog"></div>
+
+<script type ="text/javascript">
+  var roomPersistentId = '{ROOM_PERSISTENT_ID}';
+  var term             = '{TERM}';
+</script>
+
+<script type="text/javascript" src="{vendor_bundle}"></script>
+<script type="text/javascript" src="{entry_bundle}"></script>

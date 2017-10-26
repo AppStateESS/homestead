@@ -35,13 +35,10 @@ class RoomView extends hms\View {
      */
     public function show()
     {
-        javascriptMod('hms', 'RoomDamages', array('ROOM_PERSISTENT_ID' => $this->room->getPersistentId(),
-                                                    'TERM' => $this->room->getTerm()
-                                                )
-                    );
-
         /*** Header Info ***/
         $tpl = array();
+        $tpl['ROOM_PERSISTENT_ID'] = $this->room->getPersistentId();
+        $tpl['TERM'] = $this->room->getTerm();
         $tpl['TERM'] = Term::getPrintableSelectedTerm();
         $tpl['HALL_NAME']           = $this->hall->getLink();
         $tpl['FLOOR_NUMBER']        = $this->floor->getLink('Floor');
@@ -220,6 +217,9 @@ class RoomView extends hms\View {
             $dmgCmd->setRoom($this->room);
             $tpl['ADD_DAMAGE_URI']  = $dmgCmd->getURI();
         }
+
+        $tpl['vendor_bundle'] = AssetResolver::resolveJsPath('assets.json', 'vendor');
+        $tpl['entry_bundle'] = AssetResolver::resolveJsPath('assets.json', 'roomDamages');
 
         return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');
     }
