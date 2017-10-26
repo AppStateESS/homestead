@@ -1,6 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
 
 /**
  * ResidenceHallFactory - Factory methods to aid in creating HMS_Residence_Hall objects.
@@ -14,19 +16,19 @@ class ResidenceHallFactory {
      * Returns an array of HMS_Residence_Hall objects for the given term.
      *
      * @param integer $term
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @throws DatabaseException
      * @return multitype:HMS_Residence_Hall
      */
     public static function getHallsForTerm($term)
     {
         if(!isset($term)){
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         $halls = array();
 
-        $db = new PHPWS_DB('hms_residence_hall');
+        $db = new \PHPWS_DB('hms_residence_hall');
         $db->addColumn('id');
         $db->addOrder('hall_name', 'DESC');
 
@@ -34,7 +36,7 @@ class ResidenceHallFactory {
 
         $results = $db->select();
 
-        if(PHPWS_Error::logIfError($results)){
+        if(\PHPWS_Error::logIfError($results)){
             throw new DatabaseException($result->toString());
         }
 
@@ -50,13 +52,13 @@ class ResidenceHallFactory {
      * Returns a list of hall names in an associative array, where the array key is the hall's database id.
      *
      * @param integer $term
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @return multitype:Array
      */
     public static function getHallNamesAssoc($term)
     {
         if(!isset($term)){
-            throw new InvalidArgumentException('Missing term.');
+            throw new \InvalidArgumentException('Missing term.');
         }
 
         $hallArray = array();

@@ -1,6 +1,8 @@
 <?php
 
-class AddBedView extends hms\View
+namespace Homestead;
+
+class AddBedView extends View
 {
     private $hall;
     private $floor;
@@ -39,7 +41,7 @@ class AddBedView extends hms\View
 
         $tpl['HALL_ABBR'] = $this->hall->getBannerBuildingCode();
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd->initForm($form);
 
         if (isset($this->bedLetter)) {
@@ -91,9 +93,9 @@ class AddBedView extends hms\View
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Add Bed");
+        \Layout::addPageTitle("Add Bed");
 
         // Reusing the edit bed template here
-        return PHPWS_Template::process($tpl, 'hms', 'admin/addBed.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/addBed.tpl');
     }
 }

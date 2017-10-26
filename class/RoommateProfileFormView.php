@@ -1,6 +1,8 @@
 <?php
 
-class RoommateProfileFormView extends hms\View {
+namespace Homestead;
+
+class RoommateProfileFormView extends View {
 
     private $profile;
     private $term;
@@ -13,7 +15,6 @@ class RoommateProfileFormView extends hms\View {
     public function show()
     {
         require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/profile_options.php');
-        PHPWS_Core::initModClass('hms','RoommateProfile.php');
 
         $template = array();
 
@@ -28,7 +29,7 @@ class RoommateProfileFormView extends hms\View {
         $submitCmd = CommandFactory::getCommand('SubmitRoommateProfile');
         $submitCmd->setTerm($this->term);
 
-        $profile_form = new PHPWS_Form('profile_form');
+        $profile_form = new \PHPWS_Form('profile_form');
         $profile_form->useRowRepeat();
 
         $submitCmd->initForm($profile_form);
@@ -116,7 +117,7 @@ class RoommateProfileFormView extends hms\View {
         $profile_form->addCssClass('about_me', 'form-control');
 
         /***** College Life *****/
-        $profile_form->addDropBox('major', hms\MajorFactory::getMajorsList());
+        $profile_form->addDropBox('major', MajorFactory::getMajorsList());
         $profile_form->setLabel('major','My intended academic major: ');
         if($profile_exists){
             $profile_form->setMatch('major',$this->profile->get_text('major'));
@@ -188,8 +189,8 @@ class RoommateProfileFormView extends hms\View {
         $profile_form->mergeTemplate($template);
         $template = $profile_form->getTemplate();
 
-        Layout::addPageTitle("Roommate Profile Form");
+        \Layout::addPageTitle("Roommate Profile Form");
         javascript('jquery');
-        return PHPWS_Template::process($template,'hms','student/profile_form.tpl');
+        return \PHPWS_Template::process($template,'hms','student/profile_form.tpl');
     }
 }

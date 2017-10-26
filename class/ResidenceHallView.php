@@ -1,6 +1,10 @@
 <?php
 
-class ResidenceHallView extends hms\View {
+namespace Homestead;
+
+use \Homestead\Exception\PermissionException;
+
+class ResidenceHallView extends View {
 
     private $hall;
 
@@ -11,7 +15,6 @@ class ResidenceHallView extends hms\View {
     public function show()
     {
         if(!UserStatus::isAdmin()){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
             throw new PermissionException('You are not allowed to view residence halls');
         }
 
@@ -30,7 +33,7 @@ class ResidenceHallView extends hms\View {
         $submitCmd = CommandFactory::getCommand('EditResidenceHall');
         $submitCmd->setHallId($this->hall->getId());
 
-        $form = new PHPWS_Form;
+        $form = new \PHPWS_Form;
         $submitCmd->initForm($form);
 
         // This is unused, as far as I can tell, so comment it out for now.
@@ -62,7 +65,7 @@ class ResidenceHallView extends hms\View {
         $form->setMatch('assignment_notifications', $this->hall->assignment_notifications);
 
         //Package Desks
-       
+
         $packageDesks = PackageDeskFactory::getPackageDesksAssoc();
         $packageDesks = array('-1' => 'None') + $packageDesks;
         $form->addDropBox('package_desk', $packageDesks);
@@ -70,11 +73,11 @@ class ResidenceHallView extends hms\View {
         $form->addCssClass('package_desk', 'form-control');
 
         // Images
-        PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
+        \PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
         if(isset($this->hall->exterior_image_id)){
-            $manager = Cabinet::fileManager('exterior_image_id', $this->hall->exterior_image_id);
+            $manager = \Cabinet::fileManager('exterior_image_id', $this->hall->exterior_image_id);
         }else{
-            $manager = Cabinet::fileManager('exterior_image_id');
+            $manager = \Cabinet::fileManager('exterior_image_id');
         }
 
         $manager->maxImageWidth(300);
@@ -84,9 +87,9 @@ class ResidenceHallView extends hms\View {
 
 
         if(isset($this->hall->other_image_id)){
-            $manager = Cabinet::fileManager('other_image_id', $this->hall->other_image_id);
+            $manager = \Cabinet::fileManager('other_image_id', $this->hall->other_image_id);
         }else{
-            $manager = Cabinet::fileManager('other_image_id');
+            $manager = \Cabinet::fileManager('other_image_id');
         }
 
         $manager->maxImageWidth(300);
@@ -95,9 +98,9 @@ class ResidenceHallView extends hms\View {
         $form->addTplTag('OTHER_IMG', $manager->get());
 
         if(isset($this->hall->map_image_id)){
-            $manager = Cabinet::fileManager('map_image_id', $this->hall->map_image_id);
+            $manager = \Cabinet::fileManager('map_image_id', $this->hall->map_image_id);
         }else{
-            $manager = Cabinet::fileManager('map_image_id');
+            $manager = \Cabinet::fileManager('map_image_id');
         }
 
         $manager->maxImageWidth(300);
@@ -106,9 +109,9 @@ class ResidenceHallView extends hms\View {
         $form->addTplTag('MAP_IMG', $manager->get());
 
         if(isset($this->hall->room_plan_image_id)){
-            $manager = Cabinet::fileManager('room_plan_image_id', $this->hall->room_plan_image_id);
+            $manager = \Cabinet::fileManager('room_plan_image_id', $this->hall->room_plan_image_id);
         }else{
-            $manager = Cabinet::fileManager('room_plan_image_id');
+            $manager = \Cabinet::fileManager('room_plan_image_id');
         }
 
         $manager->maxImageWidth(300);
@@ -118,12 +121,11 @@ class ResidenceHallView extends hms\View {
 
         # if the user has permission to view the form but not edit it then
         # disable it
-        if(    Current_User::allow('hms', 'hall_view')
-        && !Current_User::allow('hms', 'hall_attributes')
-        && !Current_User::allow('hms', 'hall_structure'))
+        if(    \Current_User::allow('hms', 'hall_view')
+        && !\Current_User::allow('hms', 'hall_attributes')
+        && !\Current_User::allow('hms', 'hall_structure'))
         {
-            $form_vars = (array)$form;
-            $elements = $form_vars["\0PHPWS_Form\0_elements"]; //NB: this is a weird results of casting the object to an array
+            $elements = $form->getAllElements();
             foreach($elements as $element => $value){
                 $form->setDisabled($element);
             }
@@ -134,10 +136,10 @@ class ResidenceHallView extends hms\View {
 
         $tpl['FLOOR_PAGER'] = HMS_Floor::get_pager_by_hall($this->hall->getId());
         javascript('modules/hms/role_editor');
-        $tpl['ROLE_EDITOR'] = PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Residence_Hall'", 'ID'=>$this->hall->id), 'hms', 'admin/role_editor.tpl');
+        $tpl['ROLE_EDITOR'] = \PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Residence_Hall'", 'ID'=>$this->hall->id), 'hms', 'admin/role_editor.tpl');
 
-        Layout::addPageTitle("Edit Residence Hall");
+        \Layout::addPageTitle("Edit Residence Hall");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/edit_residence_hall.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/edit_residence_hall.tpl');
     }
 }

@@ -1,15 +1,13 @@
 <?php
 
+namespace Homestead;
+
 /**
  * SOAP parent class. Defines the basic functions of the SOAP interface and handles some utility functions.
  *
  * @author jbooker
  *
  */
-
-if (!defined('SOAP_OVERRIDE_FILE')) {
-    define('SOAP_OVERRIDE_FILE', 'TestSOAP.php');
-}
 
 abstract class SOAP
 {
@@ -46,19 +44,18 @@ abstract class SOAP
     public static function getInstance($username, $userType)
     {
         if(!isset($username) || is_null($username)){
-            throw new InvalidArgumentException('Missing Username.');
+            throw new \InvalidArgumentException('Missing Username.');
         }
 
         if(!isset($userType) || is_null($userType)){
-            throw new InvalidArgumentException('Missing user type.');
+            throw new \InvalidArgumentException('Missing user type.');
         }
 
         if(empty(self::$instance)) {
             if(SOAP_INFO_TEST_FLAG) {
-                PHPWS_Core::initModClass('hms', SOAP_OVERRIDE_FILE);
-                self::$instance = new TestSOAP($username, $userType);
+                $className = "\\Homestead\\" . SOAP_OVERRIDE_CLASS_NAME;
+                self::$instance = new $className($username, $userType);
             } else {
-                PHPWS_Core::initModClass('hms', 'PhpSOAP.php');
                 self::$instance = new PhpSOAP($username, $userType);
             }
         }
@@ -74,7 +71,7 @@ abstract class SOAP
      * @param   string    $bannerId
      * @param   Integer   $term
      * @return  SOAP object
-     * @throws  InvalidArgumentException, SOAPException
+     * @throws  \InvalidArgumentException, SOAPException
      */
     public abstract function getStudentProfile($bannerId, $term);
 
@@ -89,13 +86,13 @@ abstract class SOAP
      * @param String    $username
      * @param Integer   $term
      * @return SOAP object
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function getStudentInfo($username, $term){
         $bannerId = $this->getBannerId($username);
 
         if(!isset($bannerId) || $bannerId == ''){
-            throw new InvalidArgumentException('No user found with username: ' . $username);
+            throw new \InvalidArgumentException('No user found with username: ' . $username);
         }
 
         return $this->getStudentProfile($bannerId, $term);
@@ -106,7 +103,7 @@ abstract class SOAP
      *
      * @param  Integer $bannerId
      * @return String  Username corresponding to given Banner id.
-     * @throws InvalidArgumentException, SOAPException
+     * @throws \InvalidArgumentException, SOAPException
      */
     public abstract function getUsername($bannerId);
 
@@ -115,7 +112,7 @@ abstract class SOAP
      *
      * @param string $username
      * @return string banner id corresponding ot given user name
-     * @throws InvalidArgumentException, SOAPException
+     * @throws \InvalidArgumentException, SOAPException
      */
     public abstract function getBannerId($username);
 
@@ -133,7 +130,7 @@ abstract class SOAP
      *
      * @param string $bannerId\
      * @return boolean
-     * @throws InvalidArgumentException, BannerException
+     * @throws \InvalidArgumentException, BannerException
      */
     public abstract function hasParentPin($bannerId);
 
@@ -144,7 +141,7 @@ abstract class SOAP
      * @param string $bannerId
      * @param string $parentPin
      * @return Mixed $parentAccess
-     * @throws InvalidArgumentException, BannerException
+     * @throws \InvalidArgumentException, BannerException
      */
     public abstract function getParentAccess($bannerId, $parentPin);
 
@@ -157,14 +154,14 @@ abstract class SOAP
      * @param String $username
      * @param Integer $term
      * @return boolean True if successful
-     * @throws InvalidArgumentException, SOAPException, BannerException
+     * @throws \InvalidArgumentException, SOAPException, BannerException
      */
     public function reportApplicationReceived($username, $term)
     {
         $bannerId = $this->getBannerId($username);
 
         if(!isset($bannerId) || $bannerId == ''){
-            throw new InvalidArgumentException('No user found with username: ' . $username);
+            throw new \InvalidArgumentException('No user found with username: ' . $username);
         }
 
         return $this->createHousingApp($bannerId, $term);
@@ -176,7 +173,7 @@ abstract class SOAP
      *
      * @param string $bannerId The student's banner ID
      * @param string $term The term for which the application should be created
-     * @throws InvalidArgumentException, SOAPException, BannerException
+     * @throws \InvalidArgumentException, SOAPException, BannerException
      */
     public abstract function createHousingApp($bannerId, $term);
 
@@ -189,7 +186,7 @@ abstract class SOAP
      * @param Integer $bannerBedId Banner bed Id.
      * @param String $plan Banner plan code ('HOUSE' or 'HOME', defaults to 'HOME').
      * @return boolean True if successful.
-     * @throws InvalidArgumentException, SOAPException, BannerException
+     * @throws \InvalidArgumentException, SOAPException, BannerException
      */
     public abstract function createRoomAssignment($bannerId, $term, $building, $bannerBedId);
 
@@ -205,7 +202,7 @@ abstract class SOAP
      * @param String $plan_code Banner plan code ('HOUSE' or 'HOME').
      * @param Integer $meal_code Banner meal code (numeric code for meal plan level)
      * @return boolean True if successful.
-     * @throws InvalidArgumentException, SOAPException, BannerException
+     * @throws \InvalidArgumentException, SOAPException, BannerException
      */
     public function reportRoomAssignment($username, $term, $building_code, $room_code, $plan_code)
     {
@@ -223,7 +220,7 @@ abstract class SOAP
      * @param Integer $bannerBedId Banner bed id.
      * @param Integer $percentRefund Percent of original charges student should be refunded.
      * @return boolean True if successful
-     * @throws InvalidArgumentException, SOAPException, BannerException
+     * @throws \InvalidArgumentException, SOAPException, BannerException
      */
     public abstract function removeRoomAssignment($bannerId, $term, $building, $bannerBedId, $percentRefund);
 
@@ -236,7 +233,7 @@ abstract class SOAP
      * @param Integer $term
      * @param Integer $mealCode Banner meal code (numeric code for meal plan level)
      * @return boolean True if successful.
-     * @throws InvalidArgumentException, SOAPException, BannerException
+     * @throws \InvalidArgumentException, SOAPException, BannerException
      */
     public abstract function createMealPlan($bannerId, $term, $mealCode);
 
@@ -247,7 +244,7 @@ abstract class SOAP
      * @param string $bannerId
      * @param string $term
      * @return boolean True if successful, false otherwise
-     * @throws InvalidArgumentException, SOAPException, BannerException
+     * @throws \InvalidArgumentException, SOAPException, BannerException
      */
     public abstract function setHousingWaiver($bannerId, $term);
 
@@ -258,7 +255,7 @@ abstract class SOAP
      * @param string $bannerId
      * @param string $term
      * @return boolean True if successful, false otherwise
-     * @throws InvalidArgumentException, SOAPException, BannerException
+     * @throws \InvalidArgumentException, SOAPException, BannerException
      */
     public abstract function clearHousingWaiver($bannerId, $term);
 
@@ -273,8 +270,8 @@ abstract class SOAP
      * @param String $bannerId
      * @param Integer $term
      * @param String $opt
-     * @return stdClass
-     * @throws InvalidArgumentException, SOAPException
+     * @return \stdClass
+     * @throws \InvalidArgumentException, SOAPException
      */
     public abstract function getHousMealRegister($bannerId, $term, $opt);
 
@@ -297,7 +294,7 @@ abstract class SOAP
      * @param String  $damageDescription Short descirption of the damage
      * @param String  $detailCode Detail code string to record with the charge in student's Banner account
      * @return boolean True if successful, false otherwise
-     * @throws InvalidArgumentException, SOAPException
+     * @throws \InvalidArgumentException, SOAPException
      */
     public abstract function addRoomDamageToStudentAccount($bannerId, $term, $amount, $damageDescription, $detailCode);
 
@@ -311,7 +308,7 @@ abstract class SOAP
      * @param Array<BannerRoomChangeStudent> Array of BannerRoomChangeStudent objects representing each student to move
      * @param Integer $term The term for these assignments
      * @return boolean True if successful, false otherwise
-     * @throws InvalidArgumentException, SOAPException
+     * @throws \InvalidArgumentException, SOAPException
      */
     public abstract function moveRoomAssignment(Array $students, $term);
 
@@ -347,6 +344,6 @@ abstract class SOAP
              $msg .= "($responseCode: $errorMessage)";
          }
 
-         PHPWS_Core::log($msg, 'soap.log', 'SOAP');
+         \PHPWS_Core::log($msg, 'soap.log', 'SOAP');
      }
 }

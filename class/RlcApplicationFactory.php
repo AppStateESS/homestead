@@ -1,7 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'PdoFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
+namespace Homestead;
 
 class RlcApplicationFactory {
 
@@ -16,7 +15,7 @@ class RlcApplicationFactory {
                 'username' => $student->getUsername(),
                 'term'     => $term
         ));
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RlcApplicationRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\RlcApplicationRestored');
 
         return $stmt->fetch();
     }

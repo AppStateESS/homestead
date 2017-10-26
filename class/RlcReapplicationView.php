@@ -1,6 +1,8 @@
 <?php
 
-class RlcReapplicationView extends hms\View {
+namespace Homestead;
+
+class RlcReapplicationView extends View {
 
     private $student;
     private $term;
@@ -21,7 +23,7 @@ class RlcReapplicationView extends hms\View {
     {
         $this->setTitle('RLC Re-application Form');
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd = CommandFactory::getCommand('SubmitRLCReapplicationPageOne');
         $submitCmd->initForm($form);
 
@@ -76,8 +78,6 @@ class RlcReapplicationView extends hms\View {
 
         $form->mergeTemplate($tpl);
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/rlcReapplicationView.tpl');
+        return \PHPWS_Template::process($form->getTemplate(), 'hms', 'student/rlcReapplicationView.tpl');
     }
 }
-
-

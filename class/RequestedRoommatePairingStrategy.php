@@ -1,5 +1,8 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
 define('LO_SINGLE_GENDER', 1);
 define('LO_COED', 2);
 
@@ -12,14 +15,14 @@ class RequestedRoommatePairingStrategy extends RoommatePairingStrategy{
 
     public function doPairing(&$applications, &$pairs)
     {
-        $db = new PHPWS_DB('hms_roommate');
+        $db = new \PHPWS_DB('hms_roommate');
         $db->addWhere('term', $this->term);
         $db->addWhere('confirmed', 1);
         $db->addColumn('requestor');
         $db->addColumn('requestee');
         $roommates = $db->select();
 
-        if(PHPWS_Error::logIfError($roommates)) {
+        if(\PHPWS_Error::logIfError($roommates)) {
             throw new DatabaseException($roommates->toString());
         }
 

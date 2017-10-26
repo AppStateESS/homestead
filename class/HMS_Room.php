@@ -1,5 +1,13 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+use \Homestead\Exception\PermissionException;
+use \Homestead\Exception\HallStructureException;
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * HMS Room class
  *
@@ -99,7 +107,7 @@ class HMS_Room extends HMS_Item
     public function delete()
     {
         if (is_null($this->id) || !isset($this->id)) {
-            throw new InvalidArgumentException('Invalid room id.');
+            throw new \InvalidArgumentException('Invalid room id.');
         }
 
         $db = new PHPWS_DB('hms_room');
@@ -158,7 +166,7 @@ class HMS_Room extends HMS_Item
 
         try{
             $new_room->save();
-        }catch(Exception $e) {
+        }catch(\Exception $e) {
             throw $e;
         }
 
@@ -168,7 +176,7 @@ class HMS_Room extends HMS_Item
         if (empty($this->_beds)) {
             try{
                 $this->loadBeds();
-            }catch(Exception $e) {
+            }catch(\Exception $e) {
                 throw $e;
             }
         }
@@ -186,7 +194,7 @@ class HMS_Room extends HMS_Item
             foreach ($this->_beds as $bed) {
                 try{
                     $bed->copy($to_term, $new_room->id, $assignments);
-                }catch(Exception $e) {
+                }catch(\Exception $e) {
                     throw $e;
                 }
             }
@@ -231,7 +239,7 @@ class HMS_Room extends HMS_Item
         $db->addOrder('bed_letter', 'ASC');
 
         $db->loadClass('hms', 'HMS_Bed.php');
-        $result = $db->getObjects('HMS_Bed');
+        $result = $db->getObjects('\Homestead\HMS_Bed');
         if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         } else {
@@ -415,10 +423,12 @@ class HMS_Room extends HMS_Item
 
         $assignees = array();
 
-        foreach ($this->_beds as $bed) {
-            $assignee = $bed->get_assignee();
-            if (!is_null($assignee)) {
-                $assignees[] = $assignee;
+        if($this->_beds != null){
+            foreach ($this->_beds as $bed) {
+                $assignee = $bed->get_assignee();
+                if (!is_null($assignee)) {
+                    $assignees[] = $assignee;
+                }
             }
         }
 
@@ -485,7 +495,7 @@ class HMS_Room extends HMS_Item
         $text = $building->hall_name . ' Room ' . $this->room_number;
 
         if ($link) {
-            return PHPWS_Text::secureLink($text, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$this->id));
+            return \PHPWS_Text::secureLink($text, 'hms', array('type'=>'room', 'op'=>'show_edit_room', 'room'=>$this->id));
         } else {
             return $text;
         }
@@ -545,7 +555,7 @@ class HMS_Room extends HMS_Item
         $tpl['OFFLINE']        = $this->isOffline()   ? 'Yes' : 'No';
         $tpl['ADA']            = $this->isADA()       ? 'Yes' : 'No';
 
-        if (Current_User::allow('hms','room_structure') && $this->get_number_of_assignees() == 0) {
+        if (\Current_User::allow('hms','room_structure') && $this->get_number_of_assignees() == 0) {
             $deleteRoomCmd = CommandFactory::getCommand('DeleteRoom');
             $deleteRoomCmd->setRoomId($this->id);
             $deleteRoomCmd->setFloorId($this->floor_id);
@@ -568,9 +578,9 @@ class HMS_Room extends HMS_Item
         javascript('jquery');
         $tpl = array();
         $tpl['ID']           = $this->id;
-        $tpl['ROOM_NUMBER']  = PHPWS_Text::secureLink($this->room_number, 'hms', array('action'=>'EditRoomView', 'room'=>$this->id));
+        $tpl['ROOM_NUMBER']  = \PHPWS_Text::secureLink($this->room_number, 'hms', array('action'=>'EditRoomView', 'room'=>$this->id));
 
-        if (Current_User::allow('hms','room_structure') && $this->get_number_of_assignees() == 0) {
+        if (\Current_User::allow('hms','room_structure') && $this->get_number_of_assignees() == 0) {
             $deleteRoomCmd = CommandFactory::getCommand('DeleteRoom');
             $deleteRoomCmd->setRoomId($this->id);
             $deleteRoomCmd->setFloorId($this->floor_id);
@@ -579,10 +589,10 @@ class HMS_Room extends HMS_Item
             $confirm['QUESTION'] = 'Are you sure want to delete room ' .  $this->room_number . '?';
             $confirm['ADDRESS']  = $deleteRoomCmd->getURI();
             $confirm['LINK']     = 'Delete';
-            $tpl['DELETE']       = Layout::getJavascript('confirm', $confirm);
+            $tpl['DELETE']       = \Layout::getJavascript('confirm', $confirm);
         }
 
-        $form = new PHPWS_Form($this->id);
+        $form = new \PHPWS_Form($this->id);
         $form->addSelect('gender_type', array(FEMALE => FEMALE_DESC,
                 MALE   => MALE_DESC,
                 COED   => COED_DESC,
@@ -795,16 +805,15 @@ class HMS_Room extends HMS_Item
 
     public static function room_pager_by_floor($floor_id, $editable=false)
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
         javascript('jquery');
 
-        $pager = new DBPager('hms_room', 'HMS_Room');
+        $pager = new \DBPager('hms_room', '\Homestead\HMS_Room');
         $pager->addWhere('hms_room.floor_id', $floor_id);
         $pager->db->addOrder('hms_room.room_number');
 
         $page_tags = array();
 
-        if (Current_User::allow('hms', 'room_structure')) {
+        if (\Current_User::allow('hms', 'room_structure')) {
             $addRoomCmd = CommandFactory::getCommand('ShowAddRoom');
             $addRoomCmd->setFloorId($floor_id);
             $page_tags['ADD_ROOM_URI'] = $addRoomCmd->getURI();
@@ -838,21 +847,19 @@ class HMS_Room extends HMS_Item
     public static function deleteRoom($roomId)
     {
 
-        if (!Current_User::allow('hms', 'room_structure')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+        if (!\Current_User::allow('hms', 'room_structure')) {
             throw new PermissionException('You do not have permission to delete a room.');
         }
 
         // check that we're not about to do something stupid
         if (!isset($roomId)) {
-            throw new InvalidArgumentException('Invalid room id.');
+            throw new \InvalidArgumentException('Invalid room id.');
         }
 
         $room = new HMS_Room($roomId);
 
         // make sure there isn't an assignment
         if ($room->get_number_of_assignees() != 0) {
-            PHPWS_Core::initModClass('hms', 'exception/HallStructureException.php');
             throw new HallStructureException('One or more students are currently assigned to that room and therefore it cannot deleted.');
         }
 
@@ -867,7 +874,7 @@ class HMS_Room extends HMS_Item
             }
 
             $room->delete();
-        }catch(Exception $e) {
+        }catch(\Exception $e) {
             throw $e;
         }
 

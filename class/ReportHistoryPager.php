@@ -1,8 +1,6 @@
 <?php
 
-PHPWS_Core::initCoreClass('DBPager.php');
-PHPWS_Core::initModClass('hms', 'Report.php');
-PHPWS_Core::initModClass('hms', 'GenericReport.php');
+namespace Homestead;
 
 /**
  * ReportHistoryPager
@@ -13,13 +11,13 @@ PHPWS_Core::initModClass('hms', 'GenericReport.php');
  * @author jbooker
  * @package HMS
  */
-class ReportHistoryPager extends DBPager {
+class ReportHistoryPager extends \DBPager {
 
     private $reportCtrl;
 
     public function __construct(ReportController $reportCtrl)
     {
-        parent::__construct('hms_report', 'GenericReport');
+        parent::__construct('hms_report', '\Homestead\GenericReport');
 
         $this->reportCtrl = $reportCtrl;
 

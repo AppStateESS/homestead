@@ -1,5 +1,10 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+use \PHPWS_Error;
+
 abstract class HMS_Item {
     var $id         = 0;
     var $term       = null;
@@ -66,10 +71,10 @@ abstract class HMS_Item {
 
         if(!$this->id) {
             $this->added_on = & $now;
-            $this->added_by = Current_User::getId();
+            $this->added_by = \Current_User::getId();
         }
         $this->updated_on = & $now;
-        $this->updated_by = Current_User::getId();
+        $this->updated_by = \Current_User::getId();
     }
 
     public function delete()
@@ -93,10 +98,10 @@ abstract class HMS_Item {
         $tpl['UPDATED_ON']   = strftime('%c', $this->updated_on);
 
 
-        $adder = new PHPWS_User($this->added_by);
+        $adder = new \PHPWS_User($this->added_by);
         $tpl['ADDED_BY']     = $adder->username;
 
-        $updater = new PHPWS_User($this->updated_by);
+        $updater = new \PHPWS_User($this->updated_by);
         $tpl['UPDATED_BY']     = $updater->username;
 
         $tpl['TERM']         = Term::toString($this->term, true);

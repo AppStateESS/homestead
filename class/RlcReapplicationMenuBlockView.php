@@ -1,8 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+namespace Homestead;
 
-class RlcReapplicationMenuBlockView extends hms\View {
+class RlcReapplicationMenuBlockView extends View {
 
     private $term;
     private $startDate;
@@ -37,13 +37,13 @@ class RlcReapplicationMenuBlockView extends hms\View {
         }else if(isset($this->assignment) && $this->assignment->getStateName() == 'invited'){
             // Studnet has applied, been assigned, and been sent an invite email
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
-            
+
             $tpl['INVITED_COMMUNITY_NAME'] = $this->assignment->getRlcName();
-            
+
             $acceptCmd = CommandFactory::getCommand('ShowAcceptRlcInvite');
             $acceptCmd->setTerm($this->term);
             $tpl['INVITED_CONFIRM_LINK'] = $acceptCmd->getLink('accept or decline your invitation');
-          
+
         }else if(!is_null($this->rlcApp)){
             // Student has already re-applied
             $tpl['ICON'] = FEATURE_COMPLETED_ICON;
@@ -79,8 +79,6 @@ class RlcReapplicationMenuBlockView extends hms\View {
             }
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/rlcReapplicationMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/rlcReapplicationMenuBlock.tpl');
     }
 }
-
-

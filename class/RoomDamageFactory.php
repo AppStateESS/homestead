@@ -1,7 +1,8 @@
 <?php
-PHPWS_Core::initModClass('hms', 'RoomDamage.php');
-PHPWS_Core::initModClass('hms', 'PdoFactory.php');
 
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
 
 /**
  * RoomDamageFactory - Factory class with various
@@ -24,7 +25,7 @@ class RoomDamageFactory {
 
         $stmt->execute($params);
 
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RoomDamageDb');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\RoomDamageDb');
         $result = $stmt->fetch();
 
         return $result;
@@ -40,13 +41,13 @@ class RoomDamageFactory {
      */
     public static function getDamagesByRoom(HMS_Room $room)
     {
-        $db = new PHPWS_DB('hms_room_damage');
+        $db = new \PHPWS_DB('hms_room_damage');
 
         $db->addWhere('room_persistent_id', $room->getPersistentId());
         $db->addWhere('repaired', 0);
-        $result = $db->getObjects('RoomDamageDb');
+        $result = $db->getObjects('\Homestead\RoomDamageDb');
 
-        if (PHPWS_Error::logIfError($result)) {
+        if (\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -60,25 +61,25 @@ class RoomDamageFactory {
      * @param HMS_Room $room
      * @param unknown $timestamp
      * @throws DatabaseException
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @return Array<RoomDamage> null
      */
     public static function getDamagesBefore(HMS_Room $room, $timestamp)
     {
         if(!isset($timestamp)){
-            throw new InvalidArgumentException('Missing timestamp.');
+            throw new \InvalidArgumentException('Missing timestamp.');
         }
 
-        $db = new PHPWS_DB('hms_room_damage');
+        $db = new \PHPWS_DB('hms_room_damage');
 
         $db->addWhere('room_persistent_id', $room->getPersistentId());
         $db->addWhere('repaired', 0);
 
         $db->addWhere('reported_on', $timestamp, '<=');
 
-        $result = $db->getObjects('RoomDamageDb');
+        $result = $db->getObjects('\Homestead\RoomDamageDb');
 
-        if (PHPWS_Error::logIfError($result)) {
+        if (\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -94,7 +95,7 @@ class RoomDamageFactory {
     public static function getDamagesToAssessByFloor(Array $floorList, $term)
     {
         if(sizeof($floorList) == 0){
-            throw new InvalidArgumentException('No floors given to check for damages on.');
+            throw new \InvalidArgumentException('No floors given to check for damages on.');
         }
 
         $floorIdList = array();
@@ -115,7 +116,7 @@ class RoomDamageFactory {
 
         $stmt->execute($params);
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomDamageDb');
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomDamageDb');
     }
 
     public static function save(RoomDamage $dmg)
@@ -126,7 +127,7 @@ class RoomDamageFactory {
         if (isset($id)) {
             // Update
             // TODO
-            throw new Exception('Not yet implemented.');
+            throw new \Exception('Not yet implemented.');
 
             $query = "";
             $params = array();
@@ -167,6 +168,6 @@ class RoomDamageFactory {
         $stmt = $db->prepare($query);
         $stmt->execute($params);
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

@@ -4,11 +4,7 @@
     var term = '{TERM}';
 </script>
 
-<script type="text/javascript" src="mod/hms/node_modules/classnames/index.js"></script>
-<script type="text/javascript" src="mod/hms/javascript/react/build/react.min.js"></script>
-<script type="text/javascript" src="mod/hms/javascript/react/build/JSXTransformer.js"></script>
-
-<script type="text/jsx" src="mod/hms/javascript/rlcMembersList/rlcMembersList.jsx"></script>
-
-
 <div id="rlcMembers"></div>
+
+<script type="text/javascript" src="{vendor_bundle}"></script>
+<script type="text/javascript" src="{entry_bundle}"></script>

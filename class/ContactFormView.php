@@ -1,8 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+namespace Homestead;
 
-class ContactFormView extends hms\View {
+class ContactFormView extends View {
 
     public function show()
     {
@@ -14,7 +14,7 @@ class ContactFormView extends hms\View {
         $tpl = array();
         $tpl['TITLE'] = 'Contact Form';
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
 
         $form->addText('name');
         $form->setLabel('name', 'Name');
@@ -44,6 +44,6 @@ class ContactFormView extends hms\View {
         $tpl = $form->getTemplate();
         //var_dump($tpl);exit;
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/contact_page.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/contact_page.tpl');
     }
 }

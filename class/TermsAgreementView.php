@@ -1,6 +1,10 @@
 <?php
 
-class TermsAgreementView extends hms\View {
+namespace Homestead;
+
+use \Homestead\Command\Command;
+
+class TermsAgreementView extends View {
 
     private $term;
     private $submitCommand;
@@ -16,7 +20,7 @@ class TermsAgreementView extends hms\View {
     public function show()
     {
 
-        $form = new PHPWS_Form;
+        $form = new \PHPWS_Form;
         $this->submitCommand->initForm($form);
 
         $tpl = $form->getTemplate();
@@ -29,8 +33,8 @@ class TermsAgreementView extends hms\View {
         }
 
         javascript('jquery');
-        Layout::addPageTitle("License Agreement");
+        \Layout::addPageTitle("License Agreement");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/contract.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/contract.tpl');
     }
 }

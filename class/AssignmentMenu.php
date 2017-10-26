@@ -1,7 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'CommandMenu.php');
-PHPWS_Core::initModClass('hms', 'HMS_Permission.php');
+namespace Homestead;
 
 class AssignmentMenu extends CommandMenu {
 
@@ -9,29 +8,29 @@ class AssignmentMenu extends CommandMenu {
     {
         parent::__construct();
         if(UserStatus::isAdmin()){
-            if(Current_User::allow('hms', 'assignment_maintenance')){
+            if(\Current_User::allow('hms', 'assignment_maintenance')){
                 $this->addCommandByName('Assign student', 'ShowAssignStudent');
                 $this->addCommandByName('Unassign student', 'ShowUnassignStudent');
                 $this->addCommandByName('Set move-in times', 'ShowMoveinTimesView');
             }
 
-            if(Current_User::allow('hms', 'run_hall_overview')){
+            if(\Current_User::allow('hms', 'run_hall_overview')){
                 $hallOverviewCmd = CommandFactory::getCommand('SelectResidenceHall');
                 $hallOverviewCmd->setTitle('Hall Overview');
                 $hallOverviewCmd->setOnSelectCmd(CommandFactory::getCommand('HallOverview'));
                 $this->addCommand('Hall Overview', $hallOverviewCmd);
             }
 
-            if(Current_User::allow('hms', 'assign_by_floor')){
+            if(\Current_User::allow('hms', 'assign_by_floor')){
                 $floorAssignCmd = CommandFactory::getCommand('AssignByFloor');
                 $this->addCommand('Assign students by floor', $floorAssignCmd);
             }
 
-            if(UserStatus::isAdmin() && Current_User::allow('hms', 'roommate_maintenance')){
+            if(UserStatus::isAdmin() && \Current_User::allow('hms', 'roommate_maintenance')){
                 $this->addCommandByName('Edit freshmen roommate requests', 'EditRoommateGroupsView');
             }
 
-            if(Current_User::allow('hms', 'autoassign')) {
+            if(\Current_User::allow('hms', 'autoassign')) {
                 $autoAssignCmd = CommandFactory::getCommand('JSConfirm');
                 $autoAssignCmd->setLink('Auto-assign');
                 $autoAssignCmd->setTitle('Auto-assign');
@@ -41,7 +40,7 @@ class AssignmentMenu extends CommandMenu {
                 $this->addCommand('Start Autoassigner', $autoAssignCmd);
             }
 
-            if(Current_User::allow('hms', 'withdrawn_search')){
+            if(\Current_User::allow('hms', 'withdrawn_search')){
                 $withdrawnSearchCmd = CommandFactory::getCommand('JSConfirm');
                 $withdrawnSearchCmd->setLink('Withdrawn search');
                 $withdrawnSearchCmd->setTitle('Withdrawn search');
@@ -57,7 +56,7 @@ class AssignmentMenu extends CommandMenu {
                 $this->addCommand('Room Change Approval (RD)', $RDRoomChangeCmd);
             }
 
-            if(Current_User::allow('hms', 'admin_approve_room_change')){
+            if(\Current_User::allow('hms', 'admin_approve_room_change')){
                 $adminRoomChangeCmd = CommandFactory::getCommand('ShowAdminRoomChangeList');
                 $this->addCommand('Room Change Approval (Admin)', $adminRoomChangeCmd);
             }
@@ -73,6 +72,6 @@ class AssignmentMenu extends CommandMenu {
 
         $tpl['MENU'] = parent::show();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/menus/AssignmentMenu.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/menus/AssignmentMenu.tpl');
     }
 }

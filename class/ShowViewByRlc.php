@@ -1,8 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
+namespace Homestead;
 
-class ShowViewByRlc extends hms\View{
+class ShowViewByRlc extends View{
 
     private $rlc;
 
@@ -13,7 +13,7 @@ class ShowViewByRlc extends hms\View{
 
     public function show()
     {
-        Layout::addPageTitle("View By RLC");
+        \Layout::addPageTitle("View By RLC");
 
         $tpl = array();
         $tpl['RLC_ID'] = $this->rlc->getId();
@@ -23,7 +23,8 @@ class ShowViewByRlc extends hms\View{
         $term = Term::getSelectedTerm();
         $tpl['TERM'] = Term::toString($term);
 
-        javascript('jquery');
+        $tpl['vendor_bundle'] = AssetResolver::resolveJsPath('assets.json', 'vendor');
+        $tpl['entry_bundle'] = AssetResolver::resolveJsPath('assets.json', 'rlcMembersList');
 
         return \PHPWS_Template::process($tpl, 'hms', 'admin/rlcMembersList.tpl');
     }

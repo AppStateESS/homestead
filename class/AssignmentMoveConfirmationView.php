@@ -1,6 +1,8 @@
 <?php
 
-class AssignmentMoveConfirmationView extends hms\View
+namespace Homestead;
+
+class AssignmentMoveConfirmationView extends View
 {
     private $student;
     private $assignment;
@@ -38,7 +40,7 @@ class AssignmentMoveConfirmationView extends hms\View
         $submitCmd->setAssignmentType($this->assignmentType);
         $submitCmd->setNotes($this->notes);
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd->initForm($form);
 
         $form->addSubmit('submit', 'Confirm Move');
@@ -53,9 +55,9 @@ class AssignmentMoveConfirmationView extends hms\View
             $tpl['BACK'] = 'index.php?module=hms&action=ShowAssignStudent';
         }
 
-        Layout::addPageTitle("Assignment Move Confirmation");
+        \Layout::addPageTitle("Assignment Move Confirmation");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/assign_student_move_confirm.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/assign_student_move_confirm.tpl');
     }
 
 }

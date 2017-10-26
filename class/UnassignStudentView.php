@@ -1,6 +1,8 @@
 <?php
 
-class UnassignStudentView extends hms\View{
+namespace Homestead;
+
+class UnassignStudentView extends View{
 
     private $student;
 
@@ -11,7 +13,7 @@ class UnassignStudentView extends hms\View{
 
     public function show()
     {
-        PHPWS_Core::initCoreClass('Form.php');
+        \PHPWS_Core::initCoreClass('Form.php');
 
         javascript('jquery');
         javascript('modules/hms/assign_student');
@@ -19,7 +21,7 @@ class UnassignStudentView extends hms\View{
 
         $unassignCmd = CommandFactory::getCommand('UnassignStudent');
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $unassignCmd->initForm($form);
 
         $form->addText('username');
@@ -56,11 +58,9 @@ class UnassignStudentView extends hms\View{
 
         $tpl['TERM'] = Term::getPrintableSelectedTerm();
 
-        Layout::addPageTitle("Unassign Student");
+        \Layout::addPageTitle("Unassign Student");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/unassignStudent.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/unassignStudent.tpl');
     }
 
 }
-
-

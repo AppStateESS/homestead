@@ -1,6 +1,8 @@
 <?php
 
-class RoommateSelectionMenuBlockView extends hms\View {
+namespace Homestead;
+
+class RoommateSelectionMenuBlockView extends View {
 
     private $student;
     private $startDate;
@@ -20,9 +22,6 @@ class RoommateSelectionMenuBlockView extends hms\View {
     public function show()
     {
         $tpl = array();
-
-        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
 
         $roommate = HMS_Roommate::get_confirmed_roommate(UserStatus::getUsername(), $this->term);
         $requests = HMS_Roommate::countPendingRequests(UserStatus::getUsername(), $this->term);
@@ -81,8 +80,8 @@ class RoommateSelectionMenuBlockView extends hms\View {
             $tpl['ROOMMATE_LINK'] = $cmd->getLink('Select Your Roommate');
         }
 
-        Layout::addPageTitle("Roommate Selection");
+        \Layout::addPageTitle("Roommate Selection");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/roommateMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/roommateMenuBlock.tpl');
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
-class AcceptRlcInviteView extends hms\View {
+namespace Homestead;
+
+class AcceptRlcInviteView extends View {
 
     private $rlcApplication;
     private $rlcAssignment;
@@ -19,7 +21,7 @@ class AcceptRlcInviteView extends hms\View {
         $tpl['COMMUNITY_NAME'] = $this->rlcAssignment->getRlcName();
         $tpl['TERM'] = Term::toString($this->term);
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
 
         $submitCmd = CommandFactory::getCommand('AcceptDeclineRlcInvite');
         $submitCmd->initForm($form);
@@ -36,6 +38,6 @@ class AcceptRlcInviteView extends hms\View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/acceptRlcInviteView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/acceptRlcInviteView.tpl');
     }
 }

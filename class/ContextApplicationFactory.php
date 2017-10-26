@@ -1,9 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'FallApplication.php');
-PHPWS_Core::initModClass('hms', 'SpringApplication.php');
-PHPWS_Core::initModClass('hms', 'SummerApplication.php');
-PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
+namespace Homestead;
+
+use \Homestead\Command\CommandContext;
 
 abstract class ContextApplicationFactory {
 
@@ -27,10 +26,10 @@ abstract class ContextApplicationFactory {
                 $application = new RestoredSummerApplication();
                 $concreteFactory = new SummerContextApplicationFactory($context, $application);
                 break;
-            case 'lottery':
-                $application = new RestoredLotteryApplication();
+            /*case 'lottery':
+                $application = new RestoredLotteryApplication(); //class does not exist
                 $concreteFactory = new LotteryContextApplicationFactory($context, $application);
-                break;
+                break;*/
         }
 
         $concreteFactory->populateSharedFields($term, $student);
@@ -68,7 +67,7 @@ abstract class ContextApplicationFactory {
             //test('ohh hai',1);
             // do not call checkbox was not selected, so check the number
             if(is_null($areaCode) || is_null($exchange) || is_null($number)){
-                throw new InvalidArgumentException('Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
+                throw new \InvalidArgumentException('Please provide a cell-phone number or click the checkbox stating that you do not wish to share your number with us.');
             }
         }
         */
@@ -83,7 +82,7 @@ abstract class ContextApplicationFactory {
         $mealOption = $this->context->get('meal_option');
         if(!isset($mealOption))
         {
-            //throw new InvalidArgumentException('Missing meal option from context.');
+            //throw new \InvalidArgumentException('Missing meal option from context.');
         }
 
         $this->app->setMealPlan($mealOption);
@@ -108,66 +107,5 @@ abstract class ContextApplicationFactory {
         }else{
             $this->app->setInternational(false);
         }
-    }
-}
-
-class FallContextApplicationFactory extends ContextApplicationFactory {
-
-    public function populateApplicationSpecificFields()
-    {
-        $lifestyleOption	= $this->context->get('lifestyle_option');
-        $preferredBedtime	= $this->context->get('preferred_bedtime');
-        $roomCondition		= $this->context->get('room_condition');
-        $smokingPreference  = $this->context->get('smoking_preference');
-
-        if(!is_numeric($lifestyleOption) || !is_numeric($preferredBedtime) || !is_numeric($roomCondition)){
-            //throw new InvalidArgumentException('Invalid option from context. Please try again.');
-        }
-
-        // Load the fall-specific fields
-        $this->app->setLifestyleOption($lifestyleOption);
-        $this->app->setPreferredBedtime($preferredBedtime);
-        $this->app->setRoomCondition($roomCondition);
-        $this->app->setSmokingPreference($smokingPreference);
-
-        $rlcInterest = $this->context->get('rlc_interest');
-        if(isset($rlcInterest)){
-            $this->app->setRlcInterest($this->context->get('rlc_interest'));
-        }else{
-            $this->app->setRlcInterest(0);
-        }
-
-        $this->app->setApplicationType('fall');
-    }
-}
-
-class SpringContextApplicationFactory extends ContextApplicationFactory {
-
-    public function populateApplicationSpecificFields()
-    {
-        $this->app->setApplicationType('spring');
-        $this->app->setLifestyleOption($this->context->get('lifestyle_option'));
-        $this->app->setPreferredBedtime($this->context->get('preferred_bedtime'));
-        $this->app->setRoomCondition($this->context->get('room_condition'));
-        $this->app->setSmokingPreference($this->context->get('smoking_preference'));
-    }
-}
-
-class SummerContextApplicationFactory extends ContextApplicationFactory {
-
-    public function populateApplicationSpecificFields()
-    {
-        $this->app->setApplicationType('summer');
-        $this->app->setRoomType($this->context->get('room_type'));
-        $this->app->setSmokingPreference($this->context->get('smoking_preference'));
-    }
-}
-
-class LotteryContextApplicationFactory extends ContextApplicationFactory {
-
-    public function populateApplicationSpecificFields()
-    {
-        //TODO lottery stuff here
-        $this->app->setApplicationType('lottery');
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 class RandomAssignmentStrategy extends Assignmentstrategy
 {
     public function __construct($term)
@@ -20,5 +22,3 @@ class RandomAssignmentStrategy extends Assignmentstrategy
         return true;
     }
 }
-
-

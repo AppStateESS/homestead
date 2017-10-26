@@ -1,11 +1,13 @@
 <?php
 
+namespace Homestead;
+
 /*
  * View for adding rooms.
  * @package hms
  */
 
-class AddRoomView extends hms\View {
+class AddRoomView extends View {
 
     private $hall;
     private $floor;
@@ -26,7 +28,7 @@ class AddRoomView extends hms\View {
         $cmd = CommandFactory::getCommand('AddRoom');
         $cmd->floor = $this->floor->id;
 
-        $form = new PHPWS_Form;
+        $form = new \PHPWS_Form;
         $cmd->initForm($form);
 
         $form->addText('room_number');
@@ -90,6 +92,6 @@ class AddRoomView extends hms\View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/addRoom.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/addRoom.tpl');
     }
 }

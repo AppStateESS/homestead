@@ -1,5 +1,11 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * HMS Floor class
  *
@@ -7,8 +13,6 @@
  * Some code copied from:
  * @author Kevin Wilcox <kevin at tux dot appstate dot edu>
  */
-
-PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
 class HMS_Floor extends HMS_Item
 {
@@ -94,20 +98,18 @@ class HMS_Floor extends HMS_Item
 
         try{
             $new_floor->save();
-        }catch(Exception $e) {
+        }catch(\Exception $e) {
             throw $e;
         }
 
         // Copy any roles related to this floor.
         if($roles) {
-            PHPWS_Core::initModClass("hms", "HMS_Permission.php");
-            PHPWS_Core::initModClass("hms", "HMS_Role.php");
             // Get memberships by object instance.
             $membs = HMS_Permission::getUserRolesForInstance($this);
             // Add each user to new floor
             foreach($membs as $m) {
                 // Lookup the username
-                $user = new PHPWS_User($m['user_id']);
+                $user = new \PHPWS_User($m['user_id']);
 
                 // Load role and add user to new instance
                 $role = new HMS_Role();
@@ -121,7 +123,7 @@ class HMS_Floor extends HMS_Item
         if(empty($this->_rooms)) {
             try{
                 $this->loadRooms();
-            }catch(Exception $e) {
+            }catch(\Exception $e) {
                 throw $e;
             }
         }
@@ -135,7 +137,7 @@ class HMS_Floor extends HMS_Item
             foreach ($this->_rooms as $room) {
                 try{
                     $room->copy($to_term, $new_floor->id, null, $assignments);
-                }catch(Exception $e) {
+                }catch(\Exception $e) {
                     throw $e;
                 }
             }
@@ -159,7 +161,6 @@ class HMS_Floor extends HMS_Item
      */
     public function loadHall()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         $result = new HMS_Residence_Hall($this->residence_hall_id);
         if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
@@ -180,7 +181,7 @@ class HMS_Floor extends HMS_Item
         $db->addOrder('room_number', 'ASC');
 
         $db->loadClass('hms', 'HMS_Room.php');
-        $result = $db->getObjects('HMS_Room');
+        $result = $db->getObjects('\Homestead\HMS_Room');
         //test($result);
         if(PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
@@ -621,8 +622,6 @@ class HMS_Floor extends HMS_Item
 
     public function get_pager_by_hall_tags()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         $tpl = array();
 
         $tpl['FLOOR_NUMBER']   = $this->getLink();
@@ -663,9 +662,7 @@ class HMS_Floor extends HMS_Item
 
     public static function get_pager_by_hall($hall_id)
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
-
-        $pager = new DBPager('hms_floor', 'HMS_Floor');
+        $pager = new \DBPager('hms_floor', '\Homestead\HMS_Floor');
 
         $pager->addWhere('hms_floor.residence_hall_id', $hall_id);
         $pager->db->addOrder('hms_floor.floor_number');

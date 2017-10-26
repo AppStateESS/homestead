@@ -1,7 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'ReportHistoryPager.php');
-PHPWS_Core::initModClass('hms', 'ReportSchedulePager.php');
+namespace Homestead;
 
 /**
  * ReportDetailView
@@ -11,7 +10,7 @@ PHPWS_Core::initModClass('hms', 'ReportSchedulePager.php');
  * @author jbooker
  * @package HMS
  */
-class ReportDetailView extends hms\View {
+class ReportDetailView extends View {
 
     private $reportCtrl; // ReportController for the report class requested
     private $report;
@@ -57,7 +56,7 @@ class ReportDetailView extends hms\View {
 
         $resultsPager = new ReportHistoryPager($this->reportCtrl);
         $tpl['RESULTS_PAGER'] = $resultsPager->get();
-
+        
         $schedulePager = new ReportSchedulePager($this->reportCtrl);
         $tpl['SCHEDULE_PAGER'] = $schedulePager->get();
 
@@ -82,6 +81,6 @@ class ReportDetailView extends hms\View {
             $tpl['RUN_SCHEDULE_DISABLED'] = ""; // dummy tag
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/reports/reportDetailView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/reports/reportDetailView.tpl');
     }
 }

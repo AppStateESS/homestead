@@ -1,4 +1,9 @@
 <?php
+namespace Homestead\Scheduled;
+
+use Homestead\PdoFactory;
+use Homestead\Term;
+use Homestead\StudentFactory;
 
 class UpdateStudentCache {
 

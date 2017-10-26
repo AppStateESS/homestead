@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * HMS Utility class for various public functions that don't fit anywhere else
      * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
@@ -252,12 +254,10 @@ class HMS_Util{
 
     public static function formatMealOption($meal)
     {
-        PHPWS_Core::initModClass('hms', 'MealPlan.php');
-
         if(is_null($meal)){
             return 'Unknown';
         }
-        
+
         switch($meal){
             case MealPlan::BANNER_MEAL_NONE:
                 return 'None';

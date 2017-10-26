@@ -1,10 +1,12 @@
 <?php
 
+namespace Homestead;
+
 /**
  * @license http://opensource.org/licenses/lgpl-3.0.html
  * @author Matthew McNaney <mcnaney at gmail dot com>
  */
-class PulseEditView extends hms\View
+class PulseEditView extends View
 {
 
     public function show()
@@ -49,7 +51,7 @@ class PulseEditView extends hms\View
             $vars['nightly_cache_create'] = 1;
         }
 
-        $tpl = new \Template($vars);
+        $tpl = new \phpws2\Template($vars);
         $tpl->setModuleTemplate('hms', 'admin/pulse/settings.html');
         return $tpl->get();
     }

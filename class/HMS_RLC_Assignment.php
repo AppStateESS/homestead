@@ -1,13 +1,18 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\PermissionException;
+use \Homestead\Exception\DatabaseException;
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * The HMS_RLC_Assignment class
  *
  * @author jbooker
  * @package HMS
  */
-
-PHPWS_Core::initModClass('hms','StudentFactory.php');
 
 class HMS_RLC_Assignment {
 
@@ -37,7 +42,7 @@ class HMS_RLC_Assignment {
         }
 
         $result = $this->init();
-        if(PEAR::isError($result)){
+        if(\PEAR::isError($result)){
             PHPWS_Error::log($result,'hms','HMS_RLC_Assignment()','Caught error from init');
             return $result;
         }
@@ -51,7 +56,7 @@ class HMS_RLC_Assignment {
 
         $result = $db->select('row');
 
-        if(PEAR::isError($result)) {
+        if(\PEAR::isError($result)) {
             PHPWS_Error::log($result,'hms','init',"id:{$id}");
             return $result;
         }
@@ -71,8 +76,7 @@ class HMS_RLC_Assignment {
 
     public function delete()
     {
-        if(!Current_User::allow('hms', 'remove_rlc_members') ){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+        if(!\Current_User::allow('hms', 'remove_rlc_members') ){
             throw new PermissionException('You do not have permission to remove RLC members.');
         }
 
@@ -114,7 +118,6 @@ class HMS_RLC_Assignment {
      */
     public function getRlc()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         return new HMS_Learning_Community($this->getRlcId());
     }
 
@@ -127,11 +130,10 @@ class HMS_RLC_Assignment {
 
     public function getApplication()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         $application = new HMS_RLC_Application($this->getApplicationId());
 
         if(!isset($application)){
-            throw Exception('Could not load RLC application.');
+            throw \Exception('Could not load RLC application.');
         }
 
         return $application;
@@ -143,7 +145,7 @@ class HMS_RLC_Assignment {
         $this->state = $newState->getStateName();
         try{
             $this->save();
-        }catch(Exception $e){
+        }catch(\Exception $e){
             throw $e;
         }
 
@@ -158,7 +160,7 @@ class HMS_RLC_Assignment {
     /**
      * Check to see if an assignment already exists for the specified user.  Returns FALSE if no assignment
      * exists.  If an assignment does exist, a db object containing that row is returned.  In the case of a db
-     * error, a PEAR error object is returned.
+     * error, a \PEAR error object is returned.
      * TODO: Deprecate this and/or move to RlcMembershipFactory
      * @see RlcMembershipFactory
      *
@@ -224,8 +226,6 @@ class HMS_RLC_Assignment {
      * @return NULL|HMS_RLC_Assignment
      */
     public static function getAssignmentByUsername($username, $term){
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-
         $app = HMS_RLC_Application::getApplicationByUsername($username, $term);
 
         if(is_null($app)){
@@ -251,15 +251,13 @@ class HMS_RLC_Assignment {
 
     public function rlc_assignment_admin_pager()
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
-
         $tags = array();
 
         test('ooh hia!',1);
 
         $tags['TITLE'] = "View Final RLC Assignments " . Term::toString(Term::getSelectedTerm(), TRUE);
 
-        $pager = new DBPager('hms_learning_community_assignment','HMS_RLC_Assignment');
+        $pager = new \DBPager('hms_learning_community_assignment','\Homestead\HMS_RLC_Assignment');
 
         //$pager->db->addWhere('hms_learning_community_applications.hms_assignment_id','hms_learning_community_assignment.id','=');
         $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'id', 'hms_assignment_id');
@@ -279,8 +277,6 @@ class HMS_RLC_Assignment {
 
     public function getAdminPagerTags()
     {
-        PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
-
         $rlc_list = HMS_Learning_Community::getRLCListAbbr();
 
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
@@ -321,9 +317,6 @@ class HMS_RLC_Assignment {
      */
     public function getAdminCsvRow()
     {
-        PHPWS_Core::initModClass('hms','HMS_Learning_Community.php');
-        PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
-
         $row = array();
 
         // Get the RLC Application
@@ -441,8 +434,4 @@ class HMS_RLC_Assignment {
     {
         $this->state = $newState;
     }
-}
-
-class RlcMembershipRestored extends HMS_RLC_Assignment {
-    public function __construct(){}
 }

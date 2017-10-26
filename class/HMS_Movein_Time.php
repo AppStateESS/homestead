@@ -1,5 +1,10 @@
 <?php
 
+namespace Homestead;
+
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * HMS Move-in Time class
  *
@@ -57,7 +62,6 @@ class HMS_Movein_Time
 
     public function get_formatted_begin_end()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         // Check for multi-day move in time. If days-of-month aren't equal then it'multi-day move in.
         if(date('d', $this->begin_timestamp) != date('d', $this->end_timestamp)){
             // Multi-day move in time.
@@ -89,7 +93,6 @@ class HMS_Movein_Time
     public static function get_movein_times_array($term = NULL)
     {
         if(!isset($term)){
-            PHPWS_Core::initModClass('hms', 'Term.php');
             $term = Term::getSelectedTerm();
         }
 
@@ -97,9 +100,9 @@ class HMS_Movein_Time
 
         $db->addWhere('term', $term);
         $db->addOrder('begin_timestamp', 'ASC');
-        $result = $db->getObjects('HMS_Movein_Time');
+        $result = $db->getObjects('\Homestead\HMS_Movein_Time');
 
-        if(PEAR::isError($result)){
+        if(\PEAR::isError($result)){
             return false;
         }
 
@@ -117,9 +120,7 @@ class HMS_Movein_Time
     }
 
     public static function get_movein_times_pager(){
-        PHPWS_Core::initCoreClass('DBPager.php');
-
-        $pager = new DBPager('hms_movein_time', 'HMS_Movein_Time');
+        $pager = new \DBPager('hms_movein_time', '\Homestead\HMS_Movein_Time');
 
         $pager->addWhere('term', Term::getSelectedTerm());
         $pager->db->addOrder('begin_timestamp', 'DESC');

@@ -1,7 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'AssignmentPairing.php');
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+namespace Homestead;
+
+use \Homestead\Exception\StudentNotFoundException;
 
 abstract class RoommatePairingStrategy {
 

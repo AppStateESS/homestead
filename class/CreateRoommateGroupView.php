@@ -1,10 +1,12 @@
 <?php
 
+namespace Homestead;
+
 /**
  * The UI for administratively creating a roommate group
  */
 
-class CreateRoommateGroupView extends hms\View {
+class CreateRoommateGroupView extends View {
 
     private $roommate1;
     private $roommate2;
@@ -20,7 +22,7 @@ class CreateRoommateGroupView extends hms\View {
 
         $tpl['TERM'] = Term::getPrintableSelectedTerm();
 
-        $form = new PHPWS_Form('roommate_group');
+        $form = new \PHPWS_Form('roommate_group');
 
         $submitCmd = CommandFactory::getCommand('CreateRoommateGroup');
         $submitCmd->initForm($form);
@@ -45,8 +47,8 @@ class CreateRoommateGroupView extends hms\View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Create Roommate Group");
+        \Layout::addPageTitle("Create Roommate Group");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/createRoommateGroup.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/createRoommateGroup.tpl');
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
+namespace Homestead;
 
-class ApplicationMenuBlockView extends hms\View {
+class ApplicationMenuBlockView extends View {
 
     private $term;
     private $startDate;
@@ -57,6 +57,6 @@ class ApplicationMenuBlockView extends hms\View {
             }
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/applicationMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/applicationMenuBlock.tpl');
     }
 }

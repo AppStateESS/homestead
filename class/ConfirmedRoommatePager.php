@@ -1,18 +1,15 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initCoreClass('DBPager.php');
+namespace Homestead;
 
-class ConfirmedRoommatePager extends hms\View {
+class ConfirmedRoommatePager extends View {
 
     public function __construct(){
     }
 
     public function show()
     {
-        $pager = new DBPager('hms_roommate', 'HMS_Roommate');
+        $pager = new \DBPager('hms_roommate', '\Homestead\HMS_Roommate');
 
         $pager->db->addWhere('confirmed', 1);
         $pager->db->addWhere('term', Term::getSelectedTerm());
@@ -28,5 +25,3 @@ class ConfirmedRoommatePager extends hms\View {
         return $pager->get();
     }
 }
-
-

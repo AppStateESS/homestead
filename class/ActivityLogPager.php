@@ -1,9 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initCoreClass('DBPager.php');
+namespace Homestead;
 
-class ActivityLogPager extends hms\View {
+class ActivityLogPager extends View {
 
     private $actee;
     private $actor;
@@ -29,7 +28,7 @@ class ActivityLogPager extends hms\View {
         $this->static		= $static;
         $this->limit		= $limit;
 
-        $this->pager = new DBPager('hms_activity_log','HMS_Activity_Log');
+        $this->pager = new \DBPager('hms_activity_log','\Homestead\HMS_Activity_Log');
     }
 
 

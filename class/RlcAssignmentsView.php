@@ -1,17 +1,16 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
+namespace Homestead;
 
-class RlcAssignmentsView extends hms\View {
+class RlcAssignmentsView extends View {
 
     public function show(){
-        PHPWS_Core::initCoreClass('DBPager.php');
 
         $tags = array();
 
         $tags['TITLE'] = "View Final RLC Assignments " . Term::toString(Term::getSelectedTerm());
 
-        $pager = new DBPager('hms_learning_community_assignment','HMS_RLC_Assignment');
+        $pager = new \DBPager('hms_learning_community_assignment','\Homestead\HMS_RLC_Assignment');
 
         //$pager->db->addWhere('hms_learning_community_applications.hms_assignment_id','hms_learning_community_assignment.id','=');
         $pager->db->addJoin('LEFT OUTER', 'hms_learning_community_assignment', 'hms_learning_community_applications', 'application_id', 'id');
@@ -28,7 +27,7 @@ class RlcAssignmentsView extends hms\View {
         $pager->addRowTags('getAdminPagerTags');
         $pager->setReportRow('getAdminCsvRow');
 
-        Layout::addPageTitle("RLC Assignments");
+        \Layout::addPageTitle("RLC Assignments");
 
         return $pager->get();
     }

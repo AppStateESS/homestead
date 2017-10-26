@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * Represents a package desk where students can pickup a package.
  *
@@ -164,18 +166,5 @@ class PackageDesk {
     public function setZip($zip)
     {
         $this->zip = $zip;
-    }
-}
-
-/**
- * A child PacakgeDesk class for loading PackageDesk objects from the database
- * @author jbooker
- * @package hms
- */
-class RestoredPackageDesk extends PackageDesk {
-    /**
-     * Empty constructor
-     */
-    public function __construct(){
     }
 }

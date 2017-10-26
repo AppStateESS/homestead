@@ -1,6 +1,8 @@
 <?php
 
-class RlcReapplicationPageTwoView extends hms\View {
+namespace Homestead;
+
+class RlcReapplicationPageTwoView extends View {
 
     private $rlcs;
     private $term;
@@ -18,7 +20,7 @@ class RlcReapplicationPageTwoView extends hms\View {
         $tpl = array();
         $tpl['TERM'] = Term::toString($this->term);
 
-        $form = new PHPWS_Form('rlc_reapp');
+        $form = new \PHPWS_Form('rlc_reapp');
         $submitCmd = CommandFactory::getCommand('SubmitRLCReapplicationPage2');
         $submitCmd->setTerm($this->term);
         $submitCmd->initForm($form);
@@ -26,7 +28,7 @@ class RlcReapplicationPageTwoView extends hms\View {
         foreach($this->rlcs as $i=>$rlc){
             $question = $this->rlcs[$i]->getReturningQuestion();
             if(!isset($question)){
-                throw new Exception("Missing returning question for {$this->rlcs[$i]->get_community_name()}");
+                throw new \Exception("Missing returning question for {$this->rlcs[$i]->get_community_name()}");
             }
             if(isset($this->reApp) && isset($this->reApp->{"rlc_question_$i"})){
                 $form->addTextArea("rlc_question_$i", $this->reApp->{"rlc_question_$i"});
@@ -44,6 +46,6 @@ class RlcReapplicationPageTwoView extends hms\View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl,'hms', 'student/RlcReapplicationPage2.tpl');
+        return \PHPWS_Template::process($tpl,'hms', 'student/RlcReapplicationPage2.tpl');
     }
 }

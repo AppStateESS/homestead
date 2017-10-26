@@ -1,34 +1,45 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import classNames from 'classnames';
+import $ from 'jquery';
 
 // Top level component responsible for handling most of the high level logic,
 // storing relevant data, and making ajax calls.
-var RoomDamageBox = React.createClass({
+class RoomDamageBox extends React.Component{
     // Sets up an initial state for the class, with default values.
-    getInitialState: function()
-    {
-        return ({room: {location: roomLocation}, damages: undefined, newDamages: [], options: [], alert: undefined});
-    },
-    componentWillMount: function()
-    {
+    constructor(props){
+        super(props);
+
+        this.state = {room: {location: this.props.roomLocation},
+        damages: undefined,
+        newDamages: [],
+        options: [],
+        alert: undefined}
+
+        this.componentWillMount = this.componentWillMount.bind(this);
+        this.addUnsavedDamages = this.addUnsavedDamages.bind(this);
+        this.saveDamages = this.saveDamages.bind(this);
+        this.getRoomDamages = this.getRoomDamages.bind(this);
+        this.getOptions = this.getOptions.bind(this);
+        this.addRoomDamages = this.addRoomDamages.bind(this);
+        this.removeRoomDamages = this.removeRoomDamages.bind(this);
+    }
+    componentWillMount(){
         this.getRoomDamages();
         this.getOptions();
-    },
-    addUnsavedDamages: function(type, sideInput, noteInput)
-    {
+    }
+    addUnsavedDamages(type, sideInput, noteInput){
         var options = this.state.options
         var optLen = options.length;
         var categ = '';
         var dmgTypeDesc = '';
         var found = false;
-        for(i = 0; i < optLen; i++)
-        {
-            if(!found)
-            {
+        for(var i = 0; i < optLen; i++){
+            if(!found){
                 var dmgTypeArr = options[i].DamageTypes;
                 var dmgTypeArrLen = dmgTypeArr.length
-                for(x = 0; x < dmgTypeArrLen; x++)
-                {
-                    if(dmgTypeArr[x].id == type)
-                    {
+                for(var x = 0; x < dmgTypeArrLen; x++){
+                    if(dmgTypeArr[x].id === type){
                         categ = options[i].category;
                         dmgTypeDesc = dmgTypeArr[x].description;
                         found = true;
@@ -40,22 +51,20 @@ var RoomDamageBox = React.createClass({
         var newDmgsArr = this.state.newDamages;
         newDmgsArr.push(newDamageNode);
         this.setState({newDamages: newDmgsArr});
-    },
-    saveDamages: function()
-    {
+    }
+    saveDamages(){
         var newDamages = this.state.newDamages;
         //console.log(newDamages)
-        for(i = 0; i < newDamages.length; i++)
+        for(var i = 0; i < newDamages.length; i++)
         {
             var damage = newDamages[i];
             this.addRoomDamages(damage.dmgTypeId, damage.side, damage.note);
         }
         this.setState({newDamages: []});
-    },
+    }
     // Function responsible for setting up an ajax call to retrieve the current room damages.
-    getRoomDamages: function()
-    {
-        inputData = {roomPersistentId: roomPID};
+    getRoomDamages(){
+        var inputData = {roomPersistentId: this.props.roomPID};
         $.ajax({
             url: 'index.php?module=hms&action=RetrieveRoomDamage',
             type: 'GET',
@@ -63,7 +72,7 @@ var RoomDamageBox = React.createClass({
             data: inputData,
             success: function(data)
             {
-                var outputData = Array();
+                var outputData = [];
                 outputData = JSON.parse(data);
                 this.setState({damages: outputData});
             }.bind(this),
@@ -73,9 +82,8 @@ var RoomDamageBox = React.createClass({
                 console.error(this.props.url, status, err.toString());
             }.bind(this)
         });
-    },
-    getOptions: function()
-    {
+    }
+    getOptions(){
         $.ajax({
             url: 'index.php?module=hms&action=AjaxGetRoomDamageTypes',
             type: 'GET',
@@ -85,17 +93,16 @@ var RoomDamageBox = React.createClass({
             }.bind(this),
             error: function(xhr, status, err) {
                 alert("Failed to grab the damages options for drop down")
-                console.error(this.props.url, stats, err.toString());
+                console.error(this.props.url, status, err.toString());
             }.bind(this)
         });
-    },
+    }
     // Function responsible for setting up and executing the ajax call to add room damages.
-    addRoomDamages: function(type, side, desc)
-    {
+    addRoomDamages(type, side, desc){
         //console.log(desc)
         $.ajax({
           //url: 'index.php?module=hms&action=AddRoomDamage&roomPersistentId='+roomPID+'&damageType='+type+'&side='+side+'&description='+desc+'&term='+term,
-          url: 'index.php?module=hms&action=AddRoomDamage&roomPersistentId=' + roomPID + '&term=' + term,
+          url: 'index.php?module=hms&action=AddRoomDamage&roomPersistentId=' + this.props.roomPID + '&term=' + this.props.term,
           type: 'POST',
           data: {damageType: type,
                 side: side,
@@ -111,28 +118,23 @@ var RoomDamageBox = React.createClass({
             console.error(this.props.url, status, err.toString());
           }.bind(this)
         });
-    },
+    }
     // Function responsible for removing room damages from the newDamages array
-    removeRoomDamages: function(id)
-    {
+    removeRoomDamages(id){
         var newDmgsArr = this.state.newDamages;
         var len = newDmgsArr.length;
         var indexToSplice = -1;
-        for(i = 0; i < len; i++)
-        {
-            if(newDmgsArr[i].id == id)
-            {
+        for(var i = 0; i < len; i++){
+            if(newDmgsArr[i].id === id){
                 indexToSplice = i;
             }
         }
-        if(indexToSplice != -1)
-        {
+        if(indexToSplice !== -1){
             newDmgsArr.splice(indexToSplice, 1);
         }
         this.setState({newDamages: newDmgsArr});
-    },
-    render: function()
-    {
+    }
+    render(){
         return (
             <div>
                 <h2>Room Damages <small>{this.state.room.location}</small></h2>
@@ -142,13 +144,12 @@ var RoomDamageBox = React.createClass({
             </div>
         );
     }
-});
+}
 
 // Component responsible for displaying the table of the current saved damages
-var CurrentDamagesTable = React.createClass({
-    render: function()
-    {
-        if(this.props.roomDamages != undefined) {
+class CurrentDamagesTable extends React.Component{
+    render(){
+        if(this.props.roomDamages !== undefined) {
             var rows = this.props.roomDamages.map(function(node){
                 return (
                     <tr key={node.id}>
@@ -200,26 +201,27 @@ var CurrentDamagesTable = React.createClass({
             </div>
         );
     }
-});
+}
 
 
 // Component responsible for collecting the relevant information for adding room damage, as
 // well as the button to add it to the UnsavedDamagesTable table.
-var AddDamageBox = React.createClass({
-    getInitialState: function()
-    {
-        return ({dmgTypeValid: undefined, descValid: undefined})
-    },
-    add: function()
-    {
+class AddDamageBox extends React.Component{
+    constructor(props){
+        super(props);
+
+        this.state = {dmgTypeValid: undefined, descValid: undefined}
+        this.add = this.add.bind(this);
+    }
+    add(){
         var dmgTypeChoice = this.refs.damageType.getDOMNode();
         var sideChoice = this.refs.side.getDOMNode();
         var descInput = this.refs.desc.getDOMNode();
         var dmgType = dmgTypeChoice.value;
         var side = sideChoice.value;
         var desc = descInput.value;
-        var dmgTypeUnset = (dmgType == 0);
-        var descUnset = (desc == "");
+        var dmgTypeUnset = (dmgType === 0);
+        var descUnset = (desc === "");
 
         // If the form data is valid, then update state
         if(!dmgTypeUnset && !descUnset){
@@ -234,24 +236,23 @@ var AddDamageBox = React.createClass({
         // Otherwise, update state to indicate an error
         this.setState({dmgTypeInvalid: dmgTypeUnset, descInvalid: descUnset});
 
-    },
-    render: function()
-    {
+    }
+    render(){
         var options = Array({category:"Welcome", id: 0, description: "Select the type of damage"});//{id: 0, description: "Select the type of Damage"}
 
         var data = this.props.options;
-        for(i = 0; i < data.length; i++) {
+        for(var i = 0; i < data.length; i++) {
           options.push(data[i]);
         }
 
         var selectOptions = options.map(function(node){
-            if(node.category == "Welcome") {
+            if(node.category === "Welcome") {
                 return (<option key={node.id} value={node.id}>{node.description}</option>);
             } else {
               var dmgTypes = node.DamageTypes;
-              var options = Array();
-              for(i = 0; i < dmgTypes.length;i++) {
-                object = dmgTypes[i];
+              var options = [];
+              for(var i = 0; i < dmgTypes.length;i++) {
+                var object = dmgTypes[i];
                 options[i+1] = <option key={object.id} value={object.id}>{object.description}</option>;
               }
 
@@ -264,11 +265,11 @@ var AddDamageBox = React.createClass({
         var dmgTypeError = false;
         var descError = false;
 
-        if(this.state.dmgTypeInvalid != undefined) {
+        if(this.state.dmgTypeInvalid !== undefined) {
             dmgTypeError = this.state.dmgTypeInvalid;
         }
 
-        if(this.state.descInvalid != undefined) {
+        if(this.state.descInvalid !== undefined) {
             descError = this.state.descInvalid;
         }
 
@@ -336,30 +337,25 @@ var AddDamageBox = React.createClass({
             </div>
         );
     }
-});
+}
 
-var AlertBox = React.createClass({
-    render: function()
-    {
-        if(this.props.alert == undefined)
-        {
+class AlertBox extends React.Component{
+    render(){
+        if(this.props.alert === undefined){
             return (
                 <div></div>
             );
         }
-        else
-        {
+        else{
             //console.log(this.props.alert)
-            if(this.props.alert.status == "success")
-            {
+            if(this.props.alert.status === "success"){
                 return (
                     <div className="alert alert-success">
                         <i className="fa fa-check fa-2x"></i> <span>Room Damages successfully added.</span>
                     </div>
                 );
             }
-            else
-            {
+            else{
                 return (
                     <div className="alert alert-danger">
                         <i className="fa fa-times fa-2x"></i> <span>{this.props.alert.status}</span>
@@ -368,20 +364,22 @@ var AlertBox = React.createClass({
             }
         }
     }
-});
+}
 
 // Component responsible for displaying the table of the unsaved damages that have been
 // added but not saved by the user.
-var UnsavedDamagesTable = React.createClass({
-    removeRow: function(id)
-    {
+class UnsavedDamagesTable extends React.Component{
+    constructor(props){
+        super(props);
+
+        this.removeRow = this.removeRow.bind(this);
+    }
+    removeRow(id){
         this.props.removeRow(id);
-    },
-    render: function()
-    {
+    }
+    render(){
         //console.log(this.props.newRoomDamages)
-        if(this.props.newRoomDamages.length != 0)
-        {
+        if(this.props.newRoomDamages.length !== 0){
             var data = this.props.newRoomDamages;
             var removeRow = this.removeRow
             var rows = data.map(function(node){
@@ -416,19 +414,20 @@ var UnsavedDamagesTable = React.createClass({
         else {
             return (<div></div>);
         }
-
     }
-});
+}
 
-var UnsavedDamageRow = React.createClass({
-    removeRow: function()
-    {
+class UnsavedDamageRow extends React.Component{
+    constructor(props){
+        super(props);
+
+        this.removeRow = this.removeRow.bind(this);
+    }
+    removeRow(){
         this.props.removeRow(this.props.node.id);
-    },
-    render: function()
-    {
+    }
+    render(){
         var node = this.props.node;
-
         var commentStyle = {'marginRight': '5px'};
         return (
             <tr>
@@ -446,12 +445,9 @@ var UnsavedDamageRow = React.createClass({
             </tr>
         )
     }
-});
+}
 
 
 
 //Inserts all the react components within the given element.
-React.render(
-  <RoomDamageBox/>,
-  document.getElementById('roomDamage')
-);
+ReactDOM.render(<RoomDamageBox roomLocation={window.roomLocation} roomPID={window.roomPID} term={window.term}/>, document.getElementById('roomDamage'));

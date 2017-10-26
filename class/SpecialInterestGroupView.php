@@ -1,7 +1,9 @@
 <?php
 
-class SpecialInterestGroupView extends hms\View{
-    
+namespace Homestead;
+
+class SpecialInterestGroupView extends View{
+
     protected $group;
 
     public function __construct($group = NULL)
@@ -11,9 +13,6 @@ class SpecialInterestGroupView extends hms\View{
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        PHPWS_Core::initModClass('hms', 'LotteryApplication.php');
-
         $this->setTitle('Special Interest Group');
         javascript('jquery');
 
@@ -23,12 +22,12 @@ class SpecialInterestGroupView extends hms\View{
 
         // If a group was selected
         if(!is_null($this->group) && $this->group != 'none'){
-            $tpl['GROUP_PAGER'] = LotteryApplication::specialInterestPager($this->group, PHPWS_Settings::get('hms', 'lottery_term'));
+            $tpl['GROUP_PAGER'] = LotteryApplication::specialInterestPager($this->group, \PHPWS_Settings::get('hms', 'lottery_term'));
             $tpl['GROUP'] = $groups[$this->group];
         }
 
         // Show the drop down box of groups
-        $form = new PHPWS_Form('special_interest');
+        $form = new \PHPWS_Form('special_interest');
         $form->setMethod('get');
         $form->addDropBox('group', $groups);
         $form->setClass('group', 'form-control');
@@ -41,8 +40,6 @@ class SpecialInterestGroupView extends hms\View{
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/special_interest_approval.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/special_interest_approval.tpl');
     }
 }
-
-

@@ -1,8 +1,10 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'RoomChangeParticipantView.php');
+namespace Homestead;
 
-class RoomChangeManageView extends hms\View {
+use \Homestead\Exception\PermissionException;
+
+class RoomChangeManageView extends View {
 
     private $request;
 
@@ -26,7 +28,7 @@ class RoomChangeManageView extends hms\View {
 
         // Check permissions
         // Only admins, curr/future RDs, and participants can even see this
-        if(!Current_User::allow('hms', 'admin_approve_room_change') &&
+        if(!\Current_User::allow('hms', 'admin_approve_room_change') &&
             !in_array(UserStatus::getUsername(), $participantUsernames) &&
             !in_array(UserStatus::getUsername(), $potentialApprovers))
         {
@@ -52,7 +54,7 @@ class RoomChangeManageView extends hms\View {
             // participants may be ready
 
             // For current/future RDs, Show hold, cancel, and deny buttons
-            if (in_array(Current_User::getUsername(), $potentialApprovers)) {
+            if (in_array(\Current_User::getUsername(), $potentialApprovers)) {
                 $tpl['REQUEST_ID_HOLD'] = $requestId;
                 $tpl['REQUEST_ID_CANCEL'] = $requestId;
                 $tpl['REQUEST_ID_CANCEL_BTN'] = $requestId;
@@ -61,7 +63,7 @@ class RoomChangeManageView extends hms\View {
             }
 
             // For admins, always show hold, cancel, deny
-            if (Current_User::allow('hms', 'admin_approve_room_change')) {
+            if (\Current_User::allow('hms', 'admin_approve_room_change')) {
                 $tpl['REQUEST_ID_HOLD'] = $requestId;
                 $tpl['REQUEST_ID_CANCEL'] = $requestId;
                 $tpl['REQUEST_ID_CANCEL_BTN'] = $requestId;
@@ -76,7 +78,7 @@ class RoomChangeManageView extends hms\View {
             }
 
             // If all participants are approved and checked into their current assignments, and user has permission, then show housing approve button
-            if($this->allParticipantsApproved() && Current_User::allow('hms', 'admin_approve_room_change') && $this->request->allParticipantsCheckedIn()){
+            if($this->allParticipantsApproved() && \Current_User::allow('hms', 'admin_approve_room_change') && $this->request->allParticipantsCheckedIn()){
                 $tpl['REQUEST_ID_APPROVE'] = $requestId;
             }
 
@@ -84,7 +86,7 @@ class RoomChangeManageView extends hms\View {
             // Request has been approved by Housing Assignments, only Housing Assignments can still cancel
 
             // Show Cancel button
-            if (Current_User::allow('hms', 'admin_approve_room_change')) {
+            if (\Current_User::allow('hms', 'admin_approve_room_change')) {
                 $tpl['REQUEST_ID_CANCEL'] = $requestId;
                 $tpl['REQUEST_ID_CANCEL_BTN'] = $requestId;
             }
@@ -96,7 +98,7 @@ class RoomChangeManageView extends hms\View {
             // Room Change is held
 
             // Show deny, cancel buttons for Current/future RDs
-            if (in_array(Current_User::getUsername(), $this->request->getAllPotentialApprovers())) {
+            if (in_array(\Current_User::getUsername(), $this->request->getAllPotentialApprovers())) {
                 $tpl['REQUEST_ID_CANCEL'] = $requestId;
                 $tpl['REQUEST_ID_CANCEL_BTN'] = $requestId;
                 $tpl['REQUEST_ID_DENY'] = $requestId;
@@ -104,7 +106,7 @@ class RoomChangeManageView extends hms\View {
             }
 
             // For admins, always show, cancel, deny
-            if (Current_User::allow('hms', 'admin_approve_room_change')) {
+            if (\Current_User::allow('hms', 'admin_approve_room_change')) {
                 $tpl['REQUEST_ID_CANCEL'] = $requestId;
                 $tpl['REQUEST_ID_CANCEL_BTN'] = $requestId;
                 $tpl['REQUEST_ID_DENY'] = $requestId;
@@ -118,7 +120,7 @@ class RoomChangeManageView extends hms\View {
             }
 
             // If all participants are approved, and user has permission, show housing approve button
-            if($this->allParticipantsApproved() && Current_User::allow('hms', 'admin_approve_room_change')){
+            if($this->allParticipantsApproved() && \Current_User::allow('hms', 'admin_approve_room_change')){
                 $tpl['REQUEST_ID_APPROVE'] = $requestId;
             }
 
@@ -127,7 +129,7 @@ class RoomChangeManageView extends hms\View {
             $tpl['CANCELLED_REASON_PUBLIC'] = $this->request->getDeniedReasonPublic();
 
             // Show the private reason for admins / RDs
-            if (Current_User::allow('hms', 'admin_approve_room_change') || in_array(UserStatus::getUsername(), $potentialApprovers)) {
+            if (\Current_User::allow('hms', 'admin_approve_room_change') || in_array(UserStatus::getUsername(), $potentialApprovers)) {
                 $tpl['CANCELLED_REASON_PRIVATE'] = $this->request->getDeniedReasonPrivate();
             }
 
@@ -136,7 +138,7 @@ class RoomChangeManageView extends hms\View {
             $tpl['DENIED_REASON_PUBLIC']  = $this->request->getDeniedReasonPublic();
 
             // Show the private reason for admins / RDs
-            if (Current_User::allow('hms', 'admin_approve_room_change') || in_array(UserStatus::getUsername(), $potentialApprovers)) {
+            if (\Current_User::allow('hms', 'admin_approve_room_change') || in_array(UserStatus::getUsername(), $potentialApprovers)) {
                 $tpl['DENIED_REASON_PRIVATE'] = $this->request->getDeniedReasonPrivate();
             }
         }
@@ -150,7 +152,7 @@ class RoomChangeManageView extends hms\View {
         $tpl['REQUEST_REASON'] = $this->request->getReason();
 
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/roomChangeManageView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/roomChangeManageView.tpl');
     }
 
     /**
@@ -176,5 +178,3 @@ class RoomChangeManageView extends hms\View {
         return true;
     }
 }
-
-

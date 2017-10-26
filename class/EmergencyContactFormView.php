@@ -1,9 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
+namespace Homestead;
 
-class EmergencyContactFormView extends hms\View {
+class EmergencyContactFormView extends View {
 
     private $student;
     private $application;
@@ -18,8 +17,8 @@ class EmergencyContactFormView extends hms\View {
 
     public function show()
     {
-        PHPWS_Core::initCoreClass('Form.php');
-        $form = new PHPWS_Form();
+        \PHPWS_Core::initCoreClass('Form.php');
+        $form = new \PHPWS_Form();
 
         $submitCmd = CommandFactory::getCommand('EmergencyContactFormSubmit');
         $submitCmd->setTerm($this->term);
@@ -77,8 +76,8 @@ class EmergencyContactFormView extends hms\View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Emergency Contact Form");
+        \Layout::addPageTitle("Emergency Contact Form");
 
-        return PHPWS_Template::process($tpl,'hms','student/emergency_contact_form.tpl');
+        return \PHPWS_Template::process($tpl,'hms','student/emergency_contact_form.tpl');
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
-class LotteryConfirmView extends hms\View {
+namespace Homestead;
+
+class LotteryConfirmView extends View {
 
     private $roomId;
     private $mealPlan;
@@ -17,16 +19,13 @@ class LotteryConfirmView extends hms\View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $tpl = array();
 
         $submitCmd = CommandFactory::getCommand('LotteryConfirm');
         $submitCmd->setRoomId($this->roomId);
         $submitCmd->setMealPlan($this->mealPlan);
 
-        $form = new PHPWS_Form;
+        $form = new \PHPWS_Form;
         $submitCmd->initForm($form);
 
         # Add the beds and user names back to the form so they end up in the request in a pretty way
@@ -37,7 +36,6 @@ class LotteryConfirmView extends hms\View {
         }
 
         # List the student's room
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
         $room = new HMS_Room($this->roomId);
         $tpl['ROOM'] = $room->where_am_i();
 
@@ -87,14 +85,14 @@ class LotteryConfirmView extends hms\View {
         $tpl['MEAL_PLAN'] = HMS_Util::formatMealOption($this->mealPlan);
         $form->addHidden('meal_plan', $this->mealPlan);
 
-        PHPWS_Core::initCoreClass('Captcha.php');
-        $form->addTplTag('CAPTCHA_IMAGE', Captcha::get());
+        \PHPWS_Core::initCoreClass('Captcha.php');
+        $form->addTplTag('CAPTCHA_IMAGE', \Captcha::get());
 
         $form->addSubmit('submit_form', 'Confirm room & roommates');
         $form->mergeTemplate($tpl);
 
-        Layout::addPageTitle("Confirm Re-Application");
+        \Layout::addPageTitle("Confirm Re-Application");
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'student/lottery_confirm.tpl');
+        return \PHPWS_Template::process($form->getTemplate(), 'hms', 'student/lottery_confirm.tpl');
     }
 }

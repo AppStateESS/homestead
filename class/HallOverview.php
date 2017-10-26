@@ -1,10 +1,15 @@
 <?php
+
+namespace Homestead;
+
+use \Homestead\Exception\StudentNotFoundException;
+
 /**
  * @author jbooker
  * @package hms
  */
 
-class HallOverview extends hms\View{
+class HallOverview extends View{
 
     private $hall;
     private $nakedDisplay;
@@ -16,7 +21,7 @@ class HallOverview extends hms\View{
 
     public function show()
     {
-        $tpl = new PHPWS_Template('hms');
+        $tpl = new \PHPWS_Template('hms');
 
         if(!$tpl->setFile('admin/reports/hall_overview.tpl')){
             return 'Template error.';
@@ -109,7 +114,7 @@ class HallOverview extends hms\View{
                             $student = StudentFactory::getStudentByBannerId($bed->_curr_assignment->getBannerId(), $this->hall->term);
                         }catch(StudentNotFoundException $e){
                             $student = null;
-                            NQ::simple('hms', hms\NotificationView::WARNING, "Could not find data for: $username");
+                            \NQ::simple('hms', NotificationView::WARNING, "Could not find data for: $username");
                         }
 
                         $assign_rlc  = HMS_RLC_Assignment::checkForAssignment($username, $this->hall->term); //false or index
@@ -149,10 +154,10 @@ class HallOverview extends hms\View{
         }
 
         if($this->nakedDisplay) {
-            Layout::nakedDisplay($tpl->get(), 'Building overview for ' . $this->hall->hall_name, TRUE);
+            \Layout::nakedDisplay($tpl->get(), 'Building overview for ' . $this->hall->hall_name, TRUE);
         }
 
-        Layout::addPageTitle("Hall Overview");
+        \Layout::addPageTitle("Hall Overview");
 
         return $tpl->get();
     }

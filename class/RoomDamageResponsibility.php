@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 class RoomDamageResponsibility {
 
     public $id;
@@ -22,7 +24,6 @@ class RoomDamageResponsibility {
 
     public function reportToStudentAccount()
     {
-        PHPWS_Core::initModClass('hms', 'SOAP.php');
         $soap = SOAP::getInstance(UserStatus::getUsername(), SOAP::ADMIN_USER);
 
         $damage = RoomDamageFactory::getDamageById($this->getDamageId());
@@ -107,8 +108,4 @@ class RoomDamageResponsibility {
     {
         $this->assessed_by = $username;
     }
-}
-
-class RoomDamageResponsibilityRestored extends RoomDamageResponsibility {
-    public function __construct(){}
 }

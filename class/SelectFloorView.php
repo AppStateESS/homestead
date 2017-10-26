@@ -1,6 +1,10 @@
 <?php
 
-class SelectFloorView extends hms\View
+namespace Homestead;
+
+use \Homestead\Command\Command;
+
+class SelectFloorView extends View
 {
     private $title;
     private $term;
@@ -20,7 +24,7 @@ class SelectFloorView extends hms\View
         $tpl = array();
 
         if ($this->halls == NULL) {
-            NQ::simple('hms', hms\NotificationView::ERROR, 'There are no halls available for the selected term.');
+            \NQ::simple('hms', NotificationView::ERROR, 'There are no halls available for the selected term.');
             $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
             $cmd->redirect();
         }
@@ -32,7 +36,7 @@ class SelectFloorView extends hms\View
         javascript('modules/hms/select_floor');
 
         # Setup the form
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $this->onSelectCmd->initForm($form);
 
         $form->setMethod('get');
@@ -50,9 +54,9 @@ class SelectFloorView extends hms\View
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Select Floor");
+        \Layout::addPageTitle("Select Floor");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/select_floor.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/select_floor.tpl');
     }
 
 }

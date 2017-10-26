@@ -1,4 +1,11 @@
 <?php
+
+namespace Homestead;
+
+use \Homestead\Exception\InvalidConfigurationException;
+use \Homestead\Docusign\EnvelopeFactory;
+use \Homestead\Docusign\Client;
+
 class Contract {
 
     protected $id;
@@ -29,35 +36,29 @@ class Contract {
 
     public function updateEnvelope()
     {
-        PHPWS_Core::initModClass('hms', 'Docusign/EnvelopeFactory.php');
-
-        $docusignUsername = PHPWS_Settings::get('hms', 'docusign_username');
+        $docusignUsername = \PHPWS_Settings::get('hms', 'docusign_username');
         if ($docusignUsername === null || $docusignUsername == '') {
-            PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('Missing docusign username.');
         }
 
-        $docusignPassword = PHPWS_Settings::get('hms', 'docusign_password');
+        $docusignPassword = \PHPWS_Settings::get('hms', 'docusign_password');
         if ($docusignPassword === null || $docusignPassword == '') {
-            PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('Missing docusign password.');
         }
 
-        $docusignKey = PHPWS_Settings::get('hms', 'docusign_key');
+        $docusignKey = \PHPWS_Settings::get('hms', 'docusign_key');
         if ($docusignKey === null || $docusignKey == '') {
-            PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('Missing docusign key.');
         }
 
-        $docusignEnv = PHPWS_Settings::get('hms', 'docusign_env');
+        $docusignEnv = \PHPWS_Settings::get('hms', 'docusign_env');
         if ($docusignEnv === null || $docusignEnv == '') {
-            PHPWS_Core::initModClass('hms', 'exception/InvalidConfigurationException.php');
             throw new InvalidConfigurationException('Missing docusign key.');
         }
 
-        $docusignClient = new Docusign\Client($docusignKey, $docusignUsername, $docusignPassword, $docusignEnv);
+        $docusignClient = new Client($docusignKey, $docusignUsername, $docusignPassword, $docusignEnv);
 
-        $envelope = \Docusign\EnvelopeFactory::getEnvelopeById($docusignClient, $this->envelope_id);
+        $envelope = EnvelopeFactory::getEnvelopeById($docusignClient, $this->envelope_id);
 
         $this->envelope_status = $envelope->getStatus();
         $this->envelope_status_time = $envelope->getStatusDateTimeUnixTimestamp();
@@ -115,8 +116,4 @@ class Contract {
     {
         $this->envelope_status_time = $time;
     }
-}
-
-class ContractRestored extends Contract {
-	public function __construct(){} // Empty constructor for loading from DB
 }

@@ -1,6 +1,8 @@
 <?php
 
-class LotteryDenyRoommateRequestView extends hms\View {
+namespace Homestead;
+
+class LotteryDenyRoommateRequestView extends View {
 
     private $request;
     private $term;
@@ -13,21 +15,19 @@ class LotteryDenyRoommateRequestView extends hms\View {
 
     public function show()
     {
-
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initCoreClass('Captcha.php');
+        \PHPWS_Core::initCoreClass('Captcha.php');
 
         $requestor = StudentFactory::getStudentByUsername($this->request['requestor'], $this->term);
 
         $tpl = array();
 
         $tpl['REQUESTOR']  = $requestor->getName();
-        $tpl['CAPTCHA']    = Captcha::get();
+        $tpl['CAPTCHA']    = \Captcha::get();
 
         $submitCmd = CommandFactory::getCommand('LotteryDenyRoommateRequest');
         $submitCmd->setRequestId($this->request['id']);
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd->initForm($form);
 
         $form->addSubmit('deny', 'Deny Roommate Request');
@@ -37,6 +37,6 @@ class LotteryDenyRoommateRequestView extends hms\View {
 
         $this->setTitle('Deny Roommate Request');
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/lottery_deny_roommate_request.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/lottery_deny_roommate_request.tpl');
     }
 }
