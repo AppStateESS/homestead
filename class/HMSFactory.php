@@ -8,7 +8,7 @@ class HMSFactory
 
     public static function getHMS()
     {
-        //$rh = getallheaders();
+        $rh = getallheaders();
 
         if (isset(HMSFactory::$hms)) {
             return HMSFactory::$hms;
