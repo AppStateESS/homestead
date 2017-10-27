@@ -32,9 +32,6 @@ class CheckoutFormView extends View
             $residents[] = array('studentId' => $s->getBannerId(), 'name' => $s->getName());
         }
 
-        /**
-         * Remainder of code is untouched regardless of development status
-         */
         $tpl = array();
         $tpl['STUDENT'] = $this->student->getFullName();
         $tpl['BANNER_ID'] = $this->student->getBannerId();
@@ -42,7 +39,7 @@ class CheckoutFormView extends View
         $tpl['room_number'] = $this->room->getRoomNumber();
         $tpl['RESIDENTS'] = json_encode($residents);
         $tpl['CHECKIN_ID'] = $this->checkin->id;
-        $tpl['PREVIOUS_KEY_CODE'] = $this->checkin->key_code;
+        $tpl['PREVIOUS_KEY_CODE'] = json_encode($this->checkin->key_code);
         $tpl['ROOM_PID'] = $this->room->persistent_id;
 
         $damage_types = DamageTypeFactory::getDamageTypeAssoc();
