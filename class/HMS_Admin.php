@@ -22,7 +22,7 @@ class HMS_Admin
 
         \PHPWS_Core::initCoreClass('Form.php');
 
-        $form = &new \PHPWS_Form();
+        $form = new \PHPWS_Form();
         $form->addTextarea('usernames');
         $form->addSubmit('submit', 'Submit');
 
