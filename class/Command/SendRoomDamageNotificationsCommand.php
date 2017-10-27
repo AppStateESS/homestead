@@ -10,6 +10,7 @@ use \Homestead\HMS_Bed;
 use \Homestead\HMS_Email;
 use \Homestead\CommandFactory;
 use \Homestead\NotificationView;
+use \Homestead\HMS_Activity_Log;
 
 /**
  * SendRoomDamageNotificationsCommand.php
@@ -53,17 +54,18 @@ class SendRoomDamageNotificationsCommand extends Command {
 
             if($coordinators != null){
             	$coordinatorName  = $coordinators[0]->getDisplayName();
-                $coordinatorEmail = $coordinators[0]->getEmail();
+              $coordinatorEmail = $coordinators[0]->getEmail();
             } else {
             	$coordinatorName  = '(No coordinator set for this hall.)';
-                $coordinatorEmail = '(No coordinator set for this hall.)';
+              $coordinatorEmail = '(No coordinator set for this hall.)';
             }
 
             HMS_Email::sendDamageNotification($student, $term, $dmg['sum'], $coordinatorName, $coordinatorEmail);
+            HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ROOM_DAMAGE_NOTIFICATION, $student->getUsername());
         }
 
         // Show a success message and redirect back to the main admin menu
-    	\NQ::simple('hms', NotificationView::SUCCESS, 'Room damage noties sent.');
+    	\NQ::simple('hms', NotificationView::SUCCESS, 'Room damage notices sent.');
         $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
         $cmd->redirect();
     }
