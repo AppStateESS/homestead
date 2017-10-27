@@ -7,7 +7,7 @@
 <script type="text/javascript">
     var residents = {RESIDENTS};
     var existing_damage = {EXISTING_DAMAGE};
-    var previous_key_code = '{$PREVIOUS_KEY_CODE}';
+    var previous_key_code = {PREVIOUS_KEY_CODE};
     var damage_types = {DAMAGE_TYPES};
     var room_pid = '{ROOM_PID}';
     var checkin_id = '{CHECKIN_ID}';
