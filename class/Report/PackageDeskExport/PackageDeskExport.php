@@ -38,6 +38,7 @@ class PackageDeskExport extends Report implements iCsvReport{
                                         'ERROR',
                                         'ERROR',
                                         'ERROR',
+                                        $result['banner_id'],
                                         $result['cell_phone'],
                                         $result['asu_username']."@appstate.edu");
                 continue;
@@ -48,6 +49,7 @@ class PackageDeskExport extends Report implements iCsvReport{
                                   $result['room_number'],
                                   $student->getFirstName(),
                                   $student->getLastName(),
+                                  $student->getPreferredName(),
                                   $result['banner_id'],
                                   $result['cell_phone'],
                                   $result['asu_username'] . "@appstate.edu");
@@ -61,6 +63,7 @@ class PackageDeskExport extends Report implements iCsvReport{
                      "Room",
                      "First Name",
                      "Last Name",
+                     "Preferred Name",
                      "Banner ID",
                      "Cell Phone Number",
                      "Email Address");
