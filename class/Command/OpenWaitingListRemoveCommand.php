@@ -3,7 +3,7 @@
 namespace Homestead\Command;
 
 use \Homestead\CommandFactory;
-use \Homestead\HousingApplication;
+use \Homestead\HousingApplicationFactory;
 use \Homestead\NotificationView;
 use \Homestead\Exception\PermissionException;
 
