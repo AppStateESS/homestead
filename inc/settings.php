@@ -11,3 +11,5 @@ $settings['docusign_username']  = ''; // Username for DocuSign API (usually an e
 $settings['docusign_password']  = ''; // Docusign account password *grumble*
 $settings['docusign_key']       = ''; // The "integrator key"
 $settings['docusign_env']       = 'demo'; // The docusign environment, 'demo' for testing, 'na2' for production'
+
+$settings['mandrill_key']       = '';

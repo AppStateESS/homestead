@@ -309,7 +309,7 @@ class HMS_Lottery {
 
         foreach ($result as $row) {
             $student = StudentFactory::getStudentByUsername($row['username'], $term);
-            HMS_Email::send_lottery_invite_reminder($row['username'], $student->getName(), $row['invite_expires_on'], $year);
+            HMS_Email::send_lottery_invite_reminder($student, $student->getName(), $row['invite_expires_on'], $year);
             HMS_Activity_Log::log_activity($row['username'], ACTIVITY_LOTTERY_REMINDED, 'hms');
         }
     }

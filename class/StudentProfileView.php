@@ -288,6 +288,17 @@ class StudentProfileView extends View {
 
         // TODO tabs
 
+        /*********************
+         * Email Message Log *
+         *********************/
+        $tpl['vendor_bundle'] = AssetResolver::resolveJsPath('assets.json', 'vendor');
+        $tpl['entry_bundle'] = AssetResolver::resolveJsPath('assets.json', 'emailLogView');
+        $emailLogParams = array(
+            'banner_id'=>$this->student->getBannerId(),
+            'mandrill_key' => \PHPWS_Settings::get('hms', 'mandrill_key')
+        );
+        $tpl['EMAIL_LOG_PARAMS'] = json_encode($emailLogParams);
+
         \Layout::addPageTitle("Student Profile");
         return \PHPWS_Template::process($tpl, 'hms', 'admin/StudentProfile.tpl');
     }

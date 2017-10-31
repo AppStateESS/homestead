@@ -21,6 +21,13 @@ alter table hms_contract add constraint contract_uniq_banner_term UNIQUE (banner
 
 create sequence hms_contract_seq;
 
+CREATE TABLE hms_email_log (
+    banner_id   character varying not null,
+    message_id  character varying not null,
+    email       character varying not null,
+    PRIMARY KEY (banner_id, message_id)
+);
+
 CREATE TABLE hms_student_cache (
     banner_id           integer NOT NULL,
     term                integer NOT NULL,
