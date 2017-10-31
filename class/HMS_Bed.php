@@ -96,7 +96,10 @@ class HMS_Bed extends HMS_Item {
 
                 if($mealPlan !== null){
                     $newPlan = MealPlanFactory::createPlan($student, $to_term, $housingApp);
-                    MealPlanFactory::saveMealPlan($newPlan);
+
+                    if($newPlan !== null){
+                        MealPlanFactory::saveMealPlan($newPlan);
+                    }
                 }
             }
         }
