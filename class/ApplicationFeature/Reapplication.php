@@ -5,7 +5,7 @@ namespace Homestead\ApplicationFeature;
 use \Homestead\ApplicationFeature;
 use \Homestead\Student;
 use \Homestead\HMS_Assignment;
-use \Homestead\HousingApplication;
+use \Homestead\HousingApplicationFactory;
 use \Homestead\LotteryApplication;
 use \Homestead\HMS_Lottery;
 use \Homestead\ReapplicationMenuBlockView;
@@ -15,7 +15,7 @@ class Reapplication extends ApplicationFeature {
     public function getMenuBlockView(Student $student)
     {
         $assignment       = HMS_Assignment::getAssignment($student->getUsername(), $this->term);
-        $application      = HousingApplication::getApplicationByUser($student->getUsername(), $this->term);
+        $application      = HousingApplicationFactory::getAppByStudent($student, $this->term);
 
         if(!$application instanceof LotteryApplication){
             $application = null;

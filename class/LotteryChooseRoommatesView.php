@@ -24,7 +24,7 @@ class LotteryChooseRoommatesView extends View {
         #TODO: place a temporary reservation on the entire room
 
         # Grab all of their preferred roommates
-        $lotteryApplication = HousingApplication::getApplicationByUser($this->student->getUsername(), $this->term);
+        $lotteryApplication = HousingApplicationFactory::getAppByStudent($this->student, $this->term);
 
         # List each bed in the room and if it's available, assigned, or reserved
         $room = new HMS_Room($this->roomId);

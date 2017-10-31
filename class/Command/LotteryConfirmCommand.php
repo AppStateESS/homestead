@@ -15,7 +15,7 @@ use \Homestead\HMS_Util;
 use \Homestead\HMS_Email;
 use \Homestead\RlcMembershipFactory;
 use \Homestead\RlcAssignmentSelfAssignedState;
-use \Homestead\HousingApplication;
+use \Homestead\HousingApplicationFactory;
 use \Homestead\MealPlanFactory;
 use \Homestead\Term;
 use \Homestead\Exception\StudentNotFoundException;
@@ -161,7 +161,7 @@ class LotteryConfirmCommand extends Command {
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_LOTTERY_ROOM_CHOSEN, UserStatus::getUsername(), 'Captcha: ' . $captcha);
 
         // Update the student's meal plan in the housing application, just for future reference
-        $app = HousingApplication::getApplicationByUser($student->getUsername(), $term);
+        $app = HousingApplicationFactory::getAppByStudent($student, $term);
         $app->setMealPlan($mealPlanCode);
         $app->save();
 
