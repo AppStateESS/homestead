@@ -3,7 +3,7 @@
 namespace Homestead\Command;
 
 use \Homestead\UserStatus;
-use \Homestead\HousingApplication;
+use \Homestead\HousingApplicationFactory;
 use \Homestead\NotificationView;
 use \Homestead\CommandFactory;
 use \Homestead\StudentFactory;
@@ -44,9 +44,9 @@ class ShowOffCampusWaitListApplicationCommand extends Command {
      */
     public function execute(CommandContext $context){
         $term = $context->get('term');
-
+        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
         // Check if the student has already applied. If so, redirect to the student menu
-        $app = HousingApplication::getApplicationByUser(UserStatus::getUsername(), $term);
+        $app = HousingApplicationFactory::getAppByStudent($Student, $term);
 
         if (isset($app) && $app->getApplicationType() == 'offcampus_waiting_list') {
             \NQ::simple('hms', NotificationView::ERROR, 'You have already enrolled in the Open Waiting List for this term.');

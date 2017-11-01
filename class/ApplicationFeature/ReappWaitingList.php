@@ -5,7 +5,7 @@ namespace Homestead\ApplicationFeature;
 use \Homestead\ApplicationFeature;
 use \Homestead\Student;
 use \Homestead\UserStatus;
-use \Homestead\HousingApplication;
+use \Homestead\HousingApplicationFactory;
 use \Homestead\ReapplicationWaitingListMenuBlockView;
 
 class ReappWaitingList extends ApplicationFeature {
@@ -13,7 +13,7 @@ class ReappWaitingList extends ApplicationFeature {
     public function getMenuBlockView(Student $student)
     {
         $term = \PHPWS_Settings::get('hms', 'lottery_term');
-        $application = HousingApplication::getApplicationByUser(UserStatus::getUsername(), $term, 'lottery');
+        $application = HousingApplicationFactory::getAppByStudent($student, $term, 'lottery');
 
         return new ReapplicationWaitingListMenuBlockView($this->term, $this->getStartDate(), $this->getEndDate(), $application);
     }
