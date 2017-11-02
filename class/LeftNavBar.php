@@ -33,23 +33,25 @@ class LeftNavBar extends View {
         $reportsCmd = CommandFactory::getCommand('ListReports');
         $this->tpl['REPORTS_URI'] = $reportsCmd->getUri();
 
-        $this->tpl['SERVICE_DESK_URI'] = '';
+        $serviceDeskCmd = CommandFactory::getCommand('ServiceDeskMenu');
+        $this->tpl['SERVICE_DESK_URI'] = $serviceDeskCmd->getUri();
 
-        $this->tpl['REAPPLICATION_URI'] = '';
+        $reappCmd = CommandFactory::getCommand('ReapplicationMenu');
+        $this->tpl['REAPPLICATION_URI'] = $reappCmd->getUri();
 
         if(\Current_User::allow('hms', 'edit_terms')) {
             $termCmd = CommandFactory::getCommand('ShowEditTerm');
-        	$this->tpl['EDIT_TERM_URI'] = $termCmd->getURI();
+        	$this->tpl['EDIT_TERM_URI'] = $termCmd->getUri();
         }
 
         if(\Current_User::allow('hms', 'view_activity_log')) {
             $termCmd = CommandFactory::getCommand('ShowActivityLog');
-            $this->tpl['ACTIVITY_LOG_URI'] = $termCmd->getURI();
+            $this->tpl['ACTIVITY_LOG_URI'] = $termCmd->getUri();
         }
 
     	if(\Current_User::isDeity()) {
             $ctrlPanel = CommandFactory::getCommand('ShowControlPanel');
-            $this->tpl['CTRL_PANEL_URI'] = $ctrlPanel->getURI();
+            $this->tpl['CTRL_PANEL_URI'] = $ctrlPanel->getUri();
     	}
 
         return \PHPWS_Template::process($this->tpl, 'hms', 'leftNavBar.tpl');
