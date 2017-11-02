@@ -7,6 +7,7 @@ use \Homestead\HMS_Movein_Time;
 use \Homestead\HMS_Bed;
 use \Homestead\HMS_RLC_Assignment;
 use \Homestead\HMS_Email;
+use \Homestead\HMS_Acivity_Log;
 use \Homestead\StudentFactory;
 use \Homestead\NotificationView;
 use \Homestead\Exception\PermissionException;
@@ -160,6 +161,7 @@ class SendAssignmentNotificationCommand extends Command {
 
             // Send the email
             HMS_Email::sendAssignmentNotice($student, $student->getName(), $term, $location, $roommates, $movein_time);
+            HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_ASSIGNMENT_NOTICE, $student->getUsername())
 
             // Mark the student as having received an email
             $db->reset();
