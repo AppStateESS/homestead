@@ -68,6 +68,9 @@ class EmergencyContactConfirmCommand extends Command {
 
         // Update the Emergency Contact and Missing Person information
 
+        /* Student's Phone Number*/
+        $application->setCellPhone($context->get('cell_phone'));
+
         // TODO Sanity check all this new contact information
         /* Emergency Contact */
         $application->setEmergencyContactName($context->get('emergency_contact_name'));

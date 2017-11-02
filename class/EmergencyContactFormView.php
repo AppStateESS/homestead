@@ -31,6 +31,8 @@ class EmergencyContactFormView extends View {
         ****************/
         $tpl['TERM']			= Term::toString($this->term);
         $tpl['STUDENT_NAME']    = $this->student->getFullName();
+        $form->addText('cell_phone');
+        $form->addCssClass('cell_phone', 'form-control');
 
         /*********************
          * Emergency Contact *
@@ -47,6 +49,7 @@ class EmergencyContactFormView extends View {
         $form->addCssClass('emergency_medical_condition', 'form-control');
 
         if(!is_null($this->application)){
+            $form->setValue('cell_phone', $this->application->getCellPhone());
             $form->setValue('emergency_contact_name', $this->application->getEmergencyContactName());
             $form->setValue('emergency_contact_relationship', $this->application->getEmergencyContactRelationship());
             $form->setValue('emergency_contact_phone', $this->application->getEmergencyContactPhone());
