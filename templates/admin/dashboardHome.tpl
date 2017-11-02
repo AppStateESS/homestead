@@ -39,7 +39,7 @@
                     <div class="col-xs-7">
                         <div class="numbers">
                             <p>Available Beds</p>
-                            ###
+                            {NUM_BEDS_AVAIL}
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                     <div class="col-xs-7">
                         <div class="numbers">
                             <p>Overflow Assignments</p>
-                            ###
+                            {OVERFLOW_ASSIGNMENTS}
                         </div>
                     </div>
                 </div>
