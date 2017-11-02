@@ -5,11 +5,11 @@ namespace Homestead;
 /**
  * HMS User View
  * All Non-Admin Authenticated Users.
- * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
+ * @author Jeremy Booker
  * @package Homestead
  */
 
-class UserView extends HomesteadView {
+class AdminView extends HomesteadView {
 
     public function render()
     {
@@ -18,10 +18,14 @@ class UserView extends HomesteadView {
         $tpl['MAIN'] = $this->getMain();
 
         // Top nav bar
-        // TODO
+        $topNav = new TopNavBar();
+        $tpl['TOP_NAV'] = $topNav->show();
+
+        $leftNav = new LeftNavBar();
+        $tpl['LEFT_NAV'] = $leftNav->show();
 
         \Layout::addStyle('hms', 'css/hms.css');
 
-        \Layout::add(\PHPWS_Template::process($tpl, 'hms', 'user.tpl'));
+        \Layout::add(\PHPWS_Template::process($tpl, 'hms', 'adminView.tpl'));
     }
 }

@@ -40,14 +40,25 @@
 }
 /***** End Typeahead Styles *****/
 
+/* Add a pointer cursor to an entire table row */
 .row-link:hover {
     cursor: pointer;
 }
 
-/*** To make the user's full name fit in the nav bar without wrapping */
-.navbar-form {
-    padding-right: 3px;
-    padding-left: 3px;
+/* Fix the color of the Term Selector drop down box */
+.navbar-form .form-control {
+    color: #565656;
+}
+
+.sidebar .nav > li.settings-dropdown {
+    position: absolute;
+    width: 100%;
+    bottom: 10px;
+}
+
+.sidebar .nav li.settings-dropdown > ul a {
+    color: #333;
+
 }
 
 /*** Animation styles for damage assessment interface ***/
