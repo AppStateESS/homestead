@@ -58,7 +58,23 @@
 
 .sidebar .nav li.settings-dropdown > ul a {
     color: #333;
+}
 
+/****** Dashboard *******/
+.card-stats .icon-big {
+  font-size: 3em;
+  min-height: 64px;
+}
+.card-stats .icon-big i {
+    font-weight: bold;
+    line-height: 59px;
+}
+.card-stats .numbers {
+  font-size: 2em;
+  text-align: right;
+}
+.card-stats .numbers p {
+    margin: 0;
 }
 
 /*** Animation styles for damage assessment interface ***/
