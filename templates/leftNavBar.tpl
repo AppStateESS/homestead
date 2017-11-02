@@ -70,7 +70,7 @@
     <!-- END reapplication -->
 
     <li class="dropup settings-dropdown">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cog"></i> Settings <span class="caret"></span></a>
+      <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cog"></i> Settings <span class="caret"></span></a>
       <ul class="dropdown-menu" role="menu">
 
         <!-- BEGIN term -->

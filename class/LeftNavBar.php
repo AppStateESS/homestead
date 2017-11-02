@@ -16,12 +16,25 @@ class LeftNavBar extends View {
 
     public function show()
     {
-        $this->tpl['ASIGNMENTS_URI'] = '';
-        $this->tpl['HALLS_URI'] = '';
-        $this->tpl['RLC_URI'] = '';
-        $this->tpl['MESSAGING_URI'] = '';
-        $this->tpl['REPORTS_URI'] = '';
+        $assignCmd = CommandFactory::getCommand('ShowAssignStudent');
+        $this->tpl['ASSIGNMENTS_URI'] = $assignCmd->getUri();
+
+        $hallCmd = CommandFactory::getCommand('SelectResidenceHall');
+        $hallCmd->setTitle('Select Residence Hall');
+        $hallCmd->setOnSelectCmd(CommandFactory::getCommand('EditResidenceHallView'));
+        $this->tpl['HALLS_URI'] = $hallCmd->getUri();
+
+        $communityCmd = CommandFactory::getCommand('ShowEditRlc');
+        $this->tpl['RLC_URI'] = $communityCmd->getUri();
+
+        $messageCmd = CommandFactory::getCommand('ShowHallNotificationSelect');
+        $this->tpl['MESSAGING_URI'] = $messageCmd->getUri();
+
+        $reportsCmd = CommandFactory::getCommand('ListReports');
+        $this->tpl['REPORTS_URI'] = $reportsCmd->getUri();
+
         $this->tpl['SERVICE_DESK_URI'] = '';
+
         $this->tpl['REAPPLICATION_URI'] = '';
 
         if(\Current_User::allow('hms', 'edit_terms')) {
