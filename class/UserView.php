@@ -18,7 +18,8 @@ class UserView extends HomesteadView {
         $tpl['MAIN'] = $this->getMain();
 
         // Top nav bar
-        // TODO
+        $navBar = new StudentNavBar();
+        $tpl['NAV_BAR'] = $navBar->show();
 
         \Layout::addStyle('hms', 'css/hms.css');
 
