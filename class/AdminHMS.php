@@ -6,7 +6,7 @@ class AdminHMS extends HMS
 {
     public function process()
     {
-        $this->context->setDefault('action', 'ShowAdminMaintenanceMenu');
+        $this->context->setDefault('action', 'DashboardHome');
         parent::process();
 
         $view = new AdminView();
