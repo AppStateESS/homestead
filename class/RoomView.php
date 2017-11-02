@@ -19,12 +19,12 @@ class RoomView extends View {
     /**
      * Constructor
      *
-     * @param HMS_Residence_Hall    $hall
-     * @param HMS_Floor             $floor
-     * @param HMS_Room              $room
+     * @param ResidenceHall    $hall
+     * @param Floor             $floor
+     * @param Room              $room
      * @param Array                 $damageTypes
      */
-    public function __construct(HMS_Residence_Hall $hall, HMS_Floor $floor, HMS_Room $room, Array $damageTypes){
+    public function __construct(ResidenceHall $hall, Floor $floor, Room $room, Array $damageTypes){
         $this->hall		= $hall;
         $this->floor	= $floor;
         $this->room		= $room;
@@ -176,7 +176,7 @@ class RoomView extends View {
         $form->addSubmit('submit', 'Submit');
 
         // Assignment pagers
-        $tpl['BED_PAGER'] = HMS_Bed::bed_pager_by_room($this->room->id);
+        $tpl['BED_PAGER'] = Bed::bed_pager_by_room($this->room->id);
 
         // if the user has permission to view the form but not edit it then
         // disable it
@@ -194,7 +194,7 @@ class RoomView extends View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        $reasonsList = HMS_Room::listReserveReasons();
+        $reasonsList = Room::listReserveReasons();
 
         $tpl['ATHLETICS_OPTIONS'] =  $reasonsList['Athletics'];
         $tpl['SPECIAL_NEEDS_OPTIONS'] =  $reasonsList['SpecialNeeds'];

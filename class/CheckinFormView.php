@@ -11,7 +11,7 @@ class CheckinFormView extends View {
     private $room;
     private $checkin;
 
-    public function __construct(Student $student, HMS_Assignment $assignment, HMS_Residence_Hall $hall, HMS_Floor $floor, HMS_Room $room, Checkin $checkin = null)
+    public function __construct(Student $student, HMS_Assignment $assignment, ResidenceHall $hall, Floor $floor, Room $room, Checkin $checkin = null)
     {
         $this->student      = $student;
         $this->assignment   = $assignment;

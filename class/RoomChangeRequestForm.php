@@ -27,7 +27,7 @@ class RoomChangeRequestForm extends View {
 
         /* Preferences */
         $halls = array(0=>'Choose from below...');
-        $halls = $halls+HMS_Residence_Hall::get_halls_array(Term::getSelectedTerm());
+        $halls = $halls+ResidenceHall::get_halls_array(Term::getSelectedTerm());
 
         $form->addRadioAssoc('type', array('switch'=>'I want to change to an open bed.', 'swap'=>'I want to swap beds with someone I know.'));
 

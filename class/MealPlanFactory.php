@@ -23,7 +23,7 @@ class MealPlanFactory {
      * @param HousingApplication|null $application
      * @return MealPlan|null
      */
-    public static function createPlan(Student $student, $term, HousingApplication $application = null, HMS_Residence_Hall $hall = null)
+    public static function createPlan(Student $student, $term, HousingApplication $application = null, ResidenceHall $hall = null)
     {
         if($application === null){
             $planCode = MealPlan::BANNER_MEAL_STD;

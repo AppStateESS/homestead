@@ -4,7 +4,7 @@ namespace Homestead\Command;
 
 use \Homestead\Term;
 use \Homestead\HMS_Movein_Time;
-use \Homestead\HMS_Bed;
+use \Homestead\Bed;
 use \Homestead\HMS_RLC_Assignment;
 use \Homestead\HMS_Email;
 use \Homestead\StudentFactory;
@@ -62,7 +62,7 @@ class SendAssignmentNotificationCommand extends Command {
             $student = StudentFactory::getStudentByUsername($assignment->getUsername(), $term);
 
             //get the location of their assignment
-            $bed = new HMS_Bed($assignment->getBedId());
+            $bed = new Bed($assignment->getBedId());
             $room = $bed->get_parent();
             $location = $bed->where_am_i() . ' - Bedroom ' . $bed->bedroom_label;
 

@@ -36,7 +36,7 @@ class LotteryConfirmView extends View {
         }
 
         # List the student's room
-        $room = new HMS_Room($this->roomId);
+        $room = new Room($this->roomId);
         $tpl['ROOM'] = $room->where_am_i();
 
         # List all the students which will be assigned and their beds

@@ -30,9 +30,9 @@ class RoomChangeParticipant {
      *
      * @param RoomChangeRequest $request
      * @param Student $student
-     * @param HMS_Bed $fromBed
+     * @param Bed $fromBed
      */
-    public function __construct(RoomChangeRequest $request, Student $student, HMS_Bed $fromBed)
+    public function __construct(RoomChangeRequest $request, Student $student, Bed $fromBed)
     {
         $this->id = 0;
         $this->request_id    = $request->getId();
@@ -169,7 +169,7 @@ class RoomChangeParticipant {
      */
     private function getApproverList($bedId)
     {
-        $bed = new HMS_Bed($bedId);
+        $bed = new Bed($bedId);
         $room = $bed->get_parent();
         $floor = $room->get_parent();
         $hall = $floor->get_parent();
@@ -230,7 +230,7 @@ class RoomChangeParticipant {
         return $this->to_bed;
     }
 
-    public function setToBed(HMS_Bed $bed)
+    public function setToBed(Bed $bed)
     {
         $this->to_bed = $bed->getId();
     }
@@ -240,7 +240,7 @@ class RoomChangeParticipant {
         return $this->hall_pref1;
     }
 
-    public function setHallPref1(HMS_Residence_Hall $hall)
+    public function setHallPref1(ResidenceHall $hall)
     {
         $this->hall_pref1 = $hall->getId();
     }
@@ -250,7 +250,7 @@ class RoomChangeParticipant {
         return $this->hall_pref2;
     }
 
-    public function setHallPref2(HMS_Residence_Hall $hall)
+    public function setHallPref2(ResidenceHall $hall)
     {
         $this->hall_pref2 = $hall->getId();
     }

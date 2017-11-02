@@ -3,7 +3,7 @@
 namespace Homestead\Command;
 
 use \Homestead\LotteryChooseRoomThanksView;
-use \Homestead\HMS_Room;
+use \Homestead\Room;
 
 class LotteryShowConfirmedCommand extends Command {
 
@@ -25,7 +25,7 @@ class LotteryShowConfirmedCommand extends Command {
     {
         $roomId = $context->get('roomId');
 
-        $room = new HMS_Room($roomId);
+        $room = new Room($roomId);
 
         $view = new LotteryChooseRoomThanksView($room);
 

@@ -27,7 +27,7 @@ class LotteryChooseRoommatesView extends View {
         $lotteryApplication = HousingApplicationFactory::getAppByStudent($this->student, $this->term);
 
         # List each bed in the room and if it's available, assigned, or reserved
-        $room = new HMS_Room($this->roomId);
+        $room = new Room($this->roomId);
         $beds = $room->get_beds();
 
         $tpl['ROOM'] = $room->where_am_i();

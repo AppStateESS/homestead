@@ -8,7 +8,7 @@ use \Homestead\CommandFactory;
 use \Homestead\StudentFactory;
 use \Homestead\Student;
 use \Homestead\HMS_Assignment;
-use \Homestead\HMS_Bed;
+use \Homestead\Bed;
 use \Homestead\HMS_Email;
 use \Homestead\BannerRoomChangeStudent;
 use \Homestead\RoomChangeStateApproved;
@@ -75,7 +75,7 @@ class RoomChangeApproveCommand extends Command {
             $oldBed = $assignment->get_parent();
 
             // Load the new Bed object via its ID
-            $newBed = new HMS_Bed($participant->getToBed());
+            $newBed = new Bed($participant->getToBed());
 
             $bannerRoomChangeStudents[] = new BannerRoomChangeStudent($student, $oldBed, $newBed);
         }
@@ -91,7 +91,7 @@ class RoomChangeApproveCommand extends Command {
             $participant->transitionTo(new ParticipantStateInProcess($participant, time(), null, UserStatus::getUsername()));
 
             // Release bed reservation
-            $bed = new HMS_Bed($participant->getToBed());
+            $bed = new Bed($participant->getToBed());
             $bed->clearRoomChangeReserved();
             $bed->save();
         }
@@ -105,7 +105,7 @@ class RoomChangeApproveCommand extends Command {
             $student = StudentFactory::getStudentByBannerId($p->getBannerId(), $term);
 
             // New Roommate
-            $newbed = new HMS_Bed($p->getToBed());
+            $newbed = new Bed($p->getToBed());
             $newroom = $newbed->get_parent();
 
             foreach($newroom->get_assignees() as $a) {
@@ -115,7 +115,7 @@ class RoomChangeApproveCommand extends Command {
             }
 
             // Old Roommate
-            $oldbed = new HMS_Bed($p->getFromBed());
+            $oldbed = new Bed($p->getFromBed());
             $oldroom = $oldbed->get_parent();
             foreach($oldroom->get_assignees() as $a) {
                 if($a instanceof Student && $a->getBannerID() != $p->getBannerID()) {

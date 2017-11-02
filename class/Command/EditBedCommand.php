@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
-use \Homestead\HMS_Bed;
+use \Homestead\Bed;
 use \Homestead\UserStatus;
 use \Homestead\CommandFactory;
 use \Homestead\NotificationView;
@@ -53,7 +53,7 @@ class EditBedCommand extends Command {
         }
 
         # Create the bed object given the bed_id
-        $bed = new HMS_Bed($bedId);
+        $bed = new Bed($bedId);
         if(!$bed){
             \NQ::simple('hms', NotificationView::ERROR, 'Invalid bed.');
             $viewCmd->redirect();

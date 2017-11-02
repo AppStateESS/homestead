@@ -220,7 +220,7 @@ class RoomChangeRequest {
         // Make sure each participant is checked-into his/her current assignment
         foreach($this->getParticipants() as $participant){
             // Load the 'from' Bed object
-            $bed = new HMS_Bed($participant->getFromBed());
+            $bed = new Bed($participant->getFromBed());
 
             // Load the student
             $student = StudentFactory::getStudentByBannerId($participant->getBannerId(), Term::getSelectedTerm());

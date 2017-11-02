@@ -5,7 +5,7 @@ namespace Homestead\Command;
 use \Homestead\StudentFactory;
 use \Homestead\CommandFactory;
 use \Homestead\Term;
-use \Homestead\HMS_Bed;
+use \Homestead\Bed;
 use \Homestead\UserStatus;
 use \Homestead\NotificationView;
 use \Homestead\HousingApplicationFactory;
@@ -79,7 +79,7 @@ class ShowAssignStudentCommand extends Command {
         $term = Term::getSelectedTerm();
 
         if (isset($bedId) && !is_null($bedId) && !empty($bedId)) {
-            $bed = new HMS_Bed($bedId);
+            $bed = new Bed($bedId);
         } else {
             $bed = null;
         }

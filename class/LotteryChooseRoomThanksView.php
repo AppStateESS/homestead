@@ -6,7 +6,7 @@ class LotteryChooseRoomThanksView extends View {
 
     private $room;
 
-    public function __construct(HMS_Room $room)
+    public function __construct(Room $room)
     {
         $this->room = $room;
     }

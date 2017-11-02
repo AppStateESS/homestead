@@ -12,7 +12,7 @@ class AddRoomView extends View {
     private $hall;
     private $floor;
 
-    public function __construct(HMS_Floor $floor){
+    public function __construct(Floor $floor){
         $this->floor = $floor;
         $this->hall = $floor->get_parent();
     }

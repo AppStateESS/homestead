@@ -35,11 +35,11 @@ class RoomDamageFactory {
      * Returns a set of RoomDamage objects representing all
      * the room damages for the given room.
      *
-     * @param HMS_Room $room
+     * @param Room $room
      * @throws DatabaseException
      * @return Array<RoomDamage> null
      */
-    public static function getDamagesByRoom(HMS_Room $room)
+    public static function getDamagesByRoom(Room $room)
     {
         $db = new \PHPWS_DB('hms_room_damage');
 
@@ -58,13 +58,13 @@ class RoomDamageFactory {
      * Returns the set of RoomDamage objects that were created before
      * the give timestmap.
      *
-     * @param HMS_Room $room
+     * @param Room $room
      * @param unknown $timestamp
      * @throws DatabaseException
      * @throws \InvalidArgumentException
      * @return Array<RoomDamage> null
      */
-    public static function getDamagesBefore(HMS_Room $room, $timestamp)
+    public static function getDamagesBefore(Room $room, $timestamp)
     {
         if(!isset($timestamp)){
             throw new \InvalidArgumentException('Missing timestamp.');
@@ -90,7 +90,7 @@ class RoomDamageFactory {
      * Returns an array of RoomDamage objects which have pending ('new') responsibilities
      * which need to be assessed. These are filtered by the array of floor objects passed in.
      *
-     * @param array $floorList Array of HMS_Floor objects
+     * @param array $floorList Array of Floor objects
      */
     public static function getDamagesToAssessByFloor(Array $floorList, $term)
     {

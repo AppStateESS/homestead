@@ -3,9 +3,9 @@
 namespace Homestead\Command;
 
 
-use \Homestead\HMS_Residence_Hall;
+use \Homestead\ResidenceHall;
 use \Homestead\HMS_Permission;
-use \Homestead\HMS_Floor;
+use \Homestead\Floor;
 use \Homestead\RoomDamageFactory;
 use \Homestead\RoomDamageResponsibilityFactory;
 use \Homestead\RoomFactory;
@@ -46,7 +46,7 @@ class GetRoomDamagesToAssessCommand extends Command {
 
         foreach ($memberships as $member) {
             if ($member['class'] == 'hms_residence_hall') {
-                $hall = new HMS_Residence_Hall($member['instance']);
+                $hall = new ResidenceHall($member['instance']);
                 if(!is_array($floors)){
                     $floors = array();
                 }
@@ -56,7 +56,7 @@ class GetRoomDamagesToAssessCommand extends Command {
                 }
                 $floors = array_merge($floors, $hallFloors);
             } else if ($member['class'] == 'hms_floor') {
-                $floors[] = new HMS_Floor($member['instance']);
+                $floors[] = new Floor($member['instance']);
             } else {
                 throw new \Exception('Unknown object type.');
             }

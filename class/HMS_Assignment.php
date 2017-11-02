@@ -88,7 +88,7 @@ class HMS_Assignment extends HMS_Item {
     */
     public function loadBed()
     {
-        $bed = new HMS_Bed($this->bed_id);
+        $bed = new Bed($this->bed_id);
 
         $this->_bed = &$bed;
         return true;
@@ -376,7 +376,7 @@ class HMS_Assignment extends HMS_Item {
 
         if (isset($bed_id)) {
             // A bed_id was given, so create that bed object
-            $vacant_bed = new HMS_Bed($bed_id);
+            $vacant_bed = new Bed($bed_id);
 
             if (!$vacant_bed) {
                 throw new AssignmentException('Null bed object.');
@@ -385,7 +385,7 @@ class HMS_Assignment extends HMS_Item {
             $room = $vacant_bed->get_parent();
         } else if (isset($room_id)) {
             // A room_id was given, so create that room object
-            $room = new HMS_Room($room_id);
+            $room = new Room($room_id);
 
             // And find a vacant bed in that room
             $beds = $room->getBedsWithVacancies();
@@ -530,7 +530,7 @@ class HMS_Assignment extends HMS_Item {
 
         // Look for roommates and flag their assignments as needing a new letter
         $room_id = $assignment->get_room_id();
-        $room = new HMS_Room($room_id);
+        $room = new Room($room_id);
 
         // Go to the room level to get all the roommates
         $assignees = $room->get_assignees(); // get an array of student objects for those assigned to this room

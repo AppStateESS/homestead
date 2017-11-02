@@ -3,7 +3,7 @@
 namespace Homestead\Command;
 
 use \Homestead\Term;
-use \Homestead\HMS_Residence_Hall;
+use \Homestead\ResidenceHall;
 use \Homestead\CommandFactory;
 use \Homestead\SelectHallView;
 
@@ -54,7 +54,7 @@ class SelectResidenceHallCommand extends Command {
     public function execute(CommandContext $context)
     {
         $term = Term::getSelectedTerm();
-        $halls = HMS_Residence_Hall::get_halls_array($term);
+        $halls = ResidenceHall::get_halls_array($term);
 
         $onSelectCmd = CommandFactory::getCommand($context->get('onSelectAction'));
 

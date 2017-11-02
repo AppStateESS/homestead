@@ -34,11 +34,11 @@ class RoomDamage {
     /**
      * Constructor
      *
-     * @param HMS_Room $room
+     * @param Room $room
      * @param integer $damageType
      * @param string $note
      */
-    public function __construct(HMS_Room $room, $term, $damageType, $side, $note)
+    public function __construct(Room $room, $term, $damageType, $side, $note)
     {
         $this->id                    = null;
         $this->room_persistent_id    = $room->getPersistentId();

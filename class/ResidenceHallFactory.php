@@ -5,7 +5,7 @@ namespace Homestead;
 use \Homestead\Exception\DatabaseException;
 
 /**
- * ResidenceHallFactory - Factory methods to aid in creating HMS_Residence_Hall objects.
+ * ResidenceHallFactory - Factory methods to aid in creating ResidenceHall objects.
  *
  * @author jbooker
  * @package hms
@@ -13,12 +13,12 @@ use \Homestead\Exception\DatabaseException;
 class ResidenceHallFactory {
 
     /**
-     * Returns an array of HMS_Residence_Hall objects for the given term.
+     * Returns an array of ResidenceHall objects for the given term.
      *
      * @param integer $term
      * @throws \InvalidArgumentException
      * @throws DatabaseException
-     * @return multitype:HMS_Residence_Hall
+     * @return multitype:ResidenceHall
      */
     public static function getHallsForTerm($term)
     {
@@ -28,21 +28,18 @@ class ResidenceHallFactory {
 
         $halls = array();
 
-        $db = new \PHPWS_DB('hms_residence_hall');
-        $db->addColumn('id');
-        $db->addOrder('hall_name', 'DESC');
-
-        $db->addWhere('term', $term);
-
-        $results = $db->select();
-
-        if(\PHPWS_Error::logIfError($results)){
-            throw new DatabaseException($result->toString());
-        }
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT id
+           FROM hms_residence_hall
+           WHERE term = :term
+           ORDER BY hall_name ASC";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('term' => $term));
+        $results = $sth->fetchAll(\PDO::FETCH_ASSOC);
 
         //TODO this is terribly inefficient
         foreach($results as $result){
-            $halls[] = new HMS_Residence_Hall($result['id']);
+            $halls[] = new ResidenceHall($result['id']);
         }
 
         return $halls;

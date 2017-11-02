@@ -11,7 +11,7 @@ class AddRoomDamageView extends View {
 
     private $room;
 
-    public function __construct(HMS_Room $room)
+    public function __construct(Room $room)
     {
         if ($room->getId() == 0) {
             throw new \Exception('Ivalid room object.');

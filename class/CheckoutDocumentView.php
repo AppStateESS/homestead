@@ -16,7 +16,7 @@ class CheckoutDocumentView extends View {
         $term = Term::getCurrentTerm();
         $student = StudentFactory::getStudentByBannerId($this->checkin->getBannerId(), $term);
 
-        $bed = new HMS_Bed($this->checkin->getBedId());
+        $bed = new Bed($this->checkin->getBedId());
 
         $tpl = array();
 

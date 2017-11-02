@@ -4,8 +4,8 @@ namespace Homestead\Command;
 
 use \Homestead\CommandFactory;
 use \Homestead\HMS_Activity_Log;
-use \Homestead\HMS_Floor;
-use \Homestead\HMS_Residence_Hall;
+use \Homestead\Floor;
+use \Homestead\ResidenceHall;
 use \Homestead\HMS_Permission;
 use \Homestead\HMS_Email;
 use \Homestead\NotificationView;
@@ -79,7 +79,7 @@ class SendNotificationEmailsCommand extends Command {
 
         //load the floors
         foreach($floors as $key=>$floor_id){
-            $floors[$key] = new HMS_Floor($floor_id);
+            $floors[$key] = new Floor($floor_id);
         }
 
         // TODO accurate logging
@@ -89,7 +89,7 @@ class SendNotificationEmailsCommand extends Command {
         $floorObj = array();
         //load the halls and add floors that aren't already present, if they have js enabled should be zero
         foreach($halls as $hall){
-            $hallObj = new HMS_Residence_Hall($hall);
+            $hallObj = new ResidenceHall($hall);
 
             $hallFloors = $hallObj->get_floors();
 

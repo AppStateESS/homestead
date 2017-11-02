@@ -14,7 +14,7 @@ use \PHPWS_DB;
  * @author Matthew McNaney <mcnaney at gmail dot com>
  */
 
-class HMS_Bed extends HMS_Item {
+class Bed extends HMS_Item {
 
     public $id;
     public $term;
@@ -53,7 +53,7 @@ class HMS_Bed extends HMS_Item {
             return false;
         }
 
-        // echo "in hms_beds, making a copy of this bed<br>";
+        // echo "in hms_bed, making a copy of this bed<br>";
 
         $new_bed = clone ($this);
         $new_bed->reset();
@@ -128,18 +128,18 @@ class HMS_Bed extends HMS_Item {
 
     public function loadAssignment()
     {
-        $db = new PHPWS_DB('hms_assignment');
-        $db->addWhere('bed_id', $this->id);
-        $db->addWhere('term', $this->term);
-        $db->loadClass('hms', 'HMS_Assignment.php');
-        $result = $db->getObjects('\Homestead\HMS_Assignment');
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT *
+            FROM hms_assignment
+            WHERE bed_id = :id and term = :term";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $this->id, 'term' => $this->term));
+        $result = $sth->fetchAll(\PDO::FETCH_CLASS, '\Homestead\HMS_Assignment');
 
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        } else if ($result == null) {
+        if ($result == null) {
             return true;
         } elseif (sizeof($result) > 1) {
-            PHPWS_Error::log(HMS_MULTIPLE_ASSIGNMENTS, 'hms', 'HMS_Bed::loadAssignment', "bedid : {$this->id}");
+            PHPWS_Error::log(HMS_MULTIPLE_ASSIGNMENTS, 'hms', 'Bed::loadAssignment', "bedid : {$this->id}");
             return false;
         } else {
             $this->_curr_assignment = $result[0];
@@ -149,7 +149,7 @@ class HMS_Bed extends HMS_Item {
 
     public function loadRoom()
     {
-        $result = new HMS_Room($this->room_id);
+        $result = new Room($this->room_id);
         if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
@@ -402,15 +402,13 @@ class HMS_Bed extends HMS_Item {
 
     public function is_lottery_reserved()
     {
-        $db = new PHPWS_DB('hms_lottery_reservation');
-        $db->addWhere('bed_id', $this->id);
-        $db->addWhere('term', $this->term);
-        $db->addWhere('expires_on', time(), '>');
-        $result = $db->select('count');
-
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT id
+            FROM hms_lottery_reservation
+            WHERE bed_id = :id AND term = :term AND expires_on > :now";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $this->id, 'term' => $this->term, 'now' => time()));
+        $result = $sth->rowCount();
 
         if ($result > 0) {
             return TRUE;
@@ -421,15 +419,13 @@ class HMS_Bed extends HMS_Item {
 
     public function get_lottery_reservation_info()
     {
-        $db = new PHPWS_DB('hms_lottery_reservation');
-        $db->addWhere('bed_id', $this->id);
-        $db->addWhere('term', $this->term);
-        $db->addWhere('expires_on', time(), '>');
-        $result = $db->select('row');
-
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT *
+            FROM hms_lottery_reservation
+            WHERE bed_id = :id AND term = :term AND expires_on > :now";
+        $sth = $db->prepare($sql);
+        $sth->execute(array('id' => $this->id, 'term' => $this->term, 'now' => time()));
+        $result = $sth->fetch(\PDO::FETCH_ASSOC);
 
         return $result;
     }
@@ -545,78 +541,43 @@ class HMS_Bed extends HMS_Item {
      */
     public static function get_all_free_beds($term, $gender, $randomize = FALSE, $banner = FALSE)
     {
-        $db = new PHPWS_DB('hms_bed');
-
-        if ($banner) {
-            $db->addColumn('hms_bed.banner_id');
-            $db->addColumn('hms_residence_hall.banner_building_code');
-        }
-        $db->addColumn('id');
-
         // Only get free beds
-        $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_assignment', 'id', 'bed_id');
-        $db->addWhere('hms_assignment.asu_username', NULL);
-
         // Join other tables so we can do the other 'assignable' checks
-        $db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
-        $db->addJoin('LEFT OUTER', 'hms_room', 'hms_floor', 'floor_id', 'id');
-        $db->addJoin('LEFT OUTER', 'hms_floor', 'hms_residence_hall', 'residence_hall_id', 'id');
-
-        // Term
-        $db->addWhere('hms_bed.term', $term);
-
-        // Gender
-        $db->addWhere('hms_room.gender_type', $gender);
-
-        // Make sure everything is online
-        $db->addWhere('hms_room.offline', 0);
-        $db->addWhere('hms_floor.is_online', 1);
-        $db->addWhere('hms_residence_hall.is_online', 1);
-
-        // Make sure nothing is reserved
-        $db->addWhere('hms_room.reserved', 0);
+        // Make sure everything is online and nothing is reserved
+        // Don't get RA beds, lobbies, private rooms or room on floors reserved for an RLC
         // $db->addWhere('hms_room.is_medical', 0);
-
-        // Don't get RA beds
-        $db->addWhere('hms_room.ra', 0);
-
-        // Don't get lobbies
-        $db->addWhere('hms_room.overflow', 0);
-
-        // Don't get private rooms
-        $db->addWhere('hms_room.private', 0);
-
-        // Don't get rooms on floors reserved for an RLC
-        $db->addWhere('hms_floor.rlc_id', NULL);
-
-        // Randomize if necessary
-        if ($randomize) {
-            $db->addOrder('random');
-        }
-
-        // $db->setTestMode();
-
+        $db = PdoFactory::getPdoInstance();
+        $sql = "SELECT hms_bed.id ";
         if ($banner) {
-            $result = $db->select();
-            if (PHPWS_Error::logIfError($result)) {
-                throw new DatabaseException($result->toString());
-            }
-
+            $sql .= ",hms_bed.banner_id, hms_residence_hall.banner_building_code ";
+        }
+        $sql .= "FROM hms_bed
+           LEFT JOIN hms_assignment
+           ON hms_bed.id = hms_assignment.bed_id
+           LEFT JOIN hms_room
+           ON hms_bed.room_id = hms_room.id
+           LEFT JOIN hms_floor
+           ON hms_room.floor_id = hms_floor.id
+           LEFT JOIN hms_residence_hall
+           ON hms_floor.residence_hall_id = hms_residence_hall.id
+           WHERE hms_assignment.asu_username IS NULL AND hms_bed.term = :term AND hms_room.gender_type = :gender
+           AND hms_room.offline = 0 AND hms_floor.is_online = 1 AND hms_residence_hall.is_online = 1
+           AND hms_room.reserved = 0 AND hms_room.ra = 0 AND hms_room.overflow = 0 AND hms_room.private = 0 AND hms_floor.rlc_id IS NULL";
+        // Randomize if necessary
+        if ($randomize){
+            $sql .= " ORDER BY RANDOM()";
+        }
+        $sth = $db->prepare($sql);
+        $sth->execute(array('term' => $term, 'gender' => $gender));
+        if ($banner) {
+            $result = $sth->fetchAll(\PDO::FETCH_ASSOC);
             return $result;
         }
-
-        $result = $db->select('col');
-
-        // In case of an error, log it and return it
-        if (PHPWS_Error::logIfError($result)) {
-            throw new DatabaseException($result->toString());
-        }
-
+        $result = $sth->fetchAll(\PDO::FETCH_COLUMN);
         // Return FALSE if there were no results
         if (sizeof($result) <= 0) {
             return FALSE;
         }
-
         return $result;
     }
 
@@ -627,7 +588,7 @@ class HMS_Bed extends HMS_Item {
     public static function get_free_bed($term, $gender, $randomize = FALSE)
     {
         // Get the list of all free beds
-        $beds = HMS_Bed::get_all_free_beds($term, $gender);
+        $beds = Bed::get_all_free_beds($term, $gender);
 
         // Check for db errors
         if (\PEAR::isError($beds)) {
@@ -666,7 +627,7 @@ class HMS_Bed extends HMS_Item {
         }
 
         // Create a new bed object
-        $bed = new HMS_Bed();
+        $bed = new Bed();
 
         $bed->room_id = $roomId;
         $bed->term = $term;
@@ -699,7 +660,7 @@ class HMS_Bed extends HMS_Item {
         }
 
         // Create the bed object
-        $bed = new HMS_Bed($bedId);
+        $bed = new Bed($bedId);
 
         // Make sure the bed isn't assigned to anyone
         $bed->loadAssignment();
@@ -724,7 +685,7 @@ class HMS_Bed extends HMS_Item {
      */
     public static function bed_pager_by_room($room_id)
     {
-        $pager = new \DBPager('hms_bed', '\Homestead\HMS_Bed');
+        $pager = new \DBPager('hms_bed', '\Homestead\Bed');
         $pager->db->addJoin('LEFT OUTER', 'hms_bed', 'hms_room', 'room_id', 'id');
 
         $pager->addWhere('hms_room.id', $room_id);

@@ -6,7 +6,7 @@ use \Homestead\Term;
 use \Homestead\CommandFactory;
 use \Homestead\StudentFactory;
 use \Homestead\HMS_Assignment;
-use \Homestead\HMS_Residence_Hall;
+use \Homestead\ResidenceHall;
 use \Homestead\HMS_Email;
 use \Homestead\HMS_Activity_Log;
 use \Homestead\RoomChangeParticipant;
@@ -51,7 +51,7 @@ class SubmitRoomChangeRequestCommand extends Command {
             $menuCmd->redirect();
         }
 
-        // Get the HMS_Bed object corresponding to the student's current assignment
+        // Get the Bed object corresponding to the student's current assignment
         $bed = $assignment->get_parent();
         $room = $bed->get_parent();
 
@@ -143,14 +143,14 @@ class SubmitRoomChangeRequestCommand extends Command {
 
             // preferences
             if (!empty($firstHallPref)) {
-                $hall = new HMS_Residence_Hall($firstHallPref);
+                $hall = new ResidenceHall($firstHallPref);
                 if (!is_null($hall->getId())) {
                     $participant->setHallPref1($hall);
                 }
             }
 
             if (!empty($secondHallPref)) {
-                $hall = new HMS_Residence_Hall($secondHallPref);
+                $hall = new ResidenceHall($secondHallPref);
                 if (!is_null($hall->getId())) {
                     $participant->setHallPref2($hall);
                 }

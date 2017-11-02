@@ -6,7 +6,7 @@ use \Homestead\RoomChangeRequestFactory;
 use \Homestead\RoomChangeStateDenied;
 use \Homestead\ParticipantStateDenied;
 use \Homestead\HMS_Email;
-use \Homestead\HMS_Bed;
+use \Homestead\Bed;
 use \Homestead\CommandFactory;
 use \Homestead\UserStatus;
 use \Homestead\NotificationView;
@@ -61,7 +61,7 @@ class RoomChangeDenyCommand extends Command {
             //Release the bed reservation, if any
             $bedId = $p->getToBed();
             if ($bedId != null) {
-                $bed = new HMS_Bed($bedId);
+                $bed = new Bed($bedId);
                 $bed->clearRoomChangeReserved();
                 $bed->save();
             }

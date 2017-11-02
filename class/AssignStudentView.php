@@ -19,10 +19,10 @@ class AssignStudentView extends View {
     /**
      *
      * @param Student $student
-     * @param HMS_Bed $bed
+     * @param Bed $bed
      * @param HousingApplication $application
      */
-    public function __construct(Student $student = null, HMS_Bed $bed = null, HousingApplication $application = null){
+    public function __construct(Student $student = null, Bed $bed = null, HousingApplication $application = null){
 
         $this->student     = $student;
         $this->bed         = $bed;
@@ -77,7 +77,7 @@ class AssignStudentView extends View {
             $pre_populate = false;
         }
 
-        $hallList = HMS_Residence_Hall::getHallsWithVacanciesArray(Term::getSelectedTerm());
+        $hallList = ResidenceHall::getHallsWithVacanciesArray(Term::getSelectedTerm());
 
         $form->addDropBox('residence_hall', $hallList);
 

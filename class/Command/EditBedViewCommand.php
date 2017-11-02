@@ -3,7 +3,7 @@
 namespace Homestead\Command;
 
 use \Homestead\UserStatus;
-use \Homestead\HMS_Bed;
+use \Homestead\Bed;
 use \Homestead\BedView;
 use \Homestead\Term;
 use \Homestead\CommandFactory;
@@ -46,7 +46,7 @@ class EditBedViewCommand extends Command {
             throw new \InvalidArgumentException('Missing bed ID.');
         }
 
-        $bed = new HMS_Bed($bedId);
+        $bed = new Bed($bedId);
 
         if($bed->term != Term::getSelectedTerm()){
             $bedCmd = CommandFactory::getCommand('SelectBed');

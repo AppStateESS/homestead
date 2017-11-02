@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
-use \Homestead\HMS_Floor;
+use \Homestead\Floor;
 use \Homestead\CommandFactory;
 use \Homestead\NotificationView;
 use \Homestead\UserStatus;
@@ -44,7 +44,7 @@ class EditFloorCommand extends Command {
         $viewCmd->setFloorId($floorId);
 
         // Create the floor object gien the floor id
-        $floor = new HMS_Floor($floorId);
+        $floor = new Floor($floorId);
         if(!$floor){
             \NQ::simple('hms', NotificationView::ERROR, 'Invalid floor.');
             $viewCmd->redirect();

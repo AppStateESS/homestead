@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
-use \Homestead\HMS_Room;
+use \Homestead\Room;
 use \Homestead\RoomFactory;
 use \Homestead\AddRoomDamageView;
 
@@ -10,7 +10,7 @@ class ShowAddRoomDamageCommand extends Command{
 
     private $room;
 
-    public function setRoom(HMS_Room $room)
+    public function setRoom(Room $room)
     {
         $this->room = $room;
     }

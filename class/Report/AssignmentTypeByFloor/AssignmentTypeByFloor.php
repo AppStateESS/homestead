@@ -4,8 +4,8 @@ namespace Homestead\Report\AssignmentTypeByFloor;
 
 use \Homestead\Report;
 use \Homestead\ResidenceHallFactory;
-use \Homestead\HMS_Residence_Hall;
-use \Homestead\HMS_Floor;
+use \Homestead\ResidenceHall;
+use \Homestead\Floor;
 use \Homestead\Exception\DatabaseException;
 
 /**
@@ -78,11 +78,11 @@ class AssignmentTypeByFloor extends Report {
         return ResidenceHallFactory::getHallsForTerm($this->getTerm());
     }
 
-    public function getCountsForHall(HMS_Residence_Hall $hall){
+    public function getCountsForHall(ResidenceHall $hall){
         return $this->hallCounts[$hall->getId()];
     }
 
-    public function getCountsForFloor(HMS_Floor $floor){
+    public function getCountsForFloor(Floor $floor){
         return $this->floorCounts[$floor->getId()];
     }
 }

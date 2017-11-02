@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
-use \Homestead\HMS_Room;
+use \Homestead\Room;
 use \Homestead\Term;
 use \Homestead\CommandFactory;
 use \Homestead\DamageTypeFactory;
@@ -47,7 +47,7 @@ class EditRoomViewCommand extends Command {
         }
 
         // Load the room
-        $room = new HMS_Room($roomId);
+        $room = new Room($roomId);
 
         if($room->term != Term::getSelectedTerm()){
             $roomCmd = CommandFactory::getCommand('SelectRoom');
