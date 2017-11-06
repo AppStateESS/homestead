@@ -44,7 +44,7 @@ class ShowAssignmentsHomeCommand extends Command {
 
         // TODO - Fix this. It doesn't run.
         if(\Current_User::allow('hms', 'autoassign')) {
-            $autoAssignCmd = CommandFactory::getCommand('ScheduleAutoassign');
+            $autoAssignCmd = CommandFactory::getCommand('StartAutoassign');
             $tpl['AUTO_ASSIGN_URI'] = $autoAssignCmd->getUri();
         }
 
