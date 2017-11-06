@@ -2,9 +2,8 @@
 
 namespace Homestead;
 
-abstract class HomesteadView extends View {
+abstract class HomesteadView {
     private $main;
-    public $sidebar = array();
 
     protected $notifications;
 
@@ -23,17 +22,5 @@ abstract class HomesteadView extends View {
         return $this->main;
     }
 
-    public function showHMS($content)
-    {
-        $tpl = array();
-        $tpl['MAIN'] = $content;
-
-        $navbar = new NavBar();
-        $tpl['NAVBAR'] = $navbar->show();
-
-
-        \Layout::addStyle('hms', 'css/hms.css');
-
-        \Layout::add(\PHPWS_Template::process($tpl, 'hms', 'hms.tpl'));
-    }
+    public abstract function render();
 }

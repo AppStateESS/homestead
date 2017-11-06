@@ -5,13 +5,15 @@ import PropTypes from 'prop-types';
 
 class AssignByFloor extends React.Component{
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
+
         this.state = {
             hallList: [],
             assignmentOptions: [],
             currentAssignmentType: 0
         };
+
         this.updateAssignmentType = this.updateAssignmentType.bind(this);
         this.componentWillMount = this.componentWillMount.bind(this);
     }
@@ -58,6 +60,7 @@ class AssignByFloor extends React.Component{
 class Options extends React.Component{
     constructor(props){
         super(props);
+
         this.state = {currentAssignmentType: 0};
 
         this.componentWillReceiveProps = this.componentWillReceiveProps.bind(this);
@@ -128,7 +131,7 @@ class Halls extends React.Component{
         this.updateHall = this.updateHall.bind(this);
     }
     loadFloors(hallId) {
-        this.getInitialState();
+        //this.getInitialState();
         $.getJSON('index.php', {
             module: 'hms',
             action: 'JSONGetFloors',
@@ -167,7 +170,7 @@ class Floors extends React.Component{
         this.state = {
             selected: false,
             floorName: 'Choose a floor',
-            icon: 'fa-dashboard',
+            icon: 'fa-list',
             rooms: [],
             displayStatus: 'empty',
             mounted: false
@@ -229,11 +232,6 @@ Floors.defaultProps ={
 
 class Rooms extends React.Component{
     render() {
-        var icon = React.createElement('img', {
-            src: this.props.sourceHttp + 'mod/hms/img/loading.gif',
-            width: '200px'
-        });
-
         if (this.props.display === 'show') {
             if (this.props.roomList.length === 0) {
                 return (<p className="well text-center"><big>No rooms found for this floor.</big></p>);
@@ -249,7 +247,7 @@ class Rooms extends React.Component{
             );
         } else if (this.props.display === 'loading') {
             return (
-                <div className="text-center well">{icon}</div>
+                <div className="text-center well"><i className="fa fa-spinner fa-spin fa-2x"></i></div>
             );
         } else {
             return (
@@ -284,6 +282,7 @@ class Bed extends React.Component{
             assignment : '',
             bed : this.props.bed
         };
+
         this.componentDidMount = this.componentDidMount.bind(this);
         this.readyAssignment = this.readyAssignment.bind(this);
         this.plugStudent = this.plugStudent.bind(this);
@@ -445,7 +444,7 @@ class AssignmentForm extends React.Component{
 }
 
 
-class Assigned extends React.component{
+class Assigned extends React.Component{
     render() {
         return (
             <div className="alert alert-success">

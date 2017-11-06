@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/AppStateESS/homestead/",
   "dependencies": {
+    "chartist": "^0.11.0",
     "corejs-typeahead": "^1.1.1",
     "flot": "^0.8.0-alpha"
   },
@@ -40,6 +41,7 @@
     "react-a11y": "^0.3.3",
     "react-addons-css-transition-group": "~15.6.0",
     "react-bootstrap": "^0.31.0",
+    "react-data-grid": "^2.0.71",
     "react-dev-utils": "^3.0.1",
     "react-dom": "~15.6.1",
     "strip-loader": "~0.1.2",

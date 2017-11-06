@@ -12,12 +12,8 @@ use \Homestead\Exception\CommandNotFoundException;
 class CommandFactory {
     private static $dir = 'Command';
 
-    public static function getCommand($action = 'Default')
+    public static function getCommand(string $action)
     {
-        if(is_null($action)) {
-            $action = 'Default';
-        }
-
         $class = self::staticInit($action);
         $class = '\\Homestead\\Command\\' . $class;
         $cmd = new $class();

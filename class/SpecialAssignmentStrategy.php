@@ -4,7 +4,7 @@ namespace Homestead;
 
 use \Homestead\Exception\DatabaseException;
 
-class SpecialAssignmentStrategy extends Assignmentstrategy
+class SpecialAssignmentStrategy extends AssignmentStrategy
 {
     protected $specials;
 
