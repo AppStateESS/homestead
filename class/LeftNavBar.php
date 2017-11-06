@@ -16,7 +16,8 @@ class LeftNavBar extends View {
 
     public function show()
     {
-        $assignCmd = CommandFactory::getCommand('ShowAssignStudent');
+        //$assignCmd = CommandFactory::getCommand('ShowAssignStudent');
+        $assignCmd = CommandFactory::getCommand('ShowAssignmentsHome');
         $this->tpl['ASSIGNMENTS_URI'] = $assignCmd->getUri();
 
         $hallCmd = CommandFactory::getCommand('SelectResidenceHall');

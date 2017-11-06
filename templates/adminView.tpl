@@ -19,6 +19,7 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
+                    {NOTIFICATIONS}
                     {MAIN}
                 </div>
             </div>
