@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
-use \Homestead\HMS_Bed;
+use \Homestead\Bed;
 use \Homestead\CommandFactory;
 use \Homestead\UserStatus;
 use \Homestead\NotificationView;
@@ -50,7 +50,7 @@ class DeleteBedCommand extends Command {
 
         # Try to delete the bed
         try{
-            HMS_Bed::deleteBed($bedId);
+            Bed::deleteBed($bedId);
         }catch(\Exception $e){
             \NQ::simple('hms', NotificationView::ERROR, 'There was an error deleting the bed: ' . $e->getMessage());
             $viewCmd->redirect();

@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
-use \Homestead\HMS_Room;
+use \Homestead\Room;
 
 /**
  * UpdateRoomFieldCommand
@@ -40,7 +40,7 @@ class UpdateRoomFieldCommand extends Command {
 
         // Instantiate the room object
         try{
-            $room = new HMS_Room($id);
+            $room = new Room($id);
         }catch(\Exception $e){
             echo json_encode(false);
             die();

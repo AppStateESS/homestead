@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
-use \Homestead\HMS_Floor;
+use \Homestead\Floor;
 use \Homestead\AddRoomView;
 use \Homestead\Exception\PermissionException;
 
@@ -42,7 +42,7 @@ class ShowAddRoomCommand extends Command {
         $tpl['TITLE']       = 'Add Room';
 
         # Check to make sure we have a floor and hall.
-        $floor = new HMS_Floor($floor_id);
+        $floor = new Floor($floor_id);
         if(!$floor){
             $tpl['ERROR_MSG'] = 'There was an error getting the floor object. Please contact ESS.';
             return \PHPWS_Template::process($tpl, 'hms', 'admin/add_room.tpl');
@@ -56,7 +56,7 @@ class ShowAddRoomCommand extends Command {
 
         # Check Permissions
         if(!\Current_User::allow('hms','room_structure')) {
-            HMS_Floor::show_edit_floor($floor_id,NULL,'You do not have permission to add rooms.');
+            Floor::show_edit_floor($floor_id,NULL,'You do not have permission to add rooms.');
         }
 
         $view = new AddRoomView($floor);

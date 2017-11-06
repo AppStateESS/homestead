@@ -4,7 +4,7 @@ namespace Homestead\Command;
 
 use \Homestead\UserStatus;
 use \Homestead\CommandFactory;
-use \Homestead\HMS_Residence_Hall;
+use \Homestead\ResidenceHall;
 use \Homestead\NotificationView;
 use \Homestead\Exception\PermissionException;
 
@@ -59,7 +59,7 @@ class EditResidenceHallCommand extends Command {
         $viewCmd->setHallId($hallId);
 
         // Create the hall object given the hall id
-        $hall = new HMS_Residence_Hall($hallId);
+        $hall = new ResidenceHall($hallId);
         if(!$hall){
             \NQ::simple('hms', NotificationView::ERROR, 'Invalid hall.');
             $viewCmd->redirect();

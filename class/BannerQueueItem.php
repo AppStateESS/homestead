@@ -25,7 +25,7 @@ class BannerQueueItem {
     public $queued_on;
     public $queued_by;
 
-    public function __construct($id = null, $type = null, Student $student = null, $term = null, HMS_Residence_Hall $hall = null, HMS_Bed $bed = null, $percentRefund = null)
+    public function __construct($id = null, $type = null, Student $student = null, $term = null, ResidenceHall $hall = null, Bed $bed = null, $percentRefund = null)
     {
         if(!is_null($id) && $id != 0) {
             $this->load();

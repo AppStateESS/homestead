@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
-use \Homestead\HMS_Floor;
+use \Homestead\Floor;
 
 class AjaxGetRoomsCommand extends Command {
 
@@ -16,7 +16,7 @@ class AjaxGetRoomsCommand extends Command {
     {
         //TODO check for a hallId
 
-        $floor = new HMS_Floor($context->get('floorId'));
+        $floor = new Floor($context->get('floorId'));
 
         $rooms = $floor->get_rooms();
 

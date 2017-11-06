@@ -23,7 +23,7 @@ class BannerRoomChangeStudent {
     private $oldBed;
     private $newBed;
 
-    public function __construct(Student $student, HMS_Bed $oldBed, HMS_Bed $newBed)
+    public function __construct(Student $student, Bed $oldBed, Bed $newBed)
     {
         $this->student = $student;
         $this->oldBed = $oldBed;

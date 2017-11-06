@@ -2,7 +2,7 @@
 
 namespace Homestead\Command;
 
-use \Homestead\HMS_Room;
+use \Homestead\Room;
 use \Homestead\CommandFactory;
 use \Homestead\NotificationView;
 use \Homestead\Exception\PermissionException;
@@ -46,7 +46,7 @@ class EditRoomCommand extends Command {
         $viewCmd->setRoomId($roomId);
 
         // Create the room object given the room_id
-        $room = new HMS_Room($roomId);
+        $room = new Room($roomId);
         if(!$room){
             \NQ::simple('hms', NotificationView::ERROR, 'Invalid room.');
             $viewCmd->redirect();

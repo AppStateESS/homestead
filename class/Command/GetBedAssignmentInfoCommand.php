@@ -3,7 +3,7 @@
 namespace Homestead\Command;
 
 use \Homestead\UserStatus;
-use \Homestead\HMS_Bed;
+use \Homestead\Bed;
 use \Homestead\Term;
 use \Homestead\StudentFactory;
 use \Homestead\Exception\PermissionException;
@@ -20,7 +20,7 @@ class GetBedAssignmentInfoCommand extends Command {
                 throw new PermissionException('You do not have permission to assign by floor!');
             }
 
-            $bed = new HMS_Bed($context->get('bed_id'));
+            $bed = new Bed($context->get('bed_id'));
             $bed->term = Term::getSelectedTerm();
             if(!$bed->loadAssignment() || is_null($bed->_curr_assignment)){
                 $output = array('username'=>'',

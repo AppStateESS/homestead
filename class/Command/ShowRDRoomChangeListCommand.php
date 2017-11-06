@@ -4,8 +4,8 @@ namespace Homestead\Command;
 
 use \Homestead\Term;
 use \Homestead\HMS_Permission;
-use \Homestead\HMS_Residence_Hall;
-use \Homestead\HMS_Floor;
+use \Homestead\ResidenceHall;
+use \Homestead\Floor;
 use \Homestead\UserStatus;
 use \Homestead\CommandFactory;
 use \Homestead\RoomChangeRequestFactory;
@@ -34,7 +34,7 @@ class ShowRDRoomChangeListCommand extends Command {
 
         foreach ($memberships as $member) {
             if ($member['class'] == 'hms_residence_hall') {
-                $hall = new HMS_Residence_Hall($member['instance']);
+                $hall = new ResidenceHall($member['instance']);
 
                 // Filter out halls that aren't in the current term
                 if($hall->getTerm() != $term) {
@@ -44,7 +44,7 @@ class ShowRDRoomChangeListCommand extends Command {
                 $floors = array_merge($floors, $hall->getFloors());
 
             } else if ($member['class'] == 'hms_floor') {
-                $f = new HMS_Floor($member['instance']);
+                $f = new Floor($member['instance']);
 
                 // Filter out floors that aren't in the current term
                 if($f->getTerm() != $term) {

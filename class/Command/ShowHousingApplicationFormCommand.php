@@ -8,7 +8,6 @@ use \Homestead\StudentFactory;
 use \Homestead\CommandFactory;
 use \Homestead\MealPlanFactory;
 use \Homestead\HousingApplicationFactory;
-use \Homestead\HousingApplication;
 use \Homestead\HousingApplicationFormView;
 
 class ShowHousingApplicationFormCommand extends Command {
@@ -87,8 +86,8 @@ class ShowHousingApplicationFormCommand extends Command {
             $pinCmd->redirect();
         }
 
-        // Check to see if the user has an existing application for the term in question
-        $existingApplication = HousingApplication::getApplicationByUser($student->getUsername(), $term);
+        // Check to see if the student has an existing application for the term in question
+        $existingApplication = HousingApplicationFactory::getAppByStudent($student, $term);
 
 
         // Check for an in-progress application on the context, ignore any exceptions (in case there isn't an application on the context)

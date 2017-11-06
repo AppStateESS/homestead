@@ -6,7 +6,7 @@ use \Homestead\CommandFactory;
 use \Homestead\StudentFactory;
 use \Homestead\UserStatus;
 use \Homestead\ApplicationFeature;
-use \Homestead\HousingApplication;
+use \Homestead\HousingApplicationFactory;
 use \Homestead\LotteryApplication;
 use \Homestead\HMS_RLC_Application;
 use \Homestead\HMS_RLC_Assignment;
@@ -49,7 +49,7 @@ class ShowRlcReapplicationCommand extends Command {
         }
 
         // Double check the the student is eligible
-        $housingApp = HousingApplication::getApplicationByUser($student->getUsername(), $term);
+        $housingApp = HousingApplicationFactory::getAppByStudent($student, $term);
         if(!$housingApp instanceof LotteryApplication){
             \NQ::simple('hms', NotificationView::ERROR, 'You are not eligible to re-apply for a Residential Learning Community.');
             $errorCmd->redirect();

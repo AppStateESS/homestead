@@ -3,7 +3,7 @@
 namespace Homestead\Command;
 
 use \Homestead\RoomDamageFactory;
-use \Homestead\HMS_Bed;
+use \Homestead\Bed;
 
 class GetRoomDamagesCommand extends Command {
 
@@ -16,7 +16,7 @@ class GetRoomDamagesCommand extends Command {
     {
         $bedId = $context->get('bed_id');
 
-        $bed = new HMS_Bed($bedId);
+        $bed = new Bed($bedId);
         $room = $bed->get_parent();
 
         // Get the damages for this student's room

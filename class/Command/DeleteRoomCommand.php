@@ -3,7 +3,7 @@
 namespace Homestead\Command;
 
 use \Homestead\CommandFactory;
-use \Homestead\HMS_Room;
+use \Homestead\Room;
 use \Homestead\NotificationView;
 use \Homestead\Exception\PermissionException;
 
@@ -49,7 +49,7 @@ class DeleteRoomCommand extends Command {
 
         # Try to delete the room
         try{
-            HMS_Room::deleteRoom($roomId);
+            Room::deleteRoom($roomId);
         }catch(\Exception $e){
             \NQ::simple('hms', NotificationView::ERROR, 'There was an error deleting the room. Some (but not all) beds may have been deleted. : ' . $e->getMessage());
             $viewCmd->redirect();

@@ -8,14 +8,14 @@ use \Homestead\RoomFactory;
 use \Homestead\RoomDamage;
 use \Homestead\RoomDamageFactory;
 use \Homestead\UserStatus;
-use \Homestead\HMS_Room;
+use \Homestead\Room;
 use \Homestead\Exception\PermissionException;
 
 class AddRoomDamageCommand extends Command {
 
     private $room;
 
-    public function setRoom(HMS_Room $room)
+    public function setRoom(Room $room)
     {
         $this->room = $room;
     }

@@ -9,7 +9,7 @@ use \Homestead\CheckinFactory;
 use \Homestead\BedFactory;
 use \Homestead\RoomDamageFactory;
 use \Homestead\CheckoutFormView;
-use \Homestead\HMS_Residence_Hall;
+use \Homestead\ResidenceHall;
 use \Homestead\NotificationView;
 use \Homestead\Exception\StudentNotFoundException;
 
@@ -76,7 +76,7 @@ class ShowCheckoutFormCommand extends Command {
         }
 
         // Find the earliest checkin that matches hall the user selected
-        $selectedHall = new HMS_Residence_Hall($hallId);
+        $selectedHall = new ResidenceHall($hallId);
         $checkin = CheckinFactory::getPendingCheckoutForStudentByHall($student, $selectedHall);
 
         if(!isset($checkin)){

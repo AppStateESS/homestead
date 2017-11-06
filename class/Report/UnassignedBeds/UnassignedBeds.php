@@ -4,7 +4,7 @@ namespace Homestead\Report\UnassignedBeds;
 
 use \Homestead\Report;
 use \Homestead\iCsvReport;
-use \Homestead\HMS_Residence_Hall;
+use \Homestead\ResidenceHall;
 
 /**
  * Unassigned Beds Report
@@ -50,7 +50,7 @@ class UnassignedBeds extends Report implements iCsvReport {
         }
 
         // Get all of the residence halls for this term
-        $halls = HMS_Residence_Hall::get_halls($this->term);
+        $halls = ResidenceHall::get_halls($this->term);
 
         $hallRow = array();
 

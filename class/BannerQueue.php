@@ -16,7 +16,7 @@ class BannerQueue {
     /**
      * Queues a Create Assignment
      */
-    public static function queueAssignment(Student $student, $term, HMS_Residence_Hall $hall, HMS_Bed $bed)
+    public static function queueAssignment(Student $student, $term, ResidenceHall $hall, Bed $bed)
     {
         $entry = new BannerQueueItem(0, BANNER_QUEUE_ASSIGNMENT, $student, $term, $hall, $bed);
 
@@ -40,7 +40,7 @@ class BannerQueue {
      * commits are enabled, the it will be sent straight to Banner,
      * and so the force_queue flag will be ignored.
      */
-    public static function queueRemoveAssignment(Student $student, $term, HMS_Residence_Hall $hall, HMS_Bed $bed, $refund)
+    public static function queueRemoveAssignment(Student $student, $term, ResidenceHall $hall, Bed $bed, $refund)
     {
         $entry = new BannerQueueItem(0, BANNER_QUEUE_REMOVAL, $student, $term, $hall, $bed, $refund);
 

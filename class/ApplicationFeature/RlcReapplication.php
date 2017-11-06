@@ -4,7 +4,7 @@ namespace Homestead\ApplicationFeature;
 
 use \Homestead\ApplicationFeature;
 use \Homestead\Student;
-use \Homestead\HousingApplication;
+use \Homestead\HousingApplicationFactory;
 use \Homestead\LotteryApplication;
 use \Homestead\HMS_RLC_Application;
 use \Homestead\HMS_RLC_Assignment;
@@ -14,7 +14,7 @@ class RlcReapplication extends ApplicationFeature {
 
     public function getMenuBlockView(Student $student){
 
-        $application = HousingApplication::getApplicationByUser($student->getUsername(), $this->term);
+        $application = HousingApplicationFactory::getAppByStudent($student, $this->term);
         if(!$application instanceof LotteryApplication){
             $application = null;
         }

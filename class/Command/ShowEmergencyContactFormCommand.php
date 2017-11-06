@@ -4,7 +4,7 @@ namespace Homestead\Command;
 
 use \Homestead\UserStatus;
 use \Homestead\StudentFactory;
-use \Homestead\HousingApplication;
+use \Homestead\HousingApplicationFactory;
 use \Homestead\EmergencyContactFormView;
 
 class ShowEmergencyContactFormCommand extends Command {
@@ -45,7 +45,7 @@ class ShowEmergencyContactFormCommand extends Command {
         }
 
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
-        $application = HousingApplication::getApplicationByUser($student->getUsername(), $term);
+        $application = HousingApplicationFactory::getAppByStudent($student, $term);
         $formView = new EmergencyContactFormView($student, $term, $application);
 
         $context->setContent($formView->show());

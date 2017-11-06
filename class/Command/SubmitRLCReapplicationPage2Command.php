@@ -5,7 +5,7 @@ namespace Homestead\Command;
 use \Homestead\UserStatus;
 use \Homestead\CommandFactory;
 use \Homestead\StudentFactory;
-use \Homestead\HousingApplication;
+use \Homestead\HousingApplicationFactory;
 use \Homestead\LotteryApplication;
 use \Homestead\HMS_RLC_Application;
 use \Homestead\NotificationView;
@@ -49,7 +49,7 @@ class SubmitRLCReapplicationPage2Command extends Command {
         $errorCmd->setTerm($term);
 
         // Double check the the student is eligible
-        $housingApp = HousingApplication::getApplicationByUser($student->getUsername(), $term);
+        $housingApp = HousingApplicationFactory::getAppByStudent($student, $term);
         if(!$housingApp instanceof LotteryApplication){
             \NQ::simple('hms', NotificationView::ERROR, 'You are not eligible to re-apply for a Learning Community.');
             $menuCmd->redirect();

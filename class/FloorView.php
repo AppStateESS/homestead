@@ -9,7 +9,7 @@ class FloorView extends View{
     private $hall;
     private $floor;
 
-    public function __construct(HMS_Residence_Hall $hall, HMS_Floor $floor){
+    public function __construct(ResidenceHall $hall, Floor $floor){
         $this->hall		= $hall;
         $this->floor	= $floor;
     }
@@ -105,8 +105,8 @@ class FloorView extends View{
         $form->addHidden('type', 'floor');
         $form->addHidden('op', 'edit_floor');
 
-        $tpl['STATIC_ROOM_PAGER'] = HMS_Room::room_pager_by_floor($this->floor->id);
-        $tpl['DYNAMIC_ROOM_PAGER'] = HMS_Room::room_pager_by_floor($this->floor->id, true);
+        $tpl['STATIC_ROOM_PAGER'] = Room::room_pager_by_floor($this->floor->id);
+        $tpl['DYNAMIC_ROOM_PAGER'] = Room::room_pager_by_floor($this->floor->id, true);
 
         // if the user has permission to view the form but not edit it then
         // disable it
@@ -126,7 +126,7 @@ class FloorView extends View{
 
         if(\Current_User::allow('hms', 'edit_role_members')){
             javascript('modules/hms/role_editor');
-            $tpl['ROLE_EDITOR'] = \PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Floor'", 'ID'=>$this->floor->id), 'hms', 'admin/role_editor.tpl');
+            $tpl['ROLE_EDITOR'] = \PHPWS_Template::process(array('CLASS_NAME'=>"'Floor'", 'ID'=>$this->floor->id), 'hms', 'admin/role_editor.tpl');
         }
 
         \Layout::addPageTitle("Edit Floor");

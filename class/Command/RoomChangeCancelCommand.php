@@ -7,7 +7,7 @@ use \Homestead\RoomChangeStateCancelled;
 use \Homestead\ParticipantStateCancelled;
 use \Homestead\UserStatus;
 use \Homestead\StudentFactory;
-use \Homestead\HMS_Bed;
+use \Homestead\Bed;
 use \Homestead\HMS_Email;
 use \Homestead\NotificationView;
 use \Homestead\CommandFactory;
@@ -59,7 +59,7 @@ class RoomChangeCancelCommand extends Command {
             //Release the bed reservation, if any
             $bedId = $p->getToBed();
             if ($bedId != null) {
-                $bed = new HMS_Bed($bedId);
+                $bed = new Bed($bedId);
                 $bed->clearRoomChangeReserved();
                 $bed->save();
             }

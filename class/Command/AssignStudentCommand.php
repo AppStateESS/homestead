@@ -7,11 +7,11 @@ use \Homestead\HousingApplicationFactory;
 use \Homestead\HMS_Assignment;
 use \Homestead\StudentFactory;
 use \Homestead\Student;
-use \Homestead\HMS_Room;
+use \Homestead\Room;
 use \Homestead\HMS_Activity_Log;
 use \Homestead\ContractFactory;
 use \Homestead\Contract;
-use \Homestead\HMS_Residence_Hall;
+use \Homestead\ResidenceHall;
 use \Homestead\MealPlanFactory;
 use \Homestead\MealPlanProcessor;
 use \Homestead\SOAP;
@@ -180,7 +180,7 @@ class AssignStudentCommand extends Command {
         }
 
         // Create the room object so we can check gender
-        $room = new HMS_Room($roomId);
+        $room = new Room($roomId);
         if(!$room){
             \NQ::simple('hms', NotificationView::ERROR, 'Error creating the room object.');
             $errorCmd->redirect();
@@ -322,7 +322,7 @@ class AssignStudentCommand extends Command {
         return true;
     }
 
-    private function setupMealPlan(Student $student, $term, HousingApplication $housingApplication = null, HMS_Residence_Hall $hall)
+    private function setupMealPlan(Student $student, $term, HousingApplication $housingApplication = null, ResidenceHall $hall)
     {
         // Check for a meal plan, if one exists, don't do anything
         $mealPlan = MealPlanFactory::getMealByBannerIdTerm($student->getBannerId(), $term);

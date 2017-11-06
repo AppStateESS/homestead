@@ -1,4 +1,4 @@
-0<?php
+<?php
 
 namespace Homestead;
 
@@ -63,7 +63,7 @@ class HMS_Admin
             HMS_Activity_Log::log_activity(trim($names[1]), ACTIVITY_USERNAME_UPDATED, \Current_User::getUsername(), $notes);
 
             # Open a DB connection and try to update applications
-            $db = &new PHPWS_DB('hms_new_application');
+            $db = new PHPWS_DB('hms_new_application');
             $db->addValue('username', $names[1]);
             $db->addValue('created_by',     $names[1]);
             $db->addWhere('username', $names[0]);
@@ -85,7 +85,7 @@ class HMS_Admin
             }
 
             # Update assignments
-            $db = &new PHPWS_DB('hms_assignment');
+            $db = new PHPWS_DB('hms_assignment');
             $db->addValue('asu_username', $names[1]);
             $db->addWhere('asu_username', $names[0]);
             $result = $db->update();
@@ -104,7 +104,7 @@ class HMS_Admin
             }
 
             # Update the banner queue
-            $db = &new PHPWS_DB('hms_banner_queue');
+            $db = new PHPWS_DB('hms_banner_queue');
             $db->addValue('asu_username', $names[1]);
             $db->addWhere('asu_username', $names[0]);
             $result = $db->update();
@@ -123,7 +123,7 @@ class HMS_Admin
             }
 
             # Update roommates
-            $db = &new PHPWS_DB('hms_roommate');
+            $db = new PHPWS_DB('hms_roommate');
             $db->addValue('requestor', $names[1]);
             $db->addWhere('requestor', $names[0]);
             $result = $db->update();
@@ -141,7 +141,7 @@ class HMS_Admin
                 }
             }
 
-            $db = &new PHPWS_DB('hms_roommate');
+            $db = new PHPWS_DB('hms_roommate');
             $db->addValue('requestee', $names[1]);
             $db->addWhere('requestee', $names[0]);
             $result = $db->update();
@@ -160,7 +160,7 @@ class HMS_Admin
             }
 
             # Update RLCs
-            $db = &new PHPWS_DB('hms_learning_community_applications');
+            $db = new PHPWS_DB('hms_learning_community_applications');
             $db->addValue('user_id', $names[1]);
             $db->addWhere('user_id', $names[0]);
             $result = $db->update();

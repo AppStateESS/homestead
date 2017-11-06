@@ -16,7 +16,7 @@ abstract class AssignmentStrategy {
 
     public abstract function doAssignment($pair);
 
-    protected function allowed(AssignmentPairing $pair, HMS_Room $room)
+    protected function allowed(AssignmentPairing $pair, Room $room)
     {
         // If the genders don't match...
         if($pair->getGender() != $room->gender_type) {
@@ -31,7 +31,7 @@ abstract class AssignmentStrategy {
         return true;
     }
 
-    protected function assign(AssignmentPairing $pair, HMS_Room $room)
+    protected function assign(AssignmentPairing $pair, Room $room)
     {
         if(!$this->allowed($pair, $room)) {
             throw new AssignmentException('Cannot assign ' . $pair->__tostring() . ' to ' . $room->__tostring());
@@ -130,7 +130,7 @@ abstract class AssignmentStrategy {
             return null;
         }
 
-        $room = new HMS_Room();
+        $room = new Room();
         \PHPWS_Core::plugObject($room, $result);
         return $room;
     }

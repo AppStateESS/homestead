@@ -6,7 +6,7 @@ use \Homestead\Term;
 use \Homestead\RoomDamageFactory;
 use \Homestead\StudentFactory;
 use \Homestead\CheckinFactory;
-use \Homestead\HMS_Bed;
+use \Homestead\Bed;
 use \Homestead\HMS_Email;
 use \Homestead\CommandFactory;
 use \Homestead\NotificationView;
@@ -46,7 +46,7 @@ class SendRoomDamageNotificationsCommand extends Command {
             // but we'll just take the last one)
             $checkout = CheckinFactory::getLastCheckoutForStudent($student);
 
-            $bed = new HMS_Bed($checkout->getBedId());
+            $bed = new Bed($checkout->getBedId());
             $room = $bed->get_parent();
             $floor = $room->get_parent();
             $hall = $floor->get_parent();

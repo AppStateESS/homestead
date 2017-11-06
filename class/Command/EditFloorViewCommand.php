@@ -3,7 +3,7 @@
 namespace Homestead\Command;
 
 use \Homestead\UserStatus;
-use \Homestead\HMS_Floor;
+use \Homestead\Floor;
 use \Homestead\FloorView;
 use \Homestead\Term;
 use \Homestead\CommandFactory;
@@ -44,7 +44,7 @@ class EditFloorViewCommand extends Command {
             throw new \InvalidArgumentException('Missing floor ID.');
         }
 
-        $floor = new HMS_Floor($floorId);
+        $floor = new Floor($floorId);
 
         if($floor->term != Term::getSelectedTerm()){
             $floorCmd = CommandFactory::getCommand('SelectFloor');

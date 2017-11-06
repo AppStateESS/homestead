@@ -2,6 +2,6 @@
 
 namespace Homestead;
 
-class BedRestored extends HMS_Bed {
+class BedRestored extends Bed {
 	public function __construct(){}
 }

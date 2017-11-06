@@ -34,11 +34,11 @@ class RoomChangeRequestFactory {
      * Returns the latest room change request for the given bed.
      * NB: This doesn't check the request status, so you're always going to
      * get the last room change request for the given bed
-     * @param HMS_Bed $bed The HMS_Bed object that you want the room change request for
+     * @param Bed $bed The Bed object that you want the room change request for
      * @return RoomChangeRequestRestored Room change request object that corresponds to this bed
      * @throws \InvalidArgumentException
      */
-    public static function getCurrentRequestByBed(HMS_Bed $bed)
+    public static function getCurrentRequestByBed(Bed $bed)
     {
         if (!isset($bed) || is_null($bed)) {
             throw new \InvalidArgumentException('Missing bed.');
@@ -105,11 +105,11 @@ class RoomChangeRequestFactory {
 
     /**
      * Returns a set of RoomChangeRequest objects which are in the given state
-     * for a given array of HMS_Floor objects.
+     * for a given array of Floor objects.
      * Useful for showing RDs / Coordinators their pending requests.
      *
      * @param integer $term
-     * @param array<HMS_Floor> $floorList
+     * @param array<Floor> $floorList
      * @param arary<string> $stateList
      */
     public static function getRoomChangesByFloor($term, Array $floorList, Array $stateList)
@@ -180,11 +180,11 @@ class RoomChangeRequestFactory {
 
     /**
      * Returns a set of RoomChangeRequest objects which are in the given state
-     * for a given array of HMS_Floor objects.
+     * for a given array of Floor objects.
      * Useful for showing RDs / Coordinators their pending requests.
      *
      * @param integer $term
-     * @param array<HMS_Floor> $floorList
+     * @param array<Floor> $floorList
      */
     public static function getRoomChangesNeedsApproval($term, Array $floorList)
     {

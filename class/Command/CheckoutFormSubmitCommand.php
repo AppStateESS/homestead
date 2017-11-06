@@ -5,7 +5,7 @@ namespace Homestead\Command;
 use \Homestead\StudentFactory;
 use \Homestead\CheckinFactory;
 use \Homestead\HMS_Activity_Log;
-use \Homestead\HMS_Room;
+use \Homestead\Room;
 use \Homestead\RoomDamage;
 use \Homestead\RoomDamageFactory;
 use \Homestead\RoomDamageResponsibility;
@@ -187,7 +187,7 @@ class CheckoutFormSubmitCommand extends Command {
         exit;
     }
 
-    private function addDamage(Array $dmg, HMS_Room $room)
+    private function addDamage(Array $dmg, Room $room)
     {
         $damage = new RoomDamage($room, $this->term, $dmg['damage_type'], $dmg['side'], $dmg['note']);
 

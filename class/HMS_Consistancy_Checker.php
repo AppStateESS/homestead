@@ -24,7 +24,7 @@ class Consistancy_Checker {
             $term = Term::getCurrentTerm();
         }
 
-        $halls = HMS_Residence_Hall::get_halls($term);
+        $halls = ResidenceHall::get_halls($term);
 
         foreach($halls as $hall){
             $floors = $hall->get_floors();
