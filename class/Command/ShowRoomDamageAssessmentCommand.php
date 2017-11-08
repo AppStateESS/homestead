@@ -3,6 +3,7 @@
 namespace Homestead\Command;
 
 use \Homestead\Term;
+use \Homestead\AssetResolver;
 use \Homestead\Exception\PermissionException;
 
 class ShowRoomDamageAssessmentCommand extends Command {
