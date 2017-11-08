@@ -4,12 +4,27 @@ import ReactDOM from 'react-dom';
 import 'whatwg-fetch';
 import ReactDataGrid from 'react-data-grid';
 
+//import 'prop-types';
+
+class StudentIdFormatter extends React.Component {
+    // static propTypes = {
+    //      value: PropTypes.number.isRequired
+    // };
+
+    render() {
+        return (
+            <div>
+                <a href={'index.php?module=hms&action=ShowStudentProfile&bannerId=' + this.props.value}>{this.props.value}</a>
+            </div>);
+        }
+    }
+
 class AssignmentsTable extends React.Component {
     constructor(props, context) {
         super(props, context);
 
         this._columns = [
-            { key: 'banner_id', name: 'Banner ID' },
+            { key: 'banner_id', name: 'Banner ID', formatter: StudentIdFormatter},
             { key: 'first_name', name: 'First Name'},
             { key: 'last_name', name: 'Last Name'},
             { key: 'preferred_name', name:'Preferred Name'},
