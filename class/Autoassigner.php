@@ -37,18 +37,22 @@ class Autoassigner {
 
     public function autoassign()
     {
-        echo "Apps:  " . count($this->applications) . "\n";
-        echo "Pairs: " . count($this->pairs) . "\n";
+        echo "Pending applications:  " . count($this->applications) . "\n";
 
         // Run each pairing strategy
         foreach($this->pairingStrategies as $strategy){
             $strategy->doPairing($this->applications, $this->pairs);
         }
-        echo "Apps:  " . count($this->applications) . "\n";
-        echo "Pairs: " . count($this->pairs) . "\n";
+
+        echo "Roommate Pairs: " . count($this->pairs) . "\n";
 
         // Randomize the array of pairs
         //shuffle($this->pairs);
+
+        if(count($this->pairs) <= 0){
+            echo "No roommate pairs to assign. Autoassigner is done. \n";
+            return;
+        }
 
         // Sort the array of pairs by application date (use the earliest of the two application dates)
         usort($this->pairs, array("Autoassigner", "pairSort"));
