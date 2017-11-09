@@ -40,7 +40,6 @@ class FakeSoapTable extends SOAP
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if (empty($result)) {
-            var_dump($bannerId);exit;
             throw new StudentNotFoundException('User not found', 0, $bannerId);
         }
         $student = new \stdClass();

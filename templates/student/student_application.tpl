@@ -72,7 +72,7 @@
                 </div>
 
             </div>
-            <div class="checkbox">
+            <div class="form-group">
                 <label class="text-muted">
                     {DO_NOT_CALL}
                     Check here if do not wish to provide your cellphone number.
@@ -272,16 +272,12 @@
 
         <div class="row">
             <div class="col-md-2 col-md-offset-1">
-                <div class="radio">
-                    <label>
+                <div class="form-group">
                         {RLC_INTEREST_2}
                         {RLC_INTEREST_2_LABEL_TEXT}
-                    </label>
                 </div>
-                <div class="radio">
-                    <label>
+                <div class="form-group">
                         {RLC_INTEREST_1}{RLC_INTEREST_1_LABEL_TEXT}
-                    </label>
                 </div>
             </div>
         </div>
