@@ -40,7 +40,7 @@ class RoomView extends View {
         /*** Header Info ***/
         $tpl = array();
         $tpl['ROOM_PERSISTENT_ID'] = $this->room->getPersistentId();
-        $tpl['TERM'] = $this->room->getTerm();
+        $tpl['TERM_NUM'] = $this->room->getTerm();
         $tpl['TERM'] = Term::getPrintableSelectedTerm();
         $tpl['HALL_NAME']           = $this->hall->getLink();
         $tpl['FLOOR_NUMBER']        = $this->floor->getLink('Floor');

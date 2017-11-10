@@ -583,7 +583,7 @@ class Floor extends HMS_Item
         $params = array('id' => $this->id, 'term' => $this->term, 'now' => $now, 'gender' => $gender);
 
         if($rlcId != null) {
-            $query .= "AND hms_room.reserved_rlc_id = $rlcId ";
+            $query .= "AND hms_room.reserved_rlc_id = :rlc ";
             $params += ['rlc' => $rlcId];
         }else {
             $query .= "AND hms_room.reserved_rlc_id IS NULL ";
