@@ -599,7 +599,7 @@ class HMS_Email{
         $message->attach($attachment);
 
         if(EMAIL_TEST_FLAG) {
-        	self::logSwiftmailMessageLong($message);
+        	//self::logSwiftmailMessageLong($message);
             return;
         }
 
@@ -634,7 +634,7 @@ class HMS_Email{
         //$message->attach($attachment);
 
         if(EMAIL_TEST_FLAG) {
-            self::logSwiftmailMessageLong($message);
+            //self::logSwiftmailMessageLong($message);
             return;
         }
 
@@ -702,7 +702,7 @@ class HMS_Email{
     public static function sendSwiftmailMessage(\Swift_Message $message)
     {
         if(EMAIL_TEST_FLAG) {
-            self::logSwiftmailMessageLong($message);
+            //self::logSwiftmailMessageLong($message);
         } else {
             $transport = \Swift_SmtpTransport::newInstance('localhost');
             //$transport = Swift_SmtpTransport::newInstance('smtp.mandrillapp.com', 587);

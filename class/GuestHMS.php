@@ -22,7 +22,7 @@ class GuestHMS extends HMS
         $nv->popNotifications();
         $view->addNotifications($nv->show());
 
-        $view->show();
+        $view->render();
 
         $this->saveState();
     }

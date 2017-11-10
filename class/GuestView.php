@@ -9,7 +9,7 @@ namespace Homestead;
  */
 
 class GuestView extends HomesteadView {
-    
+
     private $message;
 
     public function setMessage($message)
@@ -22,7 +22,7 @@ class GuestView extends HomesteadView {
         return $this->message;
     }
 
-    public function show()
+    public function render()
     {
         $tpl = array();
         $tpl['MAIN'] = $this->getMain();
@@ -30,7 +30,7 @@ class GuestView extends HomesteadView {
         $tpl['NOTIFICATIONS'] = $this->notifications;
 
         \Layout::addPageTitle("Login");
-
-        $this->showHMS(\PHPWS_Template::process($tpl, 'hms', 'guest.tpl'));
+        \Layout::addStyle('hms', 'css/hms.css');
+        \Layout::add(\PHPWS_Template::process($tpl, 'hms', 'guest.tpl'));
     }
 }

@@ -57,7 +57,7 @@ class CheckoutFormView extends View
         }
 
         $tpl['vendor_bundle'] = AssetResolver::resolveJsPath('assets.json', 'vendor');
-        $tpl['entry_bundle'] = AssetResolver::resolveJsPath('assets.json', 'emergencyContact');
+        $tpl['entry_bundle'] = AssetResolver::resolveJsPath('assets.json', 'checkOut');
 
         return \PHPWS_Template::process($tpl, 'hms', 'admin/CheckOut.tpl');
     }

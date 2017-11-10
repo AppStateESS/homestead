@@ -39,7 +39,7 @@ class RoomDamageBox extends React.Component{
                 var dmgTypeArr = options[i].DamageTypes;
                 var dmgTypeArrLen = dmgTypeArr.length
                 for(var x = 0; x < dmgTypeArrLen; x++){
-                    if(dmgTypeArr[x].id === type){
+                    if(dmgTypeArr[x].id === Number(type)){
                         categ = options[i].category;
                         dmgTypeDesc = dmgTypeArr[x].description;
                         found = true;
@@ -214,21 +214,21 @@ class AddDamageBox extends React.Component{
         this.add = this.add.bind(this);
     }
     add(){
-        var dmgTypeChoice = this.refs.damageType.getDOMNode();
-        var sideChoice = this.refs.side.getDOMNode();
-        var descInput = this.refs.desc.getDOMNode();
+        var dmgTypeChoice = ReactDOM.findDOMNode(this.refs.damageType);
+        var sideChoice = ReactDOM.findDOMNode(this.refs.side);
+        var descInput = ReactDOM.findDOMNode(this.refs.desc);
         var dmgType = dmgTypeChoice.value;
         var side = sideChoice.value;
         var desc = descInput.value;
-        var dmgTypeUnset = (dmgType === 0);
+        var dmgTypeUnset = (Number(dmgType) === 0);
         var descUnset = (desc === "");
 
         // If the form data is valid, then update state
         if(!dmgTypeUnset && !descUnset){
             // Reset the form for the next damage
-            this.refs.damageType.getDOMNode().value = '0';
-            this.refs.side.getDOMNode().value = 'Both';
-            this.refs.desc.getDOMNode().value = '';
+            ReactDOM.findDOMNode(this.refs.damageType).value = '0';
+            ReactDOM.findDOMNode(this.refs.side).value = 'Both';
+            ReactDOM.findDOMNode(this.refs.desc).value = '';
 
             this.props.addDamage(dmgType, side, desc);
         }
