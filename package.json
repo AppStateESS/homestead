@@ -19,7 +19,8 @@
   "dependencies": {
     "chartist": "^0.11.0",
     "corejs-typeahead": "^1.1.1",
-    "flot": "^0.8.0-alpha"
+    "flot": "^0.8.0-alpha",
+    "react-data-grid-addons": "^2.0.73"
   },
   "devDependencies": {
     "assets-webpack-plugin": "^3.4.0",

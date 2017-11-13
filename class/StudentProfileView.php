@@ -258,6 +258,7 @@ class StudentProfileView extends View {
 
         $form->addTextarea('note');
         $form->addSubmit('Add Note');
+        $tpl['note_bundle'] = AssetResolver::resolveJsPath('assets.json', 'noteBox');
 
         /********
          * Logs *
@@ -292,7 +293,7 @@ class StudentProfileView extends View {
          * Email Message Log *
          *********************/
         $tpl['vendor_bundle'] = AssetResolver::resolveJsPath('assets.json', 'vendor');
-        $tpl['entry_bundle'] = AssetResolver::resolveJsPath('assets.json', 'emailLogView');
+        $tpl['email_bundle'] = AssetResolver::resolveJsPath('assets.json', 'emailLogView');
         $emailLogParams = array(
             'banner_id'=>$this->student->getBannerId(),
             'mandrill_key' => \PHPWS_Settings::get('hms', 'mandrill_key')

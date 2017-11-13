@@ -174,9 +174,7 @@ class RlcSelfSelectInviteSaveCommand extends Command {
         //and the rest
         $_SESSION['application_data'] = $sessionData;
 
-        $agreementCmd = CommandFactory::getCommand('ShowTermsAgreement');
-        $agreementCmd->setTerm($term);
-        $agreementCmd->setAgreedCommand($returnCmd);
+        $agreementCmd = CommandFactory::getCommand('LotteryShowChooseHall');
         $agreementCmd->redirect();
     }
 }
