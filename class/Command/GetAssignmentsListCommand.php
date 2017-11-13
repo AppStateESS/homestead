@@ -31,6 +31,10 @@ class GetAssignmentsListCommand extends Command {
             $row['last_name'] = $student->getLastName();
             $row['preferred_name'] = $student->getPreferredName();
 
+            if($row['cell_phone'] == null){
+                $row['cell_phone'] = '';
+            }
+
             $assignWithStudent[] = $row;
         }
 

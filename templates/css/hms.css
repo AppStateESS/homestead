@@ -77,6 +77,11 @@
     margin: 0;
 }
 
+/**** Filter Field Fix for Assignments Grids ***/
+div.react-grid-HeaderCell input {
+    height: 30px;
+}
+
 /*** Animation styles for damage assessment interface ***/
 .dmgAssessment-leave {
   opacity: 1;
