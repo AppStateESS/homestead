@@ -1,3 +1,8 @@
+<script>
+var emailLogParams = {EMAIL_LOG_PARAMS};
+var noteParamsStudent = '{USERNAME}';
+</script>
+
 <div class="col-md-8">
     <div class="card">
         <div class="content">
@@ -97,18 +102,8 @@
             <h2>Check-in / Check-out</h2>
             {CHECKINS}
 
-            <div id="note_dialog" title="Enter a note for: {FIRST_NAME} {MIDDLE_NAME} {LAST_NAME}">
-                {START_FORM}
-                {NOTE}
-                <br>
-                {SUBMIT}
-                {END_FORM}
-            </div>
-
             <h2>Recent Notes</h2>
-            <script>var student = {USERNAME};</script>
             <div id="note-box"></div>
-            [<a id=add_note>Add a note</a>]
             <!-- BEGIN notes -->
             <div class="profileHeader">{NOTE_PAGER}</div>
             <!-- END notes -->
@@ -116,9 +111,6 @@
             <!-- Email Log -->
             <h2>Email Log</h2>
             <div id="emailLogView"></div>
-            <script>
-            var emailLogParams = {EMAIL_LOG_PARAMS};
-            </script>
 
             <h2>Student Log</h2>
             <div class="profileHeader">{LOG_PAGER}</div>

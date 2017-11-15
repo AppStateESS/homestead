@@ -20,11 +20,12 @@ class Note extends React.Component {
     }
     handleSaveNote(note){
         this.closeModal(); // Close the modal box
+        console.log('hi',this.props.student_username, note)
         $.ajax({
-            url: 'index.php?module=intern&action=AddNote',
-            type: 'POST',
-            dataType: 'json',
-            data: {note: note, username: this.props.student},
+            url: 'index.php?module=hms&action=AddNote',
+            method: 'POST',
+            dataType: 'text',
+            data: {note: note, username: this.props.student_username},
             error: function(xhr, status, err) {
                 alert("Failed to save note.")
                 console.error(this.props.url, status, err.toString());
@@ -84,4 +85,4 @@ class NoteModalForm extends React.Component {
     }
 }
 
-ReactDOM.render(<Note student={window.noteParamsStudent}/>, document.getElementById('note-box'));
+ReactDOM.render(<Note student_username={window.noteParamsStudent}/>, document.getElementById('note-box'));

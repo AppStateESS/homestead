@@ -250,14 +250,9 @@ class StudentProfileView extends View {
         /*********
          * Notes *
         *********/
-        $addNoteCmd = CommandFactory::getCommand('AddNote');
-        $addNoteCmd->setUsername($this->student->getUsername());
+        //$addNoteCmd = CommandFactory::getCommand('AddNote');
+        //$addNoteCmd->setUsername($this->student->getUsername());
 
-        $form = new \PHPWS_Form('add_note_dialog');
-        $addNoteCmd->initForm($form);
-
-        $form->addTextarea('note');
-        $form->addSubmit('Add Note');
         $tpl['note_bundle'] = AssetResolver::resolveJsPath('assets.json', 'noteBox');
 
         /********
@@ -282,8 +277,6 @@ class StudentProfileView extends View {
             $notesCmd->setActivity(array(0 =>ACTIVITY_ADD_NOTE));
             $tpl['NOTE_PAGER'] .= $notesCmd->getLink('View more');
         }
-
-        $tpl = array_merge($tpl, $form->getTemplate());
 
         // TODO logs
 

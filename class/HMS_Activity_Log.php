@@ -114,6 +114,7 @@ class HMS_Activity_Log{
         else
         $tpl['ACTOR'] = $this->get_actor();
 
+        date_default_timezone_set('EST');
         $time = $this->get_timestamp();
         $tpl['DATE'] = date('j M Y', $time);
         $tpl['TIME'] = date('g:i a', $time);
