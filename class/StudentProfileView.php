@@ -56,13 +56,13 @@ class StudentProfileView extends View {
 
         $tpl['ADMISSION_DECISION'] = $this->student->getAdmissionDecisionCode();
 
-        $tpl['INTERNATIONAL'] = $this->student->isInternational() ? 'Yes' : 'No';
+        $tpl['INTERNATIONAL'] = $this->student->isInternational() ? null : 'hidden';
 
-        $tpl['HONORS'] = $this->student->isHonors() ? 'Yes' : 'No';
+        $tpl['HONORS'] = $this->student->isHonors() ? '' : 'hidden';
 
-        $tpl['TEACHING_FELLOW'] = $this->student->isTeachingFellow() ? 'Yes' : 'No';
+        $tpl['TEACHING_FELLOW'] = $this->student->isTeachingFellow() ? '' : 'hidden';
 
-        $tpl['WATAUGA'] = $this->student->isWataugaMember() ? 'Yes' : 'No';
+        $tpl['WATAUGA'] = $this->student->isWataugaMember() ? '' : 'hidden';
 
         if($this->student->pinDisabled()){
             \NQ::simple('hms', NotificationView::WARNING, "This student's PIN is disabled.");
@@ -206,19 +206,19 @@ class StudentProfileView extends View {
                     $tpl['SPECIAL_INTEREST'] = 'RLC (pending)';
                 }else{
                     # Student didn't select anything
-                    $tpl['SPECIAL_INTEREST'] = 'No';
+                    $tpl['SPECIAL_INTEREST_SHOW'] = 'hidden';
                 }
             }
         }else{
             # Not a re-application, so can't have a special group
-            $tpl['SPECIAL_INTEREST'] = 'No';
+            $tpl['SPECIAL_INTEREST_SHOW'] = 'hidden';
         }
 
         /******************
          * Housing Waiver *
         *************/
 
-       	$tpl['HOUSING_WAIVER'] = $this->student->housingApplicationWaived() ? 'Yes' : 'No';
+       	$tpl['HOUSING_WAIVER'] = $this->student->housingApplicationWaived() ? '' : 'hidden';
 
        	if($this->student->housingApplicationWaived()){
        	    \NQ::simple('hms', NotificationView::WARNING, "This student's housing application has been waived for this term.");
@@ -250,10 +250,8 @@ class StudentProfileView extends View {
         /*********
          * Notes *
         *********/
-        //$addNoteCmd = CommandFactory::getCommand('AddNote');
-        //$addNoteCmd->setUsername($this->student->getUsername());
-
         $tpl['note_bundle'] = AssetResolver::resolveJsPath('assets.json', 'noteBox');
+        $tpl['USER_ACTIVITY'] = 'hidden';
 
         /********
          * Logs *

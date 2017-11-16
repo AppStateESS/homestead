@@ -1,9 +1,65 @@
 <script>
 var emailLogParams = {EMAIL_LOG_PARAMS};
 var noteParamsStudent = '{USERNAME}';
+var userActivity = '{USER_ACTIVITY}';
 </script>
 
-<div class="col-md-8">
+<div class="col-md-4 col-md-push-8">
+    <div class="card card-user">
+        <div class="image">
+            <img src="mod/hms/img/newland.jpg"/>
+        </div>
+        <div class="content">
+            <div class="author">
+                    <img class="avatar border-gray" src="mod/hms/img/Logo.png"/>
+                    <h4 class="title">
+                        {NAME}
+                        <br>
+                        <small>{BANNER_ID}</small>
+                        <br>
+                        <small>{USERNAME} <a href="mailto:{USERNAME}@appstate.edu"><i class="fa fa-envelope-o"></i></a></small>
+                        <br>
+                         <!-- BEGIN phone_number -->
+                        <small>{NUMBER}</small><br>
+                        <!-- END phone_number -->
+                    <h4>
+            </div>
+            <p class="description text-center">
+                {GENDER}<br>
+                {DOB}<br>
+                Application Term: {APPLICATION_TERM}<br>
+                Class: {CLASS}<br>
+                Type: {TYPE}<br>
+                Level: {STUDENT_LEVEL}<br>
+                Admission Decision: {ADMISSION_DECISION}<br>
+            </p>
+            <p class="description text-center">
+                <span class="label label-info {INTERNATIONAL}">International</span>
+                <span class="label label-info {HONORS}">Honors</span>
+                <span class="label label-info {TEACHING_FELLOW}">Teaching Fellow</span>
+                <span class="label label-info {WATAUGA}">Watauga Global Member</span>
+                <span class="label label-info {SPECIAL_INTEREST_SHOW}">{SPECIAL_INTEREST}</span>
+                <span class="label label-info {HOUSING_WAIVER}">Freshmen Housing Waiver</span>
+                <br>
+            </p>
+            <p class="description text-center">
+                <!-- BEGIN addresses -->
+                <strong>{ADDR_TYPE}</strong><br>
+                {ADDRESS_L1}<br>
+                <!-- BEGIN subadd2 -->
+                {ADDRESS_L2}<br>
+                <!-- END subadd2 -->
+                <!-- BEGIN subadd3 -->
+                {ADDRESS_L3}<br>
+                <!-- END subadd3 -->
+                {CITY}, {STATE} {ZIP}<br>
+                <!-- END addresses -->
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-8 col-md-pull-4">
     <div class="card">
         <div class="content">
             <div class="row">
@@ -68,102 +124,61 @@ var noteParamsStudent = '{USERNAME}';
                         <tr>
                             <th>RLC:</th>
                             <td>{RLC_STATUS}</td>
-                        </tr>
-                        <tr>
-                            <th>Honors</th>
-                            <td>{HONORS}</td>
-                        </tr>
-                        <tr>
-                            <th>Teaching Fellow</th>
-                            <td>{TEACHING_FELLOW}</td>
-                        </tr>
-                        <tr>
-                            <th>Watauga Global Member</th>
-                            <td>{WATAUGA}</td>
-                        </tr>
-                        <tr>
-                            <th>Re-application Special Interest Group: </th>
-                            <td>{SPECIAL_INTEREST}</td>
-                        </tr>
-                        <tr>
-                            <th>Freshmen Housing Waiver:</th>
-                            <td>{HOUSING_WAIVER}</td>
-                        </tr>
                     </table>
                 </div>
             </div>
-
+        </div>
+    </div>
+    <div class="card">
+        <div class="header">
             <h2>Applications</h2>
+        </div>
+        <div class="content">
             {APPLICATIONS}
-
+        </div>
+    </div>
+    <div class="card">
+        <div class="header">
             <h2>Assignments</h2>
+        </div>
+        <div class="content">
             {HISTORY}
-
+        </div>
+    </div>
+    <div class="card">
+        <div class="header">
             <h2>Check-in / Check-out</h2>
+        </div>
+        <div class="content">
             {CHECKINS}
-
+        </div>
+    </div>
+    <div class="card">
+        <div class="header">
             <h2>Recent Notes</h2>
+        </div>
+        <div class="content">
             <div id="note-box"></div>
             <!-- BEGIN notes -->
             <div class="profileHeader">{NOTE_PAGER}</div>
             <!-- END notes -->
-
-            <!-- Email Log -->
-            <h2>Email Log</h2>
-            <div id="emailLogView"></div>
-
-            <h2>Student Log</h2>
-            <div class="profileHeader">{LOG_PAGER}</div>
-
         </div>
     </div>
-</div>
-<div class="col-md-4">
-    <div class="card card-user">
-        <div class="image">
-            <img src="mod/hms/img/newland.jpg"/>
+    <div class="card">
+        <div class="header">
+            <h2>Email Log</h2>
         </div>
         <div class="content">
-            <div class="author">
-                    <img class="avatar border-gray" src="mod/hms/img/Logo.png"/>
-                    <h4 class="title">
-                        {NAME}
-                        <br>
-                        <small>{BANNER_ID}</small>
-                        <br>
-                        <small>{USERNAME}</small>
-                    <h4>
-            </div>
-            <p class="description text-center">
-                Admission Decision: {ADMISSION_DECISION}<br>
-                Application Term: {APPLICATION_TERM}<br>
-                Class: {CLASS}<br>
-                Type: {TYPE}<br>
-                Level: {STUDENT_LEVEL}
-
-            </p>
-            <p class="description text-center">
-                {GENDER}<br>
-                {DOB}<br>
-                International: {INTERNATIONAL}<br>
-                <a href="mailto:{USERNAME}@appstate.edu">{USERNAME}@appstate.edu</a><br>
-                 <!-- BEGIN phone_number -->
-                {NUMBER}<br>
-                <!-- END phone_number -->
-                <br>
-                <!-- BEGIN addresses -->
-                <strong>{ADDR_TYPE}</strong><br>
-                {ADDRESS_L1}<br>
-                <!-- BEGIN subadd2 -->
-                {ADDRESS_L2}<br>
-                <!-- END subadd2 -->
-                <!-- BEGIN subadd3 -->
-                {ADDRESS_L3}<br>
-                <!-- END subadd3 -->
-                {CITY}, {STATE} {ZIP}<br>
-                <!-- END addresses -->
-
-            </p>
+            <!-- Email Log -->
+            <div id="emailLogView"></div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="header">
+            <h2>Student Log</h2>
+        </div>
+        <div class="content">
+            <div class="profileHeader">{LOG_PAGER}</div>
         </div>
     </div>
 </div>

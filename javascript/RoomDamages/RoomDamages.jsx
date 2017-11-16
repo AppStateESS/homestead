@@ -137,7 +137,7 @@ class DamagesRow extends React.Component{
                     <td>{this.props.data.side}</td>
                     <td>{this.props.data.term}</td>
                     <td>{this.props.data.reported_on}</td>
-                    <td><a href="javascript:;" title={this.props.data.note}>
+                    <td><a title={this.props.data.note}>
                         <i className="fa fa-comment"></i>
                     </a>
                     <button onClick={this.delete} className="close">

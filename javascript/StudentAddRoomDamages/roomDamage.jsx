@@ -159,7 +159,7 @@ class CurrentDamagesTable extends React.Component{
                         <td>{node.term}</td>
                         <td>{node.reported_on}</td>
                         <td>
-                            <a href="javascript:;" title={node.note}>
+                            <a title={node.note}>
                                 <i className="fa fa-comment"></i>
                             </a>
                         </td>
@@ -435,7 +435,7 @@ class UnsavedDamageRow extends React.Component{
                 <td>{node.description}</td>
                 <td>{node.side}</td>
                 <td>
-                    <a style={commentStyle} className="pull-left" href="javascript:;" title={node.note}>
+                    <a style={commentStyle} className="pull-left" title={node.note}>
                         <i className="fa fa-comment"></i>
                     </a>
                     <button onClick={this.removeRow} className="close pull-right">
