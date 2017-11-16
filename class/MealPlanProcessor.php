@@ -2,6 +2,8 @@
 
 namespace Homestead;
 
+use Homestead\Exception\MealPlanExistsException;
+
 class MealPlanProcessor {
 
     public static function queueMealPlan(MealPlan $mealPlan, SOAP $soapClient)
@@ -19,7 +21,14 @@ class MealPlanProcessor {
         }
 
         // If the queue was not enabled, then we're ready to send via the web Service
-        self::processMealPlan($mealPlan, $soapClient);
+        try {
+            self::processMealPlan($mealPlan, $soapClient);
+        }catch (MealPlanExistsException $e){
+            // Update the meal plan's status and timestamp
+            $mealPlan->setStatus(MealPlan::STATUS_SENT);
+            $mealPlan->setStatusTimestamp(time());
+            MealPlanFactory::saveMealPlan($mealPlan);
+        }
     }
 
     /**
