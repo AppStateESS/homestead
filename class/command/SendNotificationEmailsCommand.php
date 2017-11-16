@@ -83,43 +83,8 @@ class SendNotificationEmailsCommand extends Command {
         //HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED_ANONYMOUSLY, Current_User::getUsername(), $hall->hall_name);
         //HMS_Activity_Log::log_activity(Current_User::getUsername(), ACTIVITY_HALL_NOTIFIED, Current_User::getUsername(), $hall->hall_name);
 
-        $floorObj = array();
-        //load the halls and add floors that aren't already present, if they have js enabled should be zero
-        foreach($halls as $hall){
-            $hallObj = new HMS_Residence_Hall($hall);
-
-            $hallFloors = $hallObj->get_floors();
-
-            //if the hall has zero floors, skip it
-            if(!is_array($hallFloors))
-                continue;
-
-            foreach($hallFloors as $hallFloor){
-                if(!empty($floors)){
-                    foreach($floors as $floor){
-                        if($hallFloor->id == $floor->id){
-                            break;
-                        }
-                    }
-                }
-                if(!in_array($hallFloor, $floors)){
-                    $floorObj[] = $hallFloor;
-                }
-            }
-        }
-
-        if(!is_array($floorObj)){
-            $floorObj = array();
-        }
-
-        if(!is_array($floors)){
-            $floors = array();
-        }
-
-        $floorObj = array_merge($floorObj, $floors);
-
         $permission = new HMS_Permission();
-        foreach($floorObj as $floor){
+        foreach($floors as $floor){
             if(!$permission->verify(Current_User::getUsername(), $floor, 'email')
                && !$permission->verify(Current_User::getUsername(), $floor->get_parent(), 'email')
                && !Current_User::allow('hms', 'email_all')
@@ -127,24 +92,13 @@ class SendNotificationEmailsCommand extends Command {
                 continue;
             }
 
-            /**
-            $rooms = $floor->get_rooms();
-            foreach($rooms as $room){
-                $students = $room->get_assignees();
-                foreach($students as $student){
-                    $people[] = $student->getUsername();
-                    HMS_Email::send_email($student->getUsername() . '@appstate.edu', $from, $subject, $body);
-                }
-            }
-            */
-
             $students = $floor->getUsernames();
-            
+
             if(!is_array($students) || sizeof($students) <= 0){
                 // If no results, skip to the next floor.
                 continue;
             }
-            
+
             foreach($students as $student){
                 HMS_Email::send_email($student . '@' . DOMAIN_NAME, $from, $subject, $body);
             }
