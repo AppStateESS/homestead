@@ -4,6 +4,7 @@ namespace Homestead\Command;
 
 use Homestead\PdoFactory;
 use Homestead\Term;
+use \PDO;
 
 class DashboardHomeCommand extends Command {
 
@@ -15,14 +16,20 @@ class DashboardHomeCommand extends Command {
     public function execute(CommandContext $context){
         $tpl = array();
 
-        $tpl['NUM_RESIDENTS'] = $this->getNumResidents();
-        $tpl['NUM_BEDS_AVAIL'] = $this->getAvailableBedsCount();
-        $tpl['OVERFLOW_ASSIGNMENTS'] = $this->getOverflowAssignmentsCount();
+        $tpl['NUM_RESIDENTS'] = self::getNumResidents();
+        $tpl['NUM_BEDS_AVAIL'] = self::getAvailableBedsCount();
+        $tpl['OVERFLOW_ASSIGNMENTS'] = self::getOverflowAssignmentsCount();
+
+        $classBreakdown = self::getClassBreakdown();
+        $tpl['CLASS_BREAK_FR'] = $classBreakdown['FR'];
+        $tpl['CLASS_BREAK_SO'] = $classBreakdown['SO'];
+        $tpl['CLASS_BREAK_JR'] = $classBreakdown['JR'];
+        $tpl['CLASS_BREAK_SR'] = $classBreakdown['SR'];
 
         $context->setContent(\PHPWS_Template::process($tpl, 'hms', 'admin/dashboardHome.tpl'));
     }
 
-    private function getNumResidents(){
+    private static function getNumResidents(){
         $pdo = PdoFactory::getPdoInstance();
         $query = 'SELECT count(*) FROM hms_assignment WHERE term = :term';
 
@@ -34,7 +41,7 @@ class DashboardHomeCommand extends Command {
         return $result[0];
     }
 
-    private function getAvailableBedsCount()
+    private static function getAvailableBedsCount()
     {
         $pdo = PdoFactory::getPdoInstance();
         $query = 'SELECT count(*)
@@ -63,7 +70,7 @@ class DashboardHomeCommand extends Command {
         return $result[0];
     }
 
-    public function getOverflowAssignmentsCount()
+    public static function getOverflowAssignmentsCount()
     {
         $pdo = PdoFactory::getPdoInstance();
         $query = 'SELECT count(*)
@@ -86,5 +93,34 @@ class DashboardHomeCommand extends Command {
         $result = $stmt->fetch();
 
         return $result[0];
+    }
+
+    public static function getClassBreakdown()
+    {
+        $pdo = PdoFactory::getPdoInstance();
+        $query = 'SELECT class, round((bar.c * 100)::numeric/bar.total, 0) as perc
+                    FROM (select class, count(class) as c, foo.total
+                            FROM hms_assignment full
+                                JOIN (select count(*) as total from hms_assignment where term = :term) as foo ON 1 = 1
+                            WHERE term = :term group by class, foo.total) as bar order by perc DESC';
+
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array('term'=>Term::getCurrentTerm()));
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        $result = $stmt->fetchAll();
+
+        $breakdown = array();
+        foreach($result as $row){
+            $breakdown[$row['class']] = $row['perc'];
+        }
+
+        foreach(array('FR', 'SO', 'JR', 'SR') as $class){
+            if(!isset($breakdown[$class])){
+                $breakdown[$class] = 0;
+            }
+        }
+
+        return $breakdown;
     }
 }
