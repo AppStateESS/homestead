@@ -51,15 +51,15 @@ abstract class HMS {
             try {
                 $cmd->execute($this->context);
             } catch(PermissionException $p) {
-                NQ::Simple('hms', hms\NotificationView::ERROR, 'You do not have permission to perform that action. If you believe this is an error, please contact University Housing.');
+                \NQ::Simple('hms', hms\NotificationView::ERROR, 'You do not have permission to perform that action. If you believe this is an error, please contact University Housing.');
                 $nv = new hms\NotificationView();
                 $nv->popNotifications();
-                Layout::add($nv->show());
+                \Layout::add($nv->show());
             } catch(Exception $e) {
 
                 $user = Current_User::getUserObj();
                 $e->username = $user->getUsername();
-                
+
                 if(isset($_SERVER['HTTP_REFERER'])){
                     $e->referrer = $_SERVER['HTTP_REFERER'];
                 }else{
@@ -74,11 +74,11 @@ abstract class HMS {
 
                 try {
                     $message = $this->formatException($e);
-                    NQ::Simple('hms', hms\NotificationView::ERROR, 'An internal error has occurred, and the authorities have been notified.  We apologize for the inconvenience.');
+                    \NQ::Simple('hms', hms\NotificationView::ERROR, 'An internal error has occurred, and the authorities have been notified.  We apologize for the inconvenience.');
                     $this->emailError($message);
                     $nv = new hms\NotificationView();
                     $nv->popNotifications();
-                    Layout::add($nv->show());
+                    \Layout::add($nv->show());
                 } catch(Exception $e) {
                     $message2 = $this->formatException($e);
                     echo "HMS has experienced a major internal error.  Attempting to email an admin and then exit.";
@@ -111,16 +111,16 @@ abstract class HMS {
         }
 
         echo "Here is the exception:\n\n";
-        print_r($e);
+        echo print_r($e, true);
 
         echo "\n\nHere is the CommandContext:\n\n";
-        print_r($this->context);
+        echo print_r($this->context, true);
 
-        echo "\n\nHere is $_REQUEST:\n\n";
-        print_r($_REQUEST);
+        echo "\n\nHere is REQUEST:\n\n";
+        echo print_r($_REQUEST, true);
 
         echo "\n\nHere is CurrentUser:\n\n";
-        print_r(Current_User::getUserObj());
+        echo print_r(Current_User::getUserObj(), true);
 
         $message = ob_get_contents();
         ob_end_clean();
