@@ -116,16 +116,16 @@ abstract class HMS {
         }
 
         echo "Here is the exception:\n\n";
-        print_r($e);
+        echo print_r($e, true);
 
         echo "\n\nHere is the CommandContext:\n\n";
-        print_r($this->context);
+        echo print_r($this->context, true);
 
-        echo "\n\nHere is $_REQUEST:\n\n";
-        print_r($_REQUEST);
+        echo "\n\nHere is REQUEST:\n\n";
+        echo print_r($_REQUEST, true);
 
         echo "\n\nHere is CurrentUser:\n\n";
-        print_r(\Current_User::getUserObj());
+        echo print_r(\Current_User::getUserObj(), true);
 
         $message = ob_get_contents();
         ob_end_clean();
@@ -139,8 +139,7 @@ abstract class HMS {
         $to = HMS_Email::get_tech_contacts();
 
         $tags = array('MESSAGE' => $message);
-        HMS_Email::send_template_message($to, 'Uncaught Exception',
-        'email/UncaughtException.tpl', $tags);
+        HMS_Email::send_template_message($to, 'Uncaught Exception', 'email/UncaughtException.tpl', $tags);
     }
 
     protected function saveState()
