@@ -1,3 +1,4 @@
+/* global $ */
 $.fn.reportSetupDialog = function(settings) {
     settings = jQuery.extend({
         dialogId: null,
@@ -7,12 +8,12 @@ $.fn.reportSetupDialog = function(settings) {
         runNow: null,
         formId: null
     }, settings);
-    
+
     jQuery(this).each(function() {
-       
+
         var matched = this;
         var opts = jQuery.extend({}, settings);
-        
+
         function _initialize() {
             // Create the dialog box
             $("#"+opts.dialogId).dialog({autoOpen: false,
@@ -32,7 +33,7 @@ $.fn.reportSetupDialog = function(settings) {
             $("#"+opts.dialogId+"-link").click(function(){
                 $("#"+opts.dialogId).dialog('open');
             });
-            
+
             // Setup the datepicker and time picker, if any
             $("#"+opts.formId + "_datePicker").datepicker();
             $("#"+opts.formId + "_timePicker").timePicker({
@@ -43,7 +44,7 @@ $.fn.reportSetupDialog = function(settings) {
                step: 15
             });
         }
-        
+
         function backgroundSchedule()
         {
             //console.log($("#"+opts.formId));

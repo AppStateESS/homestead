@@ -11,6 +11,7 @@ module.exports = {
       studentRoomDamage: JS_DIR + '/StudentAddRoomDamages/roomDamage.jsx',
       emailLogView: JS_DIR + '/emailLogView/emailLogView.jsx',
       assignmentsTable: JS_DIR + '/AssignmentsTable/AssignmentsTable.jsx',
+      noteBox: JS_DIR + '/note/NoteBox.jsx',
       rlcCardList: JS_DIR + '/rlcCardList/rlcCardList.jsx',
       vendor: ['jquery', 'react', 'react-dom', 'react-bootstrap']
     }

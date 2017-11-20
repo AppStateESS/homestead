@@ -54,7 +54,6 @@ class EmailLogView extends React.Component {
         var i = 0;
         var keyList = Object.keys(this.state.messages);
         for(i = 0; i < keyList.length; i++){
-            console.log('updating message' + keyList[i]);
             that.fetchMessageDetails(keyList[i]);
         }
     }

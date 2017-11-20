@@ -353,9 +353,7 @@ class DamageForm extends React.Component{
                 updatedResidents[key].selected = selected.target.checked;
             }
         });
-        console.log(this.state.residents)
         this.setState({render: false, residents: updatedResidents});
-        console.log(this.state.residents)
     }
     updateNote(note) {
         this.setState({render: false, note: note.target.value});

@@ -45,7 +45,7 @@ class GetRoomDamagesToAssessCommand extends Command {
         $floors = array();
 
         foreach ($memberships as $member) {
-            if ($member['class'] == 'hms_residence_hall') {
+            if ($member['class'] == 'hms_residence_hall' || $member['class'] == 'residencehall') {
                 $hall = new ResidenceHall($member['instance']);
                 if(!is_array($floors)){
                     $floors = array();
@@ -55,7 +55,7 @@ class GetRoomDamagesToAssessCommand extends Command {
                     $hallFloors = array();
                 }
                 $floors = array_merge($floors, $hallFloors);
-            } else if ($member['class'] == 'hms_floor') {
+            } else if ($member['class'] == 'hms_floor' || $member['class'] == 'floor') {
                 $floors[] = new Floor($member['instance']);
             } else {
                 throw new \Exception('Unknown object type.');
