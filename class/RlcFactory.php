@@ -79,4 +79,23 @@ class RlcFactory {
 
         return $rlcs;
     }
+
+    public static function getRlcs($term)
+    {
+        $pdo = PdoFactory::getPdoInstance();
+
+        $query = 'SELECT hms_learning_communities.*, COALESCE(foo.member_count, 0) as member_count FROM hms_learning_communities
+                        LEFT OUTER JOIN (SELECT rlc_id, count(*) as member_count
+                                FROM hms_learning_community_assignment
+                                JOIN hms_learning_community_applications ON hms_learning_community_assignment.application_id = hms_learning_community_applications.id
+                                WHERE term = :term GROUP BY hms_learning_community_assignment.rlc_id)
+                            as foo ON foo.rlc_id = hms_learning_communities.id
+                        ORDER BY community_name';
+
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array('term'=>$term));
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, 'Homestead\HMS_Learning_CommunityRestored');
+
+        return $stmt->fetchAll();
+    }
 }

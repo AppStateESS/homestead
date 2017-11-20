@@ -36,13 +36,11 @@ class ShowAssignmentsHomeCommand extends Command {
             $tpl['ROOM_CHANGE_URI'] = $adminRoomChangeCmd->getUri();
         }
 
-        // TODO: Fix this. It doesn't run.
         if(\Current_User::allow('hms', 'assign_by_floor')){
             $floorAssignCmd = CommandFactory::getCommand('AssignByFloor');
             $tpl['ASSIGN_BY_FLOOR_URI'] = $floorAssignCmd->getUri();
         }
 
-        // TODO - Fix this. It doesn't run.
         if(\Current_User::allow('hms', 'autoassign')) {
             $autoAssignCmd = CommandFactory::getCommand('StartAutoassign');
             $tpl['AUTO_ASSIGN_URI'] = $autoAssignCmd->getUri();
