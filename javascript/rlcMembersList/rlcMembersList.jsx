@@ -146,9 +146,9 @@ class RlcMembersList extends React.Component{
         });
     }
     render(){
-        var backUrl = "index.php?module=hms&action=ShowSearchByRlc"
-        var addMembersUrl = "index.php?module=hms&action=ShowAdminAddRlcMember&communityId=" + this.props.rlcId;
-        var exportUrl = "index.php?module=hms&action=CreateCsvByRlc&id=" + this.props.rlcId
+        var backUrl = 'index.php?module=hms&action=ShowCommunities';
+        var addMembersUrl = 'index.php?module=hms&action=ShowAdminAddRlcMember&communityId=' + this.props.rlcId;
+        var exportUrl = 'index.php?module=hms&action=CreateCsvByRlc&id=' + this.props.rlcId
 
         return(
             <div>

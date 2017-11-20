@@ -6,27 +6,9 @@ use \Homestead\EditRlcView;
 use \Homestead\UserStatus;
 use \Homestead\Exception\PermissionException;
 
-class ShowEditRlcCommand extends Command {
-    private $id;
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function setId($id)
-    {
-        if(is_numeric($id))
-        $this->id = $id;
-    }
-
+class ShowCommunitiesCommand extends Command {
     public function getRequestVars(){
-        $vars = array();
-
-        $vars['action'] = 'ShowEditRlc';
-        $vars['id']     = $this->id;
-
-        return $vars;
+        return array('action' => 'ShowCommunities');
     }
 
     public function execute(CommandContext $context){
