@@ -25,7 +25,7 @@ class LeftNavBar extends View {
         $hallCmd->setOnSelectCmd(CommandFactory::getCommand('EditResidenceHallView'));
         $this->tpl['HALLS_URI'] = $hallCmd->getUri();
 
-        $communityCmd = CommandFactory::getCommand('ShowEditRlc');
+        $communityCmd = CommandFactory::getCommand('ShowCommunities');
         $this->tpl['RLC_URI'] = $communityCmd->getUri();
 
         $messageCmd = CommandFactory::getCommand('ShowHallNotificationSelect');

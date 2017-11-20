@@ -246,8 +246,8 @@
         Chartist.Pie('#chartPreferences', dataPreferences, optionsPreferences);
 
         Chartist.Pie('#chartPreferences', {
-          labels: ['62%','32%','6%'],
-          series: [62, 32, 6]
+          labels: ['{CLASS_BREAK_FR}%','{CLASS_BREAK_SO}%','{CLASS_BREAK_JR}%', '{CLASS_BREAK_SR}%'],
+          series: [{CLASS_BREAK_FR}, {CLASS_BREAK_SO}, {CLASS_BREAK_JR}, {CLASS_BREAK_SR}]
         });
     });
 </script>
