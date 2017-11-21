@@ -51,6 +51,9 @@ class SelectHallView extends View{
 
         \Layout::addPageTitle("Select Hall");
 
+        $tpl['vendor_bundle'] = AssetResolver::resolveJsPath('assets.json', 'vendor');
+        $tpl['entry_bundle'] = AssetResolver::resolveJsPath('assets.json', 'hallCardList');
+        
         return \PHPWS_Template::process($tpl, 'hms', 'admin/select_residence_hall.tpl');
     }
 }

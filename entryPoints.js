@@ -13,6 +13,7 @@ module.exports = {
       assignmentsTable: JS_DIR + '/AssignmentsTable/AssignmentsTable.jsx',
       noteBox: JS_DIR + '/note/NoteBox.jsx',
       rlcCardList: JS_DIR + '/rlcCardList/rlcCardList.jsx',
+      hallCardList: JS_DIR + '/hallCardList/hallCardList.jsx',
       vendor: ['jquery', 'react', 'react-dom', 'react-bootstrap']
     }
 }
