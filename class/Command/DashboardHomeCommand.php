@@ -29,6 +29,11 @@ class DashboardHomeCommand extends Command {
         $context->setContent(\PHPWS_Template::process($tpl, 'hms', 'admin/dashboardHome.tpl'));
     }
 
+    // TODO: Query for building the assignments over time graph:
+    /*
+    SELECT extract(epoch from foo.day) * 1000, count(*) FROM (SELECT day::timestamp FROM generate_series(timestamp '2016-11-21', timestamp '2017-11-21', '1 day') as day) as foo JOIN hms_assignment_history ON (to_timestamp(assigned_on) < foo.day AND (to_timestamp(removed_on) > foo.day OR removed_on IS NULL)) WHERE term = 201810 GROUP BY foo.day order by day asc;
+    */
+
     private static function getNumResidents(){
         $pdo = PdoFactory::getPdoInstance();
         $query = 'SELECT count(*) FROM hms_assignment WHERE term = :term';
