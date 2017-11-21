@@ -18,7 +18,7 @@
 		<!-- END under18 -->
 
         <div class="text-center">
-            <button class="btn btn-success btn-lg" id="signButton"><i class="fa fa-edit"></i> Sign Contract via Docusign</button>
+            <button class="btn btn-success btn-lg btn-fill" id="signButton"><i class="fa fa-edit"></i> Sign Contract via Docusign</button>
         </div>
 	</div>
 </div>

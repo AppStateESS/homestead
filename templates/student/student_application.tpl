@@ -340,7 +340,7 @@
         <div class="col-md-12">
             <!-- BEGIN continue_btn -->
             {CONTINUE_BTN}
-            <button type="submit" class="btn btn-success btn-lg pull-right">Continue <i class="fa fa-chevron-right"></i></button>
+            <button type="submit" class="btn btn-success btn-fill btn-lg pull-right">Continue <i class="fa fa-chevron-right"></i></button>
             <!-- END continue_btn -->
 
             <!-- BEGIN redo_form -->
@@ -349,7 +349,7 @@
 
             <!-- BEGIN confirmapp -->
             {CONFIRM_BTN}
-            <button type="submit" class="btn btn-success btn-lg pull-right">Confirm &amp; Continue <i class="fa fa-chevron-right"></i></button>
+            <button type="submit" class="btn btn-success btn-fill btn-lg pull-right">Confirm &amp; Continue <i class="fa fa-chevron-right"></i></button>
             <!-- END confirmapp -->
         </div>
 

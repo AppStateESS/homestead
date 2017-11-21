@@ -195,7 +195,7 @@
             <!-- BEGIN save-btn -->
             {SAVE_BTN}
             <div class="form-group pull-right">
-                <button type="submit" class="btn btn-success btn-lg">Save Profile</button>
+                <button type="submit" class="btn btn-success btn-fill btn-lg">Save Profile</button>
             </div>
             <!-- END save-btn -->
         </div>
@@ -217,24 +217,20 @@ function CountWords (this_field)
       if (fullStr.length <1) {
             word_count = 0;
       }
-      if (words_left == 1)
-      {
+
+      if (words_left == 1){
       	wordOrWords = " word ";
-      }
-      else
-      {
+      } else {
       	wordOrWords = " words ";
       }
       str_words_left = String(words_left)
 
-      if (words_left < 0)
-      {
+      if (words_left < 0) {
       	var formatted = "<span style='color:#ff0000'>" + str_words_left + "</span>";
-      }
-      else
-      {
+      } else {
       	var formatted = str_words_left;
       }
+
       var retstring = formatted + wordOrWords + "remaining."
       document.getElementById('wrdcnt').innerHTML=retstring;
 
