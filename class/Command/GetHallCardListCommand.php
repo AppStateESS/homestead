@@ -28,10 +28,10 @@ class GetHallCardListCommand extends Command {
                 $hall->imageLink = $manager->file_assoc->_file_path;
 
             }else{
+                //if no hall picture is found it puts the stock newland picture in
                 $hall->imageLink = 'mod/hms/img/newland.jpg';
             }
         }
-        //var_dump($manager->file_assoc->_file_path, $halls);exit;
         echo json_encode($halls);
         exit;
     }

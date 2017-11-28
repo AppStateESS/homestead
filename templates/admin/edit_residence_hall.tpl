@@ -1,6 +1,9 @@
 <div class="row">
   <div class="col-md-8">
-    <h1>{TITLE} <small>{TERM}</small></h1>
+      <div class="col-md-10 col-xs-12 pull-left hall-banner">
+          <img src={EXTERIOR_IMG_PIC} width="100%" height="200px"></img>
+          <h1><span>{TITLE} <small>{TERM}</small></span></h1>
+      </div>
     {START_FORM}
 
     <div class="row">
@@ -81,14 +84,14 @@
                                         {ASSIGNMENT_NOTIFICATIONS} Assignment Notifications
                                     </label>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="{PACKAGE_DESK_ID}">
                                         Package Desk
                                     </label>
                                     {PACKAGE_DESK}
                                 </div>
-                               
+
                                 <button type="submit" class="btn btn-success pull-right">Save</button>
                             </div>
                         </div>

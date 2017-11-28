@@ -45,9 +45,9 @@ class HallCardList extends React.Component {
                     <div className="content">
                         <h4><a href={rosterUri}>{hall.hall_name}</a></h4>
                         <Row>
-                        <Col md={2} className="col"><br/><i className="fa fa-users"></i> {hall.numAssignees}</Col>
-                        <Col md={2} className="col"><br/><i className="fa fa-bed"></i> {hall.numBeds}</Col>
-                        <Col md={3} className="col">Vacant: {hall.numFree}</Col>
+                        <Col md={2} className="col"><br/><i className="fa fa-users"></i><h4> {hall.numAssignees}</h4></Col>
+                        <Col md={2} className="col"><br/><i className="fa fa-bed"></i><h4> {hall.numBeds}</h4></Col>
+                        <Col md={3} className="col"><br/>Vacant:<h4> {hall.numFree}</h4></Col>
                         <Col md={5}><DonutChart value={percent}/></Col></Row>
                     </div>
                 </div>
