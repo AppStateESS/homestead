@@ -229,7 +229,6 @@ class Floor extends HMS_Item
      */
     public function can_change_gender($target_gender, $ignore_upper = false)
     {
-        var_dump($ignore_upper);exit;
         // Ignore upper is true, we're trying to change a hall's gender
         if($ignore_upper) {
             // If ignore upper is true and the target gender is coed, then
