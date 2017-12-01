@@ -33,6 +33,7 @@ class RlcCardList extends React.Component {
   }
 
   renderCards() {
+      console.log(this.state.rlcs)
       let cards = this.state.rlcs.map(function(rlc){
 
           let rosterUri = 'index.php?module=hms&action=ShowViewByRlc&rlc=' + rlc.id;
