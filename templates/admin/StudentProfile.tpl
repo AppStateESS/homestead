@@ -63,9 +63,6 @@ var userActivity = '{USER_ACTIVITY}';
 
     <div class="card">
         <div class="header">
-            <div class="form-group pull-left">
-                <h2>Rooming</h2>
-            </div>
             <div class="form-group pull-right">
                 <div class="dropdown">
                     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
@@ -81,45 +78,41 @@ var userActivity = '{USER_ACTIVITY}';
             </div>
         </div>
         <div class="content">
-            <div class="row">
-                    <div class="row col-md-12 col-xs-push-1">
-                        <p>Assigned:
-                            <!-- BEGIN not-assigned -->
-                            <span class="text-danger" style="margin-top : 5px">Not assigned</span>
-                            <a href="{NOT_ASSIGNED}" class="btn btn-xs btn-success"><i class="fa fa-plus"></i> Assign Student</a>
-                            <!-- END not-assigned -->
-                            <!-- BEGIN assignment -->
-                            {ASSIGNMENT}
-                            <!-- END assignment -->
-                            </p>
-                    </div>
-                    <div class="row col-md-12 col-xs-push-1">
-                        <p>Roommate(s):
-                        <!-- BEGIN confirmed -->
-                        <td class="success">
-                            {ROOMMATE} <i class="fa fa-check fa-2x"></i>
-                        </td>
-                        <!-- END confirmed -->
-                        <!-- BEGIN pending -->
-                        <td class="warning">
-                            {ROOMMATE} <i class="fa fa-warning fa-2x"></i>
-                        </td>
-                        <!-- END pending -->
-                        <!-- BEGIN error_status -->
-                        <td class="error">
-                            {ROOMMATE} <i class="fa fa-warning fa-2x"></i>
-                        </td>
-                        <!-- END error_status -->
-                        <!-- BEGIN assigned -->
-                            {ROOMMATE}</p>
-                        <!-- END assigned -->
-                    </div>
-                    <div class="row col-md-12 col-xs-push-1">
-                            <p>RLC: {RLC_STATUS}</p>
-                    </div>
-            </div>
+            <p class='text-left'>Assigned:
+                <!-- BEGIN not-assigned -->
+                <span class="text-danger" style="margin-top : 5px">Not assigned</span>
+                <a href="{NOT_ASSIGNED}" class="btn btn-xs btn-success"><i class="fa fa-plus"></i> Assign Student</a>
+                <!-- END not-assigned -->
+                <!-- BEGIN assignment -->
+                {ASSIGNMENT}
+                <!-- END assignment -->
+            </p>
+
+            <p class='text-left'>Roommate(s):
+                <!-- BEGIN confirmed -->
+                <p class="success">
+                    {ROOMMATE} <i class="fa fa-check fa-2x"></i>
+                </p>
+                <!-- END confirmed -->
+                <!-- BEGIN pending -->
+                <p class="warning">
+                    {ROOMMATE} <i class="fa fa-warning fa-2x"></i>
+                </p>
+                <!-- END pending -->
+                <!-- BEGIN error_status -->
+                <p class="error">
+                    {ROOMMATE} <i class="fa fa-warning fa-2x"></i>
+                </p>
+                <!-- END error_status -->
+                <!-- BEGIN assigned -->
+                <p>{ROOMMATE}</p></p>
+                <!-- END assigned -->
+
+                <p class='text-left'>RLC: {RLC_STATUS}</p>
+
         </div>
     </div>
+
     <div class="card">
         <div class="header">
             <h2>Applications</h2>
