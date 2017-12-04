@@ -535,6 +535,7 @@ CREATE TABLE hms_roommate (
 CREATE TABLE hms_student_profiles (
     id INTEGER NOT NULL,
     banner_id INTEGER NOT NULL,
+    gender smallint NOT NULL,
     username character varying(32) NOT NULL,
     term            INTEGER NOT NULL REFERENCES hms_term(term),
     date_submitted INTEGER NOT NULL,

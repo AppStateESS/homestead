@@ -68,6 +68,27 @@ class RoommateProfileFactory {
     }
 
     /**
+     * Get all profiles of the same gender for the same semster
+     */
+    public static function getPotentialProfiles(Student $student, string $term)
+    {
+        $pdo = PdoFactory::getPdoInstance();
+
+        $query = 'SELECT * FROM hms_student_profiles
+                    WHERE
+                        hms_student_profiles.term = :term AND
+                        hms_student_profiles.banner_id != :bannerId AND
+                        hms_student_profiles.gender = :gender';
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array('term'=>$term, 'bannerId'=>$student->getBannerId(), 'gender'=>$student->getGender()));
+
+        // TODO: Fetch as array??
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\RoommateProfileRestored');
+
+        return $stmt->fetchAll();
+    }
+
+    /**
      * Function to determine which hobbies check boxes need to be checked
      * Takes a Student_Profile object and returns an array of the checkbox names
      * which should be checked.
