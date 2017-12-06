@@ -5,10 +5,6 @@ import 'whatwg-fetch';
 
 
 class RlcCardList extends React.Component {
-  // State:
-  // { loading: true }
-  // { loading: false, rlcs: { name, memberCound} }
-  // { loading: false, error: any }
   constructor(){
       super();
 
