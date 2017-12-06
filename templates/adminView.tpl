@@ -1,10 +1,11 @@
 <div class="wrapper">
-    <div class="sidebar" data-color="black" data-image="assets/img/sidebar-5.jpg">
+    <div class="sidebar" data-color="black" data-image="mod/hms/img/NavPic.jpg">
 
+        <div class="sidebar-background" style='background-image: url("mod/hms/img/NavPic.jpg");'></div>
     	<div class="sidebar-wrapper">
             <div class="logo">
-                <a href="https://homestead.appstate.edu" class="simple-text">
-                    Homestead
+                <a href="https://homestead.appstate.edu">
+                    <img src="mod/hms/img/HomesteadLogo.png"></img>
                 </a>
             </div>
 
