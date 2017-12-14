@@ -16,6 +16,7 @@ use \Homestead\Exception\PermissionException;
 class ShowRequestRoommateCommand extends Command {
 
     private $term;
+    private $username;
 
     public function getRequestVars()
     {
@@ -25,12 +26,20 @@ class ShowRequestRoommateCommand extends Command {
             $vars['term'] = $this->term;
         }
 
+        if(isset($this->username)){
+            $vars['username'] = $this->username;
+        }
+
         return $vars;
     }
 
     public function setTerm($term)
     {
         $this->term = $term;
+    }
+
+    public function setUsername($username){
+        $this->username = $username;
     }
 
     public function execute(CommandContext $context)
@@ -68,7 +77,14 @@ class ShowRequestRoommateCommand extends Command {
         $cmd->setTerm($term);
         $cmd->initForm($form);
 
-        $form->addText('username');
+        // Check for a passed in username that we're trying to request
+        $requestee = $context->get('username');
+        if(isset($requestee) && $requestee != ''){
+            $form->addText('username', $requestee);
+        }else{
+            $form->addText('username');
+        }
+
         $form->addCssClass('username', 'form-control');
         $form->setExtra('username', 'autofocus');
 

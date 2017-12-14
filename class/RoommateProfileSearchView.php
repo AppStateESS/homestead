@@ -11,8 +11,7 @@ namespace Homestead;
     public static function profile_search_pager($term)
     {
         // get the current student's gender
-        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), Term::getCurrentTerm());
-        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $student->getApplicationTerm());
+        $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         $gender = $student->getGender();
 

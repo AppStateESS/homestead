@@ -62,7 +62,7 @@
                 <div class="form-group">
                     <label for="{USERNAME_ID}">Roommate's ASU Email:</label>
                     <div class="input-group">
-                        <input type="text" class="form-control input-lg" name="{USERNAME_NAME}" id="{USERNAME_ID}" autofocus>
+                        <input type="text" class="form-control input-lg" name="{USERNAME_NAME}" id="{USERNAME_ID}" value="{USERNAME_VALUE}" autofocus>
                         <div class="input-group-addon">@appstate.edu</div>
                     </div>
                 </div>

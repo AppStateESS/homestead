@@ -57,7 +57,7 @@ class RlcCardList extends React.Component {
   render() {
     if (this.state.loading) {
       return this.renderLoading();
-  } else if (this.state.rlcs) {
+    } else if (this.state.rlcs) {
       return this.renderCards();
     } else {
       return this.renderError();

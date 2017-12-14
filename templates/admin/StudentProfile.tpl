@@ -108,6 +108,14 @@ var userActivity = '{USER_ACTIVITY}';
                 <p>{ROOMMATE}</p></p>
                 <!-- END assigned -->
 
+                <!-- BEGIN roommate_suggestion_btn -->
+                <a href="{SUGGEST_ROOMMATES_URI}" class="btn btn-default btn-fill btn-sm">Suggest a Roommate</a>
+                <!-- END roommate_suggestion_btn -->
+
+                <!-- BEGIN no_roommate_suggestions -->
+                <span class="text-muted">No roommate profile submitted, so no suggsetions avaialble.</span>{NO_ROOMMATE_SUGGESTIONS}
+                <!-- END no_roommate_suggestions -->
+
                 <p class='text-left'>RLC: {RLC_STATUS}</p>
 
         </div>

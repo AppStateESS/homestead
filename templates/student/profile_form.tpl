@@ -8,6 +8,12 @@
         <div class="col-md-5">
             <h3>About Me</h3>
         </div>
+
+        <!-- BEGIN can_make_request -->
+        <div class="col-md-3 col-md-offset-4">
+            <a class="btn btn-info btn-fill btn-md" href="{REQUEST_URI}">Request This Person</a>
+        </div>
+        <!-- END can_make_request -->
     </div>
 
     <div class="row">

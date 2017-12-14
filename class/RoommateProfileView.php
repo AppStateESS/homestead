@@ -6,11 +6,13 @@ class RoommateProfileView extends View {
 
     private $student;
     private $profile;
+    private $canMakeNewRequest;
 
-    public function __construct(Student $student, RoommateProfile $profile = NULL)
+    public function __construct(Student $student, RoommateProfile $profile = NULL, bool $canMakeNewRequest)
     {
         $this->student = $student;
         $this->profile = $profile;
+        $this->canMakeNewRequest = $canMakeNewRequest;
     }
 
     public function show()
@@ -24,6 +26,15 @@ class RoommateProfileView extends View {
         $profile_form->useRowRepeat();
 
         $none_given = '<span style="color:#CCC;">none given</span>';
+
+        /***** Request this person button ****/
+        if($this->canMakeNewRequest){
+            $requestCmd = CommandFactory::getCommand('ShowRequestRoommate');
+            $requestCmd->setTerm($this->profile->getTerm());
+            $requestCmd->setUsername($this->student->getUsername());
+
+            $tpl['REQUEST_URI'] = $requestCmd->getUri();
+        }
 
         /***** Contact Info *****/
         $tpl['TITLE'] = $this->student->getName() . '\'s Profile';

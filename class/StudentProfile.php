@@ -122,7 +122,7 @@ class StudentProfile {
             $subTypeApps[] = HousingApplicationFactory::getApplicationById($app->id);
         }
 
-        return new StudentProfileView($this->student, $subTypeApps, $assignment, $this->roommates);
+        return new StudentProfileView($this->student, $this->term, $subTypeApps, $assignment, $this->roommates);
     }
 
 

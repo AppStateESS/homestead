@@ -4,8 +4,8 @@
         <div class="sidebar-background" style='background-image: url("mod/hms/img/NavPic.jpg");'></div>
     	<div class="sidebar-wrapper">
             <div class="logo">
-                <a href="https://homestead.appstate.edu">
-                    <img src="mod/hms/img/HomesteadLogo.png"></img>
+                <a href="./">
+                    <img style="max-width: 100%" src="mod/hms/img/HomesteadLogo.png"></img>
                 </a>
             </div>
 

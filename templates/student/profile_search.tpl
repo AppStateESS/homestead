@@ -16,8 +16,12 @@
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="suggested">
                     <h3>Suggested Roommates</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div id="SuggestedRoommateList"></div>
+                        </div>
+                    </div>
                 </div>
-
 
                 <div role="tabpanel" class="tab-pane" id="email">
                     <div class="row">
@@ -207,3 +211,9 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+window.term = '{TERM}';
+</script>
+
+<script type="text/javascript" src="{vendor_bundle}"></script>
+<script type="text/javascript" src="{entry_bundle}"></script>

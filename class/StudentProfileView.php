@@ -7,12 +7,14 @@ use \Homestead\Exception\InvalidTermException;
 class StudentProfileView extends View {
 
     private $student;
+    private $term;
     private $applications;
     private $assignment;
     private $roommates;
 
-    public function __construct(Student $student, $applications = NULL, HMS_Assignment $assignment = NULL, Array $roommates){
+    public function __construct(Student $student, $term, $applications = NULL, HMS_Assignment $assignment = NULL, Array $roommates){
         $this->student		= $student;
+        $this->term         = $term;
         $this->applications = $applications;
         $this->assignment	= $assignment;
         $this->roommates	= $roommates;
@@ -138,6 +140,8 @@ class StudentProfileView extends View {
         /*************
          * Roommates
         *************/
+        $roommateProfile = RoommateProfileFactory::getProfile($this->student->getBannerId(), $this->term);
+
         if(isset($this->roommates) && !empty($this->roommates)){
             // Remember, student can only have one confirmed or pending request
             // but multiple assigned roommates
@@ -160,6 +164,15 @@ class StudentProfileView extends View {
                     $tpl['assigned'][]['ROOMMATE'] = $roommate;
                 }
             }
+        }else if(isset($roommateProfile) && $roommateProfile !== null && $roommateProfile !== false){
+            // Student has no roommate, check for a profile and make suggestions is available
+            $suggestRoommatesCmd = CommandFactory::getCommand('ShowSuggestedRoommates');
+            $suggestRoommatesCmd->setBannerId($this->student->getBannerId());
+            $suggestRoommatesCmd->setTerm($this->term);
+            $tpl['SUGGEST_ROOMMATES_URI'] = $suggestRoommatesCmd->getUri();
+        }else{
+            // No roommates and no profile
+            $tpl['NO_ROOMMATE_SUGGESTIONS'] = '';
         }
 
         /**************

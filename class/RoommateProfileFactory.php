@@ -68,7 +68,8 @@ class RoommateProfileFactory {
     }
 
     /**
-     * Get all profiles of the same gender for the same semster
+     * Get all profiles of the same gender, for the same semster, who are not assigned already,
+     * and do not have roommate requests (pending or confiremd)
      */
     public static function getPotentialProfiles(Student $student, string $term)
     {
@@ -78,7 +79,9 @@ class RoommateProfileFactory {
                     WHERE
                         hms_student_profiles.term = :term AND
                         hms_student_profiles.banner_id != :bannerId AND
-                        hms_student_profiles.gender = :gender';
+                        hms_student_profiles.gender = :gender AND
+                        banner_id NOT IN (SELECT banner_id FROM hms_assignment WHERE term = :term) AND
+                        username NOT IN (SELECT requestor FROM hms_roommate WHERE term = :term UNION SELECT requestee FROM hms_roommate WHERE term = :term)';
         $stmt = $pdo->prepare($query);
         $stmt->execute(array('term'=>$term, 'bannerId'=>$student->getBannerId(), 'gender'=>$student->getGender()));
 
