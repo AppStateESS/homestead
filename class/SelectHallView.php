@@ -32,7 +32,7 @@ class SelectHallView extends View{
 
         if($this->halls == NULL){
             \NQ::simple('hms', NotificationView::ERROR, 'There are no halls available for the selected term.');
-            $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
+            $cmd = CommandFactory::getCommand('DashboardHome');
             $cmd->redirect();
         }
 
@@ -53,7 +53,7 @@ class SelectHallView extends View{
 
         $tpl['vendor_bundle'] = AssetResolver::resolveJsPath('assets.json', 'vendor');
         $tpl['entry_bundle'] = AssetResolver::resolveJsPath('assets.json', 'hallCardList');
-        
+
         return \PHPWS_Template::process($tpl, 'hms', 'admin/select_residence_hall.tpl');
     }
 }
