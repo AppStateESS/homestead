@@ -19,6 +19,7 @@ class RoommateProfile {
     public $banner_id;
     public $date_submitted;
     public $term;
+    public $gender;
 
     /******
      * Alternate contact info

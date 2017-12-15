@@ -44,6 +44,7 @@ class SubmitRoommateProfileCommand extends Command {
             $profile->setBannerID($banner);
             $profile->set_date_submitted();
             $profile->setTerm($term);
+            $profile->gender = $student->getGender();
         }
 
         # Alternate contact info
