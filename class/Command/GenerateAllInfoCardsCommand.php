@@ -33,7 +33,7 @@ class GenerateAllInfoCardsCommand extends Command {
 
         if (!isset($checkins) || count($checkins) <= 0) {
             \NQ::simple('hms', NotificationView::ERROR, 'No check-ins were found for the selected term.');
-            $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
+            $cmd = CommandFactory::getCommand('DashboardHome');
             $cmd->redirect();
         }
 

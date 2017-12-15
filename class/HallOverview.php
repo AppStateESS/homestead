@@ -34,7 +34,7 @@ class HallOverview extends View{
 
         if($this->nakedDisplay) {
 
-            $menuCmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
+            $menuCmd = CommandFactory::getCommand('DashboardHome');
             $tpl->setData(array('MAINTENANCE'=>$menuCmd->getLink('Main Menu')));
         }
 

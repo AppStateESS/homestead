@@ -145,7 +145,7 @@ class SendNotificationEmailsCommand extends Command {
         }
 
         \NQ::simple('hms', NotificationView::SUCCESS, 'Emails sent successfully!');
-        $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
+        $cmd = CommandFactory::getCommand('DashboardHome');
         $cmd->redirect();
     }
 }

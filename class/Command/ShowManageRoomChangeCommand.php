@@ -34,7 +34,7 @@ class ShowManageRoomChangeCommand extends Command {
 
         if (is_null($request) || $request === false) {
            \NQ::simple('hms', NotificationView::ERROR, 'Invalid room change request id.');
-           $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
+           $cmd = CommandFactory::getCommand('DashboardHome');
            $cmd->redirect();
         }
 
