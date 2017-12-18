@@ -229,7 +229,6 @@ class Floor extends HMS_Item
      */
     public function can_change_gender($target_gender, $ignore_upper = false)
     {
-        var_dump($ignore_upper);exit;
         // Ignore upper is true, we're trying to change a hall's gender
         if($ignore_upper) {
             // If ignore upper is true and the target gender is coed, then
@@ -583,7 +582,7 @@ class Floor extends HMS_Item
         $params = array('id' => $this->id, 'term' => $this->term, 'now' => $now, 'gender' => $gender);
 
         if($rlcId != null) {
-            $query .= "AND hms_room.reserved_rlc_id = $rlcId ";
+            $query .= "AND hms_room.reserved_rlc_id = :rlc ";
             $params += ['rlc' => $rlcId];
         }else {
             $query .= "AND hms_room.reserved_rlc_id IS NULL ";

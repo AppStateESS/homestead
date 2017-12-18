@@ -67,7 +67,7 @@ class SendRoomDamageNotificationsCommand extends Command {
 
         // Show a success message and redirect back to the main admin menu
     	\NQ::simple('hms', NotificationView::SUCCESS, 'Room damage notices sent.');
-        $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
+        $cmd = CommandFactory::getCommand('DashboardHome');
         $cmd->redirect();
     }
 }

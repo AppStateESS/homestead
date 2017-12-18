@@ -16,6 +16,13 @@ class RoommateProfileSearchForm extends View {
         $_SESSION['profile_search_use_session'] = FALSE;
         require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/profile_options.php');
 
+        $tags = array();
+
+        $tags['vendor_bundle'] = AssetResolver::resolveJsPath('assets.json', 'vendor');
+        $tags['entry_bundle'] = AssetResolver::resolveJsPath('assets.json', 'suggestedRoommateList');
+
+        $tags['TERM'] = $this->term;
+
         # Overwrite the first element of each array so it reads "No Preference" instead of "Prefer not to say".
         $no_pref = 'No Preference';
         $political_views[0]  = $no_pref;
@@ -27,8 +34,6 @@ class RoommateProfileSearchForm extends View {
         $loudness[0]         = $no_pref;
         $cleanliness[0]      = $no_pref;
         $free_time[0]        = $no_pref;
-
-        $tags = array();
 
         $submitCmd = CommandFactory::getCommand('RoommateProfileSearch');
         $submitCmd->setTerm($this->term);

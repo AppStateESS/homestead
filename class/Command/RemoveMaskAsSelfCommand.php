@@ -28,7 +28,7 @@ class RemoveMaskAsSelfCommand extends Command {
 
         UserStatus::removeMaskAsSelf();
 
-        $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
+        $cmd = CommandFactory::getCommand('DashboardHome');
         $cmd->redirect();
     }
 }

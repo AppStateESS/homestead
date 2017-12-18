@@ -146,9 +146,9 @@ class RlcMembersList extends React.Component{
         });
     }
     render(){
-        var backUrl = "index.php?module=hms&action=ShowSearchByRlc"
-        var addMembersUrl = "index.php?module=hms&action=ShowAdminAddRlcMember&communityId=" + this.props.rlcId;
-        var exportUrl = "index.php?module=hms&action=CreateCsvByRlc&id=" + this.props.rlcId
+        var backUrl = 'index.php?module=hms&action=ShowCommunities';
+        var addMembersUrl = 'index.php?module=hms&action=ShowAdminAddRlcMember&communityId=' + this.props.rlcId;
+        var exportUrl = 'index.php?module=hms&action=CreateCsvByRlc&id=' + this.props.rlcId
 
         return(
             <div>
@@ -266,12 +266,12 @@ class ListBox extends React.Component{
                     setStatus={setStatusFunc}/>
             });
 
-            var genderSort = (<a onClick={this.sortGender} href="javascript:;"><i className="fa fa-sort"></i></a>);
-            var studentTypeSort = (<a onClick={this.sortStudentType} href="javascript:;"><i className="fa fa-sort"></i></a>);
-            var usernameSort = (<a onClick={this.sortUsername} href="javascript:;"><i className="fa fa-sort"></i></a>);
-            var statusSort = (<a onClick={this.sortStatus} href="javascript:;"><i className="fa fa-sort"></i></a>);
-            var assignmentSort = (<a onClick={this.sortAssignment} href="javascript:;"><i className="fa fa-sort"></i></a>);
-            var roommateSort = (<a onClick={this.sortRoommate} href="javascript:;"><i className="fa fa-sort"></i></a>);
+            var genderSort = (<a onClick={this.sortGender}><i className="fa fa-sort"></i></a>);
+            var studentTypeSort = (<a onClick={this.sortStudentType}><i className="fa fa-sort"></i></a>);
+            var usernameSort = (<a onClick={this.sortUsername}><i className="fa fa-sort"></i></a>);
+            var statusSort = (<a onClick={this.sortStatus}><i className="fa fa-sort"></i></a>);
+            var assignmentSort = (<a onClick={this.sortAssignment}><i className="fa fa-sort"></i></a>);
+            var roommateSort = (<a onClick={this.sortRoommate}><i className="fa fa-sort"></i></a>);
 
             return(
                 <table className="table table-striped table-hover">
@@ -369,12 +369,12 @@ class ListRowBox extends React.Component{
                             <em className={studentTypeFont}>{this.props.node.status}</em>  <span className="caret"></span>
                         </button>
                         <ul className="dropdown-menu">
-                            <li><a onClick={this.setConfirm} href="javascript:;">Confirmed</a></li>
-                            <li><a onClick={this.setDecline} href="javascript:;">Declined</a></li>
-                            <li><a onClick={this.setNotInvited} href="javascript:;">Not invited</a></li>
-                            <li><a onClick={this.setPending} href="javascript:;">Pending</a></li>
-                            <li><a onClick={this.setSelfSelectAvail} href="javascript:;">Self-Select Available</a></li>
-                            <li><a onClick={this.setSelfSelected} href="javascript:;">Self-Selected</a></li>
+                            <li><a onClick={this.setConfirm}>Confirmed</a></li>
+                            <li><a onClick={this.setDecline}>Declined</a></li>
+                            <li><a onClick={this.setNotInvited}>Not invited</a></li>
+                            <li><a onClick={this.setPending}>Pending</a></li>
+                            <li><a onClick={this.setSelfSelectAvail}>Self-Select Available</a></li>
+                            <li><a onClick={this.setSelfSelected}>Self-Selected</a></li>
                         </ul>
                     </div>
                 </td>
@@ -387,8 +387,8 @@ class ListRowBox extends React.Component{
                         </button>
                         <ul className="dropdown-menu">
                             <li><a href={applicationLink}>View RLC Application</a></li>
-                            <li><a onClick={this.remove} href="javascript:;">Remove Membership</a></li>
-                            <li><a onClick={this.removeDeny} href="javascript:;">Remove &amp; Deny Application</a></li>
+                            <li><a onClick={this.remove}>Remove Membership</a></li>
+                            <li><a onClick={this.removeDeny}>Remove &amp; Deny Application</a></li>
                         </ul>
                     </div>
                 </td>

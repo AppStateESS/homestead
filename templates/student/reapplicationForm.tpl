@@ -44,7 +44,7 @@
             <label>Cell Phone Number:</label>
             {NUMBER}
         </div>
-        <div clas="form-group">
+        <div class="form-group">
             {DO_NOT_CALL}
             Check here if you do not have a cell phone or do
             not wish to provide your cell phone number.
@@ -182,11 +182,9 @@
     <div class="col-md-6">
         <div class="form-group">
             <label>Would you like to apply to live in a Residential Learning Community?</label>
-            <div class="checkbox">
-                <label>
+            <div class="form-group">
                     {RLC_INTEREST}
-                    {RLC_INTEREST_LABEL}
-                </label>
+                    I'm interested in applying for (or continuing in) a Residential Learning Community.
             </div>
         </div>
     </div>
@@ -238,10 +236,10 @@
 </div>
 <div class="row">
     <div class="col-md-6">
-        <div class="checkbox">
+        <div class="form-group">
             <label>
                 {DEPOSIT_CHECK}
-                {DEPOSIT_CHECK_LABEL}
+                I understand &amp; acknowledge that if I cancel my License Contract my student account will be charged <strong>$250</strong>.  If I cancel my License Contract after July 1, I will be liable for the entire amount of the on-campus housing fees for the Fall semester.
             </label>
         </div>
     </div>

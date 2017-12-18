@@ -7,12 +7,14 @@ use \Homestead\Exception\InvalidTermException;
 class StudentProfileView extends View {
 
     private $student;
+    private $term;
     private $applications;
     private $assignment;
     private $roommates;
 
-    public function __construct(Student $student, $applications = NULL, HMS_Assignment $assignment = NULL, Array $roommates){
+    public function __construct(Student $student, $term, $applications = NULL, HMS_Assignment $assignment = NULL, Array $roommates){
         $this->student		= $student;
+        $this->term         = $term;
         $this->applications = $applications;
         $this->assignment	= $assignment;
         $this->roommates	= $roommates;
@@ -56,13 +58,13 @@ class StudentProfileView extends View {
 
         $tpl['ADMISSION_DECISION'] = $this->student->getAdmissionDecisionCode();
 
-        $tpl['INTERNATIONAL'] = $this->student->isInternational() ? 'Yes' : 'No';
+        $tpl['INTERNATIONAL'] = $this->student->isInternational() ? null : 'hidden';
 
-        $tpl['HONORS'] = $this->student->isHonors() ? 'Yes' : 'No';
+        $tpl['HONORS'] = $this->student->isHonors() ? '' : 'hidden';
 
-        $tpl['TEACHING_FELLOW'] = $this->student->isTeachingFellow() ? 'Yes' : 'No';
+        $tpl['TEACHING_FELLOW'] = $this->student->isTeachingFellow() ? '' : 'hidden';
 
-        $tpl['WATAUGA'] = $this->student->isWataugaMember() ? 'Yes' : 'No';
+        $tpl['WATAUGA'] = $this->student->isWataugaMember() ? '' : 'hidden';
 
         if($this->student->pinDisabled()){
             \NQ::simple('hms', NotificationView::WARNING, "This student's PIN is disabled.");
@@ -138,6 +140,8 @@ class StudentProfileView extends View {
         /*************
          * Roommates
         *************/
+        $roommateProfile = RoommateProfileFactory::getProfile($this->student->getBannerId(), $this->term);
+
         if(isset($this->roommates) && !empty($this->roommates)){
             // Remember, student can only have one confirmed or pending request
             // but multiple assigned roommates
@@ -160,6 +164,15 @@ class StudentProfileView extends View {
                     $tpl['assigned'][]['ROOMMATE'] = $roommate;
                 }
             }
+        }else if(isset($roommateProfile) && $roommateProfile !== null && $roommateProfile !== false){
+            // Student has no roommate, check for a profile and make suggestions is available
+            $suggestRoommatesCmd = CommandFactory::getCommand('ShowSuggestedRoommates');
+            $suggestRoommatesCmd->setBannerId($this->student->getBannerId());
+            $suggestRoommatesCmd->setTerm($this->term);
+            $tpl['SUGGEST_ROOMMATES_URI'] = $suggestRoommatesCmd->getUri();
+        }else{
+            // No roommates and no profile
+            $tpl['NO_ROOMMATE_SUGGESTIONS'] = '';
         }
 
         /**************
@@ -206,19 +219,19 @@ class StudentProfileView extends View {
                     $tpl['SPECIAL_INTEREST'] = 'RLC (pending)';
                 }else{
                     # Student didn't select anything
-                    $tpl['SPECIAL_INTEREST'] = 'No';
+                    $tpl['SPECIAL_INTEREST_SHOW'] = 'hidden';
                 }
             }
         }else{
             # Not a re-application, so can't have a special group
-            $tpl['SPECIAL_INTEREST'] = 'No';
+            $tpl['SPECIAL_INTEREST_SHOW'] = 'hidden';
         }
 
         /******************
          * Housing Waiver *
         *************/
 
-       	$tpl['HOUSING_WAIVER'] = $this->student->housingApplicationWaived() ? 'Yes' : 'No';
+       	$tpl['HOUSING_WAIVER'] = $this->student->housingApplicationWaived() ? '' : 'hidden';
 
        	if($this->student->housingApplicationWaived()){
        	    \NQ::simple('hms', NotificationView::WARNING, "This student's housing application has been waived for this term.");
@@ -250,14 +263,8 @@ class StudentProfileView extends View {
         /*********
          * Notes *
         *********/
-        $addNoteCmd = CommandFactory::getCommand('AddNote');
-        $addNoteCmd->setUsername($this->student->getUsername());
-
-        $form = new \PHPWS_Form('add_note_dialog');
-        $addNoteCmd->initForm($form);
-
-        $form->addTextarea('note');
-        $form->addSubmit('Add Note');
+        $tpl['note_bundle'] = AssetResolver::resolveJsPath('assets.json', 'noteBox');
+        $tpl['USER_ACTIVITY'] = 'hidden';
 
         /********
          * Logs *
@@ -282,8 +289,6 @@ class StudentProfileView extends View {
             $tpl['NOTE_PAGER'] .= $notesCmd->getLink('View more');
         }
 
-        $tpl = array_merge($tpl, $form->getTemplate());
-
         // TODO logs
 
         // TODO tabs
@@ -292,7 +297,7 @@ class StudentProfileView extends View {
          * Email Message Log *
          *********************/
         $tpl['vendor_bundle'] = AssetResolver::resolveJsPath('assets.json', 'vendor');
-        $tpl['entry_bundle'] = AssetResolver::resolveJsPath('assets.json', 'emailLogView');
+        $tpl['email_bundle'] = AssetResolver::resolveJsPath('assets.json', 'emailLogView');
         $emailLogParams = array(
             'banner_id'=>$this->student->getBannerId(),
             'mandrill_key' => \PHPWS_Settings::get('hms', 'mandrill_key')

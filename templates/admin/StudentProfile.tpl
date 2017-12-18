@@ -1,189 +1,180 @@
-<h2>{NAME} - {BANNER_ID} <small class="text-muted">{TERM}</small></h2>
+<script>
+var emailLogParams = {EMAIL_LOG_PARAMS};
+var noteParamsStudent = '{USERNAME}';
+var userActivity = '{USER_ACTIVITY}';
+</script>
 
-<div class="row">
-    <div class="col-md-8">
-        <div class="form-group pull-right">
-        <div class="dropdown">
-          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-            <i class="fa fa-cog"></i> Options
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-              <!-- BEGIN login-as-student -->
-              <li role="presentation"><a role="menuitem" tabindex="-1" href="{LOGIN_AS_STUDENT_URI}"><i class="fa fa-sign-in"></i> Login as Student</a></li>
-              <!-- BEGIN login-as-student -->
-          </ul>
+<div class="col-md-4 col-md-push-8">
+    <div class="card card-user">
+        <div class="image">
+            <img src="mod/hms/img/newland.jpg"/>
         </div>
-        </div>
-
-        <table class="table">
-            <tr>
-                <th>ASU Email Address:</th>
-                <td><a href="mailto:{USERNAME}@appstate.edu">{USERNAME}@appstate.edu</a></td>
-            </tr>
-
-            <tr>
-                <th>Gender</th>
-                <td>{GENDER}</td>
-            </tr>
-
-            <tr>
-                <th>Birthday</th>
-                <td>{DOB}</td>
-            </tr>
-
-            <tr>
-                <th>Type</th>
-                <td>{TYPE}</td>
-            </tr>
-            <!-- BEGIN application_term -->
-            <tr>
-                <th>Application Term:</th>
-                <td>{APPLICATION_TERM}</td>
-            </tr>
-            <!-- END application_term -->
-            <tr>
-                <th>Class</th>
-                <td>{CLASS}</td>
-            </tr>
-            <tr>
-                <th>Level</th>
-                <td>{STUDENT_LEVEL}</td>
-            </tr>
-            <tr>
-                <th>Admissions Decision</th>
-                <td>{ADMISSION_DECISION}</td>
-            </tr>
-            <tr>
-                <th>International</th>
-                <td>{INTERNATIONAL}</td>
-            </tr>
-            <tr>
-                <th>Phone Number</th>
-                <td>
-                    <!-- BEGIN phone_number -->
-                    {NUMBER}<br />
-                    <!-- END phone_number -->
-                </td>
-            </tr>
-
-            <tr>
-               <th>Addresses</th>
-               <td>
+        <div class="content">
+            <div class="author">
+                    <img class="avatar border-gray" src="mod/hms/img/Logo.png"/>
+                    <h4 class="title">
+                        {NAME}
+                        <br>
+                        <small>{BANNER_ID}</small>
+                        <br>
+                        <small>{USERNAME} <a href="mailto:{USERNAME}@appstate.edu"><i class="fa fa-envelope-o"></i></a></small>
+                        <br>
+                         <!-- BEGIN phone_number -->
+                        <small>{NUMBER}</small><br>
+                        <!-- END phone_number -->
+                    <h4>
+            </div>
+            <p class="description text-center">
+                {GENDER}<br>
+                {DOB}<br>
+                Application Term: {APPLICATION_TERM}<br>
+                Class: {CLASS}<br>
+                Type: {TYPE}<br>
+                Level: {STUDENT_LEVEL}<br>
+                Admission Decision: {ADMISSION_DECISION}<br>
+            </p>
+            <p class="description text-center">
+                <span class="label label-info {INTERNATIONAL}">International</span>
+                <span class="label label-info {HONORS}">Honors</span>
+                <span class="label label-info {TEACHING_FELLOW}">Teaching Fellow</span>
+                <span class="label label-info {WATAUGA}">Watauga Global Member</span>
+                <span class="label label-info {SPECIAL_INTEREST_SHOW}">{SPECIAL_INTEREST}</span>
+                <span class="label label-info {HOUSING_WAIVER}">Freshmen Housing Waiver</span>
+                <br>
+            </p>
+            <p class="description text-center">
                 <!-- BEGIN addresses -->
-                <p>
-                <strong>{ADDR_TYPE}</strong><br />
-                {ADDRESS_L1}<br />
-                <!-- BEGIN subadd2 -->{ADDRESS_L2}<br /><!-- END subadd2 -->
-                <!-- BEGIN subadd3 -->{ADDRESS_L3}<br /><!-- END subadd3 -->
-                {CITY}, {STATE} {ZIP}</p>
+                <strong>{ADDR_TYPE}</strong><br>
+                {ADDRESS_L1}<br>
+                <!-- BEGIN subadd2 -->
+                {ADDRESS_L2}<br>
+                <!-- END subadd2 -->
+                <!-- BEGIN subadd3 -->
+                {ADDRESS_L3}<br>
+                <!-- END subadd3 -->
+                {CITY}, {STATE} {ZIP}<br>
                 <!-- END addresses -->
-                </td>
-            </tr>
-        </table>
+            </p>
+        </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-8">
-        <table class="table">
-            <tr>
-                <th>Assigned:</th>
-                <td>
-                    <!-- BEGIN not-assigned -->
-                    <span class="text-danger" style="margin-top : 5px">Not assigned</span>
-                    <a href="{NOT_ASSIGNED}" class="btn btn-xs btn-success"><i class="fa fa-plus"></i> Assign Student</a>
-                    <!-- END not-assigned -->
-                    <!-- BEGIN assignment -->
-                    {ASSIGNMENT}
-                    <!-- END assignment -->
-                </td>
-            </tr>
-            <tr>
-                <th>Roommate(s):</th>
+<div class="col-md-8 col-md-pull-4">
+
+    <div class="card">
+        <div class="header">
+            <div class="form-group pull-right">
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                        <i class="fa fa-cog"></i> Options
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        <!-- BEGIN login-as-student -->
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="{LOGIN_AS_STUDENT_URI}"><i class="fa fa-sign-in"></i> Login as Student</a></li>
+                        <!-- BEGIN login-as-student -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <p class='text-left'>Assigned:
+                <!-- BEGIN not-assigned -->
+                <span class="text-danger" style="margin-top : 5px">Not assigned</span>
+                <a href="{NOT_ASSIGNED}" class="btn btn-xs btn-success"><i class="fa fa-plus"></i> Assign Student</a>
+                <!-- END not-assigned -->
+                <!-- BEGIN assignment -->
+                {ASSIGNMENT}
+                <!-- END assignment -->
+            </p>
+
+            <p class='text-left'>Roommate(s):
                 <!-- BEGIN confirmed -->
-                <td class="success">
+                <p class="success">
                     {ROOMMATE} <i class="fa fa-check fa-2x"></i>
-                </td>
+                </p>
                 <!-- END confirmed -->
                 <!-- BEGIN pending -->
-                <td class="warning">
+                <p class="warning">
                     {ROOMMATE} <i class="fa fa-warning fa-2x"></i>
-                </td>
+                </p>
                 <!-- END pending -->
                 <!-- BEGIN error_status -->
-                <td class="error">
+                <p class="error">
                     {ROOMMATE} <i class="fa fa-warning fa-2x"></i>
-                </td>
+                </p>
                 <!-- END error_status -->
-            </tr>
-            <tr>
                 <!-- BEGIN assigned -->
-                <tr>
-                    <td></td>
-                    <td>{ROOMMATE}</td>
-                </tr>
+                <p>{ROOMMATE}</p></p>
                 <!-- END assigned -->
-            </tr>
-            <tr>
-                <th>RLC:</th>
-                <td>{RLC_STATUS}</td>
-            </tr>
-            <tr>
-                <th>Honors</th>
-                <td>{HONORS}</td>
-            </tr>
-            <tr>
-                <th>Teaching Fellow</th>
-                <td>{TEACHING_FELLOW}</td>
-            </tr>
-            <tr>
-                <th>Watauga Global Member</th>
-                <td>{WATAUGA}</td>
-            </tr>
-            <tr>
-                <th>Re-application Special Interest Group: </th>
-                <td>{SPECIAL_INTEREST}</td>
-            </tr>
-            <tr>
-                <th>Freshmen Housing Waiver:</th>
-                <td>{HOUSING_WAIVER}</td>
-            </tr>
-        </table>
+
+                <!-- BEGIN roommate_suggestion_btn -->
+                <a href="{SUGGEST_ROOMMATES_URI}" class="btn btn-default btn-fill btn-sm">Suggest a Roommate</a>
+                <!-- END roommate_suggestion_btn -->
+
+                <!-- BEGIN no_roommate_suggestions -->
+                <span class="text-muted">No roommate profile submitted, so no suggsetions avaialble.</span>{NO_ROOMMATE_SUGGESTIONS}
+                <!-- END no_roommate_suggestions -->
+
+                <p class='text-left'>RLC: {RLC_STATUS}</p>
+
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="header">
+            <h2>Applications</h2>
+        </div>
+        <div class="content">
+            {APPLICATIONS}
+        </div>
+    </div>
+    <div class="card">
+        <div class="header">
+            <h2>Assignments</h2>
+        </div>
+        <div class="content">
+            {HISTORY}
+        </div>
+    </div>
+    <div class="card">
+        <div class="header">
+            <h2>Check-in / Check-out</h2>
+        </div>
+        <div class="content">
+            {CHECKINS}
+        </div>
+    </div>
+    <div class="card">
+        <div class="header">
+            <h2>Recent Notes</h2>
+        </div>
+        <div class="content">
+            <div id="note-box"></div>
+            <!-- BEGIN notes -->
+            <div class="profileHeader">{NOTE_PAGER}</div>
+            <!-- END notes -->
+        </div>
+    </div>
+    <div class="card">
+        <div class="header">
+            <h2>Email Log</h2>
+        </div>
+        <div class="content">
+            <!-- Email Log -->
+            <div id="emailLogView"></div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="header">
+            <h2>Student Log</h2>
+        </div>
+        <div class="content">
+            <div class="profileHeader">{LOG_PAGER}</div>
+        </div>
     </div>
 </div>
 
-<h2>Applications</h2>
-{APPLICATIONS}
-
-<h2>Assignments</h2>
-{HISTORY}
-
-<h2>Check-in / Check-out</h2>
-{CHECKINS}
-
-<div id="note_dialog" title="Enter a note for: {FIRST_NAME} {MIDDLE_NAME} {LAST_NAME}">
-{START_FORM}
-{NOTE}
-<br>
-{SUBMIT}
-{END_FORM}
-</div>
-
-<!-- BEGIN notes -->
-<h2>Recent Notes</h2>
-[<a id=add_note>Add a note</a>]
-<div class="profileHeader">{NOTE_PAGER}</div>
-
-<!-- Email Log -->
-<h2>Email Log</h2>
-<div id="emailLogView"></div>
-<script>
-    var emailLogParams = {EMAIL_LOG_PARAMS};
-</script>
 <script type="text/javascript" src="{vendor_bundle}"></script>
-<script type="text/javascript" src="{entry_bundle}"></script>
-
-<h2>Student Log</h2>
-<div class="profileHeader">{LOG_PAGER}</div>
-<!-- END notes -->
+<script type="text/javascript" src="{email_bundle}"></script>
+<script type="text/javascript" src="{note_bundle}"></script>

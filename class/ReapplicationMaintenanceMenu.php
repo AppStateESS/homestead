@@ -37,7 +37,9 @@ class ReapplicationMaintenanceMenu extends CommandMenu {
         $tpl = array();
 
         $tpl['MENU'] = parent::show();
+        $tpl['LEGEND_TITLE'] = 'Reapplication';
+        $tpl['ICON_CLASS'] = 'refresh';
 
-        return \PHPWS_Template::process($tpl, 'hms', 'admin/menus/ReapplicationMaintenanceMenu.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/menus/AdminMenuBlock.tpl');
     }
 }

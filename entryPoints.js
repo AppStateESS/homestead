@@ -10,6 +10,11 @@ module.exports = {
       roomDamages: JS_DIR + '/RoomDamages/RoomDamages.jsx',
       studentRoomDamage: JS_DIR + '/StudentAddRoomDamages/roomDamage.jsx',
       emailLogView: JS_DIR + '/emailLogView/emailLogView.jsx',
+      assignmentsTable: JS_DIR + '/AssignmentsTable/AssignmentsTable.jsx',
+      noteBox: JS_DIR + '/note/NoteBox.jsx',
+      rlcCardList: JS_DIR + '/rlcCardList/rlcCardList.jsx',
+      hallCardList: JS_DIR + '/hallCardList/hallCardList.jsx',
+      suggestedRoommateList: JS_DIR + '/suggestedRoommateList/SuggestedRoommateList.jsx',
       vendor: ['jquery', 'react', 'react-dom', 'react-bootstrap']
     }
 }

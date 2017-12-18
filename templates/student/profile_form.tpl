@@ -8,6 +8,12 @@
         <div class="col-md-5">
             <h3>About Me</h3>
         </div>
+
+        <!-- BEGIN can_make_request -->
+        <div class="col-md-3 col-md-offset-4">
+            <a class="btn btn-info btn-fill btn-md" href="{REQUEST_URI}">Request This Person</a>
+        </div>
+        <!-- END can_make_request -->
     </div>
 
     <div class="row">
@@ -195,7 +201,7 @@
             <!-- BEGIN save-btn -->
             {SAVE_BTN}
             <div class="form-group pull-right">
-                <button type="submit" class="btn btn-success btn-lg">Save Profile</button>
+                <button type="submit" class="btn btn-success btn-fill btn-lg">Save Profile</button>
             </div>
             <!-- END save-btn -->
         </div>
@@ -217,24 +223,20 @@ function CountWords (this_field)
       if (fullStr.length <1) {
             word_count = 0;
       }
-      if (words_left == 1)
-      {
+
+      if (words_left == 1){
       	wordOrWords = " word ";
-      }
-      else
-      {
+      } else {
       	wordOrWords = " words ";
       }
       str_words_left = String(words_left)
 
-      if (words_left < 0)
-      {
+      if (words_left < 0) {
       	var formatted = "<span style='color:#ff0000'>" + str_words_left + "</span>";
-      }
-      else
-      {
+      } else {
       	var formatted = str_words_left;
       }
+
       var retstring = formatted + wordOrWords + "remaining."
       document.getElementById('wrdcnt').innerHTML=retstring;
 

@@ -60,7 +60,7 @@ class ShowRDRoomChangeListCommand extends Command {
 
         if(empty($floors)){
             \NQ::simple('hms', NotificationView::ERROR, "You do not have the 'RD' role on any residence halls or floors.");
-            $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
+            $cmd = CommandFactory::getCommand('DashboardHome');
             $cmd->redirect();
         }
 

@@ -7,7 +7,7 @@ class EmailLogFactory {
     {
         $db = PdoFactory::getPdoInstance();
 
-        $query = "INSERT INTO hms_email_log VALUES (:bannerId, :messageId, :messageType, :username);";
+        $query = "INSERT INTO hms_email_log (banner_id, message_id, message_type, username) VALUES (:bannerId, :messageId, :messageType, :username);";
 
         $stmt = $db->prepare($query);
         $stmt->execute(array(

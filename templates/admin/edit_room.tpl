@@ -164,6 +164,7 @@
 <script type ="text/javascript">
   var roomPersistentId = '{ROOM_PERSISTENT_ID}';
   var term             = '{TERM}';
+  var termNumber      = '{TERM_NUM}';
 </script>
 
 <script type="text/javascript" src="{vendor_bundle}"></script>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Modal} from 'react-bootstrap';
+import {Modal} from 'react-bootstrap';
 
 class MessageRow extends React.Component {
     constructor(props) {

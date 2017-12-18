@@ -59,7 +59,7 @@ class RoomDamagesBox extends React.Component{
     }
     postData(type, side, desc) {
         $.ajax({
-            url: 'index.php?module=hms&action=AddRoomDamage&roomPersistentId='+ this.props.roomPersistentId+'&damageType='+type+'&side='+side+'&description=' + desc + '&term=' + this.props.term,
+            url: 'index.php?module=hms&action=AddRoomDamage&roomPersistentId='+ this.props.roomPersistentId+'&damageType='+type+'&side='+side+'&description=' + desc + '&term=' + this.props.termNum,
             type: 'POST',
             success: function(data) {
                 this.getData();
@@ -137,7 +137,7 @@ class DamagesRow extends React.Component{
                     <td>{this.props.data.side}</td>
                     <td>{this.props.data.term}</td>
                     <td>{this.props.data.reported_on}</td>
-                    <td><a href="javascript:;" title={this.props.data.note}>
+                    <td><a title={this.props.data.note}>
                         <i className="fa fa-comment"></i>
                     </a>
                     <button onClick={this.delete} className="close">
@@ -188,9 +188,9 @@ class RoomDamagesForm extends React.Component{
         this.hideForm = this.hideForm.bind(this);
     }
     add() {
-        var dmgType = this.refs.damageTypeChoices.getDOMNode().value;
-        var side = this.refs.damageSideChoices.getDOMNode().value;
-        var desc = this.refs.damageDescription.getDOMNode().value;
+        var dmgType = ReactDOM.findDOMNode(this.refs.damageTypeChoices).value;
+        var side = ReactDOM.findDOMNode(this.refs.damageSideChoices).value;
+        var desc = ReactDOM.findDOMNode(this.refs.damageDescription).value;
         this.props.onAdd(dmgType, side, desc);
     }
     hideForm() {
@@ -205,17 +205,17 @@ class RoomDamagesForm extends React.Component{
         }
         var selectOptions = options.map(function(node){
             if(node.category === "Welcome"){
-                return (<option value={node.id}>{node.description}</option>);
+                return (<option key={node.id} value={node.id}>{node.description}</option>);
             }
             else{
                 var dmgTypes = node.DamageTypes;
                 var options = [];
                 for(var i=0; i < dmgTypes.length;i++){
                     var object = dmgTypes[i];
-                    options[i+1] = <option value={object.id}>{object.description}</option>;
+                    options[i+1] = <option key={object.id} value={object.id}>{object.description}</option>;
                 }
 
-                return(<optgroup label={node.category}>
+                return(<optgroup key={node.category} label={node.category}>
                     {options}
                 </optgroup>);
             }
@@ -270,4 +270,4 @@ class RoomDamagesForm extends React.Component{
 }
 
 
-ReactDOM.render(<RoomDamagesBox term={window.term} roomPersistentId={window.roomPersistentId}/>, document.getElementById('RoomDamages'));
+ReactDOM.render(<RoomDamagesBox termNum={window.termNumber} term={window.term} roomPersistentId={window.roomPersistentId}/>, document.getElementById('RoomDamages'));

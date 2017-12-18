@@ -13,20 +13,28 @@ class StartAutoassignCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        // TODO: PULSE!
+        $content = "<pre>AUTOASSIGNER\n<br />";
 
-        echo "<html><head><title>AUTOASSIGNER TEST MODE</title></head><body><pre>\n\n";
-        echo "AUTOASSIGNER 1970s MODE\n\n";
-
+        ob_start(); // Start output buffering
         try {
             $assigner = new Autoassigner(Term::getSelectedTerm());
-            $assigner->autoassign();
+            $assigner->autoassign(); //TODO: Something is wrong in here
         } catch(\Exception $e) {
+            $content .= ob_get_contents();
+            ob_end_clean();
+            $content .= '</pre>';
+            echo $content;
+
             echo "EXCEPTION CAUGHT: " . $e->getMessage() . "<br /><br />\n\n";
             //var_dump($e->getTrace());
         }
 
-        echo "</pre></body></html>\n\n";
-        exit(0);
+        // Get output buffer content and end buffering
+        $content .= ob_get_contents();
+        ob_end_clean();
+
+        $content .= '</pre>';
+
+        $context->setContent($content);
     }
 }

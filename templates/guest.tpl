@@ -1,4 +1,4 @@
-<div id="hms-guest-main">
+<div class="container" id="hms-guest-main">
 {NOTIFICATIONS}
 {MAIN}
 </div>

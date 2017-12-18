@@ -74,12 +74,13 @@ class ResidenceHallView extends View {
 
         // Images
         \PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
-        if(isset($this->hall->exterior_image_id)){
+        if(isset($this->hall->exterior_image_id) && $this->hall->exterior_image_id != 0){
             $manager = \Cabinet::fileManager('exterior_image_id', $this->hall->exterior_image_id);
+            $form->addTplTag('EXTERIOR_IMG_PIC', $manager->file_assoc->_file_path);
         }else{
             $manager = \Cabinet::fileManager('exterior_image_id');
+            $form->addTplTag('EXTERIOR_IMG_PIC', 'mod/hms/img/newland.jpg');
         }
-
         $manager->maxImageWidth(300);
         $manager->MaxImageHeight(300);
         $manager->imageOnly(false,false);

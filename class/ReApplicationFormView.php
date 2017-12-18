@@ -112,7 +112,6 @@ class ReApplicationFormView extends View {
          */
         // RLC
         $form->addCheck('rlc_interest', array('rlc_interest'));
-        $form->setLabel('rlc_interest', "I'm interested in applying for (or continuing in) a Residential Learning Community.");
 
         /*
          * Early Release
@@ -139,7 +138,6 @@ class ReApplicationFormView extends View {
          * Contract
          */
         $form->addCheck('deposit_check', array('deposit_check'));
-        $form->setLabel('deposit_check', 'I understand & acknowledge that if I cancel my License Contract my student account will be charged <strong>$250</strong>.  If I cancel my License Contract after July 1, I will be liable for the entire amount of the on-campus housing fees for the Fall semester.');
 
         $form->addSubmit('submit', 'Submit re-application');
 

@@ -25,7 +25,7 @@ class SelectFloorView extends View
 
         if ($this->halls == NULL) {
             \NQ::simple('hms', NotificationView::ERROR, 'There are no halls available for the selected term.');
-            $cmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
+            $cmd = CommandFactory::getCommand('DashboardHome');
             $cmd->redirect();
         }
 

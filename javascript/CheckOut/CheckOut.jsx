@@ -248,7 +248,7 @@ class NewRoomDamages extends React.Component{
             <div>
                 <h3>New Room Damages</h3>
                 {this.props.newDamage.map(function(value, key){ if (value.form === true) { return (
-                <DamageForm {...this.props} key={key} pushDamage={this.pushDamage} removeForm={this.removeForm}/>
+                <DamageForm {...this.props} key={key} pushDamage={this.pushDamage} damageTypes={this.props.damageTypes} removeForm={this.removeForm}/>
                 ); } else { return (
                 <Damage category={value.category} description={value.description} key={key} note={value.note} reportedOn={value.reportedOn} side={value.side} residents={value.residents}/>
                 ); } }, this)} {button}
@@ -349,7 +349,7 @@ class DamageForm extends React.Component{
     residentSelected(selected) {
         var updatedResidents = this.state.residents;
         updatedResidents.map(function(value,key){
-            if (value.studentId === selected.target.value) {
+            if (value.studentId.toString() === selected.target.value) {
                 updatedResidents[key].selected = selected.target.checked;
             }
         });
@@ -408,7 +408,7 @@ class DamageForm extends React.Component{
                                     <SideSelect onChange={this.sideSelected} error={this.state.error} />
                                 </div>
                                 <div className='col-sm-9'>
-                                    <DamageTypeSelect damage_types={this.props.damage_types} damageTypes={this.props.damageTypes} onChange={this.categorySelected} error={this.state.error}/>
+                                    <DamageTypeSelect damageTypes={this.props.damageTypes} onChange={this.categorySelected} error={this.state.error}/>
                                 </div>
                             </div>
                             <div className="row" style={{marginTop: '1em'}}>
@@ -442,7 +442,7 @@ DamageForm.propTypes = {
 class ResidentCheckbox extends React.Component{
     render() {
         return (
-            <div className="checkbox">
+            <div>
                 <label>
                     <input onChange={this.props.handleChange} type="checkbox" value={this.props.value} autoFocus={this.props.autoFocus}/>{' '}{this.props.name}
                 </label>
@@ -456,14 +456,14 @@ class DamageTypeSelect extends React.Component{
         super(props);
 
         this.buildDamageOptions = this.buildDamageOptions.bind(this);
-        var damageOptions = this.buildDamageOptions(this.props.damage_types);
+        var damageOptions = this.buildDamageOptions(this.props.damageTypes);
         this.state = {damageOptions: damageOptions};
     }
     buildDamageOptions(damageTypes) {
         var damageOptions = {};
-        Object.keys(this.props.damage_types).map(function(key, idx){
+        Object.keys(damageTypes).map(function(key, idx){
             var opt = {};
-            var value = this.props.damage_types[key];
+            var value = damageTypes[key];
             opt.description = value.description;
             opt.id = value.id;
             if (damageOptions[value.category] === undefined) {
@@ -559,12 +559,12 @@ class CheckOutCompletion extends React.Component{
         return (
             <div>
                 <h3>Final Checkout</h3>
-                <div className="radio">
+                <div>
                     <label>
                         <input onChange={this.handleChange} type="radio" name="properCheckout" value="1"/>{' '}Proper Checkout
                     </label>
                 </div>
-                <div className="radio">
+                <div>
                     <label>
                         <input onChange={this.handleChange} type="radio"  name="properCheckout" value="0"/>{' '}Improper Checkout
                     </label>

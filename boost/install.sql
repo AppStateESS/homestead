@@ -24,7 +24,8 @@ create sequence hms_contract_seq;
 CREATE TABLE hms_email_log (
     banner_id   character varying not null,
     message_id  character varying not null,
-    email       character varying not null,
+    message_type character varying not null,
+    username character varying not null,
     PRIMARY KEY (banner_id, message_id)
 );
 
@@ -535,6 +536,7 @@ CREATE TABLE hms_roommate (
 CREATE TABLE hms_student_profiles (
     id INTEGER NOT NULL,
     banner_id INTEGER NOT NULL,
+    gender smallint NOT NULL,
     username character varying(32) NOT NULL,
     term            INTEGER NOT NULL REFERENCES hms_term(term),
     date_submitted INTEGER NOT NULL,
