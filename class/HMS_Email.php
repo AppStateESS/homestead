@@ -35,12 +35,14 @@ class HMS_Email{
         return $contacts;
     }
 
-    // public static function send_template_message($to, $subject, $tpl, $tags)
-    // {
-    //     $content = \PHPWS_Template::process($tags, 'hms', $tpl);
-    //
-    //     HMS_Email::send_email($to, NULL, $subject, $content);
-    // }
+    /**
+     * @depricated
+     */
+    public static function send_template_message($to, $subject, $tpl, $tags)
+    {
+        $content = \PHPWS_Template::process($tags, 'hms', $tpl);
+        HMS_Email::send_email($to, NULL, $subject, $content);
+    }
 
     public static function sendTemplateMessage(Student $student, string $messageType, string $subject, string $tpl, Array $tags)
     {
