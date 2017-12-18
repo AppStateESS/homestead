@@ -67,154 +67,154 @@ class HMS_Email{
         EmailLogFactory::logMessage($student, $result[0], $messageType);
     }
 
-    // /*
-    //  * This is the central message sending public function for HMS.
-    //  * Returns true or false.
-    //  */
-    // public static function send_email($to, $from, $subject, $content, $cc = NULL, $bcc = NULL)
-    // {
-    //     // Sanity checking
-    //     if(!isset($to) || is_null($to)){
-    //         return false;
-    //     }
-    //
-    //     if(!isset($from) || is_null($from)){
-    //         $from = SYSTEM_NAME . ' <' . FROM_ADDRESS .'>';
-    //     }
-    //
-    //     if(!isset($subject) || is_null($subject)){
-    //         return false;
-    //     }
-    //
-    //     if(!isset($content) || is_nulL($content)){
-    //         return false;
-    //     }
-    //
-    //     # Create a Mail object and set it up
-    //     \PHPWS_Core::initCoreClass('Mail.php');
-    //     $message = new \PHPWS_Mail();
-    //
-    //     $message->addSendTo($to);
-    //     $message->setFrom($from);
-    //     $message->setSubject($subject);
-    //     $message->setMessageBody($content);
-    //
-    //     if(isset($cc)){
-    //         $message->addCarbonCopy($cc);
-    //     }
-    //
-    //     if(isset($bcc)){
-    //         $message->addBlindCopy($bcc);
-    //     }
-    //
-    //     # Send the message
-    //     if(EMAIL_TEST_FLAG){
-    //         HMS_Email::log_email($message);
-    //         $result = true;
-    //     }else{
-    //         $result = $message->send();
-    //     }
-    //
-    //     if(\PEAR::isError($result)){
-    //         \PHPWS_Error::log($result);
-    //         return false;
-    //     }
-    //
-    //     return true;
-    // }
-    //
-    // /**
-    //  * Logs a \PHPWS_Mail object to a text file
-    //  */
-    // public static function log_email($message)
-    // {
-    //     // Log the message to a text file
-    //     $fd = fopen(PHPWS_SOURCE_DIR . 'logs/email.log',"a");
-    //     fprintf($fd, "=======================\n");
-    //
-    //     foreach($message->send_to as $recipient){
-    //         fprintf($fd, "To: %s\n", $recipient);
-    //     }
-    //
-    //     if(isset($message->carbon_copy)){
-    //         foreach($message->carbon_copy as $recipient){
-    //             fprintf($fd, "Cc: %s\n", $recipient);
-    //         }
-    //     }
-    //
-    //     if(isset($message->blind_copy)){
-    //         foreach($message->blind_copy as $recipient){
-    //             fprintf($fd, "Bcc: %s\n", $bcc);
-    //         }
-    //     }
-    //
-    //     fprintf($fd, "From: %s\n", $message->from_address);
-    //     fprintf($fd, "Subject: %s\n", $message->subject_line);
-    //     fprintf($fd, "Date: %s\n", date('Y-m-d H:i:s'));
-    //     fprintf($fd, "Content: \n");
-    //     fprintf($fd, "%s\n\n", $message->message_body);
-    //
-    //     fclose($fd);
-    // }
-    //
-    // /**
-    //  * Log a \Swift_Message object to a text file
-    //  */
-    // public static function logSwiftmailMessageLong(\Swift_Message $message)
-    // {
-    //     $fd = fopen(PHPWS_SOURCE_DIR . 'logs/email.log', 'a');
-    //     fprintf($fd, "=======================\n");
-    //
-    //     foreach($message->getFrom() as $address => $name) {
-    //         fprintf($fd, "From: %s <%s>\n", $name, $address);
-    //     }
-    //
-    //     foreach($message->getTo() as $address => $name) {
-    //         fprintf($fd, "To: %s <%s>\n", $name, $address);
-    //     }
-    //
-    //     $cc = $message->getCc();
-    //     if(!empty($cc)){
-    //         foreach($cc() as $address => $name) {
-    //             fprintf($fd, "Cc: %s <%s>\n", $name, $address);
-    //         }
-    //     }
-    //
-    //     $bcc = $message->getBcc();
-    //     if(!empty($bcc)){
-    //         foreach($bcc as $address => $name) {
-    //             fprintf($fd, "Bcc: %s <%s>\n", $name, $address);
-    //         }
-    //     }
-    //
-    //     fprintf($fd, "Sender: %s\n", $message->getSender());
-    //     fprintf($fd, "Subject: %s\n", $message->getSubject());
-    //     fprintf($fd, "Date: %s\n", date('Y-m-d H:i:s'));
-    //     fprintf($fd, "Content: \n");
-    //     fprintf($fd, "%s\n\n", $message->toString());
-    // }
-    //
-    // /**
-    //  * PHPWS_Email has a built-in simple logging function.  This replicates
-    //  * the functionality of that function for SwiftMail.
-    //  */
-    // public static function logSwiftmailMessage(\Swift_Message $message)
-    // {
-    //     $id      = 'id:'       . $message->getId();
-    //     $from    = 'from:'     . $message->getSender();
-    //     $to      = 'to:'       . implode(',', array_keys($message->getTo()));
-    //
-    //     // Optional fields, If the message has them, implode the arrays to simple strings.
-    //     $cc      = $message->getCc()        != null ? ('cc:'       . implode(',', array_keys($message->getCc()))) : '';
-    //     $bcc     = $message->getBcc()       != null ? ('bcc:'      . implode(',', array_keys($message->getBcc()))) : '';
-    //     $replyto = $message->getReplyTo()   != null ? ('reply-to:' . implode(',', array_keys($message->getReplyTo()))) : '';
-    //
-    //     $subject = 'subject:'  . $message->getSubject();
-    //     $module  = 'module:'   . \PHPWS_Core::getCurrentModule();
-    //     $user    = 'user:'     . (\Current_User::isLogged() ? \Current_User::getUsername() : '');
-    //
-    //     \PHPWS_Core::log("$id $module $user $subject $from $to $cc $bcc $replyto", 'phpws-mail.log', 'mail');
-    // }
+    /*
+     * This is the central message sending public function for HMS.
+     * Returns true or false.
+     */
+    public static function send_email($to, $from, $subject, $content, $cc = NULL, $bcc = NULL)
+    {
+        // Sanity checking
+        if(!isset($to) || is_null($to)){
+            return false;
+        }
+
+        if(!isset($from) || is_null($from)){
+            $from = SYSTEM_NAME . ' <' . FROM_ADDRESS .'>';
+        }
+
+        if(!isset($subject) || is_null($subject)){
+            return false;
+        }
+
+        if(!isset($content) || is_nulL($content)){
+            return false;
+        }
+
+        # Create a Mail object and set it up
+        \PHPWS_Core::initCoreClass('Mail.php');
+        $message = new \PHPWS_Mail();
+
+        $message->addSendTo($to);
+        $message->setFrom($from);
+        $message->setSubject($subject);
+        $message->setMessageBody($content);
+
+        if(isset($cc)){
+            $message->addCarbonCopy($cc);
+        }
+
+        if(isset($bcc)){
+            $message->addBlindCopy($bcc);
+        }
+
+        # Send the message
+        if(EMAIL_TEST_FLAG){
+            HMS_Email::log_email($message);
+            $result = true;
+        }else{
+            $result = $message->send();
+        }
+
+        if(\PEAR::isError($result)){
+            \PHPWS_Error::log($result);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Logs a \PHPWS_Mail object to a text file
+     */
+    public static function log_email($message)
+    {
+        // Log the message to a text file
+        $fd = fopen(PHPWS_SOURCE_DIR . 'logs/email.log',"a");
+        fprintf($fd, "=======================\n");
+
+        foreach($message->send_to as $recipient){
+            fprintf($fd, "To: %s\n", $recipient);
+        }
+
+        if(isset($message->carbon_copy)){
+            foreach($message->carbon_copy as $recipient){
+                fprintf($fd, "Cc: %s\n", $recipient);
+            }
+        }
+
+        if(isset($message->blind_copy)){
+            foreach($message->blind_copy as $recipient){
+                fprintf($fd, "Bcc: %s\n", $bcc);
+            }
+        }
+
+        fprintf($fd, "From: %s\n", $message->from_address);
+        fprintf($fd, "Subject: %s\n", $message->subject_line);
+        fprintf($fd, "Date: %s\n", date('Y-m-d H:i:s'));
+        fprintf($fd, "Content: \n");
+        fprintf($fd, "%s\n\n", $message->message_body);
+
+        fclose($fd);
+    }
+
+    /**
+     * Log a \Swift_Message object to a text file
+     */
+    public static function logSwiftmailMessageLong(\Swift_Message $message)
+    {
+        $fd = fopen(PHPWS_SOURCE_DIR . 'logs/email.log', 'a');
+        fprintf($fd, "=======================\n");
+
+        foreach($message->getFrom() as $address => $name) {
+            fprintf($fd, "From: %s <%s>\n", $name, $address);
+        }
+
+        foreach($message->getTo() as $address => $name) {
+            fprintf($fd, "To: %s <%s>\n", $name, $address);
+        }
+
+        $cc = $message->getCc();
+        if(!empty($cc)){
+            foreach($cc() as $address => $name) {
+                fprintf($fd, "Cc: %s <%s>\n", $name, $address);
+            }
+        }
+
+        $bcc = $message->getBcc();
+        if(!empty($bcc)){
+            foreach($bcc as $address => $name) {
+                fprintf($fd, "Bcc: %s <%s>\n", $name, $address);
+            }
+        }
+
+        fprintf($fd, "Sender: %s\n", $message->getSender());
+        fprintf($fd, "Subject: %s\n", $message->getSubject());
+        fprintf($fd, "Date: %s\n", date('Y-m-d H:i:s'));
+        fprintf($fd, "Content: \n");
+        fprintf($fd, "%s\n\n", $message->toString());
+    }
+
+    /**
+     * PHPWS_Email has a built-in simple logging function.  This replicates
+     * the functionality of that function for SwiftMail.
+     */
+    public static function logSwiftmailMessage(\Swift_Message $message)
+    {
+        $id      = 'id:'       . $message->getId();
+        $from    = 'from:'     . $message->getSender();
+        $to      = 'to:'       . implode(',', array_keys($message->getTo()));
+
+        // Optional fields, If the message has them, implode the arrays to simple strings.
+        $cc      = $message->getCc()        != null ? ('cc:'       . implode(',', array_keys($message->getCc()))) : '';
+        $bcc     = $message->getBcc()       != null ? ('bcc:'      . implode(',', array_keys($message->getBcc()))) : '';
+        $replyto = $message->getReplyTo()   != null ? ('reply-to:' . implode(',', array_keys($message->getReplyTo()))) : '';
+
+        $subject = 'subject:'  . $message->getSubject();
+        $module  = 'module:'   . \PHPWS_Core::getCurrentModule();
+        $user    = 'user:'     . (\Current_User::isLogged() ? \Current_User::getUsername() : '');
+
+        \PHPWS_Core::log("$id $module $user $subject $from $to $cc $bcc $replyto", 'phpws-mail.log', 'mail');
+    }
 
     /**********************
      * Error notification *
