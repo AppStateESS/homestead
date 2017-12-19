@@ -283,7 +283,7 @@ class DamageForm extends React.Component{
     errorFree() {
         var all_clear = true;
         var errors = [];
-        var resident_selected;
+        let resident_selected = false;
 
         if (this.state.damage_type === null || this.state.damage_type.length === 0) {
             errors.push('category');
@@ -294,8 +294,9 @@ class DamageForm extends React.Component{
                 errors.splice(catError, 1);
             }
         }
+
         resident_selected = this.state.residents.some(function(value,key){
-            return value.selected;
+             return value.selected;
         });
 
         if (!resident_selected) {
@@ -348,11 +349,18 @@ class DamageForm extends React.Component{
     }
     residentSelected(selected) {
         var updatedResidents = this.state.residents;
-        updatedResidents.map(function(value,key){
-            if (value.studentId === selected.target.value) {
-                updatedResidents[key].selected = selected.target.checked;
+
+        // Loop over the list of residents to find the resident corresponding to the checkbox that was just changed
+        // Update that resident's selected status according to the new status of the checkbox
+        for (var i=0; i < updatedResidents.length; i++){
+            // NB: studentId is an int, selected.target.value is a string. Must use an implicit type cast ( + '')
+            if((updatedResidents[i].studentId + '') === selected.target.value){
+                updatedResidents[i].selected = selected.target.checked;
             }
-        });
+        }
+
+        console.log(updatedResidents);
+
         this.setState({render: false, residents: updatedResidents});
     }
     updateNote(note) {
@@ -408,7 +416,7 @@ class DamageForm extends React.Component{
                                     <SideSelect onChange={this.sideSelected} error={this.state.error} />
                                 </div>
                                 <div className='col-sm-9'>
-                                    <DamageTypeSelect damage_types={this.props.damage_types} damageTypes={this.props.damageTypes} onChange={this.categorySelected} error={this.state.error}/>
+                                    <DamageTypeSelect damageTypes={this.props.damageTypes} onChange={this.categorySelected} error={this.state.error}/>
                                 </div>
                             </div>
                             <div className="row" style={{marginTop: '1em'}}>
@@ -456,14 +464,15 @@ class DamageTypeSelect extends React.Component{
         super(props);
 
         this.buildDamageOptions = this.buildDamageOptions.bind(this);
-        var damageOptions = this.buildDamageOptions(this.props.damage_types);
+
+        var damageOptions = this.buildDamageOptions(this.props.damageTypes);
         this.state = {damageOptions: damageOptions};
     }
     buildDamageOptions(damageTypes) {
         var damageOptions = {};
-        Object.keys(this.props.damage_types).map(function(key, idx){
+        Object.keys(damageTypes).map(function(key, idx){
             var opt = {};
-            var value = this.props.damage_types[key];
+            var value = damageTypes[key];
             opt.description = value.description;
             opt.id = value.id;
             if (damageOptions[value.category] === undefined) {
