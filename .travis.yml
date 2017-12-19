@@ -1,18 +1,44 @@
-dist: trusty
 sudo: false
 language: php
 php:
-    - '7.0'
-#    - hhvm
-    - nightly
+    - 7
 
 matrix:
     fast_finish: true
 
 install:
-    - composer install
+    - nvm install 6
+    - npm install -g yarn
+    - yarn install
+    #- composer install
+
+script:
+    - ".travis-build/phplint ."
+    #- phpunit
+
+after_script:
+- vendor/bin/test-reporter
+
+after_success:
+    - npm run build
+    - rm -rf node_modules
+    #- rm -rf vendor
+    - tar -czf Homestead.tar.gz *
+
 
 script:
     - ".travis-build/phplint ."
 
 notifications:
+
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    #secure:
+  file: Homestead.tar.gz
+  overwrite: true
+  on:
+    repo: AppStateESS/homestead
+    branch: master
+    tags: true
