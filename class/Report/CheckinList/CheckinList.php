@@ -51,7 +51,9 @@ class CheckinList extends Report implements iCsvReport {
         $db->addColumn('hms_hall_structure.room_number');
 
         $db->addWhere('hms_checkin.term', $term);
-        $db->addWhere('hms_checkin.checkout_date', null, 'IS NULL');
+
+        // Commenting this out becuase when querying for past years, most students checked out, so the report is largely empty.
+        //$db->addWhere('hms_checkin.checkout_date', null, 'IS NULL');
 
         // Sort by hall, then room number
         $db->addOrder(array('hms_hall_structure.hall_name ASC', 'hms_hall_structure.room_number ASC'));
