@@ -278,9 +278,10 @@ abstract class ReportController {
 
         // PDF
         if($this instanceof iPdfReportView){
-            $this->pdfView = $this->getPdfView();
+            // Commented out until we find a HTML->PDF converter that doesn't suck
+            //$this->pdfView = $this->getPdfView();
             // Save the PDF output
-            $this->savePdfOutput($this->pdfView);
+            //$this->savePdfOutput($this->pdfView);
         }
 
         // CSV
