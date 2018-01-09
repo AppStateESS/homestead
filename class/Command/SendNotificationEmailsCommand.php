@@ -88,9 +88,9 @@ class SendNotificationEmailsCommand extends Command {
 
         $permission = new HMS_Permission();
         foreach($floors as $floor){
-            if(!$permission->verify(Current_User::getUsername(), $floor, 'email')
-               && !$permission->verify(Current_User::getUsername(), $floor->get_parent(), 'email')
-               && !Current_User::allow('hms', 'email_all')
+            if(!$permission->verify(\Current_User::getUsername(), $floor, 'email')
+               && !$permission->verify(\Current_User::getUsername(), $floor->get_parent(), 'email')
+               && !\Current_User::allow('hms', 'email_all')
                ){
                 continue;
             }
