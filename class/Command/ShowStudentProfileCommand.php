@@ -48,6 +48,14 @@ class ShowStudentProfileCommand extends Command {
 
         try{
             if(isset($bannerId)){
+                // Sanity check banner id
+                if(preg_match("/\A[\d]{9}\Z/", $bannerId) === 0){
+                    // Invlid banner id
+                    \NQ::simple('hms', NotificationView::ERROR, 'The Banner ID you entered is not formatted correctly. It must be nine digits.');
+                    $context->goBack();
+
+                }
+
                 $student = StudentFactory::getStudentByBannerId($bannerId, $term);
             } else {
                 $student = StudentFactory::getStudentByUsername($username, $term);
