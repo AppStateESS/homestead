@@ -1,19 +1,22 @@
 <?php
 
-class FloorView extends hms\View{
+namespace Homestead;
+
+use \Homestead\Exception\PermissionException;
+
+class FloorView extends View{
 
     private $hall;
     private $floor;
 
-    public function __construct(HMS_Residence_Hall $hall, HMS_Floor $floor){
+    public function __construct(ResidenceHall $hall, Floor $floor){
         $this->hall		= $hall;
         $this->floor	= $floor;
     }
 
     public function show()
     {
-        if(!UserStatus::isAdmin() || !Current_User::allow('hms', 'floor_view')){
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+        if(!UserStatus::isAdmin() || !\Current_User::allow('hms', 'floor_view')){
             throw new PermissionException('You are not allowed to edit or view floors.');
         }
 
@@ -29,7 +32,7 @@ class FloorView extends hms\View{
         $submitCmd = CommandFactory::getCommand('EditFloor');
         $submitCmd->setFloorId($this->floor->getId());
 
-        $form = new PHPWS_Form;
+        $form = new \PHPWS_Form;
         $submitCmd->initForm($form);
 
         $tpl['HALL_NAME']           = $this->hall->getLink();
@@ -76,7 +79,6 @@ class FloorView extends hms\View{
         }
 
         // Get a list of the RLCs indexed by id
-        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         $learning_communities = RlcFactory::getRlcList($this->floor->getTerm());
         $learning_communities[0] = 'None';
 
@@ -89,11 +91,11 @@ class FloorView extends hms\View{
             $form->setMatch('floor_rlc_id', 0);
         }
 
-        PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
+        \PHPWS_Core::initModClass('filecabinet', 'Cabinet.php');
         if(isset($this->floor->floor_plan_image_id)){
-            $manager = Cabinet::fileManager('floor_plan_image_id', $this->floor->floor_plan_image_id);
+            $manager = \Cabinet::fileManager('floor_plan_image_id', $this->floor->floor_plan_image_id);
         }else{
-            $manager = Cabinet::fileManager('floor_plan_image_id');
+            $manager = \Cabinet::fileManager('floor_plan_image_id');
         }
         $manager->maxImageWidth(300);
         $manager->maxImageHeight(300);
@@ -103,17 +105,16 @@ class FloorView extends hms\View{
         $form->addHidden('type', 'floor');
         $form->addHidden('op', 'edit_floor');
 
-        $tpl['STATIC_ROOM_PAGER'] = HMS_Room::room_pager_by_floor($this->floor->id);
-        $tpl['DYNAMIC_ROOM_PAGER'] = HMS_Room::room_pager_by_floor($this->floor->id, true);
+        $tpl['STATIC_ROOM_PAGER'] = Room::room_pager_by_floor($this->floor->id);
+        $tpl['DYNAMIC_ROOM_PAGER'] = Room::room_pager_by_floor($this->floor->id, true);
 
         // if the user has permission to view the form but not edit it then
         // disable it
-        if( Current_User::allow('hms', 'floor_view')
-        && !Current_User::allow('hms', 'floor_attributes')
-        && !Current_User::allow('hms', 'floor_structure'))
+        if( \Current_User::allow('hms', 'floor_view')
+        && !\Current_User::allow('hms', 'floor_attributes')
+        && !\Current_User::allow('hms', 'floor_structure'))
         {
-            $form_vars = get_object_vars($form);
-            $elements = $form_vars['_elements'];
+            $elements = $form->getAllElements();
 
             foreach($elements as $element => $value){
                 $form->setDisabled($element);
@@ -123,14 +124,14 @@ class FloorView extends hms\View{
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        if(Current_User::allow('hms', 'edit_role_members')){
+        if(\Current_User::allow('hms', 'edit_role_members')){
             javascript('modules/hms/role_editor');
-            $tpl['ROLE_EDITOR'] = PHPWS_Template::process(array('CLASS_NAME'=>"'HMS_Floor'", 'ID'=>$this->floor->id), 'hms', 'admin/role_editor.tpl');
+            $tpl['ROLE_EDITOR'] = \PHPWS_Template::process(array('CLASS_NAME'=>"'Floor'", 'ID'=>$this->floor->id), 'hms', 'admin/role_editor.tpl');
         }
 
-        Layout::addPageTitle("Edit Floor");
+        \Layout::addPageTitle("Edit Floor");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/edit_floor.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/edit_floor.tpl');
     }
 }
 

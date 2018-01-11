@@ -1,12 +1,14 @@
 <?php
 
+namespace Homestead;
+
 /**
  * StudentAssignmentHistoryView class - Represents the view for a StudentAssignmentHistory set.
  *
  * @author jbooker
  * @package HMS
  */
-class StudentAssignmentHistoryView extends hms\View {
+class StudentAssignmentHistoryView extends View {
 
     private $assignmentHistory;
 
@@ -50,7 +52,7 @@ class StudentAssignmentHistoryView extends hms\View {
                 $removedOn = date('M jS, Y \a\t g:ia', $ah->removed_on);
             }
 
-            $bed = new HMS_Bed($ah->getBedId());
+            $bed = new Bed($ah->getBedId());
 
             $row['room'] = $bed->where_am_i();
             $row['term'] = Term::toString($ah->term);
@@ -86,6 +88,6 @@ class StudentAssignmentHistoryView extends hms\View {
             $tpl['SHOW_MORE'] = "[ <a id='showMoreLink'>show more</a> ]";
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/StudentAssignmentHistoryView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/StudentAssignmentHistoryView.tpl');
     }
 }

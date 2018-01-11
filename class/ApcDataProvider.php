@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * APC Data Provider
  *

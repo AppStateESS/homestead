@@ -1,5 +1,6 @@
 <?php
-namespace hms;
+
+namespace Homestead;
 
 /**
  * HMS User View
@@ -8,7 +9,7 @@ namespace hms;
  */
 
 class UserView extends HomesteadView {
-    
+
     public function show()
     {
         $tpl = array();

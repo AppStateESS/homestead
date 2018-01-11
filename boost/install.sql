@@ -13,13 +13,20 @@ create table hms_contract (
 	term 		integer not null REFERENCES hms_term(term),
 	envelope_id character varying not null,
     envelope_status character varying not null default 'sent',
-    envelope_status_time set not null,
+    envelope_status_time integer not null,
 	PRIMARY KEY(id)
 );
 
 alter table hms_contract add constraint contract_uniq_banner_term UNIQUE (banner_id, term);
 
 create sequence hms_contract_seq;
+
+CREATE TABLE hms_email_log (
+    banner_id   character varying not null,
+    message_id  character varying not null,
+    email       character varying not null,
+    PRIMARY KEY (banner_id, message_id)
+);
 
 CREATE TABLE hms_student_cache (
     banner_id           integer NOT NULL,
@@ -510,7 +517,7 @@ create table hms_waitlist_application (
     id integer NOT NULL references hms_new_application (id),
     waitlist_reason character varying,
     oncampus_reason character varying,
-    oncampus_other_reason character varying
+    oncampus_other_reason character varying,
     PRIMARY KEY(id)
 );
 
@@ -977,5 +984,4 @@ FROM hms_bed
    JOIN hms_room ON hms_bed.room_id = hms_room.id
    JOIN hms_floor ON hms_room.floor_id = hms_floor.id
    JOIN hms_residence_hall ON hms_floor.residence_hall_id = hms_residence_hall.id;
-
 COMMIT;

@@ -1,6 +1,8 @@
 <?php
 
-class HousingApplicationNotAvailableView extends hms\View {
+namespace Homestead;
+
+class HousingApplicationNotAvailableView extends View {
 
     private $student;
     private $feature;
@@ -15,7 +17,6 @@ class HousingApplicationNotAvailableView extends hms\View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $tpl = array();
 
         if(is_null($this->feature) || !$this->feature->isEnabled()){
@@ -32,9 +33,7 @@ class HousingApplicationNotAvailableView extends hms\View {
         $contactCmd = CommandFactory::getCommand('ShowContactForm');
         $tpl['CONTACT_LINK'] = $contactCmd->getLink('click here to contact us');
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/welcomeScreenNotAvailable.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/welcomeScreenNotAvailable.tpl');
     }
 
 }
-
-

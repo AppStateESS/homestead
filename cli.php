@@ -1,5 +1,6 @@
 #!/usr/bin/php
 <?php
+namespace Homestead;
 
 // Make sure this can only be run from the command line
 if(php_sapi_name() !== 'cli'){
@@ -28,17 +29,15 @@ $_SERVER['HTTP_HOST'] = 'localhost';
 
 // Include PHPWS bootstrapping code
 require_once PHPWS_SOURCE_DIR . 'config/core/source.php';
-//require_once PHPWS_SOURCE_DIR . 'src/Bootstrap.php';
+require_once PHPWS_SOURCE_DIR . 'src/Bootstrap.php';
 
-// For older versions of PHPWS, comment this out
-//require_once PHPWS_SOURCE_DIR . 'src/Autoloader.php';
+require_once PHPWS_SOURCE_DIR . 'inc/hms_defines.php';
+require_once PHPWS_SOURCE_DIR . 'inc/SOAPDataOverride.php';
+require_once PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php';
+require_once PHPWS_SOURCE_DIR . 'mod/hms/vendor/autoload.php';
 
-// For older versions of PHPWS, uncomment these
-//require_once PHPWS_SOURCE_DIR . 'core/conf/defines.php';
-require_once PHPWS_SOURCE_DIR . 'Global/Functions.php';
-//require_once PHPWS_SOURCE_DIR . 'Global/Implementations.php';
-//require_once PHPWS_SOURCE_DIR . 'config/core/source.php';
-//require_once PHPWS_SOURCE_DIR . 'src/Autoloader.php';
+require_once PHPWS_SOURCE_DIR . 'mod/hms/HomesteadAutoLoader.php';
+spl_autoload_register(array('HomesteadAutoLoader', 'HomesteadLoader'));
 
 // Set the 'module' request variable to help the autoloader find classes
 $_REQUEST['module'] = $args['module'];
@@ -46,10 +45,11 @@ $_REQUEST['module'] = $args['module'];
 // Try to include and run the specified file/function
 try {
     $className = $args['className'];
+    $classNameWithNS = '\Homestead\Scheduled\\' . $args['className'];
 
-    PHPWS_Core::initModClass('hms', 'Scheduled/' .$className . '.php');
+    \PHPWS_Core::initModClass('hms', 'Scheduled/' . $className . '.php');
 
-    $className::cliExec();
+    $classNameWithNS::cliExec();
 
 }catch (\Exception $e) {
     echo "Error:\n";

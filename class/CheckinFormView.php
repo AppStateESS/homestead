@@ -1,6 +1,8 @@
 <?php
 
-class CheckinFormView extends hms\View {
+namespace Homestead;
+
+class CheckinFormView extends View {
 
     private $student;
     private $assignment;
@@ -9,7 +11,7 @@ class CheckinFormView extends hms\View {
     private $room;
     private $checkin;
 
-    public function __construct(Student $student, HMS_Assignment $assignment, HMS_Residence_Hall $hall, HMS_Floor $floor, HMS_Room $room, Checkin $checkin = null)
+    public function __construct(Student $student, HMS_Assignment $assignment, ResidenceHall $hall, Floor $floor, Room $room, Checkin $checkin = null)
     {
         $this->student      = $student;
         $this->assignment   = $assignment;
@@ -27,7 +29,7 @@ class CheckinFormView extends hms\View {
         $tpl['ASSIGNMENT']	= $this->assignment->where_am_i();
         $tpl['BANNER_ID'] 	= $this->student->getBannerId();
 
-        $form = new PHPWS_Form('checkin_form');
+        $form = new \PHPWS_Form('checkin_form');
 
         $submitCmd = CommandFactory::getCommand('CheckinFormSubmit');
         $submitCmd->setBannerId($this->student->getBannerId());
@@ -49,7 +51,7 @@ class CheckinFormView extends hms\View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/checkinForm.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/checkinForm.tpl');
     }
 
 }

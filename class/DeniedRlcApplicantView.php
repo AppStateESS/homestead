@@ -1,9 +1,10 @@
 <?php
 
-class DeniedRlcApplicantView extends hms\View{
+namespace Homestead;
+
+class DeniedRlcApplicantView extends View{
 
     public function show(){
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
 
         $tpl = array();
 
@@ -18,8 +19,8 @@ class DeniedRlcApplicantView extends hms\View{
             $tpl['ERROR_MSG'] = $error_msg;
         }
 
-        Layout::addPageTitle("Denied RLC Applications");
+        \Layout::addPageTitle("Denied RLC Applications");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/view_denied_rlc_applications.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/view_denied_rlc_applications.tpl');
     }
 }

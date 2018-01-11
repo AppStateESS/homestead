@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 require_once PHPWS_SOURCE_DIR . 'mod/hms/vendor/autoload.php';
 
 /**
@@ -22,7 +24,7 @@ class InfoCardPdfView {
      */
     public function __construct()
     {
-        $this->pdf = new FPDF('L', 'mm', 'Letter');
+        $this->pdf = new \FPDF('L', 'mm', 'Letter');
 
         $this->damageTypes = DamageTypeFactory::getDamageTypeAssoc();
     }

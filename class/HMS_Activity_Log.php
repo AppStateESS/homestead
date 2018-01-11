@@ -1,5 +1,10 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+use \Homestead\Exception\StudentNotFoundException;
+
 /**
  * The HMS_Acivity_Log class
  * Handles logging of various activities and produces the log pager.
@@ -36,10 +41,10 @@ class HMS_Activity_Log{
             $this->set_notes($notes);
         } else {
             $this->id = $id;
-            $db = new PHPWS_DB($table);
+            $db = new \PHPWS_DB($table);
             $db->addWhere('id', $this->id);
             $result = $db->loadObject($this);
-            if(!$result || PHPWS_Error::logIfError($result)) {
+            if(!$result || \PHPWS_Error::logIfError($result)) {
                 $tis->id = 0;
             }
         }
@@ -47,7 +52,7 @@ class HMS_Activity_Log{
 
     /**
      * Saves the current activity log object to the db.
-     * Returns TRUE upon succes or a PEAR error object otherwise.
+     * Returns TRUE upon succes or a \PEAR error object otherwise.
      */
     public function save()
     {
@@ -55,7 +60,7 @@ class HMS_Activity_Log{
             return FALSE;
         }
 
-        $db = new PHPWS_DB('hms_activity_log');
+        $db = new \PHPWS_DB('hms_activity_log');
         $db->addValue('user_id',     $this->get_user_id());
         $db->addValue('timestamp',   $this->get_timestamp());
         $db->addValue('activity',    $this->get_activity());
@@ -64,7 +69,7 @@ class HMS_Activity_Log{
 
         $result = $db->insert();
 
-        if(PHPWS_Error::logIfError($result)){
+        if(\PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
         }else{
             return TRUE;
@@ -89,13 +94,12 @@ class HMS_Activity_Log{
      */
     public function getPagerTags()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
         $tpl = array();
 
         try {
             $student = StudentFactory::getStudentByUsername($this->get_user_id(), Term::getSelectedTerm());
         }catch(StudentNotFoundException $e){
-            NQ::simple('hms', hms\NotificationView::WARNING, "Could not find data for student: {$this->get_user_id()}");
+            \NQ::simple('hms', NotificationView::WARNING, "Could not find data for student: {$this->get_user_id()}");
             $student = null;
         }
 
@@ -231,7 +235,8 @@ class HMS_Activity_Log{
             ACTIVITY_CONTRACT_SENT_EMAIL            => 'Contract Sent via Email',
             ACTIVITY_CONTRACT_STUDENT_SIGN_EMBEDDED => 'Student Signed Contract via Embedded Signing',
             ACTIVITY_CONTRACT_REMOVED_VOIDED        => 'Removed Voided Contract',
-            ACTIVITY_MEAL_PLAN_SENT                 => 'Meal Plan Reported to Banner'
+            ACTIVITY_MEAL_PLAN_SENT                 => 'Meal Plan Reported to Banner',
+            ACTIVITY_ROOM_DAMAGE_NOTIFICATION       => 'Room damage notification sent'
         );
     }
 

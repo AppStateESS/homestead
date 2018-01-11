@@ -1,6 +1,8 @@
 <?php
 
-class ReapplicationWaitingListMenuBlockView extends hms\View {
+namespace Homestead;
+
+class ReapplicationWaitingListMenuBlockView extends View {
 
     private $term;
     private $startDate;
@@ -17,7 +19,6 @@ class ReapplicationWaitingListMenuBlockView extends hms\View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $tpl = array();
 
         $now = time();
@@ -52,8 +53,8 @@ class ReapplicationWaitingListMenuBlockView extends hms\View {
 
         }
 
-        Layout::addPageTitle("Re-Application Waiting List");
+        \Layout::addPageTitle("Re-Application Waiting List");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/reApplicationWaitingListMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/reApplicationWaitingListMenuBlock.tpl');
     }
 }

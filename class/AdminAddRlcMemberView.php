@@ -1,6 +1,8 @@
 <?php
 
-class AdminAddRlcMemberView extends hms\View {
+namespace Homestead;
+
+class AdminAddRlcMemberView extends View {
 
     private $community;
 
@@ -17,7 +19,7 @@ class AdminAddRlcMemberView extends hms\View {
         $submitCmd = CommandFactory::getCommand('AdminAddRlcMembers');
         $submitCmd->setCommunity($this->community);
 
-        $form = new PHPWS_Form('addToRlcForm');
+        $form = new \PHPWS_Form('addToRlcForm');
 
         $submitCmd->initForm($form);
 
@@ -27,6 +29,6 @@ class AdminAddRlcMemberView extends hms\View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/adminAddRlcMemberView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/adminAddRlcMemberView.tpl');
     }
 }

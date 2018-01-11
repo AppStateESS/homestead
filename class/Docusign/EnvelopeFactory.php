@@ -1,7 +1,5 @@
 <?php
-namespace Docusign;
-
-\PHPWS_Core::initModClass('hms', 'Docusign/Envelope.php');
+namespace Homestead\Docusign;
 
 class EnvelopeFactory {
 
@@ -13,31 +11,17 @@ class EnvelopeFactory {
 		$roles = $templateRoles;
 
 		$roles[0]['tabs'] = array("textTabs" => $textTabs);
-
 		// var_dump($templateRoles);exit;
 
-		$data = array (
-			"accountId" => $client->getAccountID(),
-			"emailSubject" => $emailSubject,
-			"templateId" => $templateId,
-			"templateRoles" => $roles,
-			"status" => $status
-		);
-
-
-        $http = new \Guzzle\Http\Client();
-        //$request = $http->createRequest('POST', $client->getBaseUrl() . '/envelopes', ['body' => json_encode($data)]);
-        $request = $http->createRequest('POST', $client->getBaseUrl() . '/envelopes');
-        $request->setBody(json_encode($data), 'application/json');
-        $request->setHeader('Content-Type', 'application/json');
-        $request->setHeader('Accept', 'application/json');
-        $request->setHeader('X-DocuSign-Authentication', $client->getAuthHeader());
+        $http = new \GuzzleHttp\Client();
+        $request = new \GuzzleHttp\Psr7\Request('POST', $client->getBaseUrl() . '/envelopes');
 
         try{
-            $response = $http->send($request);
-            $result = $response->json();
-        }catch (\Guzzle\Http\Exception\BadResponseException $e){
-            throw new \Exception(print_r($e->getResponse()->json(), true));
+            $response = $http->send($request, ['json' => ["accountId" => $client->getAccountID(), "emailSubject" => $emailSubject, "templateId" => $templateId, "templateRoles" => $roles, "status" => $status],
+			'headers' => ['Content-Type' => 'application/json', 'Accept' => 'application/json', 'X-DocuSign-Authentication' => $client->getAuthHeader()]]);
+            $result = json_decode($response->getBody(), true);
+        }catch (\GuzzleHttp\Exception\BadResponseException $e){
+             throw new \Exception($e);
         }
 
 
@@ -45,17 +29,14 @@ class EnvelopeFactory {
     }
 
 	public static function getEnvelopeById(Client $client, $envelopeId) {
-        $http = new \Guzzle\Http\Client();
+        $http = new \GuzzleHttp\Client();
         try {
-            $request = $http->createRequest('GET', $client->getBaseUrl() . '/envelopes/' . $envelopeId);
-            $request->setHeader('Content-Type', 'application/json');
-            $request->setHeader('Accept', 'application/json');
-            $request->setHeader('X-DocuSign-Authentication', $client->getAuthHeader());
-            $response = $http->send($request);
+            $request = new \GuzzleHttp\Psr7\Request('GET', $client->getBaseUrl() . '/envelopes/' . $envelopeId);
+            $response = $http->send($request, ['headers' => ['Content-Type' => 'application/json', 'Accept' => 'application/json', 'X-DocuSign-Authentication' => $client->getAuthHeader()]]);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-            throw new \Exception(print_r($e->getResponse()->json(), true));
+            throw new \Exception($e);
         }
-        $result = $response->json();
+        $result = json_decode($response->getBody(), true);
 
         $envelope = new Envelope($result['envelopeId'], '/envelopes/' . $envelopeId, $result['statusChangedDateTime'], $result['status']);
         return $envelope;

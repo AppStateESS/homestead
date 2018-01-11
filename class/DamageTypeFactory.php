@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * Factory class for handling room damage types.
  *
@@ -16,7 +18,6 @@ class DamageTypeFactory {
      */
     public static function getDamageTypeAssoc()
     {
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getPdoInstance();
 
         $query = "SELECT * FROM hms_damage_type WHERE active = 1 ORDER BY category ASC, description ASC";
@@ -25,7 +26,7 @@ class DamageTypeFactory {
 
         $stmt->execute();
 
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $resultById = array();
 

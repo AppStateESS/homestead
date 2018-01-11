@@ -1,6 +1,11 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HousingApplication.php');
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+use \Homestead\Exception\StudentNotFoundException;
+use \PHPWS_Error;
+use \PHPWS_DB;
 
 class WaitingListApplication extends HousingApplication {
 
@@ -108,8 +113,6 @@ class WaitingListApplication extends HousingApplication {
     {
         //test($this,1);
 
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $tags = array();
 
         try{
@@ -137,8 +140,8 @@ class WaitingListApplication extends HousingApplication {
         $tags['APP_DATE']       = date("m/j/Y g:ia", $this->getCreatedOn());
 
         // TODO.. fix these - they should actually instanciate the command objects
-        $assign_link = PHPWS_Text::secureLink('[Assign]','hms', array('module'=>'hms', 'action'=>'ShowAssignStudent', 'username'=>$this->username));
-        $remove_link = PHPWS_Text::secureLink('[Remove]','hms', array('module'=>'hms', 'action'=>'OpenWaitingListRemove', 'username'=>$this->username));
+        $assign_link = \PHPWS_Text::secureLink('[Assign]','hms', array('module'=>'hms', 'action'=>'ShowAssignStudent', 'username'=>$this->username));
+        $remove_link = \PHPWS_Text::secureLink('[Remove]','hms', array('module'=>'hms', 'action'=>'OpenWaitingListRemove', 'username'=>$this->username));
         $tags['ACTION']     = "$assign_link $remove_link";
 
         return $tags;
@@ -146,8 +149,6 @@ class WaitingListApplication extends HousingApplication {
 
     public function waitingListCsvTags()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $tags = array();
 
         try{
@@ -185,11 +186,9 @@ class WaitingListApplication extends HousingApplication {
 
     public static function waitingListPager()
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
+        $term = \PHPWS_Settings::get('hms', 'lottery_term');
 
-        $term = PHPWS_Settings::get('hms', 'lottery_term');
-
-        $pager = new DBPager('hms_new_application', 'WaitingListApplication');
+        $pager = new \DBPager('hms_new_application', '\Homestead\WaitingListApplication');
 
         $pager->db->addJoin('LEFT', 'hms_new_application', 'hms_waitlist_application', 'id', 'id');
         $pager->db->addJoin('LEFT OUTER', 'hms_new_application', 'hms_assignment', 'username', 'asu_username AND hms_new_application.term = hms_assignment.term');

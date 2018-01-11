@@ -1,12 +1,12 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'ConfirmedRoommatePager.php');
+namespace Homestead;
 
 /**
  * The UI for viewing and deleting confirmed roommate groups
  */
 
-class EditRoommateGroupsView extends hms\View {
+class EditRoommateGroupsView extends View {
 
     private $roommatePager;
 
@@ -24,8 +24,8 @@ class EditRoommateGroupsView extends hms\View {
         $createCmd = CommandFactory::getCommand('CreateRoommateGroupView');
         $tpl['CREATE_REQUEST_URI'] = $createCmd->getURI();
 
-        Layout::addPageTitle("Edit Roommate Group");
+        \Layout::addPageTitle("Edit Roommate Group");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/show_confirmed_roommates.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/show_confirmed_roommates.tpl');
     }
 }

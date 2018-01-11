@@ -40,6 +40,10 @@
 }
 /***** End Typeahead Styles *****/
 
+.row-link:hover {
+    cursor: pointer;
+}
+
 /*** To make the user's full name fit in the nav bar without wrapping */
 .navbar-form {
     padding-right: 3px;

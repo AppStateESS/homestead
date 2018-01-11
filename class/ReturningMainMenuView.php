@@ -1,13 +1,13 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'StudentMenuTermBlock.php');
+namespace Homestead;
 
 define('FEATURE_LOCKED_ICON',   '<i class="fa fa-lock"></i>');
 define('FEATURE_NOTYET_ICON',   '<i class="fa fa-calendar"></i>');
 define('FEATURE_OPEN_ICON',     '<i class="fa fa-arrow-right"></i>');
 define('FEATURE_COMPLETED_ICON','<i class="fa fa-check" title="Completed" alt="Completed"></i>');
 
-class ReturningMainMenuView extends hms\View {
+class ReturningMainMenuView extends View {
 
     private $student;
     private $lotteryTerm;
@@ -59,8 +59,8 @@ class ReturningMainMenuView extends hms\View {
             $tpl['TERMBLOCK'][] = array('TERMBLOCK_CONTENT'=>$termBlock->show());
         }
 
-        Layout::addPageTitle("Main Menu");
+        \Layout::addPageTitle("Main Menu");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/returningMenu.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/returningMenu.tpl');
     }
 }

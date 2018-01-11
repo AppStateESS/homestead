@@ -8,6 +8,13 @@
         <div class="alert alert-danger">{WITHDRAWN}</div>
         <!-- END withdrawn -->
 
+        <!-- BEGIN spring_roommates -->
+        {SPRING_ROOMMATE_NOTICE}
+        <div class="alert alert-info">
+            <p><i class="fa fa-exclamation"></i> Roommate requests are not available for the spring semester due to a lack of open spaces needed to meet these requests.</p>
+        </div>
+        <!-- END spring_roommates -->
+
         <!-- BEGIN review_msg -->
         <p>
             {REVIEW_MSG}

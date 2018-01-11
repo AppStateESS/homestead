@@ -1,13 +1,15 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'CachedStudent.php');
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+use \PHPWS_Error;
+use \PHPWS_DB;
 
 class LocalCacheDataProvider extends StudentDataProvider {
 
     public function getStudentByUsername($username, $term)
     {
-        PHPWS_Core::initModClass('hms', 'Student.php');
-
         //if the ttl isn't set to "now"
         if($this->ttl != 0){
             $db = new PHPWS_DB('hms_student_cache');
@@ -50,8 +52,6 @@ class LocalCacheDataProvider extends StudentDataProvider {
 
     public function getStudentById($id, $term)
     {
-        PHPWS_Core::initModClass('hms', 'Student.php');
-
         $db = new PHPWS_DB('hms_student_cache');
         $db->addWhere('banner_id', $id);
         $db->addWhere('term', $term);
@@ -127,7 +127,7 @@ class LocalCacheDataProvider extends StudentDataProvider {
 
         foreach($result as $addr){
 
-            $obj = new stdClass();
+            $obj = new \stdClass();
 
             $obj->atyp_code = $addr['atyp_code'];
             $obj->line1     = $addr['line1'];
@@ -197,7 +197,7 @@ class LocalCacheDataProvider extends StudentDataProvider {
 
         foreach($phoneList as $number){
             $db->reset();
-            $obj = new stdClass();
+            $obj = new \stdClass();
             $obj->number = $number;
             $obj->banner_id = $student->getBannerId();
             $result = $db->saveObject($obj);

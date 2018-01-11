@@ -1,6 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'RlcAssignmentState.php');
+namespace Homestead;
 
 /**
  * RlcAssignmentInvitedState
@@ -24,10 +24,6 @@ class RlcAssignmentInvitedState extends RlcAssignmentState {
 
     public function onEnter()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-
         $application = $this->rlcAssignment->getApplication();
 
         $term     = $application->getTerm();

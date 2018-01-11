@@ -1,11 +1,13 @@
 <?php
 
+namespace Homestead;
+
 /**
  * CheckinHistoryView class - Genereated the view for a students checkin/checkout history
  * @author jbooker
  * @package hms
  */
-class CheckinHistoryView extends hms\View {
+class CheckinHistoryView extends View {
 
     private $checkins;
 
@@ -21,7 +23,7 @@ class CheckinHistoryView extends hms\View {
         foreach ($this->checkins as $checkin) {
             $row = array();
 
-            $bed = new HMS_Bed($checkin->getBedId());
+            $bed = new Bed($checkin->getBedId());
 
             $row['room']     = $bed->where_am_i();
             $row['term']     = Term::toString($checkin->getTerm());
@@ -45,6 +47,6 @@ class CheckinHistoryView extends hms\View {
 
         $tpl['HISTORY'] = $historyRows;
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/StudentCheckinHistoryView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/StudentCheckinHistoryView.tpl');
     }
 }

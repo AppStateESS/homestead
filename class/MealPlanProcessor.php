@@ -1,7 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'MealPlanFactory.php');
-PHPWS_Core::initModClass('hms', 'SOAP.php');
+namespace Homestead;
+
+use Homestead\Exception\MealPlanExistsException;
 
 class MealPlanProcessor {
 
@@ -20,7 +21,14 @@ class MealPlanProcessor {
         }
 
         // If the queue was not enabled, then we're ready to send via the web Service
-        self::processMealPlan($mealPlan, $soapClient);
+        try {
+            self::processMealPlan($mealPlan, $soapClient);
+        }catch (MealPlanExistsException $e){
+            // Update the meal plan's status and timestamp
+            $mealPlan->setStatus(MealPlan::STATUS_SENT);
+            $mealPlan->setStatusTimestamp(time());
+            MealPlanFactory::saveMealPlan($mealPlan);
+        }
     }
 
     /**

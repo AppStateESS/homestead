@@ -1,5 +1,7 @@
 <?php
-namespace Docusign;
+namespace Homestead\Docusign;
+
+use \Homestead\Docusign\DocusignException\IOException;
 
 /*
  * Copyright 2013 DocuSign Inc.
@@ -55,7 +57,7 @@ class CurlIO extends IO {
             }
             $jsonResult = json_decode($result);
             $response = (!is_null($jsonResult)) ? $jsonResult : $result;
-        } catch(Exception $e) {
+        } catch(\Exception $e) {
             throw new IOException($e);
         }
 

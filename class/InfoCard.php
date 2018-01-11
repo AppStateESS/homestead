@@ -1,11 +1,6 @@
 <?php
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HousingApplicationFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-PHPWS_Core::initModClass('hms', 'RoomDamage.php');
-PHPWS_Core::initModClass('hms', 'RoomDamageFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
 
+namespace Homestead;
 
 /**
  * Model class for representing InfoCards
@@ -54,7 +49,7 @@ class InfoCard {
         }
 
         // Get the hall, floor, and room from the checkin's bed
-        $this->bed = new HMS_Bed($this->checkin->getBedId());
+        $this->bed = new Bed($this->checkin->getBedId());
         $this->room = $this->bed->get_parent();
         $this->floor = $this->room->get_parent();
         $this->hall = $this->floor->get_parent();

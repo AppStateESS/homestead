@@ -1,9 +1,6 @@
 <?php
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
 
+namespace Homestead;
 
 /**
  * View class that represents a single participant in the
@@ -12,7 +9,7 @@ PHPWS_Core::initModClass('hms', 'CheckinFactory.php');
  * @author jbooker
  * @package hms
  */
-class RoomChangeParticipantView extends hms\View {
+class RoomChangeParticipantView extends View {
 
     private $participant; // The single partticpant this view is for
     private $request; // The parent request that this particpant is a part of
@@ -52,12 +49,12 @@ class RoomChangeParticipantView extends hms\View {
         $pref2 = $this->participant->getHallPref2();
 
         if (!is_null($pref1)) {
-            $hall1 = new HMS_Residence_Hall($pref1);
+            $hall1 = new ResidenceHall($pref1);
             $hallName = $hall1->getHallName();
 
             // Check if there's also a second hall preference
             if (!is_null($pref2)) {
-                $hall2 = new HMS_Residence_Hall($pref2);
+                $hall2 = new ResidenceHall($pref2);
                 $hallName .= ', ' . $hall2->getHallName();
             }
 
@@ -65,14 +62,14 @@ class RoomChangeParticipantView extends hms\View {
         }
 
         // From bed
-        $fromBed = new HMS_Bed($this->participant->getFromBed());
+        $fromBed = new Bed($this->participant->getFromBed());
         $tpl['FROM_ROOM'] = $fromBed->where_am_i();
 
         // To bed
         $toBedId = $this->participant->getToBed();
         if (isset($toBedId)) {
             // If there's already a bed set, show the selected bed
-            $toBed = new HMS_Bed($toBedId);
+            $toBed = new Bed($toBedId);
             $tpl['TO_ROOM'] = $toBed->where_am_i();
         }
 
@@ -87,7 +84,7 @@ class RoomChangeParticipantView extends hms\View {
             */
             $checkin = CheckinFactory::getCheckinByBed($this->student, $fromBed);
             if($checkin == null || ($checkin != null && $checkin->getCheckoutDate() != null)) {
-                NQ::simple('hms', hms\NotificationView::ERROR, "{$this->student->getName()} is not checked-in at his/her current assignment. This must be fixed before this room change can be given final approval.");
+                \NQ::simple('hms', NotificationView::ERROR, "{$this->student->getName()} is not checked-in at his/her current assignment. This must be fixed before this room change can be given final approval.");
             }
         }
 
@@ -97,14 +94,14 @@ class RoomChangeParticipantView extends hms\View {
          */
         $particpantState = $this->participant->getState();
 
-        $form = new PHPWS_Form('participant_form');
+        $form = new \PHPWS_Form('participant_form');
 
         if ($particpantState instanceof ParticipantStateNew) {
             // Particpant is in new state, waiting on this student'a approval
 
             // If the student is logged in, or the user is an admin, show the approve button
             if(UserStatus::getUsername() == $this->student->getUsername()
-                || Current_User::allow('hms', 'admin_approve_room_change')) {
+                || \Current_User::allow('hms', 'admin_approve_room_change')) {
 
                 $approveCmd = CommandFactory::getCommand('RoomChangeStudentApprove');
                 $approveCmd->setParticipantId($this->participant->getId());
@@ -124,7 +121,7 @@ class RoomChangeParticipantView extends hms\View {
             $rds = $this->participant->getCurrentRdList();
 
                 // If current user is an RD for the "from bed" or an admin
-            if (in_array(UserStatus::getUsername(), $rds) || Current_User::allow('hms', 'admin_approve_room_change')) {
+            if (in_array(UserStatus::getUsername(), $rds) || \Current_User::allow('hms', 'admin_approve_room_change')) {
 
                 if (!isset($toBedId) && count($this->participants) == 1) {
                     /*
@@ -159,7 +156,7 @@ class RoomChangeParticipantView extends hms\View {
             $rds = $this->participant->getFutureRdList();
 
             // Only future RDs and admins can approve
-            if (in_array(UserStatus::getUsername(), $rds) || Current_User::allow('hms', 'admin_approve_room_change')) {
+            if (in_array(UserStatus::getUsername(), $rds) || \Current_User::allow('hms', 'admin_approve_room_change')) {
 
                 $approveCmd = CommandFactory::getCommand('RoomChangeFutureRdApprove');
                 $approveCmd->setParticipantId($this->participant->getId());
@@ -192,6 +189,6 @@ class RoomChangeParticipantView extends hms\View {
 
         $tpl['history_rows'] = $stateRows;
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/roomChangeParticipantView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/roomChangeParticipantView.tpl');
     }
 }

@@ -1,5 +1,15 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\RoommateException;
+use \Homestead\Exception\RoommateCompatibilityException;
+use \Homestead\Exception\DatabaseException;
+use \Homestead\Exception\StudentNotFoundException;
+use \phpws2\Database;
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * HMS Roommate class - Handles creating, confirming, and deleting roommate groups
  *
@@ -9,9 +19,6 @@
 
 // The number of seconds before a roommate request expires, (hrs * 60 * 60)
 define('ROOMMATE_REQ_TIMEOUT', 259200); // 259200 = 72 hours
-
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'exception/RoommateException.php');
 
 /**
  * HMS Roommate Class - Represents a freshmen roommate request object
@@ -60,7 +67,6 @@ class HMS_Roommate
 
         $result = $this->is_request_valid();
         if ($result != E_SUCCESS) {
-            PHPWS_Core::initModClass('hms', 'exception/RoommateCompatibilityException.php');
             throw new RoommateCompatibilityException($result);
         }
 
@@ -71,7 +77,6 @@ class HMS_Roommate
     {
         $result = $this->can_live_together();
         if ($result != E_SUCCESS) {
-            PHPWS_Core::initModClass('hms', 'exception/RoommateCompatibilityException.php');
             throw new RoommateCompatibilityException($result);
         }
 
@@ -134,7 +139,6 @@ class HMS_Roommate
 
     public static function getByUsernames($a, $b, $term)
     {
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
 
         $query = $db->prepare("SELECT * FROM hms_roommate WHERE term = :term AND ((requestor ILIKE :usera AND requestee ILIKE :userb) OR (requestor ILIKE :userb AND requestee ILIKE :usera))");
@@ -143,7 +147,7 @@ class HMS_Roommate
         $query->bindParam(':userb', $b);
 
         $query->execute();
-        $results = $query->fetchAll(PDO::FETCH_CLASS, "HMS_Roommate");
+        $results = $query->fetchAll(\PDO::FETCH_CLASS, "\Homestead\HMS_Roommate");
 
         return $results[0];
     }
@@ -199,7 +203,6 @@ class HMS_Roommate
      */
     public static function has_confirmed_roommate($asu_username, $term)
     {
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
 
         $query = $db->prepare("SELECT COUNT(*) FROM hms_roommate WHERE term = :term AND (requestor ILIKE :user OR requestee ILIKE :user) AND confirmed = 1");
@@ -235,11 +238,10 @@ class HMS_Roommate
         $db->addColumn('requestor');
         $db->addColumn('requestee');
 
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
-	*/
+	    */
 
-	$db = \Database::newDB();
+	    $db = \phpws2\Database::newDB();
         $db = $db->getPdo();
 
         $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term AND confirmed = 1");
@@ -247,7 +249,7 @@ class HMS_Roommate
         $stmt->bindParam(':term', $term);
 
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         if (count($result) > 1) {
             // TODO: Log Weird Situation
@@ -278,12 +280,11 @@ class HMS_Roommate
         $db->addColumn('requestee');
         $result = $db->select('row');
 
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
-	*/
+	    */
 
-        $db = \Database::newDB();
-	$db = $db->getPdo();
+        $db = \phpws2\Database::newDB();
+	    $db = $db->getPdo();
 
         $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term AND confirmed = 0 and requested_on >= :ttl");
         $stmt->bindParam(':user', $asu_username);
@@ -293,7 +294,7 @@ class HMS_Roommate
         $stmt->bindParam(':ttl', $ttl);
 
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         if (count($result) > 1) {
             // TODO: Log Weird Situation
@@ -369,7 +370,7 @@ class HMS_Roommate
         $db->addWhere('term', $term);
         $db->addWhere('confirmed', 0);
         $db->addWhere('requested_on', time() - ROOMMATE_REQ_TIMEOUT, '>=');
-        $result = $db->getObjects('HMS_Roommate');
+        $result = $db->getObjects('\Homestead\HMS_Roommate');
 
         return $result;
     }
@@ -400,14 +401,13 @@ class HMS_Roommate
         $db->addWhere('requestee', $asu_username, 'ILIKE', 'OR', 'grp');
         $db->setGroupConj('grp', 'AND');
         $db->addWhere('term', $term);
-        $result = $db->getObjects('HMS_Roommate');
+        $result = $db->getObjects('\Homestead\HMS_Roommate');
 
         if (PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
         */
 
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
 
         $stmt = $db->prepare("SELECT * FROM hms_roommate WHERE (requestor ILIKE :user OR requestee ILIKE :user) AND term = :term");
@@ -415,7 +415,7 @@ class HMS_Roommate
         $stmt->bindParam(':term', $term);
 
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_CLASS, "HMS_Roommate");
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, "\Homestead\HMS_Roommate");
     }
 
     /**
@@ -432,14 +432,13 @@ class HMS_Roommate
 
         $db->addWhere('confirmed', 0);
         $db->addWhere('term', $term);
-        $requests = $db->getObjects('HMS_Roommate');
+        $requests = $db->getObjects('\Homestead\HMS_Roommate');
 
         if (PHPWS_Error::logIfError($requests)) {
             throw new DatabaseException('Could not remove outstanding requests');
         }
         */
 
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
         $db = PdoFactory::getInstance()->getPdo();
 
         $query = $db->prepare("SELECT * FROM hms_roommate WHERE (requestee ILIKE :user OR requestor ILIKE :user) AND term = :term AND confirmed = 0");
@@ -447,13 +446,12 @@ class HMS_Roommate
         $query->bindParam(':user', $asu_username);
 
         $query->execute();
-        $requests = $query->fetchAll(PDO::FETCH_CLASS, "HMS_Roommate");
+        $requests = $query->fetchAll(\PDO::FETCH_CLASS, "\Homestead\HMS_Roommate");
 
         if ($requests == null) {
             return true;
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         foreach ($requests as $request) {
             HMS_Activity_Log::log_activity($request->requestor, ACTIVITY_AUTO_CANCEL_ROOMMATE_REQ, UserStatus::getUsername(), "$request->requestee: Due to confirmed roommate");
             HMS_Activity_Log::log_activity($request->requestee, ACTIVITY_AUTO_CANCEL_ROOMMATE_REQ, UserStatus::getUsername(), "$request->requestor: Due to confirmed roommate");
@@ -469,7 +467,6 @@ class HMS_Roommate
      */
     public function check_rlc_applications()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
         $result  = HMS_RLC_Application::checkForApplication($this->requestor, $this->term, false);
         $resultb = HMS_RLC_Application::checkForApplication($this->requestee, $this->term, false);
 
@@ -501,7 +498,6 @@ class HMS_Roommate
      */
     public function check_rlc_assignments()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
         $resulta = HMS_RLC_Assignment::checkForAssignment($this->requestor, $this->term);
         $resultb = HMS_RLC_Assignment::checkForAssignment($this->requestee, $this->term);
 
@@ -638,7 +634,6 @@ class HMS_Roommate
             return E_ROOMMATE_GENDER_MISMATCH;
         }
 
-        PHPWS_Core::initModClass('hms', 'HousingApplication.php');
         // Make sure the requestee has filled out an application
         if (HousingApplication::checkForApplication($requestee, $term) === false) {
             return E_ROOMMATE_NO_APPLICATION;
@@ -761,8 +756,7 @@ class HMS_Roommate
      */
     public static function display_requests($asu_username, $term)
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
-        $pager = new DBPager('hms_roommate', 'HMS_Roommate');
+        $pager = new \DBPager('hms_roommate', '\Homestead\HMS_Roommate');
         $pager->setModule('hms');
         $pager->setTemplate('student/requested_roommate_list.tpl');
         $pager->addRowTags('get_requested_pager_tags');
@@ -778,9 +772,7 @@ class HMS_Roommate
      */
     public static function roommate_pager()
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
-
-        $pager = new DBPager('hms_roommate', 'HMS_Roommate');
+        $pager = new \DBPager('hms_roommate', '\Homestead\HMS_Roommate');
 
         $pager->db->addWhere('confirmed', 1);
         $pager->db->addWhere('term', Term::getSelectedTerm());

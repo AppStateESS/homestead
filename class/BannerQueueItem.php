@@ -1,5 +1,11 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * BannerQueueItem - Represents an single item in the BannerQueue
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
@@ -19,7 +25,7 @@ class BannerQueueItem {
     public $queued_on;
     public $queued_by;
 
-    public function __construct($id = null, $type = null, Student $student = null, $term = null, HMS_Residence_Hall $hall = null, HMS_Bed $bed = null, $percentRefund = null)
+    public function __construct($id = null, $type = null, Student $student = null, $term = null, ResidenceHall $hall = null, Bed $bed = null, $percentRefund = null)
     {
         if(!is_null($id) && $id != 0) {
             $this->load();
@@ -86,7 +92,7 @@ class BannerQueueItem {
     public function stamp()
     {
         $this->queued_on = time();
-        $this->queued_by = Current_User::getId();
+        $this->queued_by = \Current_User::getId();
     }
 
     /**
@@ -95,9 +101,6 @@ class BannerQueueItem {
      */
     public function process()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
-        PHPWS_Core::initModClass('hms', 'SOAP.php');
-
         $soap = SOAP::getInstance(UserStatus::getUsername(), UserStatus::isAdmin()?(SOAP::ADMIN_USER):(SOAP::STUDENT_USER));
 
         $result = null;
@@ -113,7 +116,7 @@ class BannerQueueItem {
                     HMS_Activity_Log::log_activity(
                                     $this->asu_username,
                                     ACTIVITY_ASSIGNMENT_REPORTED,
-                                    Current_User::getUsername(),
+                                    \Current_User::getUsername(),
                                     $this->term . ' ' .
                                     $this->building_code . ' ' .
                                     $this->bed_code);
@@ -131,7 +134,7 @@ class BannerQueueItem {
                     HMS_Activity_Log::log_activity(
                                     $this->asu_username,
                                     ACTIVITY_REMOVAL_REPORTED,
-                                    Current_User::getUsername(),
+                                    \Current_User::getUsername(),
                                     $this->term . ' ' .
                                     $this->building_code . ' ' .
                                     $this->bed_code . ' ');

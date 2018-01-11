@@ -1,12 +1,15 @@
 <?php
+
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+
 /**
  * RlcFactory.php
  *
  * @copyright Appalachian State University, 2013
  * @license http://opensource.org/licenses/gpl-3.0.html GNU GPLv3
  */
-
-PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
 
 /**
  * RlcFactory - Factory class for loading Rlc objects.
@@ -26,17 +29,17 @@ class RlcFactory {
     public static function getRlcById($id)
     {
         if (is_null($id) || !is_numeric($id)) {
-            throw new InvalidArgumentException('Missing RLC id.');
+            throw new \InvalidArgumentException('Missing RLC id.');
         }
 
-        $db = new PHPWS_DB('hms_learning_communities');
+        $db = new \PHPWS_DB('hms_learning_communities');
         $db->addWhere('id', $id);
 
         $community = new RestoredRlc();
 
         $result = $db->loadObject($community);
 
-        if (PHPWS_Error::logIfError($result)) {
+        if (\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -54,7 +57,7 @@ class RlcFactory {
      */
     public static function getRlcList($term, $studentType = NULL, $hidden = NULL)
     {
-        $db = new PHPWS_DB('hms_learning_communities');
+        $db = new \PHPWS_DB('hms_learning_communities');
         $db->addColumn('id');
         $db->addColumn('community_name');
 
@@ -70,7 +73,7 @@ class RlcFactory {
 
         $rlcs = $db->select('assoc');
 
-        if (PHPWS_Error::logIfError($rlcs)) {
+        if (\PHPWS_Error::logIfError($rlcs)) {
             throw new DatabaseException($rlcs->toString());
         }
 

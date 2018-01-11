@@ -174,6 +174,16 @@
 <h2>Recent Notes</h2>
 [<a id=add_note>Add a note</a>]
 <div class="profileHeader">{NOTE_PAGER}</div>
+
+<!-- Email Log -->
+<h2>Email Log</h2>
+<div id="emailLogView"></div>
+<script>
+    var emailLogParams = {EMAIL_LOG_PARAMS};
+</script>
+<script type="text/javascript" src="{vendor_bundle}"></script>
+<script type="text/javascript" src="{entry_bundle}"></script>
+
 <h2>Student Log</h2>
 <div class="profileHeader">{LOG_PAGER}</div>
 <!-- END notes -->

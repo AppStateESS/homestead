@@ -1,10 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+namespace Homestead;
 
-class CheckinDocumentView extends hms\View {
+class CheckinDocumentView extends View {
 
     private $checkin;
 
@@ -18,7 +16,7 @@ class CheckinDocumentView extends hms\View {
         $term = Term::getCurrentTerm();
         $student = StudentFactory::getStudentByBannerId($this->checkin->getBannerId(), $term);
 
-        $bed = new HMS_Bed($this->checkin->getBedId());
+        $bed = new Bed($this->checkin->getBedId());
 
         $tpl = array();
 
@@ -30,6 +28,6 @@ class CheckinDocumentView extends hms\View {
 
         $tpl['INFO_CARD_LINK'] = $pdfCmd->getLink('Resident Information Card', '_blank');
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/checkinComplete.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/checkinComplete.tpl');
     }
 }

@@ -1,12 +1,16 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\PermissionException;
+
 /**
  * View for showing the Assign Student interface.
  *
  * @author jbooker
  * @package hms
  */
-class AssignStudentView extends hms\View {
+class AssignStudentView extends View {
 
     private $student;
     private $bed;
@@ -15,10 +19,10 @@ class AssignStudentView extends hms\View {
     /**
      *
      * @param Student $student
-     * @param HMS_Bed $bed
+     * @param Bed $bed
      * @param HousingApplication $application
      */
-    public function __construct(Student $student = null, HMS_Bed $bed = null, HousingApplication $application = null){
+    public function __construct(Student $student = null, Bed $bed = null, HousingApplication $application = null){
 
         $this->student     = $student;
         $this->bed         = $bed;
@@ -31,12 +35,9 @@ class AssignStudentView extends hms\View {
      */
     public function show()
     {
-        PHPWS_Core::initCoreClass('Form.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
+        \PHPWS_Core::initCoreClass('Form.php');
 
-        if (!UserStatus::isAdmin() || !Current_User::allow('hms', 'assignment_maintenance')) {
-            PHPWS_Core::initModClass('hms', 'exception/PermissionException.php');
+        if (!UserStatus::isAdmin() || !\Current_User::allow('hms', 'assignment_maintenance')) {
             throw new PermissionException('You do not have permission to unassign students.');
         }
 
@@ -46,7 +47,7 @@ class AssignStudentView extends hms\View {
         $tpl = array();
         $tpl['TERM'] = Term::getPrintableSelectedTerm();
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
 
         $assignCmd = CommandFactory::getCommand('AssignStudent');
         $assignCmd->initForm($form);
@@ -76,7 +77,7 @@ class AssignStudentView extends hms\View {
             $pre_populate = false;
         }
 
-        $hallList = HMS_Residence_Hall::getHallsWithVacanciesArray(Term::getSelectedTerm());
+        $hallList = ResidenceHall::getHallsWithVacanciesArray(Term::getSelectedTerm());
 
         $form->addDropBox('residence_hall', $hallList);
 
@@ -173,8 +174,8 @@ class AssignStudentView extends hms\View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Assign Student");
+        \Layout::addPageTitle("Assign Student");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/assignStudent.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/assignStudent.tpl');
     }
 }

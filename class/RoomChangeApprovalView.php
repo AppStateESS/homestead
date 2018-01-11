@@ -1,7 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'RoomChangeListView.php');
+namespace Homestead;
 
 /**
  * Shows an overview of all pending and inactive requests
@@ -10,7 +9,7 @@ PHPWS_Core::initModClass('hms', 'RoomChangeListView.php');
  * @author jbooker
  * @package hms
  */
-class RoomChangeApprovalView extends hms\View {
+class RoomChangeApprovalView extends View {
 
     private $needsApproval;
     private $approved;
@@ -61,6 +60,6 @@ class RoomChangeApprovalView extends hms\View {
         $tpl['INACTIVE'] = $inactiveList->show();
         $tpl['INACTIVE_COUNT'] = count($this->inactive);
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/RoomChangeApprovalView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/RoomChangeApprovalView.tpl');
     }
 }

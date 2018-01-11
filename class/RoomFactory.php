@@ -1,28 +1,30 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HMS_Room.php');
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
 
 class RoomFactory {
 
     public static function getRoomByPersistentId($roomId, $term)
     {
         if(is_null($roomId) || $roomId == ''){
-            throw new InvalidArgumentException('Missing roomId parameter.');
+            throw new \InvalidArgumentException('Missing roomId parameter.');
         }
 
         if(is_null($term) || $term == ''){
-            throw new InvalidArgumentException('Missing term parameter.');
+            throw new \InvalidArgumentException('Missing term parameter.');
         }
 
-        $db = new PHPWS_DB('hms_room');
+        $db = new \PHPWS_DB('hms_room');
 
         $db->addWhere('term', $term);
         $db->addWhere('persistent_id', $roomId);
 
-        $room = new HMS_Room(0);
+        $room = new Room(0);
         $result = $db->loadObject($room);
 
-        if(PHPWS_Error::logIfError($result)){
+        if(\PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
         }
 
@@ -32,9 +34,6 @@ class RoomFactory {
     // Retrieves bed by regular Id
 	public static function getRoomById($roomId, $term)
     {
-        PHPWS_Core::initModClass('hms', 'PdoFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Room.php');
-
     	$db = PdoFactory::getPdoInstance();
 
         $query = "select * from hms_room where id = :roomId AND term = :term";
@@ -46,7 +45,7 @@ class RoomFactory {
 		);
         $stmt->execute($params);
 
-        $results = $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomRestored');
+        $results = $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomRestored');
 
         return $results[0];
     }

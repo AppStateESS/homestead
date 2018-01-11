@@ -1,9 +1,10 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
-PHPWS_Core::initModClass('hms', 'MealPlan.php');
+namespace Homestead;
 
-class HousingApplicationFormView extends hms\View
+use \Homestead\ApplicationFeature\RlcApplicationRegistration;
+
+class HousingApplicationFormView extends View
 {
     private $student;
     private $existingApplication;
@@ -20,8 +21,8 @@ class HousingApplicationFormView extends hms\View
 
     public function show()
     {
-        PHPWS_Core::initCoreClass('Form.php');
-        $form = new PHPWS_Form();
+        \PHPWS_Core::initCoreClass('Form.php');
+        $form = new \PHPWS_Form();
 
         $submitCmd = CommandFactory::getCommand('HousingApplicationFormSubmit');
         $submitCmd->setTerm($this->term);
@@ -39,6 +40,16 @@ class HousingApplicationFormView extends hms\View
         $tpl['CLASSIFICATION_FOR_TERM_LBL'] = HMS_Util::formatClass($this->student->getClass());
         $tpl['STUDENT_STATUS_LBL'] = HMS_Util::formatType($this->student->getType());
         $tpl['TERM'] = Term::toString($this->term);
+
+
+        /**************
+         * Show note about no roommate requests for spring term
+         */
+        $sem = Term::getTermSem($this->term);
+
+        if($sem == TERM_FALL){
+            $tpl['SPRING_ROOMMATE_NOTICE'] = ''; // Dummy var to trigger template block
+        }
 
         /**************
          * Cell Phone *
@@ -59,7 +70,6 @@ class HousingApplicationFormView extends hms\View
 
         // This is just getting worse and worse.
         // TODO: this, correctly.
-        $sem = Term::getTermSem($this->term);
         if ($sem == TERM_SPRING || $sem == TERM_FALL) {
 
             /*************
@@ -214,8 +224,7 @@ class HousingApplicationFormView extends hms\View
         /*******
          * RLC *
          *******/
-        PHPWS_Core::initModClass('hms', 'applicationFeature/RlcApplication.php');
-        $rlcReg = new RLCApplicationRegistration();
+        $rlcReg = new RlcApplicationRegistration();
         if (HMS_RLC_Application::checkForApplication($this->student->getUsername(), $this->term) == TRUE) {
             // Student has an RLC application on file already
             $tpl['RLC_SUBMITTED'] = '';
@@ -240,9 +249,9 @@ class HousingApplicationFormView extends hms\View
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Housing Application Form");
+        \Layout::addPageTitle("Housing Application Form");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/student_application.tpl');
     }
 
 }

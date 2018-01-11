@@ -1,6 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'RoomChangeParticipant.php');
+namespace Homestead;
 
 class RoomChangeParticipantFactory {
 
@@ -19,7 +19,7 @@ class RoomChangeParticipantFactory {
 
         $stmt->execute($params);
 
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RoomChangeParticipantRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\RoomChangeParticipantRestored');
 
         return $stmt->fetch();
     }
@@ -38,7 +38,7 @@ class RoomChangeParticipantFactory {
 
         $stmt->execute($params);
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'RoomChangeParticipantRestored');
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Homestead\RoomChangeParticipantRestored');
     }
 
     public static function getParticipantByRequestStudent(RoomChangeRequest $request, Student $student)
@@ -56,7 +56,7 @@ class RoomChangeParticipantFactory {
 
         $stmt->execute($params);
 
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RoomChangeParticipantRestored');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\RoomChangeParticipantRestored');
         return $stmt->fetch();
     }
 }

@@ -1,12 +1,14 @@
 <?php
 
+namespace Homestead;
+
 /**
  * View class responsible for showing the 'Edit Room' interface
  *
  * @author jbooker
  * @package HMS
  */
-class RoomView extends hms\View {
+class RoomView extends View {
 
     private $hall;
     private $floor;
@@ -17,12 +19,12 @@ class RoomView extends hms\View {
     /**
      * Constructor
      *
-     * @param HMS_Residence_Hall    $hall
-     * @param HMS_Floor             $floor
-     * @param HMS_Room              $room
+     * @param ResidenceHall    $hall
+     * @param Floor             $floor
+     * @param Room              $room
      * @param Array                 $damageTypes
      */
-    public function __construct(HMS_Residence_Hall $hall, HMS_Floor $floor, HMS_Room $room, Array $damageTypes){
+    public function __construct(ResidenceHall $hall, Floor $floor, Room $room, Array $damageTypes){
         $this->hall		= $hall;
         $this->floor	= $floor;
         $this->room		= $room;
@@ -35,13 +37,10 @@ class RoomView extends hms\View {
      */
     public function show()
     {
-        javascriptMod('hms', 'RoomDamages', array('ROOM_PERSISTENT_ID' => $this->room->getPersistentId(),
-                                                    'TERM' => $this->room->getTerm()
-                                                )
-                    );
-
         /*** Header Info ***/
         $tpl = array();
+        $tpl['ROOM_PERSISTENT_ID'] = $this->room->getPersistentId();
+        $tpl['TERM'] = $this->room->getTerm();
         $tpl['TERM'] = Term::getPrintableSelectedTerm();
         $tpl['HALL_NAME']           = $this->hall->getLink();
         $tpl['FLOOR_NUMBER']        = $this->floor->getLink('Floor');
@@ -91,7 +90,7 @@ class RoomView extends hms\View {
         $tpl['NUMBER_OF_BEDS']      = $this->room->get_number_of_beds();
         $tpl['NUMBER_OF_ASSIGNEES'] = $number_of_assignees;
 
-        $form = new PHPWS_Form;
+        $form = new \PHPWS_Form;
 
         $submitCmd = CommandFactory::getCommand('EditRoom');
         $submitCmd->setRoomId($this->room->id);
@@ -107,7 +106,7 @@ class RoomView extends hms\View {
             $roomGenders = array(FEMALE => FEMALE_DESC, MALE => MALE_DESC, AUTO=>AUTO_DESC);
 
             // Check if the user is allowed to set rooms to co-ed, if so add Co-ed to the drop down
-            if(Current_User::allow('hms', 'coed_rooms')){
+            if(\Current_User::allow('hms', 'coed_rooms')){
                 $roomGenders[COED] = COED_DESC;
             }
 
@@ -177,16 +176,15 @@ class RoomView extends hms\View {
         $form->addSubmit('submit', 'Submit');
 
         // Assignment pagers
-        $tpl['BED_PAGER'] = HMS_Bed::bed_pager_by_room($this->room->id);
+        $tpl['BED_PAGER'] = Bed::bed_pager_by_room($this->room->id);
 
         // if the user has permission to view the form but not edit it then
         // disable it
-        if(    Current_User::allow('hms', 'room_view')
-        && !Current_User::allow('hms', 'room_attributes')
-        && !Current_User::allow('hms', 'room_structure'))
+        if(    \Current_User::allow('hms', 'room_view')
+        && !\Current_User::allow('hms', 'room_attributes')
+        && !\Current_User::allow('hms', 'room_structure'))
         {
-            $form_vars = get_object_vars($form);
-            $elements = $form_vars['_elements'];
+            $elements = $form->getAllElements();
 
             foreach($elements as $element => $value){
                 $form->setDisabled($element);
@@ -196,7 +194,7 @@ class RoomView extends hms\View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        $reasonsList = HMS_Room::listReserveReasons();
+        $reasonsList = Room::listReserveReasons();
 
         $tpl['ATHLETICS_OPTIONS'] =  $reasonsList['Athletics'];
         $tpl['SPECIAL_NEEDS_OPTIONS'] =  $reasonsList['SpecialNeeds'];
@@ -211,26 +209,26 @@ class RoomView extends hms\View {
 
         $tpl['RESERVED_NOTES'] = $this->room->getReservedNotes();
 
-        Layout::addPageTitle("Edit Room");
+        \Layout::addPageTitle("Edit Room");
 
         $tpl['ROOM_DAMAGE_LIST'] = $this->roomDamagePager();
 
 
-        if(Current_User::allow('hms', 'add_room_dmg')){
+        if(\Current_User::allow('hms', 'add_room_dmg')){
             $dmgCmd = CommandFactory::getCommand('ShowAddRoomDamage');
             $dmgCmd->setRoom($this->room);
             $tpl['ADD_DAMAGE_URI']  = $dmgCmd->getURI();
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');
+        $tpl['vendor_bundle'] = AssetResolver::resolveJsPath('assets.json', 'vendor');
+        $tpl['entry_bundle'] = AssetResolver::resolveJsPath('assets.json', 'roomDamages');
+
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/edit_room.tpl');
     }
 
     private function roomDamagePager()
     {
-        PHPWS_Core::initCoreClass('DBPager.php');
-        PHPWS_Core::initModClass('hms', 'RoomDamage.php');
-
-        $pager = new DBPager('hms_room_damage', 'RoomDamageDb');
+        $pager = new \DBPager('hms_room_damage', '\Homestead\RoomDamageDb');
         $pager->db->addJoin('LEFT OUTER', 'hms_room_damage', 'hms_damage_type', 'damage_type', 'id');
 
 

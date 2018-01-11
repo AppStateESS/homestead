@@ -1,4 +1,7 @@
 <?php
+
+namespace Homestead;
+
 /**
  * ShowHallNotificationSelectView
  *
@@ -9,7 +12,7 @@
  * @subpackage hms
  */
 
-class ShowHallNotificationEditView extends hms\View{
+class ShowHallNotificationEditView extends View{
 
     private $subject;
     private $body;
@@ -26,15 +29,15 @@ class ShowHallNotificationEditView extends hms\View{
     }
 
     public function show(){
-        Layout::addPageTitle("Hall Notification Edit");
+        \Layout::addPageTitle("Hall Notification Edit");
 
         $tpl = array();
 
         $submitCmd = CommandFactory::getCommand('ReviewHallNotificationMessage');
-        $form = new PHPWS_Form('email_content');
+        $form = new \PHPWS_Form('email_content');
         $submitCmd->initForm($form);
 
-        if(Current_User::allow('hms', 'anonymous_notifications')){
+        if(\Current_User::allow('hms', 'anonymous_notifications')){
             $form->addCheck('anonymous');
             $form->setMatch('anonymous', $this->anonymous);
             $form->setLabel('anonymous', 'Send Anonymously');
@@ -58,6 +61,6 @@ class ShowHallNotificationEditView extends hms\View{
             $form->addHidden('floor', $this->floors);
         }
 
-        return PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/hall_notification_email_page.tpl');
+        return \PHPWS_Template::process($form->getTemplate(), 'hms', 'admin/hall_notification_email_page.tpl');
     }
 }

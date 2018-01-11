@@ -1,7 +1,6 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
+namespace Homestead;
 
 /**
  * View for showing/editing Learning Communities
@@ -10,7 +9,7 @@ PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
  * @author jbooker
  * @package HMS
  */
-class AddCommunityView extends hms\View {
+class AddCommunityView extends View {
 
     private $community;
 
@@ -35,7 +34,7 @@ class AddCommunityView extends hms\View {
             $tpl['COMMUNITY'] = $this->community->get_community_name();
         }
 
-        $form = new PHPWS_Form('add_learning_community');
+        $form = new \PHPWS_Form('add_learning_community');
 
         $submitCommand = CommandFactory::getCommand('SaveRlc');
         $submitCommand->initForm($form);
@@ -43,7 +42,7 @@ class AddCommunityView extends hms\View {
         $form->addText('community_name', !is_null($this->community)?$this->community->get_community_name():'');
         $form->setClass('community_name', 'form-control');
         $form->setExtra('community_name', 'autofocus');
-        
+
         $form->addText('abbreviation', !is_null($this->community)?$this->community->get_abbreviation():'');
         $form->setClass('abbreviation', 'form-control');
         $form->addText('capacity', !is_null($this->community)?$this->community->get_capacity():'');
@@ -117,6 +116,6 @@ class AddCommunityView extends hms\View {
 
         $this->setTitle("Add/Edit RLC");
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/editLearningCommunity.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/editLearningCommunity.tpl');
     }
 }

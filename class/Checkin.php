@@ -1,5 +1,6 @@
 <?php
 
+namespace Homestead;
 
 /**
  * Checkin - Model class for representing checkins and checkouts
@@ -31,7 +32,7 @@ class Checkin {
 
     const CHECKIN_TIMEOUT = 172800; // Allow max 48 hours between checkins
 
-    public function __construct(Student $student, HMS_Bed $bed, $term, $checkinBy, $keyCode)
+    public function __construct(Student $student, Bed $bed, $term, $checkinBy, $keyCode)
     {
         $this->setBannerId($student->getBannerId());
         $this->setBedPersistentId($bed->getPersistentId());
@@ -45,17 +46,17 @@ class Checkin {
 
     public function save()
     {
-        $db = new PHPWS_DB('hms_checkin');
+        $db = new \PHPWS_DB('hms_checkin');
 
         try {
             $result = $db->saveObject($this);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // rethrow any exceptions
             throw $e;
         }
 
-        if (PHPWS_Error::logIfError($result)) {
-            throw new Exception($result->toString());
+        if (\PHPWS_Error::logIfError($result)) {
+            throw new \Exception($result->toString());
         }
 
         return $this->id;
@@ -187,7 +188,7 @@ class Checkin {
     {
         $this->improper_checkout = $improper;
     }
-    
+
     public function setImproperCheckoutNote($note)
     {
     	$this->improper_checkout_note = $note;
@@ -208,12 +209,3 @@ class Checkin {
         $this->key_not_returned = $key;
     }
 }
-
-
-class RestoredCheckin extends Checkin {
-
-    public function __construct()
-    { // Empty constructor for resotring state
-    }
-}
-

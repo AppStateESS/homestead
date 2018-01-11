@@ -1,5 +1,6 @@
 <?php
-namespace hms;
+
+namespace Homestead;
 
 \PHPWS_Core::initModClass('notification', 'NQ.php');
 

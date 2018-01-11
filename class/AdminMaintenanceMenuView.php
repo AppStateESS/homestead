@@ -1,14 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'AssignmentMenu.php');
-PHPWS_Core::initModClass('hms', 'ResidenceHallMenu.php');
-PHPWS_Core::initModClass('hms', 'RLCMenu.php');
-PHPWS_Core::initModClass('hms', 'ReapplicationMaintenanceMenu.php');
-PHPWS_Core::initModClass('hms', 'MessagingMenu.php');
-PHPWS_Core::initModClass('hms', 'ServiceDeskMenu.php');
+namespace Homestead;
 
-
-class AdminMaintenanceMenuView extends hms\View {
+class AdminMaintenanceMenuView extends View {
 
     public function show()
     {
@@ -32,8 +26,8 @@ class AdminMaintenanceMenuView extends hms\View {
         $serviceDesk = new ServiceDeskMenu();
         $tpl['SERVICE_DESK'] = $serviceDesk->show();
 
-        Layout::addPageTitle("Main Menu");
+        \Layout::addPageTitle("Main Menu");
 
-        return PHPWS_Template::process($tpl, 'hms', 'AdminMaintenanceMenu.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'AdminMaintenanceMenu.tpl');
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * Handles display of the RLC application menu block on the student main menu.
  *
@@ -7,7 +9,7 @@
  * @author Jeremy Booker
  */
 
-class RlcApplicationMenuView extends hms\View {
+class RlcApplicationMenuView extends View {
 
     private $term;
     private $student;
@@ -32,8 +34,6 @@ class RlcApplicationMenuView extends hms\View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         $tpl = array();
 
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
@@ -67,7 +67,6 @@ class RlcApplicationMenuView extends hms\View {
 
             // The student can also delete their application if
             // they aren't already assigned
-            PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
             if(!HMS_RLC_Assignment::checkForAssignment(UserStatus::getUsername(), $this->term)){
 
                 $delCmd = CommandFactory::getCommand('DeleteRlcApplication');
@@ -108,8 +107,8 @@ class RlcApplicationMenuView extends hms\View {
             $tpl['APP_NOW'] = $applyCmd->getLink('Apply for a Residential Learning Community now.');
         }
 
-        Layout::addPageTitle("RLC Application Menu");
+        \Layout::addPageTitle("RLC Application Menu");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/RlcApplicationMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/RlcApplicationMenuBlock.tpl');
     }
 }

@@ -1,12 +1,15 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 // Location to save the generated report files
 // I'd rather this be a private static or class const, but you can't
 // calculate the path dynamically that way.
 define('HMS_REPORT_PATH', PHPWS_SOURCE_DIR . 'files/hms_reports/');
-
-PHPWS_Core::initModClass('hms', 'ReportInterfaces.php');
-PHPWS_Core::initModClass('hms', 'Report.php');
 
 /**
  * ReportController - Central report controller. Provides much of the functionality
@@ -55,7 +58,7 @@ abstract class ReportController {
      */
     public function getReportClassName()
     {
-        return preg_replace("/Controller$/", '', get_class($this));
+        return preg_replace('/(.+\\\)(.+\\\)(.+)(\\\.+)/', '$3', get_class($this));
     }
 
     /**
@@ -66,9 +69,8 @@ abstract class ReportController {
     private function getReportInstance()
     {
         $name = $this->getReportClassName();
-        ReportFactory::loadReportClass($name);
-
-        return new $name;
+        $className = '\\Homestead\\Report\\' . $name . '\\' . $name;
+        return new $className;
     }
 
     /**
@@ -108,8 +110,6 @@ abstract class ReportController {
     public function getMenuItemView()
     {
         $this->loadLastExec();
-
-        PHPWS_Core::initModClass('hms', 'ReportMenuItemView.php');
         $view = new ReportMenuItemView($this->report, $this->getReportClassName());
 
         return $view;
@@ -159,8 +159,6 @@ abstract class ReportController {
      */
     public function getAsyncSetupView()
     {
-        PHPWS_Core::initModClass('hms', 'ReportSetupView.php');
-
         $view = new ReportSetupView($this->report);
         $view->setLinkText('Run in background');
         $view->setDialogId('reportBgDialog');
@@ -280,9 +278,10 @@ abstract class ReportController {
 
         // PDF
         if($this instanceof iPdfReportView){
-            $this->pdfView = $this->getPdfView();
+            // Commented out until we find a HTML->PDF converter that doesn't suck
+            //$this->pdfView = $this->getPdfView();
             // Save the PDF output
-            $this->savePdfOutput($this->pdfView);
+            //$this->savePdfOutput($this->pdfView);
         }
 
         // CSV
@@ -310,12 +309,8 @@ abstract class ReportController {
      */
     public function getHtmlView()
     {
-        PHPWS_Core::initModClass('hms', 'ReportHtmlView.php');
-
         $name = $this->getReportClassName();
-        $className = $name . "HtmlView";
-        PHPWS_Core::initModClass('hms', "report/$name/$className.php");
-
+        $className = '\\Homestead\\Report\\' . $name .'\\' . $name . "HtmlView";
         return new $className($this->report);
     }
 
@@ -351,7 +346,7 @@ abstract class ReportController {
      * for returning an object which extends the ReportPdfView class.
      *
      * This implementation expects a htmlView to exist and attempts to convert
-     * it to PDF using the WKPDF class. Override this to provide your own ReportPdfView
+     * it to PDF. Override this to provide your own ReportPdfView
      * implementation which generates a custom PDF for this controller's report.
      *
      * @see iHtmlReportView
@@ -359,8 +354,6 @@ abstract class ReportController {
      */
     public function getPdfView()
     {
-        PHPWS_Core::initModClass('hms', 'ReportPdfViewFromHtml.php');
-
         //TODO Check to make sure a HtmlView actually exists
 
         $pdfView = new ReportPdfViewFromHtml($this->report, $this->htmlView);
@@ -406,8 +399,6 @@ abstract class ReportController {
      * @return ReportCsvView
      */
     public function getCsvView(){
-        PHPWS_Core::initModClass('hms', 'ReportCsvView.php');
-
         $csvView = new ReportCsvView($this->report);
 
         return $csvView;

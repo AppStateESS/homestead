@@ -1,6 +1,8 @@
 <?php
 
-class LotteryRoommateRequestView extends hms\View {
+namespace Homestead;
+
+class LotteryRoommateRequestView extends View {
 
     private $request;
     private $term;
@@ -16,12 +18,8 @@ class LotteryRoommateRequestView extends hms\View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Lottery.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         # Get the roommate request record from the database
-        $bed = new HMS_Bed($this->request['bed_id']);
+        $bed = new Bed($this->request['bed_id']);
         $room = $bed->get_parent();
 
         $tpl = array();
@@ -74,7 +72,7 @@ class LotteryRoommateRequestView extends hms\View {
         $denyCmd = CommandFactory::getCommand('LotteryShowDenyRoommateRequest');
         $denyCmd->setRequestId($this->request['id']);
 
-        $form = new PHPWS_Form();
+        $form = new \PHPWS_Form();
         $submitCmd->initForm($form);
 
         # Decide which meal plan drop box to show based on whether or not the chosen room
@@ -111,8 +109,8 @@ class LotteryRoommateRequestView extends hms\View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Lottery Request Roommate");
+        \Layout::addPageTitle("Lottery Request Roommate");
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/lottery_roommate_request.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/lottery_roommate_request.tpl');
     }
 }

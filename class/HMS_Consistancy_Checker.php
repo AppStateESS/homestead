@@ -1,4 +1,7 @@
 <?php
+
+namespace Homestead;
+
 /**
   * Checks to make sure that the genders of rooms and floors make sense with
   * respect to their parent floors and halls.
@@ -7,14 +10,11 @@
   * @package mod
   * @subpackage hms
   **/
-PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
-PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
-PHPWS_Core::initModClass('hms', 'HMS_Room.php');
 
 class Consistancy_Checker {
 
     /**
-      * Checks each hall, floor, and room for the given term and returns 
+      * Checks each hall, floor, and room for the given term and returns
       * an associative array containing all of the invalid items.
       **/
     public function check($term=null){
@@ -24,7 +24,7 @@ class Consistancy_Checker {
             $term = Term::getCurrentTerm();
         }
 
-        $halls = HMS_Residence_Hall::get_halls($term);
+        $halls = ResidenceHall::get_halls($term);
 
         foreach($halls as $hall){
             $floors = $hall->get_floors();
@@ -33,12 +33,12 @@ class Consistancy_Checker {
                 $results[$hall->hall_name] = "No Floors in Hall!";
             } else {
                 foreach($floors as $floor){
-                    if($hall->gender_type != COED 
+                    if($hall->gender_type != COED
                        && $floor->gender_type != $hall->gender_type){
                             $results[$hall->hall_name][$floor->floor_number] = "Gender Mismatch With Hall";
                             continue;
                     }
-                    
+
                     $rooms = $floor->get_rooms();
                     if(!isset($rooms)){
                         $results[$hall->hall_name][$floor->floor_number] = "No rooms in Floor!";
@@ -51,7 +51,7 @@ class Consistancy_Checker {
                                 ") (Room: ".$room->gender_type.")";
                             }
                         }
-                    } 
+                    }
 
                     $suites = $floor->get_suites();
                     if(isset($suites)){

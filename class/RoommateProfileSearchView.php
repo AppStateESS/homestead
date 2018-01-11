@@ -1,6 +1,8 @@
 <?php
 
-    class RoommateProfileSearchView extends DBPager{
+namespace Homestead;
+
+    class RoommateProfileSearchView extends \DBPager{
     /**
      * Sets up the pager object for searching questionnairs.
      *
@@ -9,15 +11,10 @@
     public static function profile_search_pager($term)
     {
         // get the current student's gender
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), Term::getCurrentTerm());
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $student->getApplicationTerm());
 
         $gender = $student->getGender();
-
-        PHPWS_Core::initCoreClass('DBPager.php');
 
         $pageTags = array();
 
@@ -26,7 +23,7 @@
         $pageTags['LAST_NAME'] = _('Last Name');
         $pageTags['ACTIONS'] = _('Action');
 
-        $pager = new DBPager('hms_student_profiles', 'RoommateProfile');
+        $pager = new \DBPager('hms_student_profiles', '\Homestead\RoommateProfile');
 
         $pager->db->addWhere('term', $term);
 

@@ -1,19 +1,18 @@
 <?php
 
-require_once PHPWS_SOURCE_DIR . 'mod/hms/vendor/autoload.php';
+namespace Homestead;
 
 use \Michelf\Markdown;
+use Homestead\Email\MandrillMessage;
+
+//require_once PHPWS_SOURCE_DIR . 'mod/hms/vendor/autoload.php';
+//require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
 
 /**
  * HMS_Email class - A class which handles the various Email delivery needs of HMS.
  *
  * @author Jeremy Booker <jbooker at tux dot appstate dot edu>
  */
-
-require_once(PHPWS_SOURCE_DIR . 'mod/hms/inc/defines.php');
-
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
 
 class HMS_Email{
 
@@ -32,16 +31,40 @@ class HMS_Email{
         $contacts = array();
 
         $contacts[] = 'dbraswell@appstate.edu';
-        $contacts[] = 'burlesonst@appstate.edu';
 
         return $contacts;
     }
 
+    /**
+     * @depricated
+     */
     public static function send_template_message($to, $subject, $tpl, $tags)
     {
-        $content = PHPWS_Template::process($tags, 'hms', $tpl);
-
+        $content = \PHPWS_Template::process($tags, 'hms', $tpl);
         HMS_Email::send_email($to, NULL, $subject, $content);
+    }
+
+    public static function sendTemplateMessage(Student $student, string $messageType, string $subject, string $tpl, Array $tags)
+    {
+        $content = \PHPWS_Template::process($tags, 'hms', $tpl);
+
+        HMS_Email::sendMessage($student, $messageType, $subject, $content);
+    }
+
+    public static function sendMessage(Student $student, string $messageType, string $subject, string $content){
+
+        $textContent = $content;
+        $htmlContent = Markdown::defaultTransform($content);
+
+        $to = array();
+        $to[] = array('name' => $student->getName(), 'email'=>$student->getEmailAddress());
+
+        $mandrillKey = \PHPWS_Settings::get('hms', 'mandrill_key');
+
+        $message = new MandrillMessage($mandrillKey, $to, array(), FROM_ADDRESS, SYSTEM_NAME, $subject, $content, $htmlContent, array('bannerId'=>$student->getBannerId()));
+        $result = $message->send();
+
+        EmailLogFactory::logMessage($student, $result[0], $messageType);
     }
 
     /*
@@ -50,7 +73,7 @@ class HMS_Email{
      */
     public static function send_email($to, $from, $subject, $content, $cc = NULL, $bcc = NULL)
     {
-        # Sanity checking
+        // Sanity checking
         if(!isset($to) || is_null($to)){
             return false;
         }
@@ -69,7 +92,7 @@ class HMS_Email{
 
         # Create a Mail object and set it up
         \PHPWS_Core::initCoreClass('Mail.php');
-        $message = new PHPWS_Mail();
+        $message = new \PHPWS_Mail();
 
         $message->addSendTo($to);
         $message->setFrom($from);
@@ -92,8 +115,8 @@ class HMS_Email{
             $result = $message->send();
         }
 
-        if(PEAR::isError($result)){
-            PHPWS_Error::log($result);
+        if(\PEAR::isError($result)){
+            \PHPWS_Error::log($result);
             return false;
         }
 
@@ -101,7 +124,7 @@ class HMS_Email{
     }
 
     /**
-     * Logs a PHPWS_Mail object to a text file
+     * Logs a \PHPWS_Mail object to a text file
      */
     public static function log_email($message)
     {
@@ -135,9 +158,9 @@ class HMS_Email{
     }
 
     /**
-     * Log a Swift_Message object to a text file
+     * Log a \Swift_Message object to a text file
      */
-    public static function logSwiftmailMessageLong(Swift_Message $message)
+    public static function logSwiftmailMessageLong(\Swift_Message $message)
     {
         $fd = fopen(PHPWS_SOURCE_DIR . 'logs/email.log', 'a');
         fprintf($fd, "=======================\n");
@@ -175,7 +198,7 @@ class HMS_Email{
      * PHPWS_Email has a built-in simple logging function.  This replicates
      * the functionality of that function for SwiftMail.
      */
-    public static function logSwiftmailMessage(Swift_Message $message)
+    public static function logSwiftmailMessage(\Swift_Message $message)
     {
         $id      = 'id:'       . $message->getId();
         $from    = 'from:'     . $message->getSender();
@@ -187,10 +210,10 @@ class HMS_Email{
         $replyto = $message->getReplyTo()   != null ? ('reply-to:' . implode(',', array_keys($message->getReplyTo()))) : '';
 
         $subject = 'subject:'  . $message->getSubject();
-        $module  = 'module:'   . PHPWS_Core::getCurrentModule();
-        $user    = 'user:'     . (Current_User::isLogged() ? Current_User::getUsername() : '');
+        $module  = 'module:'   . \PHPWS_Core::getCurrentModule();
+        $user    = 'user:'     . (\Current_User::isLogged() ? \Current_User::getUsername() : '');
 
-        PHPWS_Core::log("$id $module $user $subject $from $to $cc $bcc $replyto", 'phpws-mail.log', 'mail');
+        \PHPWS_Core::log("$id $module $user $subject $from $to $cc $bcc $replyto", 'phpws-mail.log', 'mail');
     }
 
     /**********************
@@ -201,61 +224,44 @@ class HMS_Email{
         HMS_Email::send_email(HMS_Email::get_technical_contacts(), NULL, 'HMS Error', $content);
     }
 
-    /****************
-     * Contact form *
-     ****************/
-
-    public function send_contact_form()
-    {
-
-    }
-
-    /*********************
-     * Roommate Messages *
-     *********************/
-
     /********************
      * Lottery Messages *
      ********************/
 
-    public static function send_lottery_invite($to, $name, $year)
+    public static function send_lottery_invite(Student $student, $name, $year)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         $tpl = array();
 
         $tpl['NAME']        = $name;
         $tpl['YEAR']        = $year;
 
-        HMS_Email::send_template_message($to . TO_DOMAIN, 'Offer for On-Campus Housing', 'email/lottery_invite.tpl', $tpl);
+        HMS_Email::sendTemplateMessage($student, 'Lottery Invite', 'Offer for On-Campus Housing', 'email/lottery_invite.tpl', $tpl);
     }
 
-    public static function send_lottery_invite_reminder($to, $name, $year)
+    public static function send_lottery_invite_reminder(Student $student, $name, $year)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         $tpl = array();
 
         $tpl['NAME']        = $name;
         $tpl['YEAR']        = $year;
 
-        HMS_Email::send_template_message($to . TO_DOMAIN, "Reminder Offer for On-Campus Housing", 'email/lottery_invite_reminder.tpl', $tpl);
+        HMS_Email::sendTemplateMessage($student, 'Lottery Invite Reminder', 'Reminder Offer for On-Campus Housing', 'email/lottery_invite_reminder.tpl', $tpl);
     }
 
-    public static function send_lottery_roommate_invite(Student $to, Student $from, $expires_on, $hall_room, $year)
+    public static function send_lottery_roommate_invite(Student $student, Student $from, $expires_on, $hall_room, $year)
     {
         $tpl = array();
 
-        $tpl['NAME'] = $to->getName();
+        $tpl['NAME'] = $student->getName();
         $tpl['EXPIRES_ON'] = HMS_Util::get_long_date_time($expires_on);
         $tpl['YEAR']        = $year;
         $tpl['REQUESTOR']   = $from->getName();
         $tpl['HALL_ROOM']   = $hall_room;
 
-        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Roommate Invitation for On-campus Housing', 'email/lottery_roommate_invite.tpl', $tpl);
+        HMS_Email::sendTemplateMessage($student, 'Lottery Roommate Invite', 'Roommate Invitation for On-campus Housing', 'email/lottery_roommate_invite.tpl', $tpl);
     }
 
-    public static function send_lottery_roommate_reminder($to, $name, $expires_on, $requestor_name, $hall_room, $year)
+    public static function send_lottery_roommate_reminder(Student $student, $name, $expires_on, $requestor_name, $hall_room, $year)
     {
         $tpl = array();
 
@@ -266,33 +272,30 @@ class HMS_Email{
         $tpl['HALL_ROOM']   = $hall_room;
         $hours              = round(($expires_on - time()) / 3600);
 
-        HMS_Email::send_template_message($to . TO_DOMAIN, "Roommate Invitation Reminder: Only $hours hours left!", 'email/lottery_roommate_invite_reminder.tpl', $tpl);
+        HMS_Email::sendTemplateMessage($student, 'Lottery Roommate Invite Reminder', "Roommate Invitation Reminder: Only $hours hours left!", 'email/lottery_roommate_invite_reminder.tpl', $tpl);
     }
 
     public static function send_lottery_application_confirmation(Student $student, $year)
     {
-        PHPWS_Core::initModClass('hms', 'Term.php');
-
         $tpl = array();
 
         $tpl['NAME'] = $student->getName();
 
         $tpl['TERM'] = $year;
 
-        HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'On-campus Housing Re-application Confirmation!', 'email/lottery_confirmation.tpl', $tpl);
+        HMS_Email::sendTemplateMessage($student, 'Re-application Confirmation', 'On-campus Housing Re-application Confirmation!', 'email/lottery_confirmation.tpl', $tpl);
     }
 
-    public static function send_lottery_assignment_confirmation(Student $to, $location, $term)
+    public static function send_lottery_assignment_confirmation(Student $student, $location, $term)
     {
-        PHPWS_Core::initModClass('hms', 'Term.php');
         $tpl = array();
 
-        $tpl['NAME']     = $to->getName();
+        $tpl['NAME']     = $student->getName();
 
         $tpl['TERM']     = Term::toString($term);
         $tpl['LOCATION'] = $location;
 
-        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'On-campus Housing Re-assignment Confirmation!', 'email/lottery_self_assignment_confirmation.tpl', $tpl);
+        HMS_Email::sendTemplateMessage($student, 'Re-application Assignment Confirmation', 'On-campus Housing Re-assignment Confirmation!', 'email/lottery_self_assignment_confirmation.tpl', $tpl);
     }
 
     public static function sendWaitListApplicationConfirmation(Student $student, $year)
@@ -302,7 +305,7 @@ class HMS_Email{
         $tpl['NAME'] = $student->getName();
         $tpl['YEAR'] = $year;
 
-        HMS_Email::send_template_message($student->getUsername() . TO_DOMAIN, 'On-campus Housing Waiting List Confirmation', 'email/waitingListConfirmation.tpl', $tpl);
+        HMS_Email::sendTemplateMessage($student, 'Waiting-list Application Confirmation', 'On-campus Housing Waiting List Confirmation', 'email/waitingListConfirmation.tpl', $tpl);
     }
 
     /**
@@ -315,7 +318,7 @@ class HMS_Email{
      * @param Array $roommates
      * @param String $moveinTime
      */
-    public static function sendAssignmentNotice($to, $name, $term, $location, Array $roommates, $moveinTime){
+    public static function sendAssignmentNotice(Student $student, $name, $term, $location, Array $roommates, $moveinTime){
         $tpl = array();
 
         $tpl['NAME']            = $name;
@@ -334,11 +337,11 @@ class HMS_Email{
 
         switch($sem){
             case TERM_SPRING:
-                HMS_Email::send_template_message($to . TO_DOMAIN, 'Housing Assignment Notice!', 'email/assignment_notice_spring.tpl', $tpl);
+                HMS_Email::sendTemplateMessage($student, 'Assignment Notice', 'Housing Assignment Notice!', 'email/assignment_notice_spring.tpl', $tpl);
                 break;
             case TERM_SUMMER1:
             case TERM_SUMMER2:
-                HMS_Email::send_template_message($to . TO_DOMAIN, 'Housing Assignment Notice!', 'email/assignment_notice_summer.tpl', $tpl);
+                HMS_Email::sendTemplateMessage($student, 'Assignment Notice', 'Housing Assignment Notice!', 'email/assignment_notice_summer.tpl', $tpl);
                 break;
             case TERM_FALL:
                 /*
@@ -348,36 +351,34 @@ class HMS_Email{
                  HMS_Email::send_template_message($to . TO_DOMAIN, 'Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
                  }
                  */
-                HMS_Email::send_template_message($to . TO_DOMAIN, 'Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
+                HMS_Email::sendTemplateMessage($student, 'Assignment Notice', 'Housing Assignment Notice!', 'email/assignment_notice.tpl', $tpl);
                 break;
         }
     }
 
-    public static function send_roommate_confirmation(Student $to, Student $roomie){
+    public static function send_roommate_confirmation(Student $student, Student $roomie){
         $tpl = array();
 
-        $tpl['NAME'] = $to->getName();
+        $tpl['NAME'] = $student->getName();
         $tpl['ROOMIE'] = $roomie->getName();
 
-        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Roommate Confirmation!', 'email/roommate_confirmation.tpl', $tpl);
+        HMS_Email::sendTemplateMessage($student, 'Roommate Confirmation', 'Roommate Request Confirmation!', 'email/roommate_confirmation.tpl', $tpl);
     }
 
 
     /**
      * Sends an email to the specified student to confirm submission of a housing application for a particular term
-     * @param $to Student object representing the student to send this email too
+     * @param $student Student object representing the student to send this email too
      * @param $term The term the housing application was submitted for.
      */
-    public static function send_hms_application_confirmation(Student $to, $term)
+    public static function send_hms_application_confirmation(Student $student, $term)
     {
-        PHPWS_Core::initModClass('hms', 'Term.php');
-
         $tpl = array();
-        $tpl['NAME'] = $to->getName();
+        $tpl['NAME'] = $student->getName();
 
         $tpl['TERM'] = Term::toString($term);
 
-        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'On-campus Housing Application Confirmation!', 'email/application_confirmation.tpl', $tpl);
+        HMS_Email::sendTemplateMessage($student, 'Application Confirmation', 'On-campus Housing Application Confirmation!', 'email/application_confirmation.tpl', $tpl);
     }
 
     /**************************************
@@ -388,17 +389,15 @@ class HMS_Email{
      * Sends an email to the specified student to confirm any updates to their
      * emergency contact and missing person information for a particular term.
      *
-     * @param $to Student object representing the student to send this email to
+     * @param $student Student object representing the student to send this email to
      * @param $term The term the emergency contact info was updated for
      */
-    public static function send_emergency_contact_updated_confirmation(Student $to, $term) {
-        PHPWS_Core::initModClass('hms', 'Term.php');
-
+    public static function send_emergency_contact_updated_confirmation(Student $student, $term) {
         $tpl = array();
-        $tpl['NAME'] = $to->getName();
+        $tpl['NAME'] = $student->getName();
         $tpl['TERM'] = Term::toString($term);
 
-        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Emergency Contact Information Updated!', 'email/emergency_contact_update_confirmation.tpl', $tpl);
+        HMS_Email::sendTemplateMessage($student, 'Emergency Contact Update', 'Emergency Contact Information Updated!', 'email/emergency_contact_update_confirmation.tpl', $tpl);
     }
 
     /********************
@@ -406,8 +405,6 @@ class HMS_Email{
      ********************/
     public static function send_request_emails(HMS_Roommate $request)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-
         $requestorStudent = StudentFactory::getStudentByUsername($request->requestor, $request->term);
         $requesteeStudent = StudentFactory::getStudentByUsername($request->requestee, $request->term);
 
@@ -416,7 +413,7 @@ class HMS_Email{
         $tags['REQUESTOR_NAME'] = $requestorStudent->getFullName();
         $tags['REQUESTEE_NAME'] = $requesteeStudent->getFullName();
 
-        HMS_Email::send_template_message($request->requestor . TO_DOMAIN, 'HMS Roommate Request',
+        HMS_Email::sendTemplateMessage($requestorStudent, 'Roommate Request', 'On-campus Housing Roommate Request',
                                          'email/roommate_request_requestor.tpl', $tags);
 
         // Extra tags needed for email sent to requested roommmate
@@ -424,16 +421,14 @@ class HMS_Email{
         $tags['EXPIRATION_DATE'] = date('l, F jS, Y', $expire_date);
         $tags['EXPIRATION_TIME'] = date('g:i A', $expire_date);
 
-        HMS_Email::send_template_message($request->requestee . TO_DOMAIN, 'HMS Roommate Request',
+        HMS_Email::sendTemplateMessage($requesteeStudent, 'Roommate Request', 'On-campus Housing Roommate Request',
                                          'email/roommate_request_requestee.tpl', $tags);
 
-        return TRUE;
+        return true;
     }
 
     public static function send_confirm_emails(HMS_Roommate $request)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-
         $requestorStudent = StudentFactory::getStudentByUsername($request->requestor, $request->term);
         $requesteeStudent = StudentFactory::getStudentByUsername($request->requestee, $request->term);
 
@@ -442,20 +437,18 @@ class HMS_Email{
         $tags['REQUESTEE'] = $requesteeStudent->getFullName();
 
         // to the requestor
-        HMS_Email::send_template_message($request->requestor . TO_DOMAIN, 'HMS Roommate Confirmed',
+        HMS_Email::sendTemplateMessage($requestorStudent, 'Roommate Request Confirmation', 'On-campus Housing Roommate Confirmed',
                                          'email/roommate_confirmation_requestor.tpl', $tags);
 
         // to the requestee
-        HMS_Email::send_template_message($request->requestee . TO_DOMAIN, 'HMS Roommate Confirmed',
+        HMS_Email::sendTemplateMessage($requesteeStudent, 'Roommate Request Confirmation', 'On-campus Housing Roommate Confirmed',
                                          'email/roommate_confirmation_requestee.tpl', $tags);
 
-        return TRUE;
+        return true;
     }
 
     public static function send_reject_emails(HMS_Roommate $request)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-
         $requestorStudent = StudentFactory::getStudentByUsername($request->requestor, $request->term);
         $requesteeStudent = StudentFactory::getStudentByUsername($request->requestee, $request->term);
 
@@ -466,20 +459,18 @@ class HMS_Email{
         $tags['REQUESTEE_FIRST'] = $requesteeStudent->getFirstName();
 
         // To requestor
-        HMS_Email::send_template_message($request->requestor . TO_DOMAIN, 'HMS Roommate Declined',
+        HMS_Email::sendTemplateMessage($requestorStudent, 'Roommate Declined', 'On-campus Housing Roommate Declined',
                                          'email/roommate_reject_requestor.tpl', $tags);
 
         // to the requestee
-        HMS_Email::send_template_message($request->requestee . TO_DOMAIN, 'HMS Roommate Declined',
+        HMS_Email::sendTemplateMessage($requesteeStudent, 'Roommate Declined', 'On-campus Housing Roommate Declined',
                                          'email/roommate_reject_requestee.tpl', $tags);
 
-        return TRUE;
+        return true;
     }
 
     public static function send_break_emails(HMS_Roommate $request, $breaker)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-
         $breakee = $request->get_other_guy($breaker);
 
         $breakerStudent = StudentFactory::getStudentByUsername($breaker, $request->term);
@@ -491,19 +482,18 @@ class HMS_Email{
         $tags['BREAKEE'] = $breakeeStudent->getFullName();
 
         // to the breaker
-        HMS_Email::send_template_message($breaker . TO_DOMAIN, 'HMS Roommate Pairing Broken',
+        HMS_Email::sendTemplateMessage($breakerStudent, 'Roommate Request Cancelled', 'On-campus Housing Roommate Request Cancelled',
                                          'email/roommate_break_breaker.tpl', $tags);
 
         // to the breakee
-        HMS_Email::send_template_message($breakee . TO_DOMAIN, 'HMS Roommate Pairing Broken',
+        HMS_Email::sendTemplateMessage($breakeeStudent, 'Roommate Request Cancelled', 'On-campus Housing Roommate Request Cancelled',
                                          'email/roommate_break_breakee.tpl', $tags);
-        return TRUE;
+        return true;
     }
 
+    // What's the different between this and the "break_email" method above?
     public static function send_cancel_emails(HMS_Roommate $request)
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Email.php');
-
         $requestorStudent = StudentFactory::getStudentByUsername($request->requestor, $request->term);
         $requesteeStudent = StudentFactory::getStudentByUsername($request->requestee, $request->term);
 
@@ -512,13 +502,13 @@ class HMS_Email{
                       'REQUESTEE' => $requesteeStudent->getFullName());
 
         // to the requestor
-        HMS_Email::send_template_message($request->requestor . TO_DOMAIN, 'HMS Roommate Request Cancelled',
+        HMS_Email::sendTemplateMessage($requestorStudent, 'Roommate Request Cancelled', 'On-campus Housing Roommate Request Cancelled',
                                          'email/roommate_request_cancel_requestor.tpl', $tags);
 
         // to the requestee
-        HMS_Email::send_template_message($request->requestee . TO_DOMAIN, 'HMS Roommate Request Cancelled',
+        HMS_Email::sendTemplateMessage($requesteeStudent, 'Roommate Request Cancelled', 'On-campus Housing Roommate Request Cancelled',
                                          'email/roommate_request_cancel_requestee.tpl', $tags);
-        return TRUE;
+        return true;
     }
 
 
@@ -527,29 +517,24 @@ class HMS_Email{
      *******/
     public static function send_rlc_application_confirmation(Student $to)
     {
-        PHPWS_Core::initModClass('hms', 'Term.php');
-
         $tpl = array();
         $tpl['NAME'] = $to->getName();
         $tpl['TERM'] = Term::toString($to->getApplicationTerm());
 
-        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Learning Community Application Confirmation!', 'email/rlc_application_confirmation.tpl', $tpl);
+        HMS_Email::sendTemplateMessage($to, 'RLC Application Confirmation', 'Learning Community Application Confirmation!', 'email/rlc_application_confirmation.tpl', $tpl);
     }
 
     public static function sendRlcApplicationRejected(Student $to, $term)
     {
-        PHPWS_Core::initModClass('hms', 'Term.php');
-
         $tpl = array();
         $tpl['NAME'] = $to->getName();
         $tpl['TERM'] = Term::toString($term);
 
-        HMS_Email::send_template_message($to->getUsername() . TO_DOMAIN, 'Learning Community Application Rejected', 'email/rlc_application_rejection.tpl',$tpl);
+        HMS_Email::sendTemplateMessage($to, 'RLC Application Declined', 'Learning Community Application Declined', 'email/rlc_application_rejection.tpl',$tpl);
     }
 
     public static function sendRlcInviteEmail(Student $student, HMS_Learning_Community $community, $term, $respondByTimestamp)
     {
-        $to = $student->getUsername() . TO_DOMAIN;
         $subject = 'Response Needed: Residential Learning Community Invitation';
 
         $tags = array();
@@ -559,7 +544,7 @@ class HMS_Email{
         $tags['COMMUNITY_TERMS_CONDITIONS'] = $community->getTermsConditions();
         $tags['RESPOND_BY'] = date("l, F jS, Y", $respondByTimestamp) . ' at ' . date("ga", $respondByTimestamp);
 
-        HMS_Email::send_template_message($to, $subject, 'email/RlcInvite.tpl', $tags);
+        HMS_Email::sendTemplateMessage($student, 'RLC Invitation', $subject, 'email/RlcInvite.tpl', $tags);
     }
 
     /**
@@ -567,6 +552,8 @@ class HMS_Email{
      *
      * @param String $text
      */
+
+    // TODO: Check if this is in use, update if so.
     public static function sendWithdrawnSearchOutput($text)
     {
         $to = array('jb67803@appstate.edu', 'burlesonst@appstate.edu');
@@ -575,6 +562,7 @@ class HMS_Email{
         HMS_Email::send_email($to, null, $subject, $text);
     }
 
+    // TODO: Check if this is in use, update if so
     public static function sendReportCompleteNotification($username, $reportName)
     {
         $to = $username . TO_DOMAIN;
@@ -586,6 +574,7 @@ class HMS_Email{
         HMS_Email::send_template_message($to, $subject, 'email/ReportCompleteNotification.tpl', $tpl);
     }
 
+    // TODO: Mandrill logging
     public static function sendCheckinConfirmation(Student $student, InfoCard $infoCard, InfoCardPdfView $infoCardView)
     {
         $tags = array();
@@ -594,11 +583,11 @@ class HMS_Email{
         $tags['HALL_NAME']  = $infoCard->getHall()->getHallName();
         $tags['ASSIGNMENT'] = $infoCard->getRoom()->where_am_i();
 
-        $content = PHPWS_Template::process($tags, 'hms', 'email/checkinConfirmation.tpl');
+        $content = \PHPWS_Template::process($tags, 'hms', 'email/checkinConfirmation.tpl');
 
         $htmlContent = Markdown::defaultTransform($content);
 
-        $message = Swift_Message::newInstance();
+        $message = \Swift_Message::newInstance();
 
         $message->setSubject('Check-in Confirmation');
         $message->setFrom(array(FROM_ADDRESS => SYSTEM_NAME));
@@ -608,7 +597,7 @@ class HMS_Email{
         $message->addPart($htmlContent, 'text/html');
 
         // Attach info card
-        $attachment = Swift_Attachment::newInstance($infoCardView->getPdf()->output('my-pdf-file.pdf', 'S'), 'ResidentInfoCard.pdf', 'application/pdf');
+        $attachment = \Swift_Attachment::newInstance($infoCardView->getPdf()->output('my-pdf-file.pdf', 'S'), 'ResidentInfoCard.pdf', 'application/pdf');
         $message->attach($attachment);
 
         if(EMAIL_TEST_FLAG) {
@@ -616,12 +605,13 @@ class HMS_Email{
             return;
         }
 
-        $transport = Swift_SmtpTransport::newInstance('localhost');
-        $mailer = Swift_Mailer::newInstance($transport);
+        $transport = \Swift_SmtpTransport::newInstance('localhost');
+        $mailer = \Swift_Mailer::newInstance($transport);
 
         $mailer->send($message);
     }
 
+    // TODO: Mandrill integration
     public static function sendCheckoutConfirmation(Student $student, InfoCard $infoCard)
     {
         $tags = array();
@@ -629,10 +619,10 @@ class HMS_Email{
         $tags['NAME']       = $student->getName();
         $tags['ASSIGNMENT'] = $infoCard->getRoom()->where_am_i();
 
-        $content = PHPWS_Template::process($tags, 'hms', 'email/checkoutConfirmation.tpl');
+        $content = \PHPWS_Template::process($tags, 'hms', 'email/checkoutConfirmation.tpl');
         $htmlContent = Markdown::defaultTransform($content);
 
-        $message = Swift_Message::newInstance();
+        $message = \Swift_Message::newInstance();
 
         $message->setSubject('Check-out Confirmation');
         $message->setFrom(array(FROM_ADDRESS => SYSTEM_NAME));
@@ -642,7 +632,7 @@ class HMS_Email{
         $message->addPart($htmlContent, 'text/html');
 
         // Attach info card
-        //$attachment = Swift_Attachment::newInstance($infoCardView->getPdf()->output('my-pdf-file.pdf', 'S'), 'ResidentInfoCard.pdf', 'application/pdf');
+        //$attachment = \Swift_Attachment::newInstance($infoCardView->getPdf()->output('my-pdf-file.pdf', 'S'), 'ResidentInfoCard.pdf', 'application/pdf');
         //$message->attach($attachment);
 
         if(EMAIL_TEST_FLAG) {
@@ -650,8 +640,8 @@ class HMS_Email{
             return;
         }
 
-        $transport = Swift_SmtpTransport::newInstance('localhost');
-        $mailer = Swift_Mailer::newInstance($transport);
+        $transport = \Swift_SmtpTransport::newInstance('localhost');
+        $mailer = \Swift_Mailer::newInstance($transport);
 
         $mailer->send($message);
     }
@@ -672,7 +662,7 @@ class HMS_Email{
      * @param $subject string The subject line
      * @param $tags Array The template tags to replace
      * @param $tpl string The template file (module 'hms' is implied)
-     * @return Swift_Message An instance of Swift_Message with text and html parts,
+     * @return \Swift_Message An instance of \Swift_Message with text and html parts,
      *                        from, to, and subject already set up
      */
     public static function makeSwiftmailMessage($to, $subject, $tags, $tpl)
@@ -681,10 +671,10 @@ class HMS_Email{
             $to = array(($to->getUsername() . TO_DOMAIN) => $to->getName());
         }
 
-        $content = PHPWS_Template::process($tags, 'hms', $tpl);
+        $content = \PHPWS_Template::process($tags, 'hms', $tpl);
         $htmlContent = Markdown::defaultTransform($content);
 
-        $message = Swift_Message::newInstance();
+        $message = \Swift_Message::newInstance();
 
         $message->setSubject($subject);
         $message->setFrom(array(FROM_ADDRESS => SYSTEM_NAME));
@@ -703,23 +693,29 @@ class HMS_Email{
      * sendSwiftmailMessage
      *
      * Sets up transports so you don't have to; a convenience function to use a sensible
-     * transport to send a Swift_Message object.
+     * transport to send a \Swift_Message object.
      *
-     * You can either make a Swift_Message manually or use
+     * You can either make a \Swift_Message manually or use
      * @see HMS_Email::makeSwiftmailMessageFromSystemToStudent()
      *
-     * @param $message Swift_Message The message to send
-     * @return mixed Whatever comes back from Swift_Mailer::send()
+     * @param $message \Swift_Message The message to send
+     * @return mixed Whatever comes back from \Swift_Mailer::send()
      */
-    public static function sendSwiftmailMessage(Swift_Message $message)
+    public static function sendSwiftmailMessage(\Swift_Message $message)
     {
         if(EMAIL_TEST_FLAG) {
             self::logSwiftmailMessageLong($message);
         } else {
-            $transport = Swift_SmtpTransport::newInstance('localhost');
-            $mailer = Swift_Mailer::newInstance($transport);
+            $transport = \Swift_SmtpTransport::newInstance('localhost');
+            //$transport = Swift_SmtpTransport::newInstance('smtp.mandrillapp.com', 587);
+            //$transport->setUsername('');
+            //$transport->setPassword('');
+
+            $mailer = \Swift_Mailer::newInstance($transport);
 
             self::logSwiftmailMessage($message);
+
+
             return $mailer->send($message);
         }
     }
@@ -741,11 +737,7 @@ class HMS_Email{
             'STUDENT_NAME' => $student->getName()
         );
 
-        self::sendSwiftmailMessage(
-            self::makeSwiftmailMessage(
-                $student, $subject, $tags, $template
-            )
-        );
+        self::sendTemplateMessage($student, 'Room Change Request Received', $subject, $template, $tags);
     }
 
     /**
@@ -764,10 +756,6 @@ class HMS_Email{
      */
     public static function sendRoomChangeParticipantNotice(RoomChangeParticipant $requestor, RoomChangeParticipant $requestee)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-
         $subject = 'Room Change Requested';
         $template = 'email/roomChangeParticipantNotice.tpl';
         $term = Term::getCurrentTerm();
@@ -775,12 +763,12 @@ class HMS_Email{
         $requestorBid = $requestor->getBannerId();
         $requestorStudent = StudentFactory::getStudentByBannerID($requestorBid, $term);
         $requestorCurrent = HMS_Assignment::getAssignmentByBannerID($requestorBid, $term);
-        $requestorFuture  = new HMS_Bed($requestor->getToBed());
+        $requestorFuture  = new Bed($requestor->getToBed());
 
         $requesteeBid = $requestee->getBannerId();
         $requesteeStudent = StudentFactory::getStudentByBannerID($requesteeBid, $term);
         $requesteeCurrent = HMS_Assignment::getAssignmentByBannerID($requesteeBid, $term);
-        $requesteeFuture  = new HMS_Bed($requestee->getToBed());
+        $requesteeFuture  = new Bed($requestee->getToBed());
 
         $tags = array(
             'REQUESTOR_NAME' => $requestorStudent->getName(),
@@ -798,11 +786,7 @@ class HMS_Email{
             )
         );
 
-        self::sendSwiftmailMessage(
-            self::makeSwiftmailMessage(
-                $requesteeStudent, $subject, $tags, $template
-            )
-        );
+        self::sendTemplateMessage($requesteeStudent, 'Room Change Requested Notice', $subject, $template, $tags);
     }
 
     /**
@@ -818,12 +802,9 @@ class HMS_Email{
      * @param $rd string The username of the RD
      * @param $participant RoomChangeParticipant The Participant object involved
      */
+    // TODO: Mandrill integration
     public static function sendRoomChangeCurrRDNotice(RoomChangeRequest $request)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClasS('hms', 'HMS_Bed.php');
-
         $subject = 'Room Change Approval Required';
         $template = 'email/roomChangeCurrRDNotice.tpl';
 
@@ -849,7 +830,7 @@ class HMS_Email{
             // If they have a future assignment, show it
             $futureBedId = $p->getToBed();
             if($futureBedId) {
-                $bed = new HMS_Bed($futureBedId);
+                $bed = new Bed($futureBedId);
                 $participantTags['DESTINATION'] = $bed->where_am_i();
             }
 
@@ -879,18 +860,15 @@ class HMS_Email{
      */
     public static function sendRoomChangePreliminaryRoommateNotice(Student $student)
     {
-        $subject = 'Roommate Notice';
+        $subject = 'Preliminary Roommate Notice';
         $template = 'email/roomChangePreliminaryRoommateNotice.tpl';
 
         $tags = array(
             'ROOMMATE' => $student->getName()
         );
 
-        self::sendSwiftmailMessage(
-            self::makeSwiftmailMessage(
-                $student, $subject, $tags, $template
-            )
-        );
+
+        self::sendTemplateMessage($student, 'Preliminary Roommate Notice', $subject, $template, $tags);
     }
 
     /**
@@ -905,7 +883,7 @@ class HMS_Email{
      */
     public static function sendRoomChangeApprovedNewRoommateNotice(Student $student, Student $newRoomie)
     {
-        $subject = 'Roommate Confirmation';
+        $subject = 'New Roommate Confirmation';
         $template = 'email/roomChangeApprovedNewRoommateNotice.tpl';
 
         $tags = array(
@@ -913,11 +891,8 @@ class HMS_Email{
             'NAME' => $newRoomie->getName()
         );
 
-        self::sendSwiftmailMessage(
-            self::makeSwiftmailMessage(
-                $student, $subject, $tags, $template
-            )
-        );
+
+        self::sendTemplateMessage($student, 'New Roommate Confirmation', $subject, $template, $tags);
     }
 
     /**
@@ -937,11 +912,7 @@ class HMS_Email{
             'NAME' => $oldRoomie->getName()
         );
 
-        self::sendSwiftmailMessage(
-            self::makeSwiftmailMessage(
-                $student, $subject, $tags, $template
-            )
-        );
+        self::sendTemplateMessage($student, 'Roommate Change Notice', $subject, $template, $tags);
     }
 
     /**
@@ -956,12 +927,9 @@ class HMS_Email{
      * @param $rd string The username of the RD
      * @param $participant RoomChangeParticipant The Participant object involved
      */
+    // TODO: Mandrill integration
     public static function sendRoomChangeFutureRDNotice(RoomChangeRequest $request)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Bed.php');
-
         $subject = 'Room Change Approval Required';
         $template = 'email/roomChangeFutureRDNotice.tpl';
 
@@ -977,7 +945,7 @@ class HMS_Email{
             $bid = $p->getBannerId();
             $student = StudentFactory::getStudentByBannerID($bid, $term);
             $assign = HMS_Assignment::getAssignmentByBannerID($bid, $term);
-            $future = new HMS_Bed($p->getToBed());
+            $future = new Bed($p->getToBed());
 
             $participantTags = array(
                 'BANNER_ID'   => $student->getBannerId(),
@@ -1010,10 +978,9 @@ class HMS_Email{
      * @param $request RoomChangeRequest The Room Change Request needing approval
      * TODO: Add Banner IDs and to/from beds
      */
+    // TODO: Mandrill integration
     public static function sendRoomChangeAdministratorNotice(RoomChangeRequest $r)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $subject = 'Room Change Approval Required';
         $template = 'email/roomChangeAdministratorNotice.tpl';
 
@@ -1041,10 +1008,9 @@ class HMS_Email{
      * @param $r RoomChangeRequest The Room Change Request that is in process
      * TODO: Add to/from bed for each participant
      */
+    // TODO: Mandrill integration
     public static function sendRoomChangeInProcessNotice(RoomChangeRequest $r)
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $subject = 'Room Change Approved!';
         $template = 'email/roomChangeApprovalNotice.tpl';
 
@@ -1056,8 +1022,8 @@ class HMS_Email{
 
         foreach($r->getParticipants() as $p) {
             $student = Studentfactory::getStudentByBannerID($p->getBannerID(), $r->getTerm());
-            $current = new HMS_Bed($p->getFromBed());
-            $future = new HMS_Bed($p->getToBed());
+            $current = new Bed($p->getFromBed());
+            $future = new Bed($p->getToBed());
 
             $recipients[] = $student;
 
@@ -1089,6 +1055,7 @@ class HMS_Email{
      * @param $r RoomChangeRequest The Room Change Request that has been cancelled
      * @param $canceller Student|null The student who cancelled the request
      */
+    // TODO: Mandrill integration
     public static function sendRoomChangeCancelledNotice(RoomChangeRequest $r, Student $canceller = null)
     {
         $subject = 'Room Change Cancelled';
@@ -1142,6 +1109,7 @@ class HMS_Email{
      *
      * @param $r RoomChangeRequest The Room Change Request that has been denied
      */
+    // TODO: Mandrill integration
     public static function sendRoomChangeDeniedNotice(RoomChangeRequest $r)
     {
         $subject = 'Room Change Denied';
@@ -1205,11 +1173,7 @@ class HMS_Email{
         $tags['COORDINATOR_NAME'] = $coordinatorName;
         $tags['COORDINATOR_EMAIL'] = $coordinatorEmail;
 
-        self::sendSwiftmailMessage(
-            self::makeSwiftmailMessage(
-                $student, $subject, $tags, $template
-            )
-        );
+        self::sendTemplateMessage($student, 'Damage Notification', $subject, $template, $tags);
     }
 
 } // End HMS_Email class

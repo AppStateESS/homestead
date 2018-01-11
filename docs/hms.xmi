@@ -381,7 +381,7 @@
       </UML:Operation>
      </UML:Classifier.feature>
     </UML:Class>
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="24" isRoot="false" isAbstract="false" name="HMS_Floor" >
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="24" isRoot="false" isAbstract="false" name="Floor" >
      <UML:Classifier.feature>
       <UML:Attribute isSpecification="false" visibility="public" xmi.id="3002" type="2" name="id" />
       <UML:Attribute isSpecification="false" visibility="public" xmi.id="3045" type="8" name="floor_number" />
@@ -399,7 +399,7 @@
       <UML:Attribute isSpecification="false" visibility="public" xmi.id="3561" type="2" name="updated_on" />
       <UML:Attribute isSpecification="false" visibility="public" xmi.id="3604" type="8" name="deleted_by" />
       <UML:Attribute isSpecification="false" visibility="public" xmi.id="3647" type="2" name="deleted_on" />
-      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="3816" isRoot="false" isAbstract="false" isQuery="false" name="HMS_Floor" />
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="3816" isRoot="false" isAbstract="false" isQuery="false" name="Floor" />
       <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="3859" isRoot="false" isAbstract="false" isQuery="false" name="set_error" >
        <UML:BehavioralFeature.parameter>
         <UML:Parameter isSpecification="false" visibility="private" xmi.id="3860" value="" type="13" name="msg" />
@@ -542,7 +542,7 @@
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="25" isRoot="false" isAbstract="false" name="HMS_Learning_Community" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="26" isRoot="false" isAbstract="false" name="HMS_Login" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="27" isRoot="false" isAbstract="false" name="HMS_Maintenance" />
-    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="28" isRoot="false" isAbstract="false" name="HMS_Room" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="28" isRoot="false" isAbstract="false" name="Room" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="29" isRoot="false" isAbstract="false" name="HMS_User" />
     <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="7341" isRoot="false" isAbstract="false" name="hms_questionnaire" >
      <UML:Classifier.feature>
@@ -5958,7 +5958,7 @@
         </codeblockwithcomments>
         <cppheaderclassdeclarationblock parent_id="24" tag="classDeclarationBlock" canDelete="false" >
          <header>
-          <cppcodedocumentation tag="" text="Class HMS_Floor&amp;#010;" />
+          <cppcodedocumentation tag="" text="Class Floor&amp;#010;" />
          </header>
          <textblocks>
           <hierarchicalcodeblock tag="publicBlock" canDelete="false" >
@@ -6063,7 +6063,7 @@
                 <cppcodedocumentation tag="" indentLevel="1" text="Constructors" />
                </header>
                <textblocks>
-                <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="HMS_Floor ( ) { }" >
+                <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="Floor ( ) { }" >
                  <header>
                   <cppcodedocumentation tag="" indentLevel="1" text="Empty Constructor" />
                  </header>
@@ -7486,7 +7486,7 @@
         </codeblockwithcomments>
         <cppheaderclassdeclarationblock parent_id="28" tag="classDeclarationBlock" canDelete="false" >
          <header>
-          <cppcodedocumentation tag="" text="Class HMS_Room&amp;#010;" />
+          <cppcodedocumentation tag="" text="Class Room&amp;#010;" />
          </header>
          <textblocks>
           <hierarchicalcodeblock tag="publicBlock" canDelete="false" >
@@ -7510,7 +7510,7 @@
                 <cppcodedocumentation tag="" indentLevel="1" text="Constructors" />
                </header>
                <textblocks>
-                <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="HMS_Room ( ) { }" >
+                <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="Room ( ) { }" >
                  <header>
                   <cppcodedocumentation tag="" indentLevel="1" text="Empty Constructor" />
                  </header>

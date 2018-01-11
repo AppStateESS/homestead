@@ -1,7 +1,10 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'Checkin.php');
-PHPWS_Core::initModClass('hms', 'PdoFactory.php');
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+use \PHPWS_Error;
+use \PHPWS_DB;
 
 class CheckinFactory {
 
@@ -34,7 +37,7 @@ class CheckinFactory {
 
         $db->addOrder(array('term DESC', 'checkin_date DESC'));
 
-        $result = $db->getObjects('RestoredCheckin');
+        $result = $db->getObjects('\Homestead\RestoredCheckin');
 
         if(PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
@@ -55,7 +58,7 @@ class CheckinFactory {
 
         $db->addOrder(array('term DESC', 'checkin_date DESC'));
 
-        $result = $db->getObjects('RestoredCheckin');
+        $result = $db->getObjects('\Homestead\RestoredCheckin');
 
         if(PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());
@@ -69,7 +72,7 @@ class CheckinFactory {
     }
 
     // TODO: There could potentially be multiple check-ins for a student in a single bed
-    public static function getCheckinByBed(Student $student, HMS_Bed $bed)
+    public static function getCheckinByBed(Student $student, Bed $bed)
     {
         $db = new PHPWS_DB('hms_checkin');
         $db->addWhere('banner_id', $student->getBannerId());
@@ -150,7 +153,7 @@ class CheckinFactory {
         $stmt = $db->prepare($query);
         $stmt->execute(array('term' => $term));
 
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'RestoredCheckin');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Homestead\RestoredCheckin');
 
         return $stmt->fetchAll();
     }
@@ -175,7 +178,7 @@ class CheckinFactory {
 
         $db->addOrder(array('hms_residence_hall.hall_name ASC', 'hms_assignment.asu_username ASC'));
 
-        $results = $db->getObjects('RestoredCheckin');
+        $results = $db->getObjects('\Homestead\RestoredCheckin');
 
         if(PHPWS_Error::logIfError($results)){
             throw new DatabaseException($results->toString());
@@ -189,7 +192,7 @@ class CheckinFactory {
      * has not checked out of yet.
      * //TODO update for persistent ID
      */
-    public static function getPendingCheckoutForStudentByHall(Student $student, HMS_Residence_Hall $hall)
+    public static function getPendingCheckoutForStudentByHall(Student $student, ResidenceHall $hall)
     {
         $db = new PHPWS_DB('hms_checkin');
 
@@ -241,7 +244,7 @@ class CheckinFactory {
 
         $db->addOrder(array('term DESC', 'checkout_date DESC'));
 
-        $result = $db->getObjects('RestoredCheckin');
+        $result = $db->getObjects('\Homestead\RestoredCheckin');
 
         if(PHPWS_Error::logIfError($result)){
             throw new DatabaseException($result->toString());

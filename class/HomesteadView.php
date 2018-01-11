@@ -1,6 +1,6 @@
 <?php
 
-namespace hms;
+namespace Homestead;
 
 abstract class HomesteadView extends View {
     private $main;

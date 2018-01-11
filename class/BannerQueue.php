@@ -1,19 +1,22 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+
 /**
  * BannerQueue - Manages the Banner Queue
  * Queues up assignments so if we can't SOAP it over to Banner, Housing
  * can still do their jobs
  * @author Jeff Tickle <jtickle at tux dot appstate dot edu>
  */
-PHPWS_Core::initModClass('hms', 'BannerQueueItem.php');
 
 class BannerQueue {
 
     /**
      * Queues a Create Assignment
      */
-    public static function queueAssignment(Student $student, $term, HMS_Residence_Hall $hall, HMS_Bed $bed)
+    public static function queueAssignment(Student $student, $term, ResidenceHall $hall, Bed $bed)
     {
         $entry = new BannerQueueItem(0, BANNER_QUEUE_ASSIGNMENT, $student, $term, $hall, $bed);
 
@@ -37,7 +40,7 @@ class BannerQueue {
      * commits are enabled, the it will be sent straight to Banner,
      * and so the force_queue flag will be ignored.
      */
-    public static function queueRemoveAssignment(Student $student, $term, HMS_Residence_Hall $hall, HMS_Bed $bed, $refund)
+    public static function queueRemoveAssignment(Student $student, $term, ResidenceHall $hall, Bed $bed, $refund)
     {
         $entry = new BannerQueueItem(0, BANNER_QUEUE_REMOVAL, $student, $term, $hall, $bed, $refund);
 
@@ -46,7 +49,7 @@ class BannerQueue {
         }
 
         // Otherwise, look for an corresponding assignment
-        $db = new PHPWS_DB('hms_banner_queue');
+        $db = new \PHPWS_DB('hms_banner_queue');
         $db->addWhere('type',           BANNER_QUEUE_ASSIGNMENT);
         $db->addWhere('banner_id',      $student->getBannerId());
         $db->addWhere('building_code',  $hall->getBannerBuildingCode());
@@ -54,7 +57,7 @@ class BannerQueue {
         $db->addWhere('term',           $term);
         $result = $db->count();
 
-        if(PHPWS_Error::logIfError($result)) {
+        if(\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -77,10 +80,10 @@ class BannerQueue {
 
     public static function processAll($term)
     {
-        $db = new PHPWS_DB('hms_banner_queue');
+        $db = new \PHPWS_DB('hms_banner_queue');
         $db->addWhere('term', $term);
         $db->addOrder('id');
-        $items = $db->getObjects('BannerQueueItem');
+        $items = $db->getObjects('\Homestead\BannerQueueItem');
 
         $errors = array();
         foreach($items as $item) {
@@ -88,7 +91,7 @@ class BannerQueue {
 
             try{
                 $result = $item->process();
-            }catch(Exception $e){
+            }catch(\Exception $e){
                 $error = array();
                 $error['bannerid']  = $item->banner_id;
                 $error['username']  = $item->asu_username;

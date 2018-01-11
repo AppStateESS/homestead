@@ -1,15 +1,7 @@
 <?php
+namespace Homestead;
 
-PHPWS_Core::initModClass('hms', 'ReportPdfView.php');
-PHPWS_Core::initModClass('hms', 'WKPDF.php');
-
-if (!defined('WKPDF_PATH')) {
-    define('WKPDF_PATH', PHPWS_SOURCE_DIR . 'mod/hms/vendor/ioki/wkhtmltopdf-amd64-centos6/bin/wkhtmltopdf-amd64-centos6');
-}
-if (!defined('USE_XVFB')) {
-    define('USE_XVFB', false);
-    define('XVFB_PATH', '');
-}
+use Dompdf\Dompdf;
 
 /**
  * ReportPdfViewFromHtml - Provided as a default implementation of
@@ -37,10 +29,8 @@ class ReportPdfViewFromHtml extends ReportPdfView
         parent::__construct($report);
 
         $this->htmlView = $htmlView;
-        $this->pdf = new \WKPDF(WKPDF_PATH);
-        if (USE_XVFB) {
-            $this->pdf->setXVFB(XVFB_PATH);
-        }
+        $this->pdf = new Dompdf();
+        $this->pdf->setPaper('A4', 'portrait');
     }
 
     /**
@@ -48,7 +38,7 @@ class ReportPdfViewFromHtml extends ReportPdfView
      */
     public function render()
     {
-        $this->pdf->set_html($this->htmlView->getWrappedHtml());
+        $this->pdf->loadHtml($this->htmlView->getWrappedHtml());
         $this->pdf->render();
     }
 
@@ -59,7 +49,7 @@ class ReportPdfViewFromHtml extends ReportPdfView
      */
     public function getPdfContent()
     {
-        return $this->pdf->output(WKPDF::$PDF_ASSTRING, '');
+        return $this->pdf->output();
     }
 
 }

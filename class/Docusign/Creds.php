@@ -1,5 +1,5 @@
 <?php
-namespace Docusign;
+namespace Homestead\Docusign;
 
 /*
  * Copyright 2013 DocuSign Inc.

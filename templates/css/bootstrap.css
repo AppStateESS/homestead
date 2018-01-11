@@ -9,7 +9,7 @@
 	display: inline-block;
 }
 ul.nav li.dropdown:hover > ul.dropdown-menu {
-    display: block;    
+    display: block;
 }
 .dropdown-menu.pull-right {
 	top: 0;

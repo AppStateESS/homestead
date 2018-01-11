@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\DatabaseException;
+
 /**
  * The RoommateProfile class
  * Implements the RoommateProfile object and methods to load/save
@@ -252,10 +256,10 @@ class RoommateProfile {
             return false;
         }
 
-        $db = new PHPWS_DB('hms_student_profiles');
+        $db = new \PHPWS_DB('hms_student_profiles');
         $result = $db->loadObject($this);
 
-        if (PHPWS_Error::logIfError($result)) {
+        if (\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
@@ -264,7 +268,7 @@ class RoommateProfile {
 
     public function save()
     {
-        $db = new PHPWS_DB('hms_student_profiles');
+        $db = new \PHPWS_DB('hms_student_profiles');
 
         if ($this->get_date_submitted() == NULL) {
             $this->set_date_submitted();
@@ -272,11 +276,10 @@ class RoommateProfile {
 
         $result = $db->saveObject($this);
 
-        if (PHPWS_Error::logIfError($result)) {
+        if (\PHPWS_Error::logIfError($result)) {
             throw new DatabaseException($result->toString());
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Activity_Log.php');
         HMS_Activity_Log::log_activity(UserStatus::getUsername(), ACTIVITY_PROFILE_CREATED, UserStatus::getUsername(), '');
 
         return $result;

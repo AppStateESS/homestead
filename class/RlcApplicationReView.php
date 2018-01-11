@@ -1,12 +1,14 @@
 <?php
 
+namespace Homestead;
+
 /**
  * View class for displaying an existing RLC application.
  *
  * @author jbooker
  * @package HMS
  */
-class RlcApplicationReView extends hms\View {
+class RlcApplicationReView extends View {
 
     private $student;
     private $application;
@@ -17,11 +19,7 @@ class RlcApplicationReView extends hms\View {
     }
 
     public function show(){
-        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Application.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-
-        Layout::addPageTitle("RLC Application Review");
+        \Layout::addPageTitle("RLC Application Review");
 
         $tags = array();
 
@@ -70,11 +68,11 @@ class RlcApplicationReView extends hms\View {
 
         // If this application is denied and the person logged in is an admin, show a warning
         if($this->application->isDenied() && UserStatus::isAdmin()){
-            NQ::simple('hms', hms\NotificationView::WARNING, 'This application has been denied.');
+            \NQ::simple('hms', NotificationView::WARNING, 'This application has been denied.');
         }
 
         // Show options depending of status of application.
-        if(UserStatus::isAdmin() && Current_User::allow('hms', 'approve_rlc_applications')){
+        if(UserStatus::isAdmin() && \Current_User::allow('hms', 'approve_rlc_applications')){
             if(!$this->application->denied && !HMS_RLC_Assignment::checkForAssignment($this->student->getUsername(), Term::getSelectedTerm())){
                 // Approve application for the community selected from dropdown
                 $approvalForm = $this->getApprovalForm();
@@ -85,7 +83,7 @@ class RlcApplicationReView extends hms\View {
             }
         }
 
-        return PHPWS_Template::process($tags, 'hms', 'student/rlc_application.tpl');
+        return \PHPWS_Template::process($tags, 'hms', 'student/rlc_application.tpl');
     }
 
     /**
@@ -109,7 +107,7 @@ class RlcApplicationReView extends hms\View {
      */
     private function getApprovalForm()
     {
-        $approveForm = new PHPWS_Form('approve_form');
+        $approveForm = new \PHPWS_Form('approve_form');
         $approveForm->addSubmit('approve', 'Approve');
         $approveForm->addCssClass('approve', 'btn btn-md btn-success');
         $approveCmd = CommandFactory::getCommand('AssignRlcApplicants');

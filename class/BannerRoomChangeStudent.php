@@ -1,5 +1,7 @@
 <?php
 
+namespace Homestead;
+
 /**
  * Class used to represent room changes for the Banner web Service
  *
@@ -21,7 +23,7 @@ class BannerRoomChangeStudent {
     private $oldBed;
     private $newBed;
 
-    public function __construct(Student $student, HMS_Bed $oldBed, HMS_Bed $newBed)
+    public function __construct(Student $student, Bed $oldBed, Bed $newBed)
     {
         $this->student = $student;
         $this->oldBed = $oldBed;

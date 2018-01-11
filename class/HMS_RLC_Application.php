@@ -1,5 +1,12 @@
 <?php
 
+namespace Homestead;
+
+use \Homestead\Exception\StudentNotFoundException;
+use \Homestead\Exception\DatabaseException;
+use \PHPWS_Error;
+use \PHPWS_DB;
+
 /**
  * The HMS_RLC_Application class
  * Implements the RLC_Application object and methods to load/save
@@ -12,9 +19,6 @@
 // RLC application types
 define('RLC_APP_FRESHMEN', 'freshmen');
 define('RLC_APP_RETURNING', 'returning');
-
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'HMS_Item.php');
 
 class HMS_RLC_Application extends HMS_Item
 {
@@ -90,9 +94,6 @@ class HMS_RLC_Application extends HMS_Item
 
     public function getAdminPagerTags()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('hms', 'Term.php');
-
         $student = StudentFactory::getStudentByUsername($this->username, Term::getCurrentTerm());
 
         $rlc_list = HMS_Learning_Community::getRlcList();
@@ -127,9 +128,6 @@ class HMS_RLC_Application extends HMS_Item
 
     public function applicantsReport()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-
         $term = Term::getSelectedTerm();
 
         $rlc_list = HMS_Learning_Community::getRlcList();
@@ -160,8 +158,21 @@ class HMS_RLC_Application extends HMS_Item
 
         $row['email']               = $student->getUsername() . '@appstate.edu';
         $row['first_chocie']        = $rlc_list[$this->getFirstChoice()];
-        $row['second_choice']       = $rlc_list[$this->getSecondChoice()];
-        $row['third_choice']        = $rlc_list[$this->getThirdChoice()];
+
+        $secondChoice = $this->getSecondChoice();
+        if(is_null($secondChoice) || $secondChoice == '') {
+            $row['second_choice'] = '';
+        } else {
+            $row['second_choice'] = $rlc_list[$this->getSecondChoice()];
+        }
+
+        $thirdChoice = $this->getThirdChoice();
+        if(is_null($thirdChoice) || $thirdChoice == '') {
+            $row['third_choice'] = '';
+        } else {
+            $row['third_choice'] = $rlc_list[$this->getThirdChoice()];
+        }
+
         $row['application_date']    = $application_date;
         $row['denied']              = (isset($this->denied) && $this->denied == 0) ? 'no' : 'yes';
 
@@ -170,7 +181,6 @@ class HMS_RLC_Application extends HMS_Item
 
     public function getDeniedPagerTags()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
         $student = StudentFactory::getStudentByUsername($this->username, $this->term);
 
         $tags = array();
@@ -206,9 +216,6 @@ class HMS_RLC_Application extends HMS_Item
      */
     public function viewByRLCExportFields()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-
         $row = array();
 
         // Get the Student object
@@ -217,7 +224,7 @@ class HMS_RLC_Application extends HMS_Item
         }catch(StudentNotFoundException $e){
             // Catch the StudentNotFound exception in the odd case that someone doesn't exist.
             // Show a warning message and skip the rest of the method
-            NQ::simple('hms', hms\NotificationView::WARNING, "No student found with username: {$this->username}.");
+            \NQ::simple('hms', NotificationView::WARNING, "No student found with username: {$this->username}.");
             $row['username'] = $this->username;
             $row['name'] = 'UNKNOWN - INVALID';
             return $tags;
@@ -257,8 +264,6 @@ class HMS_RLC_Application extends HMS_Item
 
         /*** Roommates ***/
         // Show all possible roommates for this application
-        PHPWS_Core::initModClass('hms', 'HMS_Roommate.php');
-
         $allRoommates = HMS_Roommate::get_all_roommates($this->username, $this->term);
         $row['roommates'] = 'N/A'; // Default text
 
@@ -285,7 +290,7 @@ class HMS_RLC_Application extends HMS_Item
 
     /**
      * Check to see if an application already exists for the specified user. Returns false if no application exists.
-     * If an application does exist, an associative array containing that row is returned. In the case of a db error, a PEAR
+     * If an application does exist, an associative array containing that row is returned. In the case of a db error, a \PEAR
      * error object is returned.
      * @param include_denied Controls whether or not denied applications are returned
      * TODO: Deprecate this and/or move to RlcApplicationFactory
@@ -392,10 +397,7 @@ class HMS_RLC_Application extends HMS_Item
     //TODO move this!!
     public static function denied_pager()
     {
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initCoreClass('DBPager.php');
-
-        $pager = new DBPager('hms_learning_community_applications', 'HMS_RLC_Application');
+        $pager = new \DBPager('hms_learning_community_applications', '\Homestead\HMS_RLC_Application');
 
         $pager->db->addWhere('term', Term::getSelectedTerm());
         $pager->db->addWhere('denied', 1); // show only denied applications
@@ -609,8 +611,4 @@ class HMS_RLC_Application extends HMS_Item
         $this->denied_email_sent = $value;
     }
 
-}
-
-class RlcApplicationRestored extends HMS_RLC_Application {
-    public function __construct(){}
 }

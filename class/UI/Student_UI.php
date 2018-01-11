@@ -1,5 +1,14 @@
 <?php
 
+namespace Homestead\UI;
+
+use \Homestead\HMS_Term;
+use \Homestead\HMS_SOAP;
+use \Homestead\HMS_Assignment;
+use \Homestead\HMS_Learning_Community;
+use \Homestead\HMS_RLC_Assignment;
+use \Homestead\HMS_Movein_Time;
+
 /**
  * Student_UI.php
  * A class for consolidating the the methods for student UI/Interface handling.
@@ -9,13 +18,6 @@ class HMS_Student_UI{
 
     public function show_verify_assignment()
     {
-        PHPWS_Core::initModClass('hms', 'HMS_Term.php');
-        PHPWS_Core::initModClass('hms', 'HMS_SOAP.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Learning_Community.php');
-        PHPWS_Core::initModClass('hms', 'HMS_RLC_Assignment.php');
-        PHPWS_Core::initModClass('hms', 'HMS_Movein_Time.php');
-
         $tpl = array();
 
         $assignment = HMS_Assignment::get_assignment($_SESSION['asu_username'], $_SESSION['application_term']);
@@ -70,8 +72,8 @@ class HMS_Student_UI{
             $tpl['RLC'] = 'You have been assigned to the ' . $rlc_list[$rlc_assignment['rlc_id']];
         }
 
-        $tpl['MENU_LINK'] = PHPWS_Text::secureLink('Back to Main Menu', 'hms', array('type'=>'student', 'op'=>'show_main_menu'));
+        $tpl['MENU_LINK'] = \PHPWS_Text::secureLink('Back to Main Menu', 'hms', array('type'=>'student', 'op'=>'show_main_menu'));
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/verify_assignment.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/verify_assignment.tpl');
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
-class UpdateEmergencyContactMenuBlockView extends hms\View {
+namespace Homestead;
+
+class UpdateEmergencyContactMenuBlockView extends View {
 
     private $student;
     private $startDate;
@@ -19,7 +21,6 @@ class UpdateEmergencyContactMenuBlockView extends hms\View {
     {
         $tpl = array();
 
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
 
         if (is_null($this->application)) {      // No application
@@ -38,6 +39,6 @@ class UpdateEmergencyContactMenuBlockView extends hms\View {
             $tpl['UPDATE_CONTACT'] = $cmd->getLink('update your emergency contact info');
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/updateEmergencyContactMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/updateEmergencyContactMenuBlock.tpl');
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
-class TermsConditionsUploadView extends hms\View{
+namespace Homestead;
+
+class TermsConditionsUploadView extends View{
 
     private $term;
     private $type;
@@ -8,10 +10,10 @@ class TermsConditionsUploadView extends hms\View{
     public function __construct($term, $type)
     {
         if(is_null($term)) {
-            throw new InvalidArgumentException('term cannot be null.');
+            throw new \InvalidArgumentException('term cannot be null.');
         }
         if($type != 'txt' && $type != 'pdf') {
-            throw new InvalidArgumentException('type must be either txt or pdf');
+            throw new \InvalidArgumentException('type must be either txt or pdf');
         }
 
         $this->term = $term;
@@ -23,7 +25,7 @@ class TermsConditionsUploadView extends hms\View{
         $term = $this->term;
         $type = $this->type;
 
-        $form = new PHPWS_Form('upload_terms_conditions');
+        $form = new \PHPWS_Form('upload_terms_conditions');
 
         $cmd = CommandFactory::getCommand('UploadTermsConditions');
         $cmd->setTerm($term);
@@ -40,8 +42,6 @@ class TermsConditionsUploadView extends hms\View{
                         ($type == 'pdf' ? 'PDF' : 'SOMETHING WENT WRONG')) .
                         ' file to upload.';
 
-        return PHPWS_Template::process($tpl, 'hms', 'admin/TermsConditionsUploadView.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'admin/TermsConditionsUploadView.tpl');
     }
 }
-
-

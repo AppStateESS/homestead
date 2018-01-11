@@ -1,9 +1,8 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'HMS_Util.php');
-PHPWS_Core::initModClass('hms', 'ApplicationFeature.php');
+namespace Homestead;
 
-class EmergencyContactFormView extends hms\View {
+class EmergencyContactFormView extends View {
 
     private $student;
     private $application;
@@ -18,8 +17,8 @@ class EmergencyContactFormView extends hms\View {
 
     public function show()
     {
-        PHPWS_Core::initCoreClass('Form.php');
-        $form = new PHPWS_Form();
+        \PHPWS_Core::initCoreClass('Form.php');
+        $form = new \PHPWS_Form();
 
         $submitCmd = CommandFactory::getCommand('EmergencyContactFormSubmit');
         $submitCmd->setTerm($this->term);
@@ -32,6 +31,8 @@ class EmergencyContactFormView extends hms\View {
         ****************/
         $tpl['TERM']			= Term::toString($this->term);
         $tpl['STUDENT_NAME']    = $this->student->getFullName();
+        $form->addText('cell_phone');
+        $form->addCssClass('cell_phone', 'form-control');
 
         /*********************
          * Emergency Contact *
@@ -48,6 +49,7 @@ class EmergencyContactFormView extends hms\View {
         $form->addCssClass('emergency_medical_condition', 'form-control');
 
         if(!is_null($this->application)){
+            $form->setValue('cell_phone', $this->application->getCellPhone());
             $form->setValue('emergency_contact_name', $this->application->getEmergencyContactName());
             $form->setValue('emergency_contact_relationship', $this->application->getEmergencyContactRelationship());
             $form->setValue('emergency_contact_phone', $this->application->getEmergencyContactPhone());
@@ -77,8 +79,8 @@ class EmergencyContactFormView extends hms\View {
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 
-        Layout::addPageTitle("Emergency Contact Form");
+        \Layout::addPageTitle("Emergency Contact Form");
 
-        return PHPWS_Template::process($tpl,'hms','student/emergency_contact_form.tpl');
+        return \PHPWS_Template::process($tpl,'hms','student/emergency_contact_form.tpl');
     }
 }

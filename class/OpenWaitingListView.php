@@ -1,12 +1,12 @@
 <?php
 
-PHPWS_Core::initModClass('hms', 'WaitingListApplication.php');
+namespace Homestead;
 
-class OpenWaitingListView extends hms\View {
+class OpenWaitingListView extends View {
 
     public function show()
     {
-        Layout::addPageTitle("Open Waiting List");
+        \Layout::addPageTitle("Open Waiting List");
 
         return WaitingListApplication::waitingListPager();
     }

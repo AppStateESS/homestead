@@ -1,6 +1,8 @@
 <?php
 
-class DamageMenuBlockView extends hms\View {
+namespace Homestead;
+
+class DamageMenuBlockView extends View {
 
     private $student;
     private $startDate;
@@ -19,8 +21,6 @@ class DamageMenuBlockView extends hms\View {
 
     public function show()
     {
-        PHPWS_Core::initModClass('hms', 'RoomChangeParticipantFactory.php');
-
         $checkin = CheckinFactory::getCheckinByBannerId($this->student->getBannerId(), $this->term);
 
 
@@ -31,7 +31,6 @@ class DamageMenuBlockView extends hms\View {
             $end = strtotime(RoomDamage::SELF_REPORT_DEADLINE, $checkin->getCheckinDate());
         }
 
-        PHPWS_Core::initModClass('hms', 'HMS_Util.php');
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
 
         if (time() > $end){ // too late
@@ -51,6 +50,6 @@ class DamageMenuBlockView extends hms\View {
             $tpl['DEADLINE'] = HMS_Util::get_long_date_time($end);
         }
 
-        return PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/roomDamageMenuBlock.tpl');
+        return \PHPWS_Template::process($tpl, 'hms', 'student/menuBlocks/roomDamageMenuBlock.tpl');
     }
 }

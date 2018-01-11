@@ -1,5 +1,9 @@
 <?php
 
+namespace Homestead;
+
+use \phpws2\Database;
+
 define('HMS_CACHE_ERROR_THRESHOLD', 30);
 
 /**
@@ -15,11 +19,8 @@ class NightlyCache
     public static function execute()
     {
         session_start();
-        PHPWS_Core::initModClass('hms', 'Term.php');
-        PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-        PHPWS_Core::initModClass('users', 'Users.php');
-        PHPWS_Core::initModClass('users', 'Current_User.php');
-        PHPWS_Core::initModClass('hms', 'UserStatus.php');
+        \PHPWS_Core::initModClass('users', 'Users.php');
+        \PHPWS_Core::initModClass('users', 'Current_User.php');
 
         $errors = null;
         $term = Term::getSelectedTerm();
@@ -34,7 +35,7 @@ class NightlyCache
         $t2->addFieldConditional('term', $term);
         $t2->addField('asu_username');
 
-        $union = new \Database\Union(array($db1, $db2));
+        $union = new \phpws2\Database\Union(array($db1, $db2));
         $result = $union->select();
 
         if (empty($result)) {
@@ -44,7 +45,7 @@ class NightlyCache
         $count = 0;
         $error_count = 0;
 
-        $_SESSION['User'] = new PHPWS_User;
+        $_SESSION['User'] = new \PHPWS_User;
         $_SESSION['User']->username= 'nightlycache';
         $_SESSION['User']->display_name = 'Nightly Cache';
 
@@ -53,7 +54,7 @@ class NightlyCache
             try {
                 //asking for the student updates the cache since the ttl is zero
                 StudentFactory::getStudentByUsername($row['username'], $term);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $errors[] = $e->getMessage() . "\n";
                 $error_count++;
             }

@@ -1,4 +1,7 @@
 <?php
+
+namespace Homestead;
+
 /**
  * ReviewHallNotificationMessageView
  *
@@ -8,9 +11,8 @@
  * @package mod
  * @subpackage hms
  */
-PHPWS_Core::initModClass('hms', 'HMS_Floor.php');
 
-class ReviewHallNotificationMessageView extends hms\View {
+class ReviewHallNotificationMessageView extends View {
 
     private $subject;
     private $body;
@@ -26,29 +28,28 @@ class ReviewHallNotificationMessageView extends hms\View {
     }
 
     public function show(){
-        PHPWS_Core::initModClass('hms', 'HMS_Residence_Hall.php');
         $tpl = array();
 
-        $template = new PHPWS_Template('hms');
+        $template = new \PHPWS_Template('hms');
         $template->setFile('admin/review_hall_email.tpl');
 
         if(is_array($this->floors)){
             foreach($this->floors as $floorId){
-                $floor = new HMS_Floor();
+                $floor = new Floor();
                 $floor->id = $floorId;
                 $floor->load();
                 $floor->loadHall();
                 $tpl['halls'][$floor->_hall->getHallName()][] = 'Floor '.$floor->getFloorNumber();
             }
         } else {
-            $floor = new HMS_Floor();
+            $floor = new Floor();
             $floor->id = $this->floors;
             $floor->load();
             $floor->loadHall();
             $tpl['halls'][$floor->_hall->getHallName()][] = 'Floor '.$floor->getFloorNumber();
         }
 
-        $tpl['FROM']    = ($this->anonymous && Current_User::allow('hms', 'anonymous_notifications')) ? FROM_ADDRESS : (Current_User::getUsername() . '@' . DOMAIN_NAME);
+        $tpl['FROM']    = ($this->anonymous && \Current_User::allow('hms', 'anonymous_notifications')) ? FROM_ADDRESS : (\Current_User::getUsername() . '@' . DOMAIN_NAME);
         $tpl['SUBJECT'] = $this->subject;
         $tpl['BODY']    = preg_replace('/\n/', '<br />', $this->body);
 
@@ -65,7 +66,7 @@ class ReviewHallNotificationMessageView extends hms\View {
         */
 
 
-        $form2 = new PHPWS_Form('review_email');
+        $form2 = new \PHPWS_Form('review_email');
 
         $sendCmd = CommandFactory::getCommand('SendNotificationEmails');
         $sendCmd->initForm($form2);
