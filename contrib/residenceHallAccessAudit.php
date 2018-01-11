@@ -75,13 +75,17 @@ $_SESSION['User'] = $user;
 // Include more HMS specific stuff
 require_once './mod/hms/inc/defines.php';
 require_once './inc/hms_defines.php';
-PHPWS_Core::initModClass('hms', 'PdoFactory.php');
-PHPWS_Core::initModClass('hms', 'UserStatus.php');
 
-PHPWS_Core::initModClass('hms', 'StudentFactory.php');
-PHPWS_Core::initModClass('hms', 'Term.php');
-PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
-PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
+require_once(PHPWS_SOURCE_DIR . 'mod/hms/HomesteadAutoLoader.php');
+spl_autoload_register(array('HomesteadAutoLoader', 'HomesteadLoader'));
+
+//PHPWS_Core::initModClass('hms', 'PdoFactory.php');
+//PHPWS_Core::initModClass('hms', 'UserStatus.php');
+
+// PHPWS_Core::initModClass('hms', 'StudentFactory.php');
+// PHPWS_Core::initModClass('hms', 'Term.php');
+// PHPWS_Core::initModClass('hms', 'HMS_Assignment.php');
+// PHPWS_Core::initModClass('hms', 'RoomChangeRequestFactory.php');
 
 // Open the input file, read into an array
 $lines = file($inputFileName);
@@ -89,42 +93,63 @@ $lines = file($inputFileName);
 // Open output file, for writing by fputcsv later
 $outputFile = fopen($outputFileName, 'w');
 
+$firstLine = true;
+
 // Loop over each line in the file
 foreach ($lines as $line){
 
-    // Initalize an array for this line of output
-    $outputFields = array();
+    // Skip the first line of the file (column headers)
+    if($firstLine){
+        $firstLine = false;
+        continue;
+    }
 
     // Break the row apart info separate fields
     $fields = explode(',', $line);
 
-    echo "Banner Id: {$fields[0]}\n";
+    echo "{$fields[0]}: ";
+
+    // Initalize an array for this line of output
+    $outputFields = $fields;
+    $outputFields[3] = trim($outputFields[3]);
 
     // Get a student object, given the banner id (file the input file)
-    //$student = StudentFactory::getStudentById($fields[0], $term);
-
-    // Add basic data to file output
-    //$outputFields[] = $fields[0]; // Banner ID
-    //$outputFields[] = $student->getFirstName(); // Name
-    //$outputFields[] = $student->getLastName();
+    $student = \Homestead\StudentFactory::getStudentByBannerID($fields[0], $term);
 
     // Get an assignment using the student's banner ID and term. Returns null if not assigned.
-    //$assignment = HMS_Assignment::getAssignmentByBannerId($student->getBannerId(), $term);
+    $assignment = \Homestead\HMS_Assignment::getAssignmentByBannerId($student->getBannerId(), $term);
 
-    /*
     if($assignment !== null){
         // Student is assigned..
-        // TODO compare assignments (if match then continue)
+        $hallCode = trim($assignment->get_banner_building_code());
+
+        $accessCode = trim($fields[3]);
+
+        // Compare audit file's hall code against actual assignment's hall code
+        if($hallCode === $accessCode){
+            // Student is assigned to the hall they have access to
+            echo "Assigned... OK\n";
+            $outputFields[4] = 'OK';
+
+            continue; // Skip outputting this person because they're fine
+        } else {
+            // Student is assigned to some other place, but they have this access
+            echo "Assigned somewhere else: $hallCode \n";
+            $outputFields[4] = 'Not Assigned Here - ' . $hallCode;
+
+            // Get a pending room change using the Student object and term. Returns null if no room change is pending for this student.
+            $pendingRoomChange = \Homestead\RoomChangeRequestFactory::getPendingByStudent($student, $term);
+
+            if($pendingRoomChange !== null){
+                $outputFields[5] = 'Room Change Pending';
+            }
+        }
+
     } else {
-        // Student is not assigned...
-        // TODO
-    }*/
-
-    // Get a pending room change using the Student object and term. Returns null if no room change is pending for this student.
-    //$pendingRoomChange = RoomChangeRequestFactory::getPendingByStudent($student, $term);
-
-    // To skip this row
-    //continue;
+        // Person is not assigned...
+        echo "Not Assigned!!\n";
+        $outputFields[4] = 'Not Assigned.';
+    }
 
     // Write this row to the outputfile
     fputcsv($outputFile, $outputFields);
