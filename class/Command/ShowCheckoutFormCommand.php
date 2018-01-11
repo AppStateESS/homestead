@@ -40,7 +40,7 @@ class ShowCheckoutFormCommand extends Command {
 
     public function execute(CommandContext $context)
     {
-        $term = Term::getCurrentTerm();
+        $term = Term::getSelectedTerm();
 
         $bannerId = $context->get('bannerId');
         $hallId = $context->get('hallId');
