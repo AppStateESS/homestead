@@ -26,6 +26,9 @@ class LotteryConfirmCommand extends Command {
     private $roomId;
     private $mealPlan;
 
+    // TODO: Also defined in HMS_Lottery. Choose one of the other.
+    const INVITE_TTL_HRS = 48;
+
     public function setRoomId($id){
         $this->roomId = $id;
     }
@@ -181,7 +184,7 @@ class LotteryConfirmCommand extends Command {
             }
 
             # Reserve the bed for the roommate
-            $expires_on = time() + (INVITE_TTL_HRS * 3600);
+            $expires_on = time() + (self::INVITE_TTL_HRS * 3600);
             $bed = new Bed($bed_id);
             if(!$bed->lottery_reserve($username, $student->getUsername(), $expires_on)){
                 \NQ::smiple('hms', NotificationView::WARNING, "You were assigned, but there was a problem reserving space for your roommates. Please contact University Housing.");
