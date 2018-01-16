@@ -13,7 +13,7 @@
 </style>
 
 <script type="text/javascript">
-    var sourceHttp = {SOURCE_HTTP};
+    var sourceHttp = '{SOURCE_HTTP}';
 </script>
 
 <div class="container">
