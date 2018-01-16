@@ -62,6 +62,7 @@ class LotteryRoommateRequestView extends View {
             // Housing application complete, go straight to confirming roommate
             $submitCmd = CommandFactory::getCommand('LotteryShowConfirmRoommateRequest');
             $submitCmd->setRoommateRequestId($this->request['id']);
+            $_SESSION['application_data'] = get_object_vars($this->housingApplication);
         } else {
         	// No housing application, goto self-select start page for contract and emg contact
             $submitCmd = CommandFactory::getCommand('RlcSelfAssignStart');
