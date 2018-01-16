@@ -7,6 +7,7 @@ class AssignByFloor extends React.Component{
 
     constructor(props) {
         super(props);
+
         this.state = {
             hallList: [],
             assignmentOptions: [],
@@ -126,9 +127,20 @@ class Halls extends React.Component{
         };
         this.loadFloors = this.loadFloors.bind(this);
         this.updateHall = this.updateHall.bind(this);
+        this.resetState = this.resetState.bind(this);
+    }
+    resetState() {
+        this.setState({
+            hallName: 'Choose a hall',
+            selected: false,
+            icon: 'fa-building-o',
+            floors: [],
+            floorDisabled: true,
+            timestamp: Date.now()
+        });
     }
     loadFloors(hallId) {
-        this.getInitialState();
+        this.resetState();
         $.getJSON('index.php', {
             module: 'hms',
             action: 'JSONGetFloors',
@@ -445,7 +457,7 @@ class AssignmentForm extends React.Component{
 }
 
 
-class Assigned extends React.component{
+class Assigned extends React.Component{
     render() {
         return (
             <div className="alert alert-success">
