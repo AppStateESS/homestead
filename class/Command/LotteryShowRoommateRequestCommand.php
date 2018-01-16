@@ -7,6 +7,7 @@ use \Homestead\HousingApplicationFactory;
 use \Homestead\UserStatus;
 use \Homestead\RlcMembershipFactory;
 use \Homestead\LotteryRoommateRequestView;
+use \Homestead\StudentFactory;
 
 class LotteryShowRoommateRequestCommand extends Command {
 

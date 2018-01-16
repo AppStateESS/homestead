@@ -12,6 +12,7 @@ use \Homestead\HMS_Lottery;
 use \Homestead\HMS_Activity_Log;
 use \Homestead\RlcMembershipFactory;
 use \Homestead\RlcAssignmentSelfAssignedState;
+use \Homestead\HousingApplicationFactory;
 
 class LotteryConfirmRoommateRequestCommand extends Command {
 
