@@ -23,6 +23,15 @@ class DamageMenuBlockView extends View {
     {
         $checkin = CheckinFactory::getCheckinByBannerId($this->student->getBannerId(), $this->term);
 
+        // If there's no fall checkin, check for a checkin in the following Spring term (could be that we're looking a student menu for Fall that shows both fall-spring assignments)
+        if($checkin === null && Term::getTermSem($this->term) == TERM_FALL){
+            $checkin = CheckinFactory::getCheckinByBannerId($this->student->getBannerId(), Term::getNextTerm($this->term));
+
+            // If that worked, change the term to Spring
+            if($checkin !== null){
+                $this->term = Term::getNextTerm($this->term);
+            }
+        }
 
         $tpl = array();
         $end = 0;
@@ -33,7 +42,14 @@ class DamageMenuBlockView extends View {
 
         $tpl['DATES'] = HMS_Util::getPrettyDateRange($this->startDate, $this->endDate);
 
-        if (time() > $end){ // too late
+        if($checkin === null) { // Student has not checked in yet.
+            $tpl['ICON'] = FEATURE_LOCKED_ICON;
+            if($end === 0) {
+                $tpl['NO_CHECKIN'] = ''; // Dummy template var, text is in template
+            } else {
+                $tpl['END_DEADLINE'] = HMS_Util::get_long_date_time($end);
+            }
+        } else if (time() > $end) { // too late
             $tpl['ICON'] = FEATURE_LOCKED_ICON;
             if($end === 0) {
                 $tpl['NO_CHECKIN'] = ''; // Dummy template var, text is in template
@@ -41,7 +57,7 @@ class DamageMenuBlockView extends View {
                 $tpl['END_DEADLINE'] = HMS_Util::get_long_date_time($end);
             }
 
-        } else {
+        } else { // Damage reporting available
             $tpl['ICON'] = FEATURE_OPEN_ICON;
             $addRoomDmgsCmd = CommandFactory::getCommand('ShowStudentAddRoomDamages');
             $addRoomDmgsCmd->setTerm($this->term);
