@@ -30,23 +30,24 @@ class RoomDamageBox extends React.Component{
     }
     addUnsavedDamages(type, sideInput, noteInput){
         var options = this.state.options
-        var optLen = options.length;
+
         var categ = '';
         var dmgTypeDesc = '';
         var found = false;
-        for(var i = 0; i < optLen; i++){
+
+        for(var i = 0; i < options.length; i++){
             if(!found){
                 var dmgTypeArr = options[i].DamageTypes;
-                var dmgTypeArrLen = dmgTypeArr.length
-                for(var x = 0; x < dmgTypeArrLen; x++){
-                    if(dmgTypeArr[x].id === type){
+                for(var j = 0; j < dmgTypeArr.length; j++){
+                    if(dmgTypeArr[j].id == type){ // NB: Must be double equals, not triple
                         categ = options[i].category;
-                        dmgTypeDesc = dmgTypeArr[x].description;
+                        dmgTypeDesc = dmgTypeArr[j].description;
                         found = true;
                     }
                 }
             }
         }
+
         var newDamageNode = {dmgTypeId: type, category: categ, description: dmgTypeDesc, side: sideInput, note: noteInput};
         var newDmgsArr = this.state.newDamages;
         newDmgsArr.push(newDamageNode);
@@ -214,21 +215,20 @@ class AddDamageBox extends React.Component{
         this.add = this.add.bind(this);
     }
     add(){
-        var dmgTypeChoice = this.refs.damageType.getDOMNode();
-        var sideChoice = this.refs.side.getDOMNode();
-        var descInput = this.refs.desc.getDOMNode();
-        var dmgType = dmgTypeChoice.value;
-        var side = sideChoice.value;
-        var desc = descInput.value;
+
+        var dmgType = this.refs.damageType.value;
+        var side = this.refs.side.value;
+        var desc = this.refs.desc.value;
+
         var dmgTypeUnset = (dmgType === 0);
         var descUnset = (desc === "");
 
         // If the form data is valid, then update state
         if(!dmgTypeUnset && !descUnset){
             // Reset the form for the next damage
-            this.refs.damageType.getDOMNode().value = '0';
-            this.refs.side.getDOMNode().value = 'Both';
-            this.refs.desc.getDOMNode().value = '';
+            this.refs.damageType.value = '0';
+            this.refs.side.value = 'Both';
+            this.refs.desc.value = '';
 
             this.props.addDamage(dmgType, side, desc);
         }
