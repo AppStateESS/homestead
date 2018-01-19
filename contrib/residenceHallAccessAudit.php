@@ -114,7 +114,13 @@ foreach ($lines as $line){
     $outputFields[3] = trim($outputFields[3]);
 
     // Get a student object, given the banner id (file the input file)
-    $student = \Homestead\StudentFactory::getStudentByBannerID($fields[0], $term);
+    try {
+        $student = \Homestead\StudentFactory::getStudentByBannerID($fields[0], $term);
+    }catch(\Exception $e){
+        $outputFields[4] = 'Soap Exception: Banner ID may not exist.';
+        fputcsv($outputFile, $outputFields);
+        continue;
+    }
 
     // Get an assignment using the student's banner ID and term. Returns null if not assigned.
     $assignment = \Homestead\HMS_Assignment::getAssignmentByBannerId($student->getBannerId(), $term);
