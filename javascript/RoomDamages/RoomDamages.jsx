@@ -188,9 +188,9 @@ class RoomDamagesForm extends React.Component{
         this.hideForm = this.hideForm.bind(this);
     }
     add() {
-        var dmgType = this.refs.damageTypeChoices.getDOMNode().value;
-        var side = this.refs.damageSideChoices.getDOMNode().value;
-        var desc = this.refs.damageDescription.getDOMNode().value;
+        var dmgType = this.refs.damageTypeChoices.value;
+        var side = this.refs.damageSideChoices.value;
+        var desc = this.refs.damageDescription.value;
         this.props.onAdd(dmgType, side, desc);
     }
     hideForm() {
