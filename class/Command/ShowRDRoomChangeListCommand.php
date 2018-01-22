@@ -33,7 +33,7 @@ class ShowRDRoomChangeListCommand extends Command {
         $floors = array();
 
         foreach ($memberships as $member) {
-            if ($member['class'] == 'hms_residence_hall') {
+            if ($member['class'] == 'residencehall') {
                 $hall = new ResidenceHall($member['instance']);
 
                 // Filter out halls that aren't in the current term
@@ -43,7 +43,7 @@ class ShowRDRoomChangeListCommand extends Command {
 
                 $floors = array_merge($floors, $hall->getFloors());
 
-            } else if ($member['class'] == 'hms_floor') {
+            } else if ($member['class'] == 'floor') {
                 $f = new Floor($member['instance']);
 
                 // Filter out floors that aren't in the current term
