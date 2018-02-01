@@ -53,7 +53,6 @@ class HMS_Email{
 
     public static function sendMessage(Student $student, string $messageType, string $subject, string $content){
 
-        $textContent = $content;
         $htmlContent = Markdown::defaultTransform($content);
 
         $to = array();
@@ -64,7 +63,7 @@ class HMS_Email{
         $message = new MandrillMessage($mandrillKey, $to, array(), FROM_ADDRESS, SYSTEM_NAME, $subject, $content, $htmlContent, array('bannerId'=>$student->getBannerId()));
         $result = $message->send();
 
-        EmailLogFactory::logMessage($student, $result[0], $messageType);
+        EmailLogFactory::logMessage($student, $result[0], $messageType, $content);
     }
 
     /*

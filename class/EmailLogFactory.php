@@ -3,18 +3,20 @@ namespace Homestead;
 
 class EmailLogFactory {
 
-    public static function logMessage(Student $student, Array $messageResult, string $messageType)
+    public static function logMessage(Student $student, Array $messageResult, string $messageType, string $content)
     {
         $db = PdoFactory::getPdoInstance();
 
-        $query = "INSERT INTO hms_email_log VALUES (:bannerId, :messageId, :messageType, :username);";
+        $query = "INSERT INTO hms_email_log (banner_id, message_id, message_type, username, time_made)
+                  VALUES (:bannerId, :messageId, :messageType, :username, :content, :currentTime);";
 
         $stmt = $db->prepare($query);
         $stmt->execute(array(
-                'bannerId' => $student->getBannerId(),
-                'messageId' => $messageResult['_id'],
+                'bannerId'    => $student->getBannerId(),
+                'messageId'   => $messageResult['_id'],
                 'messageType' => $messageType,
-                'username' => $student->getUsername()
+                'username'    => $student->getUsername(),
+                'currentTime' => time()
         ));
     }
 
