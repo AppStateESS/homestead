@@ -25,7 +25,7 @@ chdir(PHPWS_SOURCE_DIR);
 // Define these to avoid errors in sanity checking later
 $_SERVER['REQUEST_URI'] = 'cli.php';
 $_SERVER['HTTP_HOST'] = 'localhost';
-$_SERVER['SERVER_NAME'] = 'host.domain.com'; // NB: Pass SERVER_NAME="blah.blah" on the command line *before* the php executable
+//$_SERVER['SERVER_NAME'] = 'host.domain.com'; // NB: Pass SERVER_NAME="blah.blah" on the command line *before* the php executable
 
 // Include PHPWS bootstrapping code
 require_once PHPWS_SOURCE_DIR . 'config/core/source.php';
