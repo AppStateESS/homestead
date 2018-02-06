@@ -47,7 +47,7 @@ try {
     $classNames = $args['className'];
     foreach($classNames as $className){
 
-      $classNameWithNS = '\Homestead\Scheduled\\' . $args['className'];
+      $classNameWithNS = '\Homestead\Scheduled\\' . $className;
 
       \PHPWS_Core::initModClass('hms', 'Scheduled/' . $className . '.php');
 
