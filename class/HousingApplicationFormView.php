@@ -48,7 +48,7 @@ class HousingApplicationFormView extends View
         $sem = Term::getTermSem($this->term);
 
         if($sem == TERM_FALL){
-            $tpl['SPRING_ROOMMATE_NOTICE'] = ''; // Dummy var to trigger template block
+            //$tpl['SPRING_ROOMMATE_NOTICE'] = ''; // Dummy var to trigger template block
         }
 
         /**************
