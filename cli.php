@@ -10,7 +10,7 @@ if(php_sapi_name() !== 'cli'){
 // Expected arguments
 $args = array('phpwsConfigPath'=>'',
               'module' => '',
-              'className'=>'');
+              'className'=>array());
 $switches = array();
 
 // Process arguments into $args
@@ -44,13 +44,16 @@ $_REQUEST['module'] = $args['module'];
 
 // Try to include and run the specified file/function
 try {
-    $className = $args['className'];
-    $classNameWithNS = '\Homestead\Scheduled\\' . $args['className'];
+    $classNames = $args['className'];
+    foreach($classNames as $className){
 
-    \PHPWS_Core::initModClass('hms', 'Scheduled/' . $className . '.php');
+      $classNameWithNS = '\Homestead\Scheduled\\' . $className;
 
-    $classNameWithNS::cliExec();
+      \PHPWS_Core::initModClass('hms', 'Scheduled/' . $className . '.php');
 
+      $classNameWithNS::cliExec();
+
+    }
 }catch (\Exception $e) {
     echo "Error:\n";
     echo $e->getMessage();
@@ -89,8 +92,15 @@ function processArgs($argc, $argv, &$args, &$switches)
             continue;
         }
 
-        $args[current($args_keys)] = $arg;
-        next($args_keys);
+        if (current($args_keys) == 'className'){
+            $args[current($args_keys)][] = $arg;
+        } else {
+            $args[current($args_keys)] = $arg;
+        }
+
+        if (current($args_keys) != 'className') {
+            next($args_keys);
+        }
     }
 }
 

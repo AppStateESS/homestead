@@ -53,7 +53,6 @@ class HMS_Email{
 
     public static function sendMessage(Student $student, string $messageType, string $subject, string $content){
 
-        $textContent = $content;
         $htmlContent = Markdown::defaultTransform($content);
 
         $to = array();
