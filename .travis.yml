@@ -4,19 +4,24 @@ php:
 - 7
 matrix:
   fast_finish: true
+
 install:
 - nvm install 6
 - npm install -g yarn
 - yarn install
+
 script:
 - ".travis-build/phplint ."
+
 after_script:
 - vendor/bin/test-reporter
+
 after_success:
 - npm run build
 - rm -rf node_modules
 - tar -czf Homestead.tar.gz *
 notifications: 
+
 deploy:
   provider: releases
   skip_cleanup: true
