@@ -44,14 +44,8 @@ class MealPlanFactory {
                 if($hall->mealPlanRequired() === 1){
                     // Meal plan is required, so use standard plan
                     $planCode = MealPlan::BANNER_MEAL_STD;
-                } else {
-                    // Meal plan is optional and 'none' was requested, so we're done here
-                    return null;
                 }
             }
-
-            // We didn't have a hall param, so we can't check required status.
-            return null;
         }
 
         // Make a new MealPlan object and return it
