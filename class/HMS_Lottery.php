@@ -336,7 +336,7 @@ class HMS_Lottery {
 
             $bed = new Bed($row['bed_id']);
             $hall_room = $bed->where_am_i();
-            HMS_Email::send_lottery_roommate_reminder($row['asu_username'], $student->getName(), $row['expires_on'], $requestor->getName(), $hall_room, $year);
+            HMS_Email::send_lottery_roommate_reminder($student, $student->getName(), $row['expires_on'], $requestor->getName(), $hall_room, $year);
             HMS_Activity_Log::log_activity($row['asu_username'], ACTIVITY_LOTTERY_ROOMMATE_REMINDED, 'hms');
         }
     }
