@@ -96,17 +96,15 @@ class UpdateDocusignContractStatus {
 
     private function sendRequest(Array $envelopeIdList, $docusignClient, $guzzleClient) {
         $envelopeIdJson = json_encode(array('envelopeIds' => $envelopeIdList));
-
         $url = $docusignClient->getBaseUrl() . '/envelopes/status?envelope_ids=request_body';
-        //echo $url . "\n\n";
+        $headers = array('Content-Type' => 'application/json',
+                         'Accept' => 'application/json',
+                         'X-DocuSign-Authentication' => $docusignClient->getAuthHeader());
+
         $request = new \GuzzleHttp\Psr7\Request('PUT', $url);
-        $request->setBody($envelopeIdJson, 'application/json');
-        $request->setHeader('Content-Type', 'application/json');
-        $request->setHeader('Accept', 'application/json');
-        $request->setHeader('X-DocuSign-Authentication', $docusignClient->getAuthHeader());
 
         try{
-            $response = $guzzleClient->send($request);
+            $response = $guzzleClient->send($request, ['headers' => $headers, 'body' => $envelopeIdJson]);
             $result = $response->json();
         }catch (\GuzzleHttp\Exception\BadResponseException $e){
             throw new \Exception(print_r($e->getResponse()->json(), true));

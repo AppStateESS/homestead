@@ -44,3 +44,4 @@ bower_components
 node_modules
 assets.json
 javascript/dist/
+/nbproject/private/
