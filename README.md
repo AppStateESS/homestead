@@ -18,9 +18,9 @@ Homestead is a web-application for managing on-campus student housing.
 * Install [Composer](https://getcomposer.org/doc/00-intro.md)
 * Install dependencies with Composer -- from inside the `hms` directory: `./composer.phar install`
 * Install [Node.js](https://nodejs.org/download/) (includes npm) (Something like `sudo yum install npm` should work)
-  * ~~ Bower~~
-  * ~~ Use npm to install [Bower](http://bower.io): `sudo npm install -g bower`~~
-  * ~~ Use Bower to install dependencies -- from inside the `hms` directory: `bower install`~~
+  * ~~Bower~~
+  * ~~Use npm to install [Bower](http://bower.io): `sudo npm install -g bower`~~
+  * ~~Use Bower to install dependencies -- from inside the `hms` directory: `bower install`~~
   * Bower is deprecated. Use Yarn instead.
 * Setup the Postgresql [Fuzzy String Matching Extensions](http://www.postgresql.org/docs/9.1/static/fuzzystrmatch.html):
   * `sudo yum install postgresql-contrib`
