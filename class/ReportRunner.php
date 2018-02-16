@@ -82,12 +82,6 @@ class ReportRunner
                 exit;
             }
 
-            // Send success notification
-            $username = $report->getCreatedBy();
-            if ($username == 'jbooker') {
-                $username = 'jb67803';
-            }
-
             HMS_Email::sendReportCompleteNotification($username, $report->getFriendlyName());
         }
 

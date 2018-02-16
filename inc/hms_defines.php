@@ -1,12 +1,12 @@
 <?php
 
-define('HMS_DEBUG', false);
+define('HMS_DEBUG', true);
 
 /**************
  * Login Link *
  **************/
-define('LOGIN_TEST_FLAG', 'false');
-define('HMS_LOGIN_LINK', 'secure');
+define('LOGIN_TEST_FLAG', 'true');
+define('HMS_LOGIN_LINK', 'admin');
 
 /**********************
  * SOAP Testing Flags *
@@ -17,13 +17,13 @@ define('HMS_LOGIN_LINK', 'secure');
  * Set to true to use canned student info (no SOAP connection
  * will ever be made).
  */
-define('SOAP_INFO_TEST_FLAG', false);
+define('SOAP_INFO_TEST_FLAG', true);
 
 /**
  * Name of the SOAP override file. Only used if SOAP_INFO_TEST_FLAG is true
  */
  define('SOAP_OVERRIDE_CLASS_NAME', 'FakeSoapTable');
- //define('SOAP_OVERRIDE_CLASS_NAME', 'TestSOAP');
+ define('SOAP_OVERRIDE_CLASS_NAME', 'TestSOAP');
 
 
 /**
@@ -64,7 +64,7 @@ define('SOAP_REPORT_TEST_FLAG', false);
  * Set to true to prevent email from actually being sent.
  * Instead, it will be logged to a text file.
  */
-define('EMAIL_TEST_FLAG', false);
+define('EMAIL_TEST_FLAG', true);
 
 /* Errors */
 //ini_set('ERROR_REPORTING', E_ALL);

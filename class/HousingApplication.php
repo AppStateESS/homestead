@@ -227,7 +227,7 @@ class HousingApplication {
         } catch(\Exception $e) {
             // Send an email notification
             $send_to = array();
-            $send_to[] = 'jb67803@appstate.edu';
+            $send_to[] = 'eberhardtm@appstate.edu';
 
             $mail = new \PHPWS_Mail;
 

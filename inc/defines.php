@@ -14,7 +14,7 @@ define('EMAIL_ADDRESS', 'housing'); // user name of email account to send email 
 define('DOMAIN_NAME', 'appstate.edu'); // domain name to send email from
 define('FROM_ADDRESS', EMAIL_ADDRESS . '@' . DOMAIN_NAME); // fully qualified "from" address
 define('TO_DOMAIN', '@'. DOMAIN_NAME); // Default domain to send email to, beginning with '@'
-define('HMS_AUTOASSIGN_EMAIL', 'jb67803@appstate.edu');
+define('HMS_AUTOASSIGN_EMAIL', 'eberhardtm@appstate.edu');
 /**
  * Online/Offline Defines
  */

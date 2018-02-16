@@ -44,7 +44,7 @@ if(!$db){
 }
 
 // Get an instance of SOAP
-$soap = new PhpSOAP('jb67803', 'A');
+$soap = new PhpSOAP('eberhardtm', 'A');
 
 foreach($inputFile as $line) {
 
@@ -53,10 +53,6 @@ foreach($inputFile as $line) {
     if ($line == '') {
         continue;
     }
-
-    //$username = 'jb67803';
-    //$gender = 'M';
-
 
     $username = $soap->getUsername($bannerId);
     $student = $soap->getStudentProfile($bannerId, $args['term']);
@@ -83,7 +79,7 @@ foreach($inputFile as $line) {
     $applicationId = pg_fetch_assoc($result);
     $applicationId = $applicationId['id'];
 
-    $sql = "insert into hms_learning_community_assignment VALUES (nextval('hms_learning_community_assignment_seq'), {$args['rlcId']}, 'jb67803', $gender, $applicationId, 'new')";
+    $sql = "insert into hms_learning_community_assignment VALUES (nextval('hms_learning_community_assignment_seq'), {$args['rlcId']}, 'eberhardtm', $gender, $applicationId, 'new')";
     $result = pg_query($sql);
 
     echo "Added $bannerId.\n";

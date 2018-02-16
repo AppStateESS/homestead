@@ -17,7 +17,7 @@ class UpdateDocusignContractStatus {
         \PHPWS_Core::initModClass('users', 'Users.php');
         \PHPWS_Core::initModClass('users', 'Current_User.php');
 
-        $userId = \PHPWS_DB::getOne("SELECT id FROM users WHERE username = 'jb67803'");
+        $userId = \PHPWS_DB::getOne("SELECT id FROM users WHERE username = 'eberhardtm'");
 
         $user = new \PHPWS_User($userId);
 
