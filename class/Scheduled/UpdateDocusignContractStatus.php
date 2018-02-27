@@ -105,9 +105,9 @@ class UpdateDocusignContractStatus {
 
         try{
             $response = $guzzleClient->send($request, ['headers' => $headers, 'body' => $envelopeIdJson]);
-            $result = $response->json();
+            $result = json_decode($response->getBody(), true);
         }catch (\GuzzleHttp\Exception\BadResponseException $e){
-            throw new \Exception(print_r($e->getResponse()->json(), true));
+            throw new \Exception(print_r($e->json_decode(getResponse()->getBody(), true), true));
         }
 
         if(!isset($result['envelopes']) || sizeof($result['envelopes']) == 0){
