@@ -93,7 +93,7 @@ function processArgs($argc, $argv, &$args, &$switches)
         }
 
         if (current($args_keys) == 'className'){
-            $args[current($args_keys)][] = explode(",", $arg);
+            $args[current($args_keys)] = explode(",", $arg);
         } else {
             $args[current($args_keys)] = $arg;
         }
