@@ -24,6 +24,9 @@ class EmergencyContactFormView extends View {
         $submitCmd->setTerm($this->term);
         $submitCmd->initForm($form);
 
+        javascript('jquery');
+        javascriptMod('hms', 'EmailValidation');
+
         $tpl = array();
 
         /****************
