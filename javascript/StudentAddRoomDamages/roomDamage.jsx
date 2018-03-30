@@ -439,7 +439,7 @@ class UnsavedDamageRow extends React.Component{
                         <i className="fa fa-comment"></i>
                     </a>
                     <button onClick={this.removeRow} className="close pull-right">
-                      <i className="fa fa-trash-o"></i>
+                      <i className="far fa-trash-alt"></i>
                     </button>
                 </td>
             </tr>
