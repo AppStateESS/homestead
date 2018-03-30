@@ -88,7 +88,7 @@ var roleMan = function(className, instance, div, name){
             }else{
             	contents += '<ul>';
             	for(var j in members){
-            		contents += '<li>'+members[j].fullname+' <i class="fa fa-trash-o" style=" cursor: pointer" onclick="removeUser(\''+members[j].username+'\', \''+this.roles[i].getName()+'\', newMan);"></i>';
+            		contents += '<li>'+members[j].fullname+' <i class="far fa-trash-alt" style=" cursor: pointer" onclick="removeUser(\''+members[j].username+'\', \''+this.roles[i].getName()+'\', newMan);"></i>';
             	}
             	contents += '</ul>';
             }
