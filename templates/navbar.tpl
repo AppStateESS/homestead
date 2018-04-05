@@ -51,20 +51,20 @@
             <li class="divider"></li>
 
             <!-- BEGIN term -->
-            <li><a href="{EDIT_TERM_URI}"><i class="fa fa-calendar"></i> Edit Terms</a></li>
+            <li><a class="dropdown-item" href="{EDIT_TERM_URI}"><i class="fa fa-calendar"></i> Edit Terms</a></li>
             <!-- END term -->
 
             <!-- BEGIN pulse -->
-            <li><a href="{PULSE_URI}"><i class="fa fa-calendar-o"></i> Schedule processes</a></li>
+            <li><a class="dropdown-item" href="{PULSE_URI}"><i class="far fa-calendar"></i> Schedule processes</a></li>
             <!-- END pulse -->
 
             <!-- BEGIN activitylog -->
-            <li><a href="{ACTIVITY_LOG_URI}"><i class="fa fa-list-ul"></i> Activity Log</a></li>
+            <li><a class="dropdown-item" href="{ACTIVITY_LOG_URI}"><i class="fa fa-list-ul"></i> Activity Log</a></li>
             <!-- END activitylog -->
 
             <!-- BEGIN ctrlpanel -->
             <li class="divider"></li>
-            <li><a href="{CTRL_PANEL_URI}"><i class="fa fa-wrench"></i> Control Panel</a></li>
+            <li><a class="dropdown-item" href="{CTRL_PANEL_URI}"><i class="fa fa-wrench"></i> Control Panel</a></li>
             <!-- END ctrlpanel -->
           </ul>
         </li>
@@ -83,7 +83,7 @@
         <!-- END signin -->
 
         <!-- BEGIN signout -->
-        <li><a href="{SIGNOUT_URL}"><i class="fa fa-sign-out"></i> Sign out</a></li>
+        <li><a href="{SIGNOUT_URL}"><i class="fas sign-out-alt"></i> Sign out</a></li>
         <!-- END signout -->
       </ul>
     </div><!-- /.navbar-collapse -->
