@@ -430,7 +430,7 @@ class DamageForm extends React.Component{
                     <div className="text-center">
                         {alert}
                         <button className="btn btn-primary" onClick={this.saveDamage}>
-                            <i className="fa fa-floppy-o"></i>{' '}Save damages
+                            <i className="far fa-save"></i>{' '}Save damages
                         </button>{' '}
                         <button className="btn btn-danger-hover" onClick={this.props.removeForm}>
                             <i className="fa fa-times"></i>{' '}Remove
