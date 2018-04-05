@@ -67,7 +67,7 @@
     </div> <!-- end panel -->
     
     <div class="panel panel-default">
-      <div class="panel-heading"><h4><i class="fa fa-clock-o"></i> Pending</h4></div>
+      <div class="panel-heading"><h4><i class="far fa-clock"></i> Pending</h4></div>
       <div class="panel-body">
         {SCHEDULE_PAGER}
       </div>

@@ -29,5 +29,5 @@
     </div>
 </div>
 
-<button class="btn btn-primary"><i class="fa fa-envelope-o"></i> Send Invites</button>
+<button class="btn btn-primary"><i class="far fa-envelope"></i> Send Invites</button>
 {END_FORM}
