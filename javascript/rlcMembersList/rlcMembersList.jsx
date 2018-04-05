@@ -369,12 +369,12 @@ class ListRowBox extends React.Component{
                             <em className={studentTypeFont}>{this.props.node.status}</em>  <span className="caret"></span>
                         </button>
                         <ul className="dropdown-menu">
-                            <li><a onClick={this.setConfirm} href="javascript:;">Confirmed</a></li>
-                            <li><a onClick={this.setDecline} href="javascript:;">Declined</a></li>
-                            <li><a onClick={this.setNotInvited} href="javascript:;">Not invited</a></li>
-                            <li><a onClick={this.setPending} href="javascript:;">Pending</a></li>
-                            <li><a onClick={this.setSelfSelectAvail} href="javascript:;">Self-Select Available</a></li>
-                            <li><a onClick={this.setSelfSelected} href="javascript:;">Self-Selected</a></li>
+                            <li><a className="dropdown-item" onClick={this.setConfirm} href="javascript:;">Confirmed</a></li>
+                            <li><a className="dropdown-item" onClick={this.setDecline} href="javascript:;">Declined</a></li>
+                            <li><a className="dropdown-item" onClick={this.setNotInvited} href="javascript:;">Not invited</a></li>
+                            <li><a className="dropdown-item" onClick={this.setPending} href="javascript:;">Pending</a></li>
+                            <li><a className="dropdown-item" onClick={this.setSelfSelectAvail} href="javascript:;">Self-Select Available</a></li>
+                            <li><a className="dropdown-item" onClick={this.setSelfSelected} href="javascript:;">Self-Selected</a></li>
                         </ul>
                     </div>
                 </td>
@@ -386,9 +386,9 @@ class ListRowBox extends React.Component{
                             <i className="fa fa-gear"></i> <span className="caret"></span>
                         </button>
                         <ul className="dropdown-menu">
-                            <li><a href={applicationLink}>View RLC Application</a></li>
-                            <li><a onClick={this.remove} href="javascript:;">Remove Membership</a></li>
-                            <li><a onClick={this.removeDeny} href="javascript:;">Remove &amp; Deny Application</a></li>
+                            <li><a className="dropdown-item" href={applicationLink}>View RLC Application</a></li>
+                            <li><a className="dropdown-item" onClick={this.remove} href="javascript:;">Remove Membership</a></li>
+                            <li><a className="dropdown-item" onClick={this.removeDeny} href="javascript:;">Remove &amp; Deny Application</a></li>
                         </ul>
                     </div>
                 </td>

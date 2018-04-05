@@ -520,7 +520,7 @@ class DropDownChoice extends React.Component{
     render() {
         return (
             <li onClick={this.props.onClick}>
-                <a style={{cursor: 'pointer', fontSize: '1.3em'}}>{this.props.title}</a>
+                <a className="dropdown-item" style={{cursor: 'pointer', fontSize: '1.3em'}}>{this.props.title}</a>
             </li>
         );
     }

@@ -27,22 +27,22 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
                 <li>
-                    <a href="{view}"><i class="fa fa-search"></i> View Application</a>
+                    <a class="dropdown-item" href="{view}"><i class="fa fa-search"></i> View Application</a>
                 </li>
                 <!-- BEGIN cancel-link -->
                 <li>
-                    <a href="{cancel}" class="cancelAppLink"><i class="fa fa-times"></i> Cancel Application</a>
+                    <a class="dropdown-item" href="{cancel}" class="cancelAppLink"><i class="fa fa-times"></i> Cancel Application</a>
                 </li>
                 <!-- END cancel-link -->
                 <!-- BEGIN reinstate-link -->
                 <li>
-                    <a href="{reinstate}"><i class="fa fa-undo"></i> Re-instate</a>
+                    <a class="dropdown-item" href="{reinstate}"><i class="fa fa-undo"></i> Re-instate</a>
                 </li>
                 <!-- END reinstate-link -->
                 <!-- BEGIN view_contract-link -->
                 <li role="separator" class="divider"></li>
                 <li>
-                    <a href="{contract}"><i class="fa fa-file-text"></i> View Contract</a>
+                    <a class="dropdown-item" href="{contract}"><i class="fas fa-file-alt"></i> View Contract</a>
                 </li>
                 <!-- END view_contract-link -->
             </ul>

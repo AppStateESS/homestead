@@ -10,7 +10,7 @@
           </button>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
               <!-- BEGIN login-as-student -->
-              <li role="presentation"><a role="menuitem" tabindex="-1" href="{LOGIN_AS_STUDENT_URI}"><i class="fa fa-sign-in"></i> Login as Student</a></li>
+              <li role="presentation"><a class="dropdown-item" role="menuitem" tabindex="-1" href="{LOGIN_AS_STUDENT_URI}"><i class="fa fa-sign-in"></i> Login as Student</a></li>
               <!-- BEGIN login-as-student -->
           </ul>
         </div>
