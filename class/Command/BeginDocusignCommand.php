@@ -130,10 +130,10 @@ class BeginDocusignCommand extends Command
             // Create a new envelope and save it
             if ($under18) {
                 // If student is under 18, use the template with parent signatures
-                $envelope = EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $under18TemplateId, 'University Housing Contract', $templateRoles, 'sent', $student->getBannerId());
+                $envelope = EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $under18TemplateId, "University Housing Contract - $term", $templateRoles, 'sent', $student->getBannerId());
             } else {
                 // Student is over 18, so use the 1-signature template (without a parent signature)
-                $envelope = EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $templateId, 'University Housing Contract', $templateRoles, 'sent', $student->getBannerId());
+                $envelope = EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $templateId, "University Housing Contract - $term", $templateRoles, 'sent', $student->getBannerId());
             }
 
             // Create a new contract to save the envelope ID

@@ -17,7 +17,7 @@ class EnvelopeFactory {
         $request = new \GuzzleHttp\Psr7\Request('POST', $client->getBaseUrl() . '/envelopes');
 
         try{
-            $response = $http->send($request, ['json' => ["accountId" => $client->getAccountID(), "emailSubject" => $emailSubject, "templateId" => $templateId, "templateRoles" => $roles, "status" => $status],
+            $response = $http->send($request, ['json' => ["accountId" => $client->getAccountID(), "emailSubject" => $emailSubject, "templateId" => $templateId, "templateRoles" => $roles, "status" => $status, "clientUserId" => $bannerId, "embeddedRecipientStartURL" => "SIGN_AT_DOCUSIGN"],
 			'headers' => ['Content-Type' => 'application/json', 'Accept' => 'application/json', 'X-DocuSign-Authentication' => $client->getAuthHeader()]]);
             $result = json_decode($response->getBody(), true);
         }catch (\GuzzleHttp\Exception\BadResponseException $e){

@@ -151,7 +151,7 @@ class ContractFactory {
         $docusignClient = DocusignClientFactory::getClient();
 
         // Create the envelope
-        $envelope = EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $envelopeTemplateId, 'University Housing Contract', $templateRoles, Contract::STATUS_SENT, $student->getBannerId());
+        $envelope = EnvelopeFactory::createEnvelopeFromTemplate($docusignClient, $envelopeTemplateId, "University Housing Contract - $term", $templateRoles, Contract::STATUS_SENT, $student->getBannerId());
 
         // Create the corresponding Contract object and save it
         $contract = new Contract($student, $term, $envelope->getEnvelopeId(), $envelope->getStatus(), strtotime($envelope->getStatusDateTime()));
