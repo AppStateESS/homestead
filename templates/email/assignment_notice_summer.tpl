@@ -24,7 +24,7 @@ Roommates:
 <!-- END roommate_text -->
 
 ** If you requested a double occupancy room and do not have a roommate listed,
-you will likely still receive a roommate for Summer 2. Please plan to keep
+you will likely still receive a roommate for Summer 1. Please plan to keep
 half of your room clean and available at all times throughout the second
 Summer session.
 
@@ -33,7 +33,8 @@ Summer session.
 Check-in Time: {MOVE_IN_TIME}
 <!-- END movein_time -->
 
-Move In is Sunday, July 2nd, from noon to 5pm. Check in at the White Hall office. Please have your AppCard with you to check in.
+Move In is Thursday, May 24, from 1pm to 4pm. Check in at the White Hall office. Please have your AppCard with you to check in.
+You may check in anytime after your assigned check in time, but not before.
 
 Should you have any questions, please feel free to contact our office at 828-262-2160. You may also visit our website at:
 http://housing.appstate.edu/ .
