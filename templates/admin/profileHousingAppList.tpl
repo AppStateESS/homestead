@@ -20,7 +20,7 @@
       <td>{clean}</td>
       <td>{bedtime}</td>
       <td><div class="dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"
+            <button class="btn btn-outline-dark dropdown-toggle" type="button" data-toggle="dropdown"
                 id="dropdownMenu" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-cog"></i>
                 <span class="caret"></span>

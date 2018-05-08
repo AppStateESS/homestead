@@ -2,7 +2,7 @@
 <h1 style="display: inline-block; margin-right: 15px">Room {ROOM_NUMBER} - Bed {BED_LABEL}</h1>
 
 <!-- BEGIN bath -->
-<h3 style="display:inline-block"><span class="label label-danger">{ROOM_CHANGE_RESERVED}</span></h3>
+<h3 style="display:inline-block"><span class="badge badge-danger">{ROOM_CHANGE_RESERVED}</span></h3>
 <!-- END bath -->
 
 {START_FORM}
@@ -56,7 +56,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button class="btn btn-success pull-right">Save</button>
+                    <button class="btn btn-success float-right">Save</button>
                 </div>
             </div>
         </div>
@@ -87,7 +87,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button class="btn btn-success pull-right">Save</button>
+                    <button class="btn btn-success float-right">Save</button>
                 </div>
             </div>
         </div>

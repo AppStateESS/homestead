@@ -5,5 +5,5 @@
         <p>Click the 'Confirm' button below to move the student, or 'Cancel' to keep the current assignment.</p>
     </div>
             {SUBMIT}
-            <a href="{BACK}" class="btn btn-default">Cancel</a>
+            <a href="{BACK}" class="btn btn-outline-dark">Cancel</a>
 {END_FORM}

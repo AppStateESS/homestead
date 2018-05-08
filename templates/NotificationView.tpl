@@ -11,7 +11,7 @@
 <!-- END WARNING -->
 <!-- BEGIN SUCCESS -->
 <div class="alert alert-success" role="alert">
-    <i class="fa fa-check fa-2x"></i> {SUCCESS}
+    <i class="fas fa-check fa-2x"></i> {SUCCESS}
 </div>
 <!-- END SUCCESS -->
 <!-- BEGIN UNKNOWN -->

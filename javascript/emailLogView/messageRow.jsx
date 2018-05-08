@@ -26,7 +26,7 @@ class MessageRow extends React.Component {
             subject = this.props.mandrillInfo.subject;
 
             if(this.props.mandrillInfo.opens > 0){
-                opened = <i className="fa fa-check text-success"></i>
+                opened = <i className="fas fa-check text-success"></i>
             } else {
                 opened = 'No';
             }

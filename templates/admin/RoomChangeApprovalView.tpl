@@ -6,7 +6,7 @@
 
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#approval" aria-controls="approval" role="tab" data-toggle="tab">Needs Approval <span class="label label-danger">{NEEDS_ACTION_COUNT}</span></a></li>
+    <li role="presentation" class="active"><a href="#approval" aria-controls="approval" role="tab" data-toggle="tab">Needs Approval <span class="badge badge-danger">{NEEDS_ACTION_COUNT}</span></a></li>
     <li role="presentation"><a href="#in-progress" aria-controls="in-progress" role="tab" data-toggle="tab">In Progress <span class="badge">{APPROVED_COUNT}</span></a></li>
     <li role="presentation"><a href="#pending" aria-controls="pending" role="tab" data-toggle="tab">Pending <span class="badge">{PENDING_COUNT}</span></a></li>
     <li role="presentation"><a href="#completed" aria-controls="completed" role="tab" data-toggle="tab">Completed <span class="badge">{COMPLETED_COUNT}</span></a></li>

@@ -392,7 +392,7 @@ class Bed extends React.Component{
             dismissString = ' alert-dismissible';
             button = <button type="button" className="close" onClick={this.resetForm} aria-label="Close"><span aria-hidden="true">&times;</span></button>;
         } else {
-            button = <i className="fa-lg pull-right fa fa-check-circle"></i>;
+            button = <i className="fa-lg float-right fa fa-check-circle"></i>;
         }
         var message2 = <div>{button}{message}</div>;
         return React.createElement('div', {
@@ -461,7 +461,7 @@ class Assigned extends React.Component{
     render() {
         return (
             <div className="alert alert-success">
-                <i className="fa-lg pull-right fa fa-check-circle"></i>{this.props.student}
+                <i className="fa-lg float-right fa fa-check-circle"></i>{this.props.student}
             </div>
         );
     }
@@ -476,7 +476,7 @@ Assigned.defaultProps = {
 
 class DropDown extends React.Component{
     render() {
-        var buttonClass = this.props.selected ? 'btn-success' : 'btn-default';
+        var buttonClass = this.props.selected ? 'btn-success' : 'btn-outline-dark';
         var buttonDisabled = this.props.disabled ? 'disabled' : '';
         //var listing = this.props.listing;
         return (

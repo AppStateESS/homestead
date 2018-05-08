@@ -261,7 +261,7 @@ class RoomDamagesForm extends React.Component{
                     </div>
 
                     <div className="col-md-3 col-md-offset-7">
-                        <button onClick={this.hideForm} className="btn btn-default btn-md pull-right">Close Form</button>
+                        <button onClick={this.hideForm} className="btn btn-outline-dark btn-md float-right">Close Form</button>
                     </div>
                 </div>
             </div>

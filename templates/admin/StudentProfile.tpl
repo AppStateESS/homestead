@@ -2,9 +2,9 @@
 
 <div class="row">
     <div class="col-md-8">
-        <div class="form-group pull-right">
+        <div class="form-group float-right">
         <div class="dropdown">
-          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+          <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
             <i class="fa fa-cog"></i> Options
             <span class="caret"></span>
           </button>
@@ -103,7 +103,7 @@
                 <th>Roommate(s):</th>
                 <!-- BEGIN confirmed -->
                 <td class="success">
-                    {ROOMMATE} <i class="fa fa-check fa-2x"></i>
+                    {ROOMMATE} <i class="fas fa-check fa-2x"></i>
                 </td>
                 <!-- END confirmed -->
                 <!-- BEGIN pending -->

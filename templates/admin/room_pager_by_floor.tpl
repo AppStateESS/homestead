@@ -35,7 +35,7 @@
     </tr>
     <!-- END listrows -->
 </table>
-<a href="{ADD_ROOM_URI}" class="btn btn-success btn-sm pull-right"><i class="fa fa-plus"></i> Add Room</a>
+<a href="{ADD_ROOM_URI}" class="btn btn-success btn-sm float-right"><i class="fa fa-plus"></i> Add Room</a>
 <!-- BEGIN page_label -->
 <p class="text-center">
 Rooms {TOTAL_ROWS}

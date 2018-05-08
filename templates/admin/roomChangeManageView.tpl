@@ -1,4 +1,4 @@
-<a class="btn btn-default btn-sm" href="index.php?module=hms&action=ShowAdminRoomChangeList"><i class="fa fa-chevron-left"></i> Manage Requests</a>
+<a class="btn btn-outline-dark btn-sm" href="index.php?module=hms&action=ShowAdminRoomChangeList"><i class="fa fa-chevron-left"></i> Manage Requests</a>
 
 <h1>Manage Room Change Request</h1>
 
@@ -11,15 +11,15 @@
     <!-- END approve_btn -->
 
     <!-- BEGIN hold_btn -->
-        <button type="button" class="btn btn-default">Hold</button>
+        <button type="button" class="btn btn-outline-dark">Hold</button>
     <!-- END hold_btn -->
 
     <!-- BEGIN deny_btn -->
-        <button type="button" id="deny-btn" class="btn btn-default" data-request-id="{REQUEST_ID_DENY_BTN}">Deny</button>
+        <button type="button" id="deny-btn" class="btn btn-outline-dark" data-request-id="{REQUEST_ID_DENY_BTN}">Deny</button>
     <!-- END deny_btn -->
 
     <!-- BEGIN cancel2 -->
-        <button type="button" id="cancel-btn" class="btn btn-default" data-request-id="{REQUEST_ID_CANCEL_BTN}">Cancel</button>
+        <button type="button" id="cancel-btn" class="btn btn-outline-dark" data-request-id="{REQUEST_ID_CANCEL_BTN}">Cancel</button>
     <!-- END cancel2 -->
 </div>
 

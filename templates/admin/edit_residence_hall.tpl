@@ -7,7 +7,7 @@
         <div class="col-md-12">
             <!-- BEGIN offline -->
             {OFFLINE}
-            <h3><span class="label label-danger">Offline</span></h3>
+            <h3><span class="badge badge-danger">Offline</span></h3>
             <!-- END offline -->
         </div>
     </div>
@@ -89,7 +89,7 @@
                                     {PACKAGE_DESK}
                                 </div>
                                
-                                <button type="submit" class="btn btn-success pull-right">Save</button>
+                                <button type="submit" class="btn btn-success float-right">Save</button>
                             </div>
                         </div>
                         {END_FORM}

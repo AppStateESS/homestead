@@ -51,7 +51,7 @@
         </div>
 
         <div class="form-group">
-            <button type="submit" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Create Move-in Time</button>
+            <button type="submit" class="btn btn-success float-right"><i class="fa fa-plus"></i> Create Move-in Time</button>
         </div>
     </div>
 </div>

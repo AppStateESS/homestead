@@ -1,5 +1,5 @@
 <h2>
-    <i class="fa fa-check-square-o"></i>  <span id="hallName" class="text-primary"></span> Check-In <a class="btn btn-default" id="changeLink" href="#">Change Hall</a>
+    <i class="fa fa-check-square-o"></i>  <span id="hallName" class="text-primary"></span> Check-In <a class="btn btn-outline-dark" id="changeLink" href="#">Change Hall</a>
 </h2>
 
 {START_FORM}

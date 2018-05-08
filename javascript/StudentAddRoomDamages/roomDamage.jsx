@@ -329,7 +329,7 @@ class AddDamageBox extends React.Component{
                                 </div>
                             </div>
                             <div className="form-group">
-                                <button onClick={this.add} className="btn btn-md btn-success pull-right"><i className="fa fa-plus"></i> Add Damage</button>
+                                <button onClick={this.add} className="btn btn-md btn-success float-right"><i className="fa fa-plus"></i> Add Damage</button>
                             </div>
                         </div>
                     </div>
@@ -351,7 +351,7 @@ class AlertBox extends React.Component{
             if(this.props.alert.status === "success"){
                 return (
                     <div className="alert alert-success">
-                        <i className="fa fa-check fa-2x"></i> <span>Room Damages successfully added.</span>
+                        <i className="fas fa-check fa-2x"></i> <span>Room Damages successfully added.</span>
                     </div>
                 );
             }
@@ -405,7 +405,7 @@ class UnsavedDamagesTable extends React.Component{
                     </table>
                     <div className="row">
                         <div className="col-md-12">
-                            <button onClick={this.props.saveDamages} className="btn btn-lg btn-primary pull-right">Save New Damages</button>
+                            <button onClick={this.props.saveDamages} className="btn btn-lg btn-primary float-right">Save New Damages</button>
                         </div>
                     </div>
                 </div>
@@ -435,10 +435,10 @@ class UnsavedDamageRow extends React.Component{
                 <td>{node.description}</td>
                 <td>{node.side}</td>
                 <td>
-                    <a style={commentStyle} className="pull-left" href="javascript:;" title={node.note}>
+                    <a style={commentStyle} className="float-left" href="javascript:;" title={node.note}>
                         <i className="fa fa-comment"></i>
                     </a>
-                    <button onClick={this.removeRow} className="close pull-right">
+                    <button onClick={this.removeRow} className="close float-right">
                       <i className="far fa-trash-alt"></i>
                     </button>
                 </td>

@@ -1,6 +1,6 @@
 <h2>{TITLE}</h2>
 
-<div class="pull-right form-group">{SEARCH}</div>
+<div class="float-right form-group">{SEARCH}</div>
 <table class="table table-striped table-hover">
     <tr>
         <th>Position</th>

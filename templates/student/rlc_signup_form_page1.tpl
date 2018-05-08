@@ -105,7 +105,7 @@
               Cancel
             </a>
 
-            <button type="submit" class="btn btn-success btn-lg pull-right">
+            <button type="submit" class="btn btn-success btn-lg float-right">
               Continue
               <i class="fa fa-chevron-right"></i>
             </button>

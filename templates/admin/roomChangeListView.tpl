@@ -1,6 +1,6 @@
 <h2>{TITLE}</h2>
 
-<!--<div class="pull-right form-group">{SEARCH}></div>-->
+<!--<div class="float-right form-group">{SEARCH}></div>-->
 <div class="row">
 <div class="col-md-6">
 <table class="table table-striped table-hover">
@@ -18,7 +18,7 @@
   <tr>
     <td>{participants}</td>
     <td><abbr title="{last_updated_date}" data-livestamp="{last_updated_timestamp}"></abbr></td>
-    <td><a class="btn btn-default" href="{manage}">manage</a></td>
+    <td><a class="btn btn-outline-dark" href="{manage}">manage</a></td>
   </tr>
   <!-- END REQUESTS -->
 </table>

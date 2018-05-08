@@ -27,7 +27,7 @@
                     {RLC_RESERVED}
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-success pull-right">Add Room</button>
+                    <button type="submit" class="btn btn-success float-right">Add Room</button>
                 </div>
             </div>
         </div>

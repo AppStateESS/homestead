@@ -47,7 +47,7 @@
                     <td class="text-right">
                         <!-- BEGIN vacant -->
                         {VACANT}
-                        <span class="label label-warning">Vacant</span>
+                        <span class="badge badge-warning">Vacant</span>
                         <!-- END vacant -->
                         {NAME}
                     </td>

@@ -98,7 +98,7 @@ class DamageItem extends React.Component{
                         <h4>{dmgType.category} - {dmgType.description} - ${dmgType.cost}</h4>
                     </div>
                     <div className="col-md-2">
-                        <button type="button" style={{marginTop: "1em"}} className="btn btn-default btn-xs" onClick={this.handleSplitCost}>Split Evenly</button>
+                        <button type="button" style={{marginTop: "1em"}} className="btn btn-outline-dark btn-xs" onClick={this.handleSplitCost}>Split Evenly</button>
                     </div>
                 </div>
                 <div className="row">
@@ -219,11 +219,11 @@ class DamageRoom extends React.Component{
         if(this.state.saved){
             submitButton = <button className="btn btn-success disabled" disabled="disabled">Saved Successfully!</button>;
         } else if(this.state.saveError){
-            submitButton = <button className="btn btn-default disabled btn-danger" disabled="disabled">Something went wrong while sending to Student Accounts!</button>
+            submitButton = <button className="btn btn-outline-dark disabled btn-danger" disabled="disabled">Something went wrong while sending to Student Accounts!</button>
         } else if(this.state.submitted){
-            submitButton = <button className="btn btn-default disabled" disabled="disabled"><i className="fa fa-spinner fa-pulse"></i> Sending to Student Accounts</button>
+            submitButton = <button className="btn btn-outline-dark disabled" disabled="disabled"><i className="fa fa-spinner fa-pulse"></i> Sending to Student Accounts</button>
         } else {
-            submitButton = <button className="btn btn-default" onClick={this.handleSave}>Report to Student Accounts</button>
+            submitButton = <button className="btn btn-outline-dark" onClick={this.handleSave}>Report to Student Accounts</button>
         }
 
         return(

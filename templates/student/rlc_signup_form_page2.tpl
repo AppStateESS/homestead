@@ -23,7 +23,7 @@
         </div>
 
         <div class="form-group">
-            <button type="submit" class="btn btn-success btn-lg pull-right">
+            <button type="submit" class="btn btn-success btn-lg float-right">
               Submit Application
             </button>
             <a href="index.php" class="btn btn-danger btn-lg">

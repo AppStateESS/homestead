@@ -98,7 +98,7 @@ class CheckOut extends React.Component{
                 <NewRoomDamages damageTypes={this.state.damageTypes} residents={this.state.residents} updateNewDamage={this.updateNewDamage} newDamage={this.state.newDamage}/>
                 <CheckOutCompletion updateProperCheckout={this.updateProperCheckout} updateImproperNote={this.updateImproperNote} />
                 <hr />
-                <p className="text-center"><button disabled={disable} className="btn btn-primary btn-lg" onClick={this.postCheckOut}><i className="fa fa-check"></i> Complete Checkout</button></p>
+                <p className="text-center"><button disabled={disable} className="btn btn-primary btn-lg" onClick={this.postCheckOut}><i className="fas fa-check"></i> Complete Checkout</button></p>
             </div>
         );
     }

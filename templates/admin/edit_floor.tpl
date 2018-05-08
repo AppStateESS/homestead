@@ -4,11 +4,11 @@
         <h1>{FLOOR_NUMBER} Floor</h1>
 
         <!-- BEGIN offline -->
-        <h3 style="display:inline-block"><span class="label label-danger">{OFFLINE_ATTRIB}</span></h3>
+        <h3 style="display:inline-block"><span class="badge badge-danger">{OFFLINE_ATTRIB}</span></h3>
         <!-- END offline -->
 
         <!-- BEGIN rlc -->
-        <h3 style="display:inline-block"><span class="label label-info">{RLC_NAME}</span></h3>
+        <h3 style="display:inline-block"><span class="badge badge-info">{RLC_NAME}</span></h3>
         <!-- END rlc -->
     </div>
 </div>
@@ -89,7 +89,7 @@
                             </div>
 
                             <div class="form-group">
-                                <button class="btn btn-success pull-right">Save</button>
+                                <button class="btn btn-success float-right">Save</button>
                             </div>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                     <input type="hidden" name="tab" value="images">
                     Floor plan: {FILE_MANAGER}
                     <div class="form-group">
-                        <button class="btn btn-success pull-right">Save</button>
+                        <button class="btn btn-success float-right">Save</button>
                     </div>
                     {END_FORM}
                 </div>

@@ -56,7 +56,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-success pull-right">
+                    <button type="submit" class="btn btn-success float-right">
                       Submit
                     </button>
                 </div>

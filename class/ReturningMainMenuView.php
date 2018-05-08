@@ -5,7 +5,7 @@ namespace Homestead;
 define('FEATURE_LOCKED_ICON',   '<i class="fa fa-lock"></i>');
 define('FEATURE_NOTYET_ICON',   '<i class="fa fa-calendar"></i>');
 define('FEATURE_OPEN_ICON',     '<i class="fa fa-arrow-right"></i>');
-define('FEATURE_COMPLETED_ICON','<i class="fa fa-check" title="Completed" alt="Completed"></i>');
+define('FEATURE_COMPLETED_ICON','<i class="fas fa-check" title="Completed" alt="Completed"></i>');
 
 class ReturningMainMenuView extends View {
 

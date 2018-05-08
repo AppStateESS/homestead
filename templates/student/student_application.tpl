@@ -344,16 +344,16 @@
         <div class="col-md-12">
             <!-- BEGIN continue_btn -->
             {CONTINUE_BTN}
-            <button type="submit" class="btn btn-success btn-lg pull-right">Continue <i class="fa fa-chevron-right"></i></button>
+            <button type="submit" class="btn btn-success btn-lg float-right">Continue <i class="fa fa-chevron-right"></i></button>
             <!-- END continue_btn -->
 
             <!-- BEGIN redo_form -->
-            <a href="{REDO_BUTTON}" class="btn btn-default"><i class="fa fa-chevron-left"></i> Back</a>
+            <a href="{REDO_BUTTON}" class="btn btn-outline-dark"><i class="fa fa-chevron-left"></i> Back</a>
             <!-- END redo_form -->
 
             <!-- BEGIN confirmapp -->
             {CONFIRM_BTN}
-            <button type="submit" class="btn btn-success btn-lg pull-right">Confirm &amp; Continue <i class="fa fa-chevron-right"></i></button>
+            <button type="submit" class="btn btn-success btn-lg float-right">Confirm &amp; Continue <i class="fa fa-chevron-right"></i></button>
             <!-- END confirmapp -->
         </div>
 

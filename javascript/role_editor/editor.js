@@ -77,7 +77,7 @@ var roleMan = function(className, instance, div, name){
         $(this.div).empty();
         var contents = "";
 
-        contents += '<button type="button" class="btn btn-primary pull-right" onclick="managerPopup.open(\''+this.className+'\', '+this.instance+', '+this.name+');"><i class="fa fa-user-plus"></i> Add User</button>';
+        contents += '<button type="button" class="btn btn-primary float-right" onclick="managerPopup.open(\''+this.className+'\', '+this.instance+', '+this.name+');"><i class="fa fa-user-plus"></i> Add User</button>';
 
         for(var i in this.roles){
             contents += '<h3>'+this.roles[i].getName()+'</h3>';

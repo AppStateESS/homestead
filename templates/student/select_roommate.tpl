@@ -71,8 +71,8 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="form-group">
-                    <a href="index.php" class="btn btn-default pull-left"><i class="fa fa-chevron-left"></i> Cancel</a>
-                    <button type="submit" class="btn btn-success btn-lg pull-right">Send Request <i class="fa fa-chevron-right"></i></button>
+                    <a href="index.php" class="btn btn-outline-dark float-left"><i class="fa fa-chevron-left"></i> Cancel</a>
+                    <button type="submit" class="btn btn-success btn-lg float-right">Send Request <i class="fa fa-chevron-right"></i></button>
                 </div>
             </div>
         </div>

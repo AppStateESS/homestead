@@ -28,7 +28,7 @@
                     <div class="input-group-addon">@appstate.edu</div>
                 </div>
             </div>
-            <div class="form-group pull-right">
+            <div class="form-group float-right">
                 <button type="submit" class="btn btn-primary">
                   <i class="fa fa-search"></i> Search
                 </button>
@@ -179,7 +179,7 @@
                 </div>
             </div>
 
-            <div class="form-group pull-right">
+            <div class="form-group float-right">
                 <button type="submit" class="btn btn-primary btn-lg">
                     <i class="fa fa-search"></i> Search
                 </button>

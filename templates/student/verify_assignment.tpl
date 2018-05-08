@@ -76,6 +76,6 @@
 
 <div class="row">
     <div class="col-md-5">
-        <a href="index.php" class="btn btn-default pull-left"><i class="fa fa-chevron-left"></i> Back</a>
+        <a href="index.php" class="btn btn-outline-dark float-left"><i class="fa fa-chevron-left"></i> Back</a>
     </div>
 </div>

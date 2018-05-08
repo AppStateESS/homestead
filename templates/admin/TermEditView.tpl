@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-md-7">
         <h1>{TITLE}</h1>
-		<a class="btn btn-success btn-small pull-right" href="{NEW_TERM_URI}"><i class="fa fa-plus"></i> Add New Term</a>
+		<a class="btn btn-success btn-small float-right" href="{NEW_TERM_URI}"><i class="fa fa-plus"></i> Add New Term</a>
     </div>
 </div>
 
@@ -58,7 +58,7 @@
 
             <!-- BEGIN meal_plan_disabled -->
             <p>
-                <a href="{MEAL_PLAN_ENABLE_URI}" class="btn btn-default">Enable Meal Plan Queue</a>
+                <a href="{MEAL_PLAN_ENABLE_URI}" class="btn btn-outline-dark">Enable Meal Plan Queue</a>
             </p>
             <!-- END meal_plan_disabled -->
 

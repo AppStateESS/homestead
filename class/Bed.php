@@ -274,11 +274,11 @@ class Bed extends HMS_Item {
                 $reAssignCmd = CommandFactory::getCommand('ShowAssignStudent');
                 $reAssignCmd->setUsername($this->_curr_assignment->asu_username);
                 $reAssignCmd->setBedId($this->id);
-                $link_re = $reAssignCmd->getLink('<i class="fa fa-refresh"></i> Reassign', null, 'btn btn-default btn-xs');
+                $link_re = $reAssignCmd->getLink('<i class="fas fa-sync"></i> Reassign', null, 'btn btn-outline-dark btn-sm');
 
                 $unAssignCmd = CommandFactory::getCommand('ShowUnassignStudent');
                 $unAssignCmd->setUsername($this->_curr_assignment->asu_username);
-                $link_un = $unAssignCmd->getLink('<i class="fa fa-minus-circle"></i> Remove', null, 'btn btn-danger btn-xs');
+                $link_un = $unAssignCmd->getLink('<i class="fa fa-minus-circle"></i> Remove', null, 'btn btn-danger btn-sm');
             }
 
             try {

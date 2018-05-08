@@ -20,7 +20,7 @@
             {BED}
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-success pull-right">Select Bed</button>
+            <button type="submit" class="btn btn-success float-right">Select Bed</button>
         </div>
     </div>
 </div>

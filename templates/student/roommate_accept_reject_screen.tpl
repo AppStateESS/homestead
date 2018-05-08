@@ -26,7 +26,7 @@
         <div class="row">
             <div class="col-md-4">
                 <p>
-                    <a href="{CANCEL}" class="btn btn-default"><i class="fa fa-chevron-left"></i> Cancel</a>
+                    <a href="{CANCEL}" class="btn btn-outline-dark"><i class="fa fa-chevron-left"></i> Cancel</a>
                 </p>
             </div>
         </div>

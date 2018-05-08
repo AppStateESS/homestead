@@ -194,7 +194,7 @@
 
             <!-- BEGIN save-btn -->
             {SAVE_BTN}
-            <div class="form-group pull-right">
+            <div class="form-group float-right">
                 <button type="submit" class="btn btn-success btn-lg">Save Profile</button>
             </div>
             <!-- END save-btn -->

@@ -29,7 +29,7 @@
 
         {START_FORM}
         <div class="form-group">
-            <button type="submit" class="btn btn-lg btn-success pull-right">Start My Application <i class="fa fa-chevron-right"></i></button>
+            <button type="submit" class="btn btn-lg btn-success float-right">Start My Application <i class="fa fa-chevron-right"></i></button>
         </div>
         {END_FORM}
     </div>

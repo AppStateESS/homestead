@@ -160,7 +160,7 @@ class RlcMembersList extends React.Component{
 
                 <div className="row">
                     <div className="col-md-12">
-                        <a className="btn btn-default" href={backUrl}>
+                        <a className="btn btn-outline-dark" href={backUrl}>
                             <i className="fa fa-chevron-left"></i> RLC List
                         </a>
                     </div>
@@ -169,10 +169,10 @@ class RlcMembersList extends React.Component{
                 <div className="row">
                     <div className="col-md-12">
                         <h2>{this.props.rlcName} Members <small>{this.props.term}</small></h2>
-                        <a className="btn btn-default pull-right" href={exportUrl}>
+                        <a className="btn btn-outline-dark float-right" href={exportUrl}>
                             <i className="fa fa-file-excel-o"></i> Export to Spreadsheet
                         </a>
-                        <a className="btn btn-success pull-right" style={{marginRight: '2em'}} href={addMembersUrl}>
+                        <a className="btn btn-success float-right" style={{marginRight: '2em'}} href={addMembersUrl}>
                             <i className="fa fa-plus"></i> Add Member(s)
                         </a>
                     </div>
@@ -365,7 +365,7 @@ class ListRowBox extends React.Component{
                 <td>{this.props.node.username}</td>
                 <td>
                     <div className="btn-group">
-                        <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button type="button" className="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <em className={studentTypeFont}>{this.props.node.status}</em>  <span className="caret"></span>
                         </button>
                         <ul className="dropdown-menu">
@@ -382,8 +382,8 @@ class ListRowBox extends React.Component{
                 <td>{roommate}</td>
                 <td>
                     <div className="btn-group">
-                        <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i className="fa fa-gear"></i> <span className="caret"></span>
+                        <button type="button" className="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i className="fas fa-cog"></i> <span className="caret"></span>
                         </button>
                         <ul className="dropdown-menu">
                             <li><a className="dropdown-item" href={applicationLink}>View RLC Application</a></li>

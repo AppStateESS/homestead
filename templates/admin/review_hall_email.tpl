@@ -19,9 +19,9 @@
         <strong>Message:</strong><br />
         {BODY}
         <br /><br />
-        <a class="btn btn-default" href="{EDIT_URI}"><i class="fa fa-chevron-left"></i> Edit Message</a>
+        <a class="btn btn-outline-dark" href="{EDIT_URI}"><i class="fa fa-chevron-left"></i> Edit Message</a>
 
-        <button type="submit" class="btn btn-success pull-right">Send Messages</button>
+        <button type="submit" class="btn btn-success float-right">Send Messages</button>
         {END_FORM}
     </div>
 </div>

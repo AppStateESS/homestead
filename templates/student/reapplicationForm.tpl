@@ -248,7 +248,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-4 pull-right">
+    <div class="col-md-4 float-right">
         <button type="submit" class="btn btn-success btn-lg">
             Continue <i class="fa fa-chevron-right"></i>
         </button>

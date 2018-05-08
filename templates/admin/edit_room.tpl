@@ -2,39 +2,39 @@
 <h1 style="display: inline-block; margin-right: 15px">Room {ROOM}</h1>
 
 <!-- BEGIN offline -->
-<h3 style="display:inline-block"><span class="label label-danger">{OFFLINE_ATTRIB}</span></h3>
+<h3 style="display:inline-block"><span class="badge badge-danger">{OFFLINE_ATTRIB}</span></h3>
 <!-- END offline -->
 
 <!-- BEGIN reserved -->
-<h3 style="display:inline-block"><span class="label label-warning">{RESERVED_ATTRIB}</span></h3>
+<h3 style="display:inline-block"><span class="badge badge-warning">{RESERVED_ATTRIB}</span></h3>
 <!-- END reserved -->
 
 <!-- BEGIN private -->
-<h3 style="display:inline-block"><span class="label label-warning">{PRIVATE_ATTRIB}</span></h3>
+<h3 style="display:inline-block"><span class="badge badge-warning">{PRIVATE_ATTRIB}</span></h3>
 <!-- END private -->
 
 <!-- BEGIN parlor -->
-<h3 style="display:inline-block"><span class="label label-warning">{PARLOR_ATTRIB}</span></h3>
+<h3 style="display:inline-block"><span class="badge badge-warning">{PARLOR_ATTRIB}</span></h3>
 <!-- END parlor -->
 
 <!-- BEGIN overflow -->
-<h3 style="display:inline-block"><span class="label label-warning">{OVERFLOW_ATTRIB}</span></h3>
+<h3 style="display:inline-block"><span class="badge badge-warning">{OVERFLOW_ATTRIB}</span></h3>
 <!-- END overflow -->
 
 <!-- BEGIN RA -->
-<h3 style="display:inline-block"><span class="label label-info">{RA_ATTRIB}</span></h3>
+<h3 style="display:inline-block"><span class="badge badge-info">{RA_ATTRIB}</span></h3>
 <!-- END RA -->
 
 <!-- BEGIN ada -->
-<h3 style="display:inline-block"><span class="label label-default">{ADA_ATTRIB}</span></h3>
+<h3 style="display:inline-block"><span class="badge badge-secondary">{ADA_ATTRIB}</span></h3>
 <!-- END ada -->
 
 <!-- BEGIN hearing -->
-<h3 style="display:inline-block"><span class="label label-default">{HEARING_ATTRIB}</span></h3>
+<h3 style="display:inline-block"><span class="badge badge-secondary">{HEARING_ATTRIB}</span></h3>
 <!-- END hearing -->
 
 <!-- BEGIN bath -->
-<h3 style="display:inline-block"><span class="label label-default">{BATHENSUITE_ATTRIB}</span></h3>
+<h3 style="display:inline-block"><span class="badge badge-secondary">{BATHENSUITE_ATTRIB}</span></h3>
 <!-- END bath -->
 
 {START_FORM}
@@ -47,7 +47,7 @@
                 <h3 class="panel-title"><i class="fa fa-bed"></i> Beds</h3>
             </div>
             <div class="panel-body">
-                <span class="pull-right">{NUMBER_OF_ASSIGNEES} of {NUMBER_OF_BEDS} occupied</span>
+                <span class="float-right">{NUMBER_OF_ASSIGNEES} of {NUMBER_OF_BEDS} occupied</span>
                 {BED_PAGER}
             </div>
         </div>

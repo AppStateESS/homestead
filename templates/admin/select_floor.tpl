@@ -12,7 +12,7 @@
             {FLOOR}
         </div>
         <div class="form-group">
-            <button class="btn btn-success pull-right">Choose floor</button>
+            <button class="btn btn-success float-right">Choose floor</button>
         </div>
     </div>
 </div>

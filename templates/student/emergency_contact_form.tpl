@@ -154,7 +154,7 @@
           Cancel
       </a>
 
-      <button type="submit" class="btn btn-lg btn-success pull-right">
+      <button type="submit" class="btn btn-lg btn-success float-right">
         <i class="fa fa-save"></i>
         Update
       </button>
