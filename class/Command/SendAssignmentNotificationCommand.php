@@ -57,6 +57,7 @@ class SendAssignmentNotificationCommand extends Command {
             throw new DatabaseException($result->toString());
         }
 
+	if(!empty($result)){
         foreach($result as $assignment){
             //get the students real name from their asu_username
             $student = StudentFactory::getStudentByUsername($assignment->getUsername(), $term);
@@ -172,6 +173,10 @@ class SendAssignmentNotificationCommand extends Command {
                 throw new DatabaseException($result->toString());
             }
         }
+}else{
+               \NQ::simple('hms', NotificationView::INFO, "No notifications need to be sent");
+	       $context->goBack();
+}
 
         // Check for floors with missing move-in times.
         if(empty($missingMovein) || is_null($missingMovein)){
