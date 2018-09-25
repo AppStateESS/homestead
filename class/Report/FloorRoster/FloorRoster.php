@@ -88,7 +88,7 @@ EOF;
 
     public function getDefaultOutputViewCmd()
     {
-        $cmd = CommandFactory::getCommand('ShowReportPdf');
+        $cmd = CommandFactory::getCommand('ShowReportHtml');
         $cmd->setReportId($this->id);
 
         return $cmd;

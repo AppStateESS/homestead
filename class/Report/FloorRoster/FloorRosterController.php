@@ -7,6 +7,7 @@ use \Homestead\iSyncReport;
 use \Homestead\iAsyncReport;
 use \Homestead\iSchedReport;
 use \Homestead\iPdfReportView;
+use \Homestead\iHtmlReportView;
 use \Homestead\Report\FloorRoster\FloorRosterPdfView;
 
 /**
@@ -15,7 +16,7 @@ use \Homestead\Report\FloorRoster\FloorRosterPdfView;
  * @license http://opensource.org/licenses/gpl-3.0.html
  */
 
-class FloorRosterController extends ReportController implements iSyncReport, iAsyncReport, iSchedReport, iPdfReportView {
+class FloorRosterController extends ReportController implements iSyncReport, iAsyncReport, iSchedReport, iHtmlReportView, iPdfReportView {
 
     public function setParams(Array $params)
     {
