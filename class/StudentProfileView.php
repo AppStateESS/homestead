@@ -44,11 +44,11 @@ class StudentProfileView extends View {
         if (\Current_User::allow('hms', 'login_as_student')) {
             $tpl['DOB'] = $this->student->getDOB();
         } else {
-            $tpl['DOB'] = "Over 21";
+            $tpl['DOB'] = "Under 21";
             // Calculate the timestamp from 21 years ago
             $twentyOneYearsAgo = strtotime("-21 years");
             if(strtotime($this->student->getDOB()) < $twentyOneYearsAgo){
-                $tpl['DOB'] = "Under 21";
+                $tpl['DOB'] = "Over 21";
             }
         }
 
