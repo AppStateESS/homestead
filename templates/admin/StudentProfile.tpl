@@ -26,12 +26,12 @@
                 <th>Gender</th>
                 <td>{GENDER}</td>
             </tr>
-
+<!-- BEGIN BIRTHDAY -->
             <tr>
                 <th>Birthday</th>
                 <td>{DOB}</td>
             </tr>
-
+<!-- END BIRTHDAY -->
             <tr>
                 <th>Type</th>
                 <td>{TYPE}</td>
