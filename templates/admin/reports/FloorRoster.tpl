@@ -8,6 +8,7 @@
         <th width="30%">Name</th>
         <th width="20%">Username</th>
         <th width="5%">Year</th>
+        <th width="10%">Over 21</th>
         <th width="5%">Gender</th>
     </tr>
 <!-- BEGIN room-rows -->
@@ -18,6 +19,7 @@
         <td>{name}</td>
         <td>{asu_username}</td>
         <td>{year}</td>
+        <td>{over_21}</td>
         <td>{gender}</td>
     </tr>
 <!-- END room-rows -->
