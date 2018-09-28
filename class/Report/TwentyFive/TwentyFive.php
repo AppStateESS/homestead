@@ -54,7 +54,6 @@ class TwentyFive extends Report implements iCsvReport {
                 if (strtotime($dob) > $twentyFiveYearsAgo) {
                     continue;
                 }
-                $student['dob'] = $dob;
                 $student['full_name'] = $sf->getFullName();
                 $this->all_rows[] = $student;
             } catch (\Exception $e) {
@@ -71,7 +70,7 @@ class TwentyFive extends Report implements iCsvReport {
 
     public function getCsvColumnsArray()
     {
-        return array('Banner ID', 'Username', 'Date of Birth', 'Name');
+        return array('Banner ID', 'Username', 'Name');
     }
 
     public function getCsvRowsArray()

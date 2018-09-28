@@ -17,24 +17,22 @@ use \Homestead\Exception\StudentNotFoundException;
  */
 
 class AssignedStudentData extends Report implements iCsvReport {
+
     const friendlyName = 'Assigned Student Data Export';
     const shortName = 'AssignedStudentData';
 
     private $term;
     private $rows;
 
-    public function setTerm($term)
-    {
+    public function setTerm($term) {
         $this->term = $term;
     }
 
-    public function getTerm()
-    {
+    public function getTerm() {
         return $this->term;
     }
 
-    public function execute()
-    {
+    public function execute() {
         $db = new \PHPWS_DB('hms_assignment');
         $db->addColumn('hms_assignment.banner_id');
         $db->addColumn('hms_assignment.reason');
@@ -56,7 +54,7 @@ class AssignedStudentData extends Report implements iCsvReport {
 
         $term = Term::getTermSem($this->term);
 
-        if($term == TERM_FALL) {
+        if ($term == TERM_FALL) {
             $db->addJoin('LEFT', 'hms_new_application', 'hms_fall_application', 'id', 'id');
             $db->addColumn('hms_fall_application.lifestyle_option');
         }
@@ -80,16 +78,25 @@ class AssignedStudentData extends Report implements iCsvReport {
                 $last = $student->getLastName();
                 $type = $student->getType();
                 $date = $row['created_on'];
-                if($date != '') {
+                if ($date != '') {
                     $date = date('n/j/Y', $date);
                 }
 
                 $appTerm = $student->getApplicationTerm();
-                $cellPhone= $row['cell_phone'];
+                $cellPhone = $row['cell_phone'];
                 $assignmentType = $row['reason'];
 
                 $gender = HMS_Util::formatGender($student->getGender());
                 $dob = $student->getDob();
+
+                $over_21 = "No";
+                // Calculate the timestamp from 21 years ago
+                $twentyOneYearsAgo = strtotime("-21 years");
+                $DOB = strtotime($dob);
+
+                if ($DOB < $twentyOneYearsAgo) {
+                    $over_21 = "Yes";
+                }
 
                 $room = $row['hall_name'] . ' ' . $row['room_number'] . ' ' . $row['bedroom_label'] . ' ' . $row['bed_letter'];
 
@@ -111,16 +118,15 @@ class AssignedStudentData extends Report implements iCsvReport {
                     $zip = $address->zip;
                 }
 
-                if(isset($row['lifestyle_option'])){
+                if (isset($row['lifestyle_option'])) {
                     $lifestyle = $row['lifestyle_option'];
-                    
-                    if($lifestyle != ''){
+
+                    if ($lifestyle != '') {
                         $lifestyle = ($lifestyle == 1) ? 'Single Gender' : 'Co-Ed';
                     }
                 } else {
                     $lifestyle = '';
                 }
-
             } catch (StudentNotFoundException $e) {
                 $bannerId = $row['banner_id'];
                 $username = '';
@@ -129,7 +135,7 @@ class AssignedStudentData extends Report implements iCsvReport {
                 $middle = '';
                 $last = '';
                 $gender = '';
-                $dob = '';
+                $over_21 = '';
                 $type = '';
                 $cellPhone = '';
                 $line1 = '';
@@ -144,26 +150,23 @@ class AssignedStudentData extends Report implements iCsvReport {
             }
 
             $this->rows[] = array($username, $bannerId, $preferred, $first, $middle, $last,
-                                  $gender, $dob, $type, $cellPhone, $date, $appTerm, $lifestyle,
-                                  $assignmentType, $room, $line1, $line2, $line3,
-                                  $city, $state, $zip);
+                $gender, $over_21, $type, $cellPhone, $date, $appTerm, $lifestyle,
+                $assignmentType, $room, $line1, $line2, $line3,
+                $city, $state, $zip);
         }
     }
 
-    public function getCsvColumnsArray()
-    {
-        return array('Username', 'Banner id', 'Preferred name', 'First name', 'Middle name', 'Last Name', 'Gender', 'Birthday',
-            'Student type', 'Cell Phone', 'Date Applied', 'Application Term', 'Lifestyle', 'Assignment Type','Assignment', 'Address 1',
+    public function getCsvColumnsArray() {
+        return array('Username', 'Banner id', 'Preferred name', 'First name', 'Middle name', 'Last Name', 'Gender', 'Over 21',
+            'Student type', 'Cell Phone', 'Date Applied', 'Application Term', 'Lifestyle', 'Assignment Type', 'Assignment', 'Address 1',
             'Address 2', 'Address 3', 'City', 'State', 'Zip');
     }
 
-    public function getCsvRowsArray()
-    {
+    public function getCsvRowsArray() {
         return $this->rows;
     }
 
-    public function getDefaultOutputViewCmd()
-    {
+    public function getDefaultOutputViewCmd() {
         $cmd = CommandFactory::getCommand('ShowReportCsv');
         $cmd->setReportId($this->id);
 

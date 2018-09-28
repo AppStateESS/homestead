@@ -13,14 +13,12 @@
         <th>Name</th>
         <th>Username</th>
         <th>Banner ID</th>
-        <th>Date of Birth</th>
       </tr>
       <!-- BEGIN rows -->
       <tr>
         <td>{full_name}</td>
         <td>{username}</td>
         <td>{banner_id}</td>
-        <td>{dob}</td>
       </tr>
       <!-- END rows -->
     </table>
