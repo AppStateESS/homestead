@@ -30,7 +30,7 @@ class FloorRosterHtmlView extends ReportHtmlView {
                 if (strtotime($row['dob']) < $twentyOneYearsAgo) {
                     $row['over_21'] = "Yes";
                 }
-
+                $row['birth_month'] = date('M', $DOB);
                 $tpl->setCurrentBlock('room-rows');
                 $tpl->setData($row);
                 $tpl->parseCurrentBlock();
