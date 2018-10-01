@@ -40,18 +40,8 @@ class StudentProfileView extends View {
         $tpl['TERM'] = Term::getPrintableSelectedTerm();
 
         $tpl['GENDER'] = $this->student->getPrintableGender();
-
-        if (\Current_User::allow('hms', 'login_as_student')) {
-            $tpl['DOB'] = $this->student->getDOB();
-        } else {
-            $tpl['DOB'] = "Under 21";
-            // Calculate the timestamp from 21 years ago
-            $twentyOneYearsAgo = strtotime("-21 years");
-            if(strtotime($this->student->getDOB()) < $twentyOneYearsAgo){
-                $tpl['DOB'] = "Over 21";
-            }
-        }
-
+        $tpl['DOB'] = $this->student->getDOB();
+        
         if (strtotime($this->student->getDOB()) < strtotime("-25 years")) {
             \NQ::simple('hms', NotificationView::WARNING, 'Student is 25 years old or older!');
         }
