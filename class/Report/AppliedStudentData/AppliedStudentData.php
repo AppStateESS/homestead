@@ -100,7 +100,7 @@ class AppliedStudentData extends Report implements iCsvReport {
             
             if (!is_null($address) && $address !== false) {
                 $this->rows[] = array(
-                            $username, $bannerId, $preferredName, $first, $middle, $last, $gender, $over_21,
+                            $username, $bannerId, $preferredName, $first, $middle, $last, $gender, $birthday,
                             $type, $cellPhone, $date, $appTerm, $lifestyle, $room, $reason, $address->line1, $address->line2,
                             $address->line3, $address->city,
                             $address->state, $address->zip
@@ -114,7 +114,7 @@ class AppliedStudentData extends Report implements iCsvReport {
 
     public function getCsvColumnsArray() {
         return array('Username', 'Banner id', 'Preferred Name', 'First name', 'Middle name',
-            'Last name', 'Gender', 'Over 21', 'Student type', 'Cell Phone', 'Date Applied', 'Application Term', 'Lifestyle',
+            'Last name', 'Gender', 'Birthday', 'Student type', 'Cell Phone', 'Date Applied', 'Application Term', 'Lifestyle',
             'Assignment', 'Assignment Type', 'Address 1', 'Address 2', 'Address 3', 'City', 'State', 'Zip');
     }
 

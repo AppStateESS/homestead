@@ -93,7 +93,8 @@ class AssignedStudentData extends Report implements iCsvReport {
                 // Calculate the timestamp from 21 years ago
                 $twentyOneYearsAgo = strtotime("-21 years");
                 $DOB = strtotime($dob);
-
+                $dob = date("m/d/Y", $DOB);
+                
                 if ($DOB < $twentyOneYearsAgo) {
                     $over_21 = "Yes";
                 }
@@ -135,7 +136,7 @@ class AssignedStudentData extends Report implements iCsvReport {
                 $middle = '';
                 $last = '';
                 $gender = '';
-                $over_21 = '';
+                $dob = '';
                 $type = '';
                 $cellPhone = '';
                 $line1 = '';
@@ -150,14 +151,14 @@ class AssignedStudentData extends Report implements iCsvReport {
             }
 
             $this->rows[] = array($username, $bannerId, $preferred, $first, $middle, $last,
-                $gender, $over_21, $type, $cellPhone, $date, $appTerm, $lifestyle,
+                $gender, $dob, $type, $cellPhone, $date, $appTerm, $lifestyle,
                 $assignmentType, $room, $line1, $line2, $line3,
                 $city, $state, $zip);
         }
     }
 
     public function getCsvColumnsArray() {
-        return array('Username', 'Banner id', 'Preferred name', 'First name', 'Middle name', 'Last Name', 'Gender', 'Over 21',
+        return array('Username', 'Banner id', 'Preferred name', 'First name', 'Middle name', 'Last Name', 'Gender', 'Birthday',
             'Student type', 'Cell Phone', 'Date Applied', 'Application Term', 'Lifestyle', 'Assignment Type', 'Assignment', 'Address 1',
             'Address 2', 'Address 3', 'City', 'State', 'Zip');
     }
