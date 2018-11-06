@@ -141,7 +141,7 @@ class DamagesRow extends React.Component{
                         <i className="fa fa-comment"></i>
                     </a>
                     <button onClick={this.delete} className="close">
-                        <i className="far fa-trash-alt"></i>
+                        <i className="fa fa-trash"></i>
                     </button></td>
                 </tr>
             </tbody>
