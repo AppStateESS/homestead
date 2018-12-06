@@ -2,9 +2,11 @@
 
 namespace Homestead\Command;
 
+use \Homestead\CommandFactory;
 use \Homestead\HousingApplicationFactory;
 use \Homestead\HousingApplication;
 use \Homestead\HMS_Assignment;
+use \Homestead\NotificationView;
 use \Homestead\HMS_RLC_Assignment;
 use \Homestead\HMS_RLC_Application;
 use \Homestead\HMS_Activity_Log;
@@ -31,7 +33,7 @@ class CancelHousingApplicationCommand extends Command {
         if(!\Current_User::allow('hms', 'cancel_housing_application')){
             throw new PermissionException('You do not have permission to cancel housing applications.');
         }
-
+               
         // Check for a housing application id
         $applicationId = $context->get('applicationId');
 
@@ -91,7 +93,9 @@ class CancelHousingApplicationCommand extends Command {
         $application->cancel($cancelReason);
         $application->save();
 
-        echo 'success';
-        exit;
+        \NQ::simple('hms', NotificationView::SUCCESS, 'Application successfully cancelled.');
+        $viewCmd = CommandFactory::getCommand('ShowAdminMaintenanceMenu');
+        $viewCmd->redirect();
+        
     }
 }

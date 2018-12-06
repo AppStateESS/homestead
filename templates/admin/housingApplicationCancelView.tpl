@@ -9,4 +9,7 @@ Cancel <strong>{NAME}</strong>'s <strong>{TERM}</strong> housing application?<br
 <!-- BEGIN no_assignment -->
 <em class="text-muted">No assignment changes needed.</em>{NO_ASSIGNMENT}
 <!-- END no_assignment -->
+
+<br /><br />
+{CANCEL_SUBMIT}
 {END_FORM}

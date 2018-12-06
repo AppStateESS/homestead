@@ -240,7 +240,7 @@ class AssignStudentCommand extends Command {
          * Check for a valid and complete contract *
          *******************************************/
         $contract = ContractFactory::getContractByStudentTerm($student, $term);
-
+/**
         if($contract === false){
             // No contract exists. Create a new one and send it via email to the student
             if($this->sendContract($student, $housingApplication, $term)){
@@ -274,7 +274,7 @@ class AssignStudentCommand extends Command {
                 \NQ::simple('hms', NotificationView::INFO, 'This student has a pending contract for this semester. A new contract was not needed.');
             }
         }
-
+*/
 
         /*************
          * Meal Plan *

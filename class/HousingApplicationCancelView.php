@@ -29,17 +29,21 @@ class HousingApplicationCancelView extends View {
 
         $form = new \PHPWS_Form('cancel_app_form');
 
-        $submitCmd = CommandFactory::getCommand('CancelHousingApplication');
-        $submitCmd->initForm($form);
+        //$submitCmd = CommandFactory::getCommand('CancelHousingApplication');
+        //$submitCmd->initForm($form);
 
         $reasons = array_merge(array(-1=>'Select...'), HousingApplication::getCancellationReasons());
 
         $form->addDropBox('cancel_reason', $reasons);
         $form->setLabel('cancel_reason', 'Reason');
-
+        
+        $form->addHidden('module', 'hms');
         $form->addHidden('applicationId', $this->application->getId());
         $form->addHidden('term', $this->application->getTerm());
-
+        $form->addHidden('bannerId', $this->student->banner_id);
+        $form->addHidden('action', 'CancelHousingApplication');
+        $form->addSubmit('cancel_submit','Cancel Application');
+        
         $form->mergeTemplate($tpl);
         $tpl = $form->getTemplate();
 

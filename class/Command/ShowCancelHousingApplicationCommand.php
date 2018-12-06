@@ -11,14 +11,14 @@ use \Homestead\Term;
 class ShowCancelHousingApplicationCommand extends Command {
 
     private $housingApp;
-
+    
     public function setHousingApp(HousingApplication $app){
         $this->housingApp = $app;
     }
 
     public function getRequestVars()
     {
-        return array('action'=>'ShowCancelHousingApplication', 'applicationId'=>$this->housingApp->getId());
+        return array('action'=>'ShowCancelHousingApplication', 'applicationId'=>$this->housingApp->getId(), 'bannerId'=>$this->housingApp->banner_id);
     }
 
     public function getLink($text, $target = null, $cssClass = null, $title = null)
@@ -30,7 +30,7 @@ class ShowCancelHousingApplicationCommand extends Command {
     public function execute(CommandContext $context)
     {
         $applicationId = $context->get('applicationId');
-
+        
         if(!isset($applicationId)){
             throw new \InvalidArgumentException('Missing application id.');
         }
