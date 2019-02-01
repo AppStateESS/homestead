@@ -55,8 +55,8 @@ class HMS_Eligibility_Waiver{
         }else{
             $db->addWhere('term', $term);
         }
-
-        return !is_null($db->select('row'));
+    
+        return !empty($db->select('row'));
     }
 
     public function createWaiver()

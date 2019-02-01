@@ -258,24 +258,28 @@ class StudentProfileView extends View {
         /*         * ******
          * Logs *
          * ****** */
+        /**
         $everything_but_notes = HMS_Activity_Log::get_activity_list();
         unset($everything_but_notes[array_search(ACTIVITY_ADD_NOTE, $everything_but_notes)]);
-
+        */
         if (\Current_User::allow('hms', 'view_activity_log') && \Current_User::allow('hms', 'view_student_log')) {
+            /**
             $activityLogPager = new ActivityLogPager($this->student->getUsername(), null, null, true, null, null, $everything_but_notes, true, 10);
             $activityNotePager = new ActivityLogPager($this->student->getUsername(), null, null, true, null, null, array(0 => ACTIVITY_ADD_NOTE), true, 10);
 
             $tpl['LOG_PAGER'] = $activityLogPager->show();
             $tpl['NOTE_PAGER'] = $activityNotePager->show();
-
+            */
             $logsCmd = CommandFactory::getCommand('ShowActivityLog');
             $logsCmd->setActeeUsername($this->student->getUsername());
-            $tpl['LOG_PAGER'] .= $logsCmd->getLink('View more');
+            //$tpl['LOG_PAGER'] .= $logsCmd->getLink('View more');
+            $tpl['LOG_PAGER'] = $logsCmd->getLink('Click here to view the student log');
 
             $notesCmd = CommandFactory::getCommand('ShowActivityLog');
             $notesCmd->setActeeUsername($this->student->getUsername());
             $notesCmd->setActivity(array(0 => ACTIVITY_ADD_NOTE));
-            $tpl['NOTE_PAGER'] .= $notesCmd->getLink('View more');
+            //$tpl['NOTE_PAGER'] .= $notesCmd->getLink('View more');
+            $tpl['NOTE_PAGER'] = $notesCmd->getLink('Click here to view notes');           
         }
 
         $tpl = array_merge($tpl, $form->getTemplate());
