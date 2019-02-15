@@ -59,7 +59,7 @@ class ShowTermsAgreementCommand extends Command {
         	$agreedCmd->setRoommateRequestId($roommateRequestId);
         }
 
-        $mealPlan = $context->get('meal_plan');
+        $mealPlan = $context->get('mealPlan');
         if(isset($mealPlan) && $mealPlan !== null){
             $agreedCmd->setMealPlan($mealPlan);
         }

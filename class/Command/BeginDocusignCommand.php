@@ -155,7 +155,7 @@ class BeginDocusignCommand extends Command
             $returnCmd->setRoommateRequestId($roommateRequestId);
         }
 
-        $mealPlan = $context->get('meal_plan');
+        $mealPlan = $context->get('mealPlan');
         if(isset($mealPlan) && $mealPlan !== null){
             $returnCmd->setMealPlan($mealPlan);
         }

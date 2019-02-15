@@ -50,7 +50,7 @@ class LotteryShowConfirmRoommateRequestCommand extends Command {
             {
                 $returnCmd = CommandFactory::getCommand('LotteryShowConfirmRoommateRequest');
                 $returnCmd->setRoommateRequestId($context->get('roommateRequestId'));
-                $returnCmd->setMealPlan($context->get('meal_plan'));
+                $returnCmd->setMealPlan($context->get('mealPlan'));
                 //var_dump($returnCmd->getURI());exit;
 
                 $agreementCmd = CommandFactory::getCommand('ShowTermsAgreement');
@@ -63,7 +63,7 @@ class LotteryShowConfirmRoommateRequestCommand extends Command {
         }
 
         $request = HMS_Lottery::get_lottery_roommate_invite_by_id($context->get('roommateRequestId'));
-        $mealPlan = $context->get('meal_plan');
+        $mealPlan = $context->get('mealPlan');
 
         $view = new LotteryConfirmRoommateRequestView($request, $term, $mealPlan);
         $context->setContent($view->show());

@@ -39,7 +39,7 @@ class LotteryConfirmRoommateRequestCommand extends Command {
     public function execute(CommandContext $context)
     {
         $requestId = $context->get('requestId');
-        $mealPlanCode = $context->get('meal_plan');
+        $mealPlanCode = $context->get('mealPlan');
 
         $errorCmd = CommandFactory::getCommand('LotteryShowConfirmRoommateRequest');
         $errorCmd->setRoommateRequestId($requestId);
