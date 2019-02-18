@@ -37,9 +37,9 @@ class CommandContext {
         } else if($this->get('hms_load')) {
             $this->loadContext();
         }
+
         // Load raw postdata
         $this->postdata = file_get_contents('php://input');
-        
     }
 
     public function addParam($key, $val)

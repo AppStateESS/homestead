@@ -275,6 +275,7 @@ class AssignStudentCommand extends Command {
             }
         }
 
+
         /*************
          * Meal Plan *
          *************/

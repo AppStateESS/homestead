@@ -54,7 +54,13 @@ class LotteryConfirmCommand extends Command {
     {
         $roomId = $context->get('roomId');
         $roommates = $context->get('roommates');
-        $mealPlanCode = $context->get('mealPlan');
+
+	$mealPlanCode = $context->get('mealPlan');
+	if(empty($mealPlanCode) && !empty($context->get('meal_plan'))){
+		$mealPlanCode = $context->get('meal_plan');
+	}else{
+		$mealPlanCode = '1';
+	}
 
         $term = \PHPWS_Settings::get('hms', 'lottery_term');
 

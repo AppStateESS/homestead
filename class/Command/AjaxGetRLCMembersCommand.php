@@ -33,7 +33,7 @@ class AjaxGetRLCMembersCommand {
         $rlcId = $_REQUEST['id'];
         $term = Term::getSelectedTerm();
         $memberList = RlcMembershipFactory::getRlcMembersByCommunityId($rlcId, $term);
-
+	
         $returnData = array();
 
         foreach ($memberList as $member)

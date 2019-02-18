@@ -38,7 +38,7 @@ class ShowStudentMenuCommand extends Command {
         $studentClass	= $student->getClass();
         $dob 			= $student->getDob();
         $gender         = $student->getGender();
-        
+
         # Check for banner errors in any of these calls
         if(empty($applicationTerm) || empty($studentType) ||
         empty($studentClass) ||
@@ -51,7 +51,7 @@ class ShowStudentMenuCommand extends Command {
             $badDataCmd = CommandFactory::getCommand('ShowBadBannerData');
             $badDataCmd->redirect();
         }
-        
+
         # Recreate the student object using the student's application term
         $student = StudentFactory::getStudentByUsername($username, $applicationTerm);
 

@@ -43,6 +43,13 @@ class LotteryShowConfirmRoommateRequestCommand extends Command {
             $contract->updateEnvelope();
         }
 
+	$mealPlanCode = $context->get('mealPlan');
+	if(empty($mealPlanCode) && !empty($context->get('meal_plan'))){
+		$mealPlanCode = $context->get('meal_plan');
+	}else{
+		$mealPlanCode = '1';
+	}
+
         if($contract === false || $contract->getEnvelopeStatus() !== 'completed'){
             // If they haven't agreed, redirect to the agreement
             $event = $context->get('event');
@@ -50,8 +57,8 @@ class LotteryShowConfirmRoommateRequestCommand extends Command {
             {
                 $returnCmd = CommandFactory::getCommand('LotteryShowConfirmRoommateRequest');
                 $returnCmd->setRoommateRequestId($context->get('roommateRequestId'));
-                $returnCmd->setMealPlan($context->get('mealPlan'));
-                //var_dump($returnCmd->getURI());exit;
+
+                $returnCmd->setMealPlan($mealPlanCode);
 
                 $agreementCmd = CommandFactory::getCommand('ShowTermsAgreement');
                 $agreementCmd->setTerm($term);
@@ -63,7 +70,7 @@ class LotteryShowConfirmRoommateRequestCommand extends Command {
         }
 
         $request = HMS_Lottery::get_lottery_roommate_invite_by_id($context->get('roommateRequestId'));
-        $mealPlan = $context->get('mealPlan');
+        $mealPlan = $mealPlanCode;
 
         $view = new LotteryConfirmRoommateRequestView($request, $term, $mealPlan);
         $context->setContent($view->show());
