@@ -62,8 +62,6 @@ class ShowTermsAgreementCommand extends Command {
 	$mealPlan = $context->get('mealPlan');
 	if(empty($mealPlan) && !empty($context->get('meal_plan'))){
 		$mealPlan = $context->get('meal_plan');
-	}else{
-		$mealPlan = '1';
 	}
 
         if(isset($mealPlan) && $mealPlan !== null){
