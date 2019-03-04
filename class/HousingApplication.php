@@ -65,6 +65,7 @@ class HousingApplication {
     public $cancelled_reason;
     public $cancelled_by;
     public $cancelled_on;
+    public $waiting_list_hide = 0;
 
     /**
      * Constructor for the abstract HousingApplication class. It can never be called directly. Instead,

@@ -1,0 +1,1 @@
+ALTER TABLE hms_new_application ADD COLUMN waiting_list_hide smallint NOT NULL default 0;

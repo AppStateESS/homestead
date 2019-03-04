@@ -201,6 +201,7 @@ class WaitingListApplication extends HousingApplication {
         $pager->db->addWhere('hms_new_application.term', $term);
         $pager->db->addWhere('hms_new_application.application_type', 'offcampus_waiting_list');
         $pager->db->addWhere('hms_new_application.cancelled', 0);
+        $pager->db->addWhere('hms_new_application.waiting_list_hide', 0);
 
         $pager->db->addOrder('hms_new_application.created_on ASC');
 

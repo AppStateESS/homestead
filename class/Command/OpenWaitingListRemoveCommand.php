@@ -6,6 +6,7 @@ use \Homestead\CommandFactory;
 use \Homestead\HousingApplicationFactory;
 use \Homestead\NotificationView;
 use \Homestead\Exception\PermissionException;
+use \Homestead\StudentFactory;
 
 class OpenWaitingListRemoveCommand extends Command {
 
@@ -23,7 +24,7 @@ class OpenWaitingListRemoveCommand extends Command {
         $cmd      = CommandFactory::getCommand('ShowOpenWaitingList');
 
         if(!is_null($username)){
-            $term = \PHPWS_Settings::get('hms', 'lottery_term')
+            $term = \PHPWS_Settings::get('hms', 'lottery_term');
             $student = StudentFactory::getStudentByUsername($username, $term);
             $app = HousingApplicationFactory::getAppByStudent($student, $term);
             $app->waiting_list_hide = 1;

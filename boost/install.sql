@@ -465,6 +465,7 @@ CREATE TABLE hms_new_application (
     missing_person_relationship 	varchar,
     missing_person_phone 			varchar,
     missing_person_email 			varchar,
+    waiting_list_hide               smallint NOT NULL default 0,
     PRIMARY KEY(id)
 );
 
