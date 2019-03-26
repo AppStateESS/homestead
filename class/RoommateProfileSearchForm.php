@@ -61,7 +61,7 @@ class RoommateProfileSearchForm extends View {
         $form->addCssClass('political_views_dropbox', 'form-control');
 
         /***** College Life *****/
-        $form->addDropBox('intended_major',$majors);
+        $form->addDropBox('intended_major', MajorFactory::getMajorsList());
         $form->setLabel('intended_major','His/her academic major: ');
         $form->addCssClass('intended_major', 'form-control');
 
