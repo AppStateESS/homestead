@@ -114,9 +114,9 @@ class HMS_Roommate
 
     public function get_other_guy($username)
     {
-        if (trim($this->requestor) == trim($username)) {
+        if (strtolower(trim($this->requestor)) == strtolower(trim($username))) {
             return $this->requestee;
-        } else if (trim($this->requestee) == trim($username)) {
+        } else if (strtolower(trim($this->requestee)) == strtolower(trim($username))) {
             return $this->requestor;
         }
 
