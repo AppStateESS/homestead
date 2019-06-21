@@ -52,7 +52,7 @@ class Autoassigner {
 
         // Sort the array of pairs by application date (use the earliest of the two application dates)
         usort($this->pairs, array("Autoassigner", "pairSort"));
-
+exit;
         $fp = fopen('/tmp/WTFISGOINGON', 'w');
 
         // Run each assignment strategy
