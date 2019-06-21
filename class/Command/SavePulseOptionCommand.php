@@ -84,14 +84,14 @@ class SavePulseOptionCommand extends Command
         if (!empty($pulse)) {
             throw new \Exception('Auto Assign schedule is already present.');
         }
-        $ps = pulse\PulseFactory::build();
+        $ps = \pulse\PulseFactory::build();
         $ps->setName('AutoAssign');
         $ps->setModule('hms');
         $ps->setClassName('AutoassignPulse');
         $ps->setClassMethod('execute');
         $ps->setInterim('1');
         $ps->setRequiredFile('mod/hms/class/AutoassignPulse.php');
-        pulse\PulseFactory::save($ps);
+        \pulse\PulseFactory::save($ps);
     }
 
     public function dropReportRunnerSchedule()
