@@ -59,7 +59,7 @@ class InfoCardPdfView {
             $name .= ' (' . $prefName . ')';
         }
 
-        $this->pdf->setXY(110, 10);
+        $this->pdf->setXY(120, 10);
         $this->pdf->cell(50, 5, $name);
 
         // Banner ID
