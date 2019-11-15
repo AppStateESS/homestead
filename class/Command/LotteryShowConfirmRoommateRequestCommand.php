@@ -38,18 +38,18 @@ class LotteryShowConfirmRoommateRequestCommand extends Command {
         $student = StudentFactory::getStudentByUsername(UserStatus::getUsername(), $term);
 
         $contract = ContractFactory::getContractByStudentTerm($student, $term);
-
+/**
         if($contract !== false){
             $contract->updateEnvelope();
         }
-
+*/
 	$mealPlanCode = $context->get('mealPlan');
 	if(empty($mealPlanCode) && !empty($context->get('meal_plan'))){
 		$mealPlanCode = $context->get('meal_plan');
 	}else{
 		$mealPlanCode = '1';
 	}
-
+/**
         if($contract === false || $contract->getEnvelopeStatus() !== 'completed'){
             // If they haven't agreed, redirect to the agreement
             $event = $context->get('event');
@@ -68,7 +68,7 @@ class LotteryShowConfirmRoommateRequestCommand extends Command {
                 HMS_Activity_Log::log_activity($student->getUsername(), ACTIVITY_CONTRACT_STUDENT_SIGN_EMBEDDED, UserStatus::getUsername(), "Student signed contract for $term through the embedded signing process");
             }
         }
-
+*/
         $request = HMS_Lottery::get_lottery_roommate_invite_by_id($context->get('roommateRequestId'));
         $mealPlan = $mealPlanCode;
 
